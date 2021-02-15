@@ -46,6 +46,19 @@ Check built JS files:
             fi
     allow_failure: false
 
+ESLint:
+    stage: Static analysis
+    services:
+        -   name: mysql:5.7
+            alias: mysql
+    script:
+        - cd $CI_PROJECT_DIR/development/custom/plugins/SwagExtensionStore/src/Resources/app/administration
+        - npm ci
+        - npm run lint-ci
+    artifacts:
+        reports:
+            junit: $CI_PROJECT_DIR/development/custom/plugins/SwagExtensionStore/src/Resources/app/administration/eslint.junit.xml
+
 Administration Jest:
     stage: Testing
     timeout: 1h 00m

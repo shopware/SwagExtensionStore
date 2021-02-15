@@ -68,3 +68,4 @@ chromedriver.log
 /composer.lock
 /src/Resources/app/administration/node_modules/
 /src/Resources/app/administration/coverage/
+/src/Resources/app/administration/eslint.junit.xml

@@ -1,4 +1,4 @@
-import helloWorld from '_src/helloWorld';
+import helloWorld from 'SwagExtensionStore/helloWorld';
 
 describe('testing the hello world', () => {
     test('helloWorld returns "Hello World"', () => {

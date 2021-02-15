@@ -7,6 +7,6 @@ module.exports = {
     },
 
     moduleNameMapper: {
-        '^_src(.*)$': '<rootDir>/src$1'
+        '^SwagExtensionStore(.*)$': '<rootDir>/src$1'
     }
 };

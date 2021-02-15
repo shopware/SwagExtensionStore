@@ -8,20 +8,26 @@
     },
     "scripts": {
         "unit": "jest --config jest.config.js --ci",
-        "unit-watch": "jest --config jest.config.js --watch"
+        "unit-watch": "jest --config jest.config.js --watch",
+        "lint": "eslint --ext .js,.vue src test",
+        "lint-ci": "npm run lint -- --format junit > eslint.junit.xml"
     },
     "author": "",
     "license": "MIT",
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "7.10.4",
+        "@babel/plugin-transform-runtime": "7.5.5",
         "@babel/preset-env": "7.11.0",
+        "@shopware-ag/eslint-config-base": "1.0.0",
         "@shopware-ag/jest-preset-sw6-admin": "1.1.2-beta.1",
         "@vue/test-utils": "1.0.3",
-        "jest": "26.2.2",
-        "vue": "2.6.11"
+        "babel-eslint": "10.1.0",
+        "eslint-plugin-jest": "24.1.3",
+        "eslint-import-resolver-webpack": "0.11.1",
+        "jest": "26.2.2"
     },
     "dependencies": {
-        "@babel/plugin-transform-runtime": "7.5.5",
-        "vue-template-compiler": "2.6.11"
+        "vue-template-compiler": "2.6.11",
+        "vue": "2.6.11"
     }
 }
