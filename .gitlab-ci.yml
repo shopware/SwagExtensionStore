@@ -48,9 +48,6 @@ Check built JS files:
 
 ESLint:
     stage: Static analysis
-    services:
-        -   name: mysql:5.7
-            alias: mysql
     script:
         - cd $CI_PROJECT_DIR/development/custom/plugins/SwagExtensionStore/src/Resources/app/administration
         - npm ci
