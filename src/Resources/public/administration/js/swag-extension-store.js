@@ -1,1 +1,1 @@
-(this.webpackJsonp=this.webpackJsonp||[]).push([["swag-extension-store"],{Cz5L:function(s,o){console.log("It works")}},[["Cz5L","runtime"]]]);
+(this.webpackJsonp=this.webpackJsonp||[]).push([["swag-extension-store"],{Cz5L:function(s,o,e){"use strict";e.r(o),console.log("It works: ","Hello World")}},[["Cz5L","runtime"]]]);
