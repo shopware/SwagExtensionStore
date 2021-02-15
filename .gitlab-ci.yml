@@ -47,7 +47,7 @@ Check built JS files:
     allow_failure: false
 
 Administration Jest:
-    stage: Unit
+    stage: Testing
     timeout: 1h 00m
     variables:
         PROJECT_ROOT: $CI_PROJECT_DIR/development
