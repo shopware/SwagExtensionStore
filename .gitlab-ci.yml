@@ -1,0 +1,67 @@
+variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: "tcp://docker:2375"
+    MYSQL_ROOT_PASSWORD: app
+    WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/development/public
+    DEVELOPMENT_BRANCH: 'master'
+    PLATFORM_BRANCH: 'master'
+
+stages:
+    - Static analysis
+    - Testing
+
+default:
+    image: shopware/development:latest
+    before_script:
+        - zip -rq plugin.zip .
+        - git clone --branch $DEVELOPMENT_BRANCH http://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/6/product/development.git
+        - rm -rf development/platform
+        - git clone --branch $PLATFORM_BRANCH http://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/6/product/platform.git development/platform
+        - unzip -q plugin.zip -d development/custom/plugins/SwagExtensionStore
+        - cd development
+        - cp -v dev-ops/gitlab/.psh.yaml.override .
+        - /entrypoint supervisord > /dev/null 2>&1 &
+
+Check built JS files:
+    stage: Static analysis
+    services:
+        -   name: mysql:5.7
+            alias: mysql
+    script:
+        - ./psh.phar init
+        - php bin/console plugin:install --activate SwagExtensionStore
+        - ./psh.phar storefront:install-dependencies
+        - ./psh.phar administration:install-dependencies
+        - ./psh.phar administration:build
+        - ./psh.phar storefront:build
+        - cd $CI_PROJECT_DIR/development/custom/plugins/SwagExtensionStore
+        - >
+            if ! git diff --quiet --ignore-submodules HEAD --; then
+                echo "Built Javascript files differ. Update the dependencies and execute 'administration:build' and 'storefront:build' again";
+                git status;
+                exit 1;
+            else
+                echo "Everything ok"
+                exit 0;
+            fi
+    allow_failure: false
+
+Administration Jest:
+    stage: Unit
+    timeout: 1h 00m
+    variables:
+        PROJECT_ROOT: $CI_PROJECT_DIR/development
+        PLUGINNAME: "SwagExtensionStore"
+    services:
+        -   name: mariadb:10.3
+            alias: mysql
+    script:
+        - ./psh.phar init
+        - php bin/console plugin:refresh
+        - php bin/console plugin:install --activate $PLUGINNAME -c
+        - npm --prefix $(pwd)/custom/plugins/$PLUGINNAME/src/Resources/app/administration/ ci
+        - npm --prefix $(pwd)/vendor/shopware/platform/src/Administration/Resources/app/administration ci
+        - ADMIN_PATH=$(pwd)/vendor/shopware/platform/src/Administration/Resources/app/administration/ npm --prefix $(pwd)/custom/plugins/$PLUGINNAME/src/Resources/app/administration/ run unit
+    artifacts:
+        reports:
+            junit: development/build/artifacts/jest/customized-products.junit.xml

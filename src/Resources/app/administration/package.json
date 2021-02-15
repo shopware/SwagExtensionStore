@@ -1,0 +1,27 @@
+{
+    "name": "swag-extension-store",
+    "version": "0.0.1",
+    "description": "Jest test for the administration part of th extension store",
+    "main": "index.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "unit": "jest --config jest.config.js --ci",
+        "unit-watch": "jest --config jest.config.js --watch"
+    },
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@babel/plugin-proposal-class-properties": "7.10.4",
+        "@babel/preset-env": "7.11.0",
+        "@shopware-ag/jest-preset-sw6-admin": "1.1.2-beta.1",
+        "@vue/test-utils": "1.0.3",
+        "jest": "26.2.2",
+        "vue": "2.6.11"
+    },
+    "dependencies": {
+        "@babel/plugin-transform-runtime": "7.5.5",
+        "vue-template-compiler": "2.6.11"
+    }
+}
