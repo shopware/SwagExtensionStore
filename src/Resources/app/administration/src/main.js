@@ -1,3 +1,6 @@
-import helloWorld from 'SwagExtensionStore/helloWorld';
+import './module/sw-extension-store';
 
-console.log('It works: ', helloWorld());
+console.log('################################');
+console.log('SwagExtensionStore is installed!');
+console.log('################################');
+
