@@ -11,7 +11,10 @@ module.exports = {
         Shopware: true
     },
 
-    plugins: ['jest'],
+    plugins: [
+        'jest',
+        'internal-rules'
+    ],
 
     settings: {
         'import/resolver': {
@@ -39,6 +42,7 @@ module.exports = {
         'import/extensions': ['error', 'always', {
             js: 'never',
             vue: 'never'
-        }]
+        }],
+        'internal-rules/no-src-imports': 'error'
     }
 };
