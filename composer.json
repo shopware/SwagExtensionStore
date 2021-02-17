@@ -1,6 +1,6 @@
 {
-  "name": "swag/plugin-skeleton",
-  "description": "Skeleton plugin",
+  "name": "swag/swag-extension-store",
+  "description": "SWAG Extension Store",
   "type": "shopware-platform-plugin",
   "license": "MIT",
   "autoload": {
@@ -11,8 +11,8 @@
   "extra": {
     "shopware-plugin-class": "SwagExtensionStore\\SwagExtensionStore",
     "label": {
-      "de-DE": "Skeleton plugin",
-      "en-GB": "Skeleton plugin"
+      "de-DE": "Erweiterungen Store",
+      "en-GB": "Extension Store"
     }
   }
 }
