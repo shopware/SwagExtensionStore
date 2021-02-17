@@ -3,7 +3,7 @@ variables:
     DOCKER_HOST: "tcp://docker:2375"
     MYSQL_ROOT_PASSWORD: app
     WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/development/public
-    DEVELOPMENT_BRANCH: 'master'
+    DEVELOPMENT_BRANCH: 'trunk'
     PLATFORM_BRANCH: 'trunk'
 
 stages:
