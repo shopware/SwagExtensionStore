@@ -9,7 +9,7 @@
     "scripts": {
         "unit": "jest --config jest.config.js --ci",
         "unit-watch": "jest --config jest.config.js --watch",
-        "lint": "eslint --ext .js,.vue src test",
+        "lint": "eslint --ext .js,.vue src",
         "lint-ci": "npm run lint -- --format junit > eslint.junit.xml"
     },
     "author": "",
