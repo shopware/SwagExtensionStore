@@ -45,6 +45,9 @@ Check built JS files:
                 exit 0;
             fi
     allow_failure: false
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/development/custom/plugins/SwagExtensionStore/src/Resources/public/
 
 ESLint:
     stage: Static analysis
