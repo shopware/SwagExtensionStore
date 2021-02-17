@@ -46,6 +46,7 @@ Check built JS files:
             fi
     allow_failure: false
     artifacts:
+        when: always
         paths:
             - $CI_PROJECT_DIR/development/custom/plugins/SwagExtensionStore/src/Resources/public/
 
