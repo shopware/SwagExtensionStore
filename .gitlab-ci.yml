@@ -4,7 +4,7 @@ variables:
     MYSQL_ROOT_PASSWORD: app
     WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/development/public
     DEVELOPMENT_BRANCH: 'master'
-    PLATFORM_BRANCH: 'master'
+    PLATFORM_BRANCH: 'trunk'
 
 stages:
     - Static analysis
