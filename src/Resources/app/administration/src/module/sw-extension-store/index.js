@@ -68,5 +68,16 @@ Shopware.Module.register('sw-extension-store', {
                 }
             }
         }
+    },
+
+    /**
+     * Add routeMiddleware to add a redirect to the landing page
+     */
+    routeMiddleware(next, currentRoute) {
+        if (currentRoute.name === 'sw.extension.store.landing-page') {
+            currentRoute.redirect = {
+                name: 'sw.extension.store.listing'
+            };
+        }
     }
 });
