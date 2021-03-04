@@ -108,6 +108,9 @@ Component.register('sw-extension-buy-modal', {
 
         /* onPrem we need to check if the user is connected to the store in saas we check if the user has a plan */
         userCanBuyFromStore() {
+            // Trigger for recompute value
+            // eslint-disable-next-line no-unused-vars
+            const trigger = this.tocAccepted;
             return Shopware.State.get('shopwareExtensions').loginStatus;
         },
 
