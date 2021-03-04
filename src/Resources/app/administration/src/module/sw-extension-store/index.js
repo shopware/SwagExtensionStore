@@ -10,6 +10,7 @@ import './component/sw-extension-listing-card';
 import './component/sw-extension-deactivation-modal';
 import './component/sw-extension-removal-modal';
 import './component/sw-extension-uninstall-modal';
+import './component/sw-extension-store-update-warning';
 import './component/sw-ratings/sw-extension-rating-stars';
 import './component/sw-ratings/sw-extension-ratings-card';
 import './component/sw-ratings/sw-extension-ratings-summary';

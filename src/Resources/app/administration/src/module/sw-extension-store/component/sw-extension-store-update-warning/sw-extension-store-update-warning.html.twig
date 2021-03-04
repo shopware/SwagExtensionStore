@@ -1,0 +1,25 @@
+<div class="sw-extension-store-update-warning">
+    <sw-label appearance="pill"
+              variant="info">
+        <sw-icon name="default-badge-info"
+                 size="30px"
+        ></sw-icon>
+    </sw-label>
+
+    <h2>
+        {{ $tc('sw-extension-store.updateWarning.headlineFirst') }}
+        <br>
+        {{ $tc('sw-extension-store.updateWarning.headlineSecond') }}
+    </h2>
+
+    <p>
+        {{ $tc('sw-extension-store.updateWarning.description') }}
+    </p>
+    <p class="sw-extension-store-update-warning__strong-text">
+        {{ $tc('sw-extension-store.updateWarning.requestDescription') }}
+    </p>
+
+    <sw-button variant="primary" @click="updateExtension" :isLoading="isUpdating">
+        {{ $tc('sw-extension-store.updateWarning.update') }}
+    </sw-button>
+</div>

@@ -13,13 +13,13 @@
                 <template #page-tabs>
                     {% block sw_extension_store_index_tabs %}
                         {% block sw_extension_store_index_tabs_extensions_app %}
-                            <sw-tabs-item :route="{ name: 'sw.extension.store.listing.app' }">
+                            <sw-tabs-item :route="{ name: 'sw.extension.store.listing.app' }" :disabled="updateAvailable">
                                 {{ $tc('sw-extension.store.tabs.apps') }}
                             </sw-tabs-item>
                         {% endblock %}
 
                         {% block sw_extension_store_index_tabs_extensions_theme %}
-                            <sw-tabs-item :route="{ name: 'sw.extension.store.listing.theme' }">
+                            <sw-tabs-item :route="{ name: 'sw.extension.store.listing.theme' }" :disabled="updateAvailable">
                                 {{ $tc('sw-extension.store.tabs.themes') }}
                             </sw-tabs-item>
                         {% endblock %}
@@ -30,7 +30,14 @@
             {% block sw_extension_store_index_slot_default %}
                 <template #default>
                     {% block sw_extension_store_index_content %}
-                        <router-view></router-view>
+                        {% block sw_extension_store_index_content_view %}
+                            <router-view v-if="!updateAvailable"></router-view>
+                        {% endblock %}
+
+                        {% block sw_extension_store_index_content_update_warning %}
+                            <sw-extension-store-update-warning v-else>
+                            </sw-extension-store-update-warning>
+                        {% endblock %}
                     {% endblock %}
                 </template>
             {% endblock %}

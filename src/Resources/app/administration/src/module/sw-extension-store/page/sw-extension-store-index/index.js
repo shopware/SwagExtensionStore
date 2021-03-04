@@ -9,12 +9,22 @@ const { Component } = Shopware;
 Component.register('sw-extension-store-index', {
     template,
 
+    inject: [
+        'extensionStoreDataService'
+    ],
+
     props: {
         id: {
             type: String,
             required: false,
             default: null
         }
+    },
+
+    data() {
+        return {
+            updateAvailable: false
+        };
     },
 
     computed: {
@@ -38,7 +48,44 @@ Component.register('sw-extension-store-index', {
         }
     },
 
+    created() {
+        this.createdComponent();
+    },
+
     methods: {
+        createdComponent() {
+            this.checkStoreUpdates();
+        },
+
+        async checkStoreUpdates() {
+            const extensionStore = await this.getExtensionStore();
+
+            if (!extensionStore) {
+                return;
+            }
+
+            if (this.isUpdateable(extensionStore)) {
+                this.updateAvailable = true;
+                return;
+            }
+
+            this.updateAvailable = false;
+        },
+
+        getExtensionStore() {
+            return this.extensionStoreDataService.getMyExtensions('SwagPayPal').then((extensions) => {
+                return extensions.find(extension => extension.name === 'SwagExtensionStore');
+            });
+        },
+
+        isUpdateable(extension) {
+            if (!extension || extension.latestVersion === null) {
+                return false;
+            }
+
+            return extension.latestVersion !== extension.version;
+        },
+
         updateSearch(term) {
             Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'term', value: term });
         }

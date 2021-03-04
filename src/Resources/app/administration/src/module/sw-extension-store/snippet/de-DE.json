@@ -1,0 +1,11 @@
+{
+    "sw-extension-store": {
+        "updateWarning": {
+            "headlineFirst": "Wir haben den Shopware Store aktualisiert.",
+            "headlineSecond": "Nimm dir einen Moment Zeit, um auf die neueste Version zu aktualisieren.",
+            "description": "Es gibt jetzt noch mehr Möglichkeiten, großartige Erweiterungen zu entdecken, die dir helfen, dein Geschäft auszubauen.",
+            "requestDescription": "Du musst auf die neueste Version upgraden, um neue und aktualisierte Erweiterungen oder Themes für deinen Shop zu erhalten.",
+            "update": "Update"
+        }
+    }
+}
