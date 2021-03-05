@@ -73,7 +73,7 @@ Component.register('sw-extension-store-index', {
         },
 
         getExtensionStore() {
-            return this.extensionStoreDataService.getMyExtensions('SwagPayPal').then((extensions) => {
+            return this.extensionStoreDataService.getMyExtensions().then((extensions) => {
                 return extensions.find(extension => extension.name === 'SwagExtensionStore');
             });
         },
