@@ -1,0 +1,7 @@
+{% block sw_extension_label %}
+    <div class="sw-extension-label" :style="{ 'background-color': backgroundColor, 'color': determineTextColor(backgroundColor) }">
+        {% block sw_extension_label_slot %}
+            <slot></slot>
+        {% endblock %}
+    </div>
+{% endblock %}

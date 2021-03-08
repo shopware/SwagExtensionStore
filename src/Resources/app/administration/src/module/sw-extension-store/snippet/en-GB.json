@@ -1,11 +1,20 @@
 {
     "sw-extension-store": {
+        "tabs": {
+            "apps": "Apps & Plugins",
+            "themes": "Themes"
+        },
         "updateWarning": {
             "headlineFirst": "We've updated the Shopware Store.",
             "headlineSecond": "Take a moment to update to the latest version.",
             "description": "There are now even more ways to discover great Extensions that'll help you grow your business.",
             "requestDescription": "You need to upgrade to the latest version to get new and updated Extensions or Themes for your shop.",
             "update": "Update"
+        },
+        "entityTypes": {
+            "app": "App",
+            "plugin": "Plugin",
+            "theme": "Theme"
         }
     }
 }

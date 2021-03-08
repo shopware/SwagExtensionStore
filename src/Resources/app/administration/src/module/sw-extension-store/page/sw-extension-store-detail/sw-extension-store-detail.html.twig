@@ -26,13 +26,22 @@
                     {% block sw_extension_store_detail_smart_bar_producer_name %}
                         <span v-if="extension.producerWebsite && extension.producerName">
                             {{ $tc('sw-extension-store.detail.labelBy') }}
-                            <a  :href="extension.producerWebsite" target="_blank">
+                            <a  :href="extension.producerWebsite"
+                                target="_blank"
+                                class="link sw-extension-store-detail__producer-link">
                                 {{ extension.producerName }}
                             </a>
                         </span>
+
                         <span v-else-if="extension.producerName">
                             {{ $tc('sw-extension-store.detail.labelBy') }} {{ extension.producerName }}
                         </span>
+                    {% endblock %}
+
+                    {% block sw_extension_store_detail_slot_smart_bar_header_meta_extension_type_label %}
+                        <sw-extension-type-label :type="extension.type"
+                                                 class="sw-extension-store-detail__extension-type-label">
+                        </sw-extension-type-label>
                     {% endblock %}
                 </template>
             {% endblock %}
@@ -45,12 +54,16 @@
                                 {{ extension.shortDescription }}
                             </div>
                         {% endblock %}
+
                         {% block sw_extension_store_detail_label_and_rating_overview %}
                             <div class="sw-extension-store-detail__label-and-rating-overview">
                                 {% block sw_extension_store_detail_label_display %}
-                                    <sw-extensions-store-label-display :labels="extension.labels" class="sw-extension-store-detail__label-display"/>
+                                    <sw-extension-store-label-display v-if="extension.labels.length > 0"
+                                        :labels="extension.labels"
+                                        class="sw-extension-store-detail__label-display">
+                                    </sw-extension-store-label-display>
                                 {% endblock %}
-                                
+
                                 {% block sw_extension_store_detail_rating_overview %}
                                     <div class="sw-extension-store-detail__rating-overview">
                                         {% block sw_extension_store_detail_rating_overview_content %}

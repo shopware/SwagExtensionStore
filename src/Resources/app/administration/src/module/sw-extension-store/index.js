@@ -20,7 +20,9 @@ import './component/sw-ratings/sw-extension-review-creation-inputs';
 import './component/sw-ratings/sw-extension-review-reply';
 import './component/sw-ratings/sw-extension-select-rating';
 import './component/sw-ratings/sw-extension-rating-modal';
-import './component/sw-extensions-store-label-display';
+import './component/sw-extension-store-label';
+import './component/sw-extension-store-type-label';
+import './component/sw-extension-store-label-display';
 import './component/sw-extension-adding-failed';
 import './component/sw-extension-adding-success';
 

@@ -14,13 +14,13 @@
                     {% block sw_extension_store_index_tabs %}
                         {% block sw_extension_store_index_tabs_extensions_app %}
                             <sw-tabs-item :route="{ name: 'sw.extension.store.listing.app' }" :disabled="updateAvailable">
-                                {{ $tc('sw-extension.store.tabs.apps') }}
+                                {{ $tc('sw-extension-store.tabs.apps') }}
                             </sw-tabs-item>
                         {% endblock %}
 
                         {% block sw_extension_store_index_tabs_extensions_theme %}
                             <sw-tabs-item :route="{ name: 'sw.extension.store.listing.theme' }" :disabled="updateAvailable">
-                                {{ $tc('sw-extension.store.tabs.themes') }}
+                                {{ $tc('sw-extension-store.tabs.themes') }}
                             </sw-tabs-item>
                         {% endblock %}
                     {% endblock %}

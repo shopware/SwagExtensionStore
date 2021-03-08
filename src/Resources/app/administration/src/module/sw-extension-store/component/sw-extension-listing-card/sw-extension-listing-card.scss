@@ -13,6 +13,13 @@ $font-size-rating: 10px;
         width: 100%;
         padding-top: 75%;
         cursor: pointer;
+        position: relative;
+    }
+
+    &__extension-type-label {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
     }
 
     .sw-extension-listing-card__info-grid {

@@ -44,10 +44,31 @@
         height: 32px;
     }
 
+    .sw-meteor-page__head-area {
+        padding-bottom: 12px;
+    }
+
+    .sw-meteor-page__smart-bar-header {
+        align-items: baseline !important;
+        flex-wrap: wrap;
+    }
+
     .sw-meteor-page__smart-bar-meta {
         align-self: flex-end;
         color: $color-gray-500;
         font-size: $font-size-extra-small;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        margin-bottom: 5px;
+    }
+
+    .sw-extension-store-detail__extension-type-label {
+        margin-left: 10px;
+    }
+
+    .sw-extension-store-detail__producer-link {
+        text-decoration: none;
     }
 
     .sw-meteor-page__smart-bar-actions {
