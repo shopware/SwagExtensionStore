@@ -1,16 +1,19 @@
 import { shallowMount } from '@vue/test-utils';
-import 'SwagExtensionStore/module/sw-extension-store/component/sw-extensions-store-label-display';
-
+import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-label-display';
+import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-label';
 
 function createWrapper(labels) {
-    return shallowMount(Shopware.Component.build('sw-extensions-store-label-display'), {
+    return shallowMount(Shopware.Component.build('sw-extension-store-label-display'), {
         propsData: {
             labels
+        },
+        stubs: {
+            'sw-extension-label': Shopware.Component.build('sw-extension-label')
         }
     });
 }
 
-describe('sw-extensions-store-label-display', () => {
+describe('sw-extension-store-label-display', () => {
     it('should be a Vue.JS component', async () => {
         const wrapper = createWrapper([{
             label: 'Gold zerifiziert',
@@ -38,7 +41,7 @@ describe('sw-extensions-store-label-display', () => {
         expect(label.at(0).attributes().style).toBe('background-color: rgb(203, 172, 68); color: rgb(255, 255, 255);');
         expect(label.at(0).text()).toBe('Label Text 0');
 
-        expect(label.at(1).attributes().style).toBe('background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);');
+        expect(label.at(1).attributes().style).toBe('background-color: rgba(41, 51, 61, 0.749); color: rgb(255, 255, 255);');
         expect(label.at(1).text()).toBe('Label Text 1');
 
         expect(label.at(2).attributes().style).toBe('background-color: rgb(0, 0, 0); color: rgb(255, 255, 255);');

@@ -1,0 +1,13 @@
+@import "~scss/variables";
+
+$sw-label-border-radius: $border-radius-default / 2;
+$sw-label-pill-border-radius: 50px;
+
+.sw-extension-label {
+    display: inline-block;
+    font-size: $font-size-extra-small;
+    font-weight: normal;
+    letter-spacing: 0.08px;
+    padding: 2px 5px;
+    border-radius: $sw-label-border-radius;
+}
