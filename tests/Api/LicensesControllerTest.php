@@ -35,7 +35,7 @@ class LicensesControllerTest extends TestCase
         $request->request->set('extensionId', 'foo');
 
         static::expectException(InvalidExtensionIdException::class);
-        $controller->purchaseExtension($request, Context::createDefaultContext());
+        $controller->createCart($request, Context::createDefaultContext());
     }
 
     public function testPurchaseExtensionWithInvalidVariantId(): void
@@ -51,7 +51,7 @@ class LicensesControllerTest extends TestCase
         $request->request->set('variantId', 'foo');
 
         static::expectException(InvalidVariantIdException::class);
-        $controller->purchaseExtension($request, Context::createDefaultContext());
+        $controller->createCart($request, Context::createDefaultContext());
     }
 
     public function testPurchaseExtension(): void
@@ -66,8 +66,8 @@ class LicensesControllerTest extends TestCase
         $request->request->set('extensionId', 1);
         $request->request->set('variantId', 1);
 
-        $response = $controller->purchaseExtension($request, Context::createDefaultContext());
+        $response = $controller->createCart($request, Context::createDefaultContext());
 
-        static::assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+        static::assertEquals(Response::HTTP_OK, $response->getStatusCode());
     }
 }

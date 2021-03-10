@@ -15,16 +15,16 @@ use Shopware\Core\Framework\Test\Store\ExtensionBehaviour;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
-use SwagExtensionStore\Services\ExtensionDataProvider;
+use SwagExtensionStore\Services\StoreDataProvider;
 
-class ExtensionDataProviderTest extends TestCase
+class StoreDataProviderTest extends TestCase
 {
     use IntegrationTestBehaviour;
     use StoreClientBehaviour;
     use ExtensionBehaviour;
 
     /**
-     * @var ExtensionDataProvider
+     * @var StoreDataProvider
      */
     private $extensionDataProvider;
 
@@ -35,7 +35,7 @@ class ExtensionDataProviderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->extensionDataProvider = $this->getContainer()->get(ExtensionDataProvider::class);
+        $this->extensionDataProvider = $this->getContainer()->get(StoreDataProvider::class);
         $this->context = $this->createAdminStoreContext();
 
         $this->installApp(__DIR__ . '/../_fixtures/TestApp');
@@ -70,16 +70,6 @@ class ExtensionDataProviderTest extends TestCase
 
         static::assertInstanceOf(ExtensionCollection::class, $listing);
         static::assertEquals(2, $listing->count());
-    }
-
-    public function testItLoadsRemoteExtensions(): void
-    {
-        $this->getContainer()->get(SystemConfigService::class)->set(StoreService::CONFIG_KEY_STORE_LICENSE_DOMAIN, 'localhost');
-        $this->getRequestHandler()->reset();
-        $this->getRequestHandler()->append(new Response(200, [], \file_get_contents(__DIR__ . '/../_fixtures/responses/my-licenses.json')));
-
-        $installedExtensions = $this->extensionDataProvider->getInstalledExtensions($this->context, true);
-        static::assertEquals(7, $installedExtensions->count());
     }
 
     public function testItReturnsAnExtensionDetail(): void
@@ -136,7 +126,7 @@ class ExtensionDataProviderTest extends TestCase
         $requestHandler->reset();
         $requestHandler->append(new Response(
             200,
-            [ExtensionDataProvider::HEADER_NAME_TOTAL_COUNT => '2'],
+            [StoreDataProvider::HEADER_NAME_TOTAL_COUNT => '2'],
             \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-listing.json')
         ));
     }

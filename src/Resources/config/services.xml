@@ -11,11 +11,11 @@
         </service>
 
         <service id="SwagExtensionStore\Controller\DataController" public="true">
-            <argument type="service" id="SwagExtensionStore\Services\ExtensionDataProvider"/>
+            <argument type="service" id="SwagExtensionStore\Services\StoreDataProvider"/>
             <argument type="service" id="SwagExtensionStore\Services\CategoryProvider"/>
         </service>
 
-        <service id="SwagExtensionStore\Services\ExtensionDataProvider">
+        <service id="SwagExtensionStore\Services\StoreDataProvider">
             <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
             <argument type="service" id="Shopware\Core\Framework\Store\Services\ExtensionLoader"/>
         </service>

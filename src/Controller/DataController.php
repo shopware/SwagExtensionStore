@@ -8,7 +8,7 @@ use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Routing\Annotation\Since;
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use SwagExtensionStore\Services\CategoryProvider;
-use SwagExtensionStore\Services\ExtensionDataProvider;
+use SwagExtensionStore\Services\StoreDataProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,10 +21,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DataController
 {
-    private ExtensionDataProvider $dataProvider;
+    private StoreDataProvider $dataProvider;
     private CategoryProvider $categoryProvider;
 
-    public function __construct(ExtensionDataProvider $dataProvider, CategoryProvider $categoryProvider)
+    public function __construct(StoreDataProvider $dataProvider, CategoryProvider $categoryProvider)
     {
         $this->dataProvider = $dataProvider;
         $this->categoryProvider = $categoryProvider;

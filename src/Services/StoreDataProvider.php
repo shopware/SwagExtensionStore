@@ -10,7 +10,7 @@ use Shopware\Core\Framework\Store\Struct\ExtensionStruct;
 use Shopware\Core\Framework\Store\Struct\ReviewCollection;
 use Shopware\Core\Framework\Store\Struct\ReviewSummaryStruct;
 
-class ExtensionDataProvider
+class StoreDataProvider
 {
     public const HEADER_NAME_TOTAL_COUNT = 'SW-Meta-Total';
     private StoreClient $client;

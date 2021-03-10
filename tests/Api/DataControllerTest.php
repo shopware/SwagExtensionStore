@@ -12,6 +12,8 @@ use Shopware\Core\Framework\Test\Store\ExtensionBehaviour;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Shopware\Core\Framework\Uuid\Uuid;
+use SwagExtensionStore\Controller\DataController;
+use SwagExtensionStore\Services\StoreDataProvider;
 use Symfony\Component\HttpFoundation\Request;
 
 class DataControllerTest extends TestCase
@@ -21,7 +23,7 @@ class DataControllerTest extends TestCase
     use ExtensionBehaviour;
 
     /**
-     * @var ExtensionStoreDataController
+     * @var DataController
      */
     private $controller;
 
@@ -29,7 +31,7 @@ class DataControllerTest extends TestCase
     {
         Feature::skipTestIfInActive('FEATURE_NEXT_12608', $this);
         parent::setUp();
-        $this->controller = $this->getContainer()->get(ExtensionStoreDataController::class);
+        $this->controller = $this->getContainer()->get(DataController::class);
     }
 
     public function testExtensionList(): void
@@ -116,7 +118,7 @@ class DataControllerTest extends TestCase
         $requestHandler->reset();
         $requestHandler->append(new Response(
             200,
-            [ExtensionDataProvider::HEADER_NAME_TOTAL_COUNT => '2'],
+            [StoreDataProvider::HEADER_NAME_TOTAL_COUNT => '2'],
             \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-listing.json')
         ));
     }

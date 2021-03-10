@@ -69,3 +69,6 @@ chromedriver.log
 /src/Resources/app/administration/node_modules/
 /src/Resources/app/administration/coverage/
 /src/Resources/app/administration/eslint.junit.xml
+
+
+/.phpunit.result.cache

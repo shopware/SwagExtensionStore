@@ -8,12 +8,14 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Api\Context\AdminApiSource;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\Store\Services\AbstractExtensionStoreLicensesService;
 use Shopware\Core\Framework\Store\Services\StoreService;
+use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
-use SwagExtensionStore\Services\ExtensionDataProvider;
+use SwagExtensionStore\Services\StoreDataProvider;
 use SwagExtensionStore\Services\LicenseService;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -27,21 +29,24 @@ class LicenseServiceTest extends TestCase
      */
     private $licenseService;
 
+    /**
+     * @var AbstractExtensionStoreLicensesService
+     */
+    private $coreLicenseService;
+
     public function setUp(): void
     {
         $this->licenseService = $this->getContainer()->get(LicenseService::class);
+        $this->coreLicenseService = $this->getContainer()->get(AbstractExtensionStoreLicensesService::class);
     }
 
-    public function testPurchaseExtensionCreatesCartAndProcessesIt(): void
+    public function testCreateCart(): void
     {
         $this->getContainer()->get(SystemConfigService::class)->set(StoreService::CONFIG_KEY_STORE_LICENSE_DOMAIN, 'localhost');
         $this->setResponsesToPurchaseExtension();
 
-        $this->licenseService->purchaseExtension(5, 5, $this->getContextWithStoreToken());
-
-        $appDir = $this->getContainer()->getParameter('shopware.app_dir') . '/TestApp';
-        static::assertFileExists($appDir);
-        (new Filesystem())->remove($appDir);
+        $cart = $this->licenseService->createCart(5, 5, $this->getContextWithStoreToken());
+        static::assertInstanceOf(CartStruct::class, $cart);
     }
 
     public function testCancelSubscriptionRemovesLicense(): void
@@ -50,11 +55,12 @@ class LicenseServiceTest extends TestCase
         $this->getContainer()->get(SystemConfigService::class)->set(StoreService::CONFIG_KEY_STORE_LICENSE_DOMAIN, 'localhost');
         $this->setResponsesToPurchaseExtension();
 
-        $this->licenseService->purchaseExtension(5, 5, $context);
+        $cart = $this->licenseService->createCart(5, 5, $context);
+        $this->licenseService->orderCart($cart, $context);
 
         $this->setCancelationResponses();
 
-        $this->licenseService->cancelSubscription(1, $context);
+        $this->coreLicenseService->cancelSubscription(1, $context);
 
         static::assertEquals(
             '/swplatform/pluginlicenses/1/cancel?shopwareVersion=___VERSION___&language=en-GB&domain=localhost',
@@ -122,7 +128,7 @@ class LicenseServiceTest extends TestCase
         $this->getRequestHandler()->append(
             new Response(
                 200,
-                [ExtensionDataProvider::HEADER_NAME_TOTAL_COUNT => '0'],
+                [StoreDataProvider::HEADER_NAME_TOTAL_COUNT => '0'],
                 \json_encode($licenses)
             )
         );
