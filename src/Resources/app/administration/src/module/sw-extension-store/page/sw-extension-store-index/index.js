@@ -9,9 +9,7 @@ const { Component } = Shopware;
 Component.register('sw-extension-store-index', {
     template,
 
-    inject: [
-        'extensionStoreDataService'
-    ],
+    inject: ['extensionApiService'],
 
     props: {
         id: {
@@ -73,7 +71,7 @@ Component.register('sw-extension-store-index', {
         },
 
         getExtensionStore() {
-            return this.extensionStoreDataService.getMyExtensions().then((extensions) => {
+            return this.extensionApiService.getMyExtensions().then((extensions) => {
                 return extensions.find(extension => extension.name === 'SwagExtensionStore');
             });
         },

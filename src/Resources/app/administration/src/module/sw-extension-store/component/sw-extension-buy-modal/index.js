@@ -10,7 +10,8 @@ Component.register('sw-extension-buy-modal', {
     template,
 
     inject: [
-        'shopwareExtensionService'
+        'shopwareExtensionService',
+        'extensionStoreLicensesService'
     ],
 
     mixins: [
@@ -171,12 +172,14 @@ Component.register('sw-extension-buy-modal', {
             let checkoutResult = null;
 
             try {
-                await this.shopwareExtensionService.purchaseExtension(
+                await this.extensionStoreLicensesService.purchaseExtension(
                     this.extension.id,
                     this.selectedVariant.id,
                     this.tocAccepted,
                     this.permissionsAccepted
                 );
+
+                await this.shopwareExtensionService.updateExtensionData();
                 checkoutResult = this.checkoutSteps.SUCCESS;
             } catch (e) {
                 this.handleErrors(e);
