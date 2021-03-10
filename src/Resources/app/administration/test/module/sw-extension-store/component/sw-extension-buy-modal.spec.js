@@ -165,7 +165,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
 
     it('shows failed status if extensions could not be bought', async () => {
         httpClient.post.mockImplementation((route) => {
-            if (route === '_action/extension/purchase') {
+            if (route === '_action/extension-store/purchase') {
                 // eslint-disable-next-line prefer-promise-reject-errors
                 return Promise.reject({
                     response: { data: { errors: [] } }
@@ -175,7 +175,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             return Promise.resolve();
         });
         httpClient.get.mockImplementation((route) => {
-            if (route === '_action/extension/installed') {
+            if (route === '_action/extension-store/installed') {
                 return Promise.resolve({
                     data: []
                 });
@@ -207,7 +207,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
 
         await flushPromises();
 
-        expect(httpClient.get).toBeCalledWith('_action/extension/installed', {
+        expect(httpClient.get).toBeCalledWith('_action/extension-store/installed', {
             headers: expect.objectContaining({
                 Accept: 'application/json',
                 Authorization: expect.anything(),
@@ -223,7 +223,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
 
     it('shows success status if extensions was installed successfully', async () => {
         httpClient.post.mockImplementation((route) => {
-            if (route === '_action/extension/purchase') {
+            if (route === '_action/extension-store/purchase') {
                 return Promise.resolve();
             }
             return Promise.resolve();
