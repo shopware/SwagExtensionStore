@@ -175,7 +175,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             return Promise.resolve();
         });
         httpClient.get.mockImplementation((route) => {
-            if (route === '_action/extension-store/installed') {
+            if (route === '_action/extension/installed') {
                 return Promise.resolve({
                     data: []
                 });

@@ -92,4 +92,4 @@ PHPUnit:
         - php bin/console plugin:refresh
         - php bin/console plugin:install --activate $PLUGINNAME -c
         - ./psh.phar init-test-databases
-        - ./vendor/bin/phpunit -c custom/plugins/SwagExtensionStore/
+        - ./vendor/bin/phpunit -c $(pwd)/custom/plugins/$PLUGINNAME/phpunit.xml
