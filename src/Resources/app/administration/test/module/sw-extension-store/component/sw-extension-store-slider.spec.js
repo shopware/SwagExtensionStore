@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { shallowMount } from '@vue/test-utils';
-import 'SwagExtensionStore/module/sw-extension-store/component/sw-extensions-store-slider';
+import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-slider';
 
 function createWrapper() {
     return shallowMount(Shopware.Component.build('sw-extension-store-slider'), {

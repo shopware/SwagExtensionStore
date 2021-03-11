@@ -40,7 +40,9 @@ function createWrapper(extension) {
         stubs: {
             'sw-icon': true,
             'sw-extension-rating-stars': true,
-            'router-link': true
+            'router-link': true,
+            'sw-extension-type-label': true,
+            'sw-extension-store-label-display': true,
         },
         provide: {
             repositoryFactory: {
@@ -58,7 +60,7 @@ function createWrapper(extension) {
                     });
                 }
             },
-            shopwareExtensionService: new ShopwareExtensionService(undefined, undefined, undefined, new ShopwareDiscountCampaignService())
+            shopwareExtensionService: new ShopwareExtensionService(undefined, undefined, new ShopwareDiscountCampaignService())
         }
     });
 }
