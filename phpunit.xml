@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="tests/TestBootstrap.php" executionOrder="random">
+  <coverage>
+    <include>
+      <directory suffix=".php">./</directory>
+    </include>
+    <exclude>
+      <directory suffix=".php">./bin</directory>
+      <directory suffix=".php">./tests</directory>
+      <directory suffix=".php">./vendor</directory>
+      <directory suffix=".php">./src/Migration</directory>
+      <directory suffix=".php">./src/Resources</directory>
+      <directory suffix="Definition.php">./</directory>
+      <directory suffix="Exception.php">./</directory>
+      <file>src/SwagExtensionStore.php</file>
+    </exclude>
+  </coverage>
+  <php>
+    <ini name="error_reporting" value="-1"/>
+    <server name="KERNEL_CLASS" value="Shopware\Development\Kernel"/>
+    <env name="APP_ENV" value="test"/>
+    <env name="APP_DEBUG" value="1"/>
+    <env name="APP_SECRET" value="s$cretf0rt3st"/>
+    <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
+  </php>
+  <testsuites>
+    <testsuite name="SwagExtensionStore Testsuite">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

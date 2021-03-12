@@ -11,7 +11,7 @@ Shopware.Component.register('sw-extension-type-label', {
             type: String,
             required: true,
             validator(value) {
-                const validTypes = ['app', 'extension'];
+                const validTypes = ['app', 'extension', 'plugin'];
 
                 return validTypes.includes(value);
             }

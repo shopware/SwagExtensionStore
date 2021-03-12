@@ -1,7 +1,7 @@
 import './page/sw-extension-store-index';
 import './page/sw-extension-store-listing';
 import './page/sw-extension-store-detail';
-import './component/sw-extensions-store-slider';
+import './component/sw-extension-store-slider';
 import './component/sw-extension-store-listing-filter';
 import './component/sw-extension-buy-modal';
 import './component/sw-extension-permissions-modal';
@@ -25,7 +25,22 @@ import './component/sw-extension-store-type-label';
 import './component/sw-extension-store-label-display';
 import './component/sw-extension-adding-failed';
 import './component/sw-extension-adding-success';
+import ExtensionStoreDataService from './service/extension-store-data.service';
+import ExtensionLicenseService from './service/extension-store-licenses.service';
 
+Shopware.Application.addServiceProvider('extensionStoreDataService', () => {
+    return new ExtensionStoreDataService(
+        Shopware.Application.getContainer('init').httpClient,
+        Shopware.Service('loginService')
+    );
+});
+
+Shopware.Application.addServiceProvider('extensionStoreLicensesService', () => {
+    return new ExtensionLicenseService(
+        Shopware.Application.getContainer('init').httpClient,
+        Shopware.Service('loginService')
+    );
+});
 
 Shopware.Module.register('sw-extension-store', {
     routePrefixName: 'sw.extension',

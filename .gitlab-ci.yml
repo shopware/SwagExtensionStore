@@ -5,6 +5,7 @@ variables:
     WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/development/public
     DEVELOPMENT_BRANCH: 'trunk'
     PLATFORM_BRANCH: 'trunk'
+    FEATURE_ALL: 'major'
 
 stages:
     - Static analysis
@@ -75,3 +76,20 @@ Administration Jest:
     artifacts:
         reports:
             junit: development/build/artifacts/jest/customized-products.junit.xml
+
+
+PHPUnit:
+    stage: Testing
+    timeout: 1h 00m
+    variables:
+        PROJECT_ROOT: $CI_PROJECT_DIR/development
+        PLUGINNAME: "SwagExtensionStore"
+    services:
+        -   name: mariadb:10.3
+            alias: mysql
+    script:
+        - ./psh.phar init
+        - php bin/console plugin:refresh
+        - php bin/console plugin:install --activate $PLUGINNAME -c
+        - ./psh.phar init-test-databases
+        - ./vendor/bin/phpunit -c $(pwd)/custom/plugins/$PLUGINNAME/phpunit.xml

@@ -4,6 +4,8 @@ import vuei18n from 'vue-i18n';
 
 /* service */
 import 'src/module/sw-extension/service';
+import LicenseViolationsService from 'SwagExtensionStore/extensions/service/license-violations.service';
+import LicenseViolationStore from 'SwagExtensionStore/extensions/state/license-violation.store';
 
 /* components */
 import 'src/app/component/base/sw-alert';
@@ -13,6 +15,8 @@ import 'src/app/component/form/field-base/sw-field-error';
 import 'src/app/component/form/sw-checkbox-field';
 import 'src/app/component/form/sw-gtc-checkbox';
 import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-buy-modal';
+import ExtensionStoreDataService from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-data.service';
+import ExtensionLicenseService from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-licenses.service';
 
 /* stores */
 import pluginStore from 'src/module/sw-plugin/state/plugin.store';
@@ -20,6 +24,27 @@ import extensionStore from 'src/module/sw-extension/store/extensions.store';
 
 /* mixin */
 import extensionErrorMixin from 'src/module/sw-extension/mixin/sw-extension-error.mixin';
+
+Shopware.Application.addServiceProvider('extensionStoreDataService', () => {
+    return new ExtensionStoreDataService(
+        Shopware.Application.getContainer('init').httpClient,
+        Shopware.Service('loginService')
+    );
+});
+
+Shopware.Application.addServiceProvider('extensionStoreLicensesService', () => {
+    return new ExtensionLicenseService(
+        Shopware.Application.getContainer('init').httpClient,
+        Shopware.Service('loginService')
+    );
+});
+
+Shopware.Application.addServiceProvider('licenseViolationService', () => {
+    return LicenseViolationsService(Shopware.Application.getContainer('service').storeService);
+});
+
+Shopware.State.registerModule('licenseViolation', LicenseViolationStore);
+
 
 Shopware.Application.addServiceProvider('appModulesService', () => {
     return {
@@ -76,7 +101,8 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 extension: provideTestExtension(overrides)
             },
             provide: {
-                shopwareExtensionService: Shopware.Service('shopwareExtensionService')
+                shopwareExtensionService: Shopware.Service('shopwareExtensionService'),
+                extensionStoreLicensesService: Shopware.Service('extensionStoreLicensesService')
             },
             stubs: {
                 'sw-modal': {
@@ -165,17 +191,23 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
 
     it('shows failed status if extensions could not be bought', async () => {
         httpClient.post.mockImplementation((route) => {
-            if (route === '_action/extension/purchase') {
+            if (route === '/_action/extension-store/purchase') {
                 // eslint-disable-next-line prefer-promise-reject-errors
                 return Promise.reject({
                     response: { data: { errors: [] } }
                 });
             }
 
+            if (route === '/_action/extension/refresh') {
+                return Promise.resolve({
+                    data: []
+                });
+            }
+
             return Promise.resolve();
         });
         httpClient.get.mockImplementation((route) => {
-            if (route === '_action/extension/installed') {
+            if (route === '/_action/extension/installed') {
                 return Promise.resolve({
                     data: []
                 });
@@ -207,9 +239,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
 
         await flushPromises();
 
-        expect(httpClient.get).toBeCalledWith('_action/extension/installed', {
+        expect(httpClient.get).toBeCalledWith('/_action/extension/installed', {
             headers: expect.objectContaining({
-                Accept: 'application/json',
+                Accept: expect.anything(),
                 Authorization: expect.anything(),
                 'Content-Type': 'application/json'
             }),
@@ -223,14 +255,21 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
 
     it('shows success status if extensions was installed successfully', async () => {
         httpClient.post.mockImplementation((route) => {
-            if (route === '_action/extension/purchase') {
+            if (route === '/_action/extension-store/purchase') {
                 return Promise.resolve();
             }
+
+            if (route === '/_action/extension/refresh') {
+                return Promise.resolve({
+                    data: []
+                });
+            }
+
             return Promise.resolve();
         });
 
         httpClient.get.mockImplementation((route) => {
-            if (route === '_action/extension/installed') {
+            if (route === '/_action/extension/installed') {
                 return Promise.resolve({
                     data: []
                 });
@@ -262,9 +301,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
 
         await flushPromises();
 
-        expect(httpClient.get).toBeCalledWith('_action/extension/installed', {
+        expect(httpClient.get).toBeCalledWith('/_action/extension/installed', {
             headers: expect.objectContaining({
-                Accept: 'application/json',
+                Accept: expect.anything(),
                 Authorization: expect.anything(),
                 'Content-Type': 'application/json'
             }),

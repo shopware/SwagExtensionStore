@@ -5,6 +5,34 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <!-- Controller -->
+        <service id="SwagExtensionStore\Controller\BasketController" public="true">
+            <argument type="service" id="SwagExtensionStore\Services\LicenseService"/>
+        </service>
 
+        <service id="SwagExtensionStore\Controller\DataController" public="true">
+            <argument type="service" id="SwagExtensionStore\Services\StoreDataProvider"/>
+            <argument type="service" id="SwagExtensionStore\Services\CategoryProvider"/>
+        </service>
+
+        <service id="SwagExtensionStore\Services\StoreDataProvider">
+            <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
+            <argument type="service" id="Shopware\Core\Framework\Store\Services\ExtensionLoader"/>
+        </service>
+
+        <service id="SwagExtensionStore\Services\CategoryProvider">
+            <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
+        </service>
+
+        <service id="SwagExtensionStore\Services\LicenseService">
+            <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
+            <argument type="service" id="Shopware\Core\Framework\Store\Services\ExtensionDownloader"/>
+        </service>
+
+        <service id="SwagExtensionStore\Services\StoreClient">
+            <argument type="service" id="Shopware\Core\Framework\Store\Services\StoreService"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="Shopware\Core\Framework\Store\Authentication\AbstractAuthenticationProvider"/>
+        </service>
     </services>
 </container>
