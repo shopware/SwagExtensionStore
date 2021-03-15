@@ -34,17 +34,16 @@ Component.register('sw-extension-buy-modal', {
             showPermissionsModal: false,
             privacyExtensionsAccepted: false,
             showPrivacyModal: false,
-            checkoutStep: null
+            checkoutStep: null,
+            checkoutError: null,
+            cart: null,
+            paymentMeans: []
         };
     },
 
     computed: {
         recommendedVariants() {
-            return this.shopwareExtensionService.orderVariantsByRecommendation(
-                this.extension.variants
-            ).filter((variant) => {
-                return Object.values(this.shopwareExtensionService.EXTENSION_VARIANT_TYPES).includes(variant.type);
-            });
+            return this.shopwareExtensionService.orderVariantsByRecommendation(this.extension.variants);
         },
 
         selectedVariant() {
@@ -121,18 +120,27 @@ Component.register('sw-extension-buy-modal', {
                 SUCCESS: 'checkout-success',
                 FAILED: 'checkout-failed'
             });
+        },
+
+        showPaymentSelection() {
+            return this.cart && this.cart.payment && this.cart.payment.chargingAmount > 0;
         }
     },
 
     created() {
-        const variantId = this.recommendedVariants.length > 0
-            ? this.recommendedVariants[0].id
-            : this.extension.variants[0].id;
+        const variantId = this.recommendedVariants.length > 0 ? this.recommendedVariants[0].id : null;
 
         this.setSelectedVariantId(variantId);
         this.permissionsAccepted = !this.extensionHasPermissions;
         this.privacyExtensionsAccepted = !this.extension.privacyPolicyExtension;
+
         this.fetchPlan();
+    },
+
+    watch: {
+        selectedVariantId() {
+            this.getCart();
+        }
     },
 
     methods: {
@@ -172,18 +180,17 @@ Component.register('sw-extension-buy-modal', {
             let checkoutResult = null;
 
             try {
-                await this.extensionStoreLicensesService.purchaseExtension(
-                    this.extension.id,
-                    this.selectedVariant.id,
-                    this.tocAccepted,
-                    this.permissionsAccepted
-                );
+                await this.extensionStoreLicensesService.orderCart(this.cart);
 
                 await this.shopwareExtensionService.updateExtensionData();
                 checkoutResult = this.checkoutSteps.SUCCESS;
-            } catch (e) {
-                this.handleErrors(e);
+            } catch (error) {
+                this.handleErrors(error);
                 checkoutResult = this.checkoutSteps.FAILED;
+
+                if (error && error.response && error.response.data && Array.isArray(error.response.data.errors)) {
+                    this.checkoutError = error.response.data.errors[0];
+                }
             } finally {
                 await this.shopwareExtensionService.updateExtensionData();
                 this.checkoutStep = checkoutResult;
@@ -192,9 +199,27 @@ Component.register('sw-extension-buy-modal', {
             }
         },
 
+        async getCart() {
+            if (!this.userCanBuyFromStore) {
+                return;
+            }
+
+            this.isLoading = true;
+
+            try {
+                const response = await this.extensionStoreLicensesService.newCart(this.extension.id, this.selectedVariantId);
+                this.cart = response.data;
+            } catch (e) {
+                Shopware.Utils.debug.warn('Error: ', e);
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
         variantsCardLabel(variant) {
             const price = this.shopwareExtensionService.getPriceFromVariant(variant);
 
+            // TODO: will be served from the SBP
             switch (variant.type) {
                 case this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.FREE:
                     return this.$tc(
@@ -209,12 +234,15 @@ Component.register('sw-extension-buy-modal', {
                     );
 
                 case this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.BUY:
-                default:
                     return this.$tc(
                         'sw-extension-store.component.sw-extension-buy-modal.variantCard.buy',
                         0,
                         { price: Utils.format.currency(price, 'EUR') }
                     );
+
+                default:
+                    // TODO: remove to a better fallback
+                    return `${variant.type} ${Utils.format.currency(price, 'EUR')}`;
             }
         },
 
@@ -294,7 +322,18 @@ Component.register('sw-extension-buy-modal', {
         async fetchPlan() {
             this.isLoading = true;
             await this.shopwareExtensionService.checkLogin();
+            await this.getPaymentMeans();
+            await this.getCart();
             this.isLoading = false;
+        },
+
+        async getPaymentMeans() {
+            this.extensionStoreLicensesService.getPaymentMeans().then((response) => {
+                this.paymentMeans = response.data;
+            }).catch(e => {
+                // TODO: add error handling
+                console.log('e', e);
+            });
         },
 
         openPrivacyModal() {

@@ -10,7 +10,7 @@ use Shopware\Core\Framework\Store\Exception\InvalidExtensionIdException;
 use Shopware\Core\Framework\Store\Exception\InvalidVariantIdException;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
-use SwagExtensionStore\Services\LicenseService;
+use SwagExtensionStore\Services\BasketService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,9 +23,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class BasketController
 {
-    private LicenseService $licenseService;
+    private BasketService $licenseService;
 
-    public function __construct(LicenseService $licenseService)
+    public function __construct(BasketService $licenseService)
     {
         $this->licenseService = $licenseService;
     }
@@ -63,5 +63,14 @@ class BasketController
         $this->licenseService->orderCart($cart, $context);
 
         return new Response('', Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Since("6.4.0.0")
+     * @Route("/api/_action/extension-store/cart/payment-means", name="api.extension.payment-means", methods={"GET"})
+     */
+    public function availablePaymentMeans(Context $context): Response
+    {
+        return new JsonResponse($this->licenseService->availablePaymentMeans($context));
     }
 }

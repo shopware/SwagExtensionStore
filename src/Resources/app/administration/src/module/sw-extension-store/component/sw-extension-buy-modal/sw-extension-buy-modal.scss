@@ -141,4 +141,17 @@ $padding-summary-card: 24px;
             }
         }
     }
+
+    .sw-extension-buy-modal__general-text-block {
+        font-size: $font-size-small;
+        line-height: 22px;
+        margin-bottom: 21px;
+        margin-top: 5px;
+    }
+
+    .sw-extension-buy-modal__variant-text-block {
+        font-size: $font-size-small;
+        line-height: 22px;
+        margin-top: 5px;
+    }
 }

@@ -1,13 +1,13 @@
 const { Criteria } = Shopware.Data;
 
 export default class ExtensionStoreDataService extends Shopware.Classes.ApiService {
-    constructor(httpClient, loginService, apiEndpoint = 'plugin') {
+    constructor(httpClient, loginService, apiEndpoint = 'extension-store') {
         super(httpClient, loginService, apiEndpoint);
         this.name = 'extensionStoreDataService';
     }
 
     async listingFilters(context) {
-        const res = await this.httpClient.get('_action/extension-store/store-filters', {
+        const res = await this.httpClient.get(`_action/${this.apiEndpoint}/store-filters`, {
             headers: this.basicHeaders(context),
             version: 3
         });
@@ -18,7 +18,7 @@ export default class ExtensionStoreDataService extends Shopware.Classes.ApiServi
     async getExtensionList(search, context) {
         const criteria = this._getCriteriaFromSearch(search);
 
-        const { data } = await this.httpClient.post('_action/extension-store/list', criteria.parse(), {
+        const { data } = await this.httpClient.post(`_action/${this.apiEndpoint}/list`, criteria.parse(), {
             headers: this.basicHeaders(context),
             version: 3
         });
@@ -31,7 +31,7 @@ export default class ExtensionStoreDataService extends Shopware.Classes.ApiServi
     }
 
     async getDetail(id, context) {
-        const { data } = await this.httpClient.get(`_action/extension-store/detail/${id}`, {
+        const { data } = await this.httpClient.get(`_action/${this.apiEndpoint}/detail/${id}`, {
             headers: this.basicHeaders(context),
             version: 3
         });
@@ -45,7 +45,7 @@ export default class ExtensionStoreDataService extends Shopware.Classes.ApiServi
             limit
         );
 
-        const { data } = await this.httpClient.get(`_action/extension-store/${id}/reviews`, {
+        const { data } = await this.httpClient.get(`_action/${this.apiEndpoint}/${id}/reviews`, {
             headers: this.basicHeaders(),
             params: criteria.parse(),
             version: 3

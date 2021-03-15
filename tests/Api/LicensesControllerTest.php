@@ -9,7 +9,7 @@ use Shopware\Core\Framework\Store\Exception\InvalidExtensionIdException;
 use Shopware\Core\Framework\Store\Exception\InvalidVariantIdException;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use SwagExtensionStore\Controller\BasketController;
-use SwagExtensionStore\Services\LicenseService;
+use SwagExtensionStore\Services\BasketService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,7 +25,7 @@ class LicensesControllerTest extends TestCase
 
     public function testPurchaseExtensionWithInvalidExtensionId(): void
     {
-        $provider = $this->createMock(LicenseService::class);
+        $provider = $this->createMock(BasketService::class);
 
         $controller = new BasketController(
             $provider
@@ -40,7 +40,7 @@ class LicensesControllerTest extends TestCase
 
     public function testPurchaseExtensionWithInvalidVariantId(): void
     {
-        $provider = $this->createMock(LicenseService::class);
+        $provider = $this->createMock(BasketService::class);
 
         $controller = new BasketController(
             $provider
@@ -56,7 +56,7 @@ class LicensesControllerTest extends TestCase
 
     public function testPurchaseExtension(): void
     {
-        $provider = $this->createMock(LicenseService::class);
+        $provider = $this->createMock(BasketService::class);
 
         $controller = new BasketController(
             $provider

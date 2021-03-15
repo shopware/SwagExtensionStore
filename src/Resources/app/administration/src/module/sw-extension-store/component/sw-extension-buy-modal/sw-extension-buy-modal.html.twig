@@ -19,7 +19,10 @@
                 {% block sw_extension_buy_modal_adding_failed_content %}
                     <sw-extension-adding-failed
                         :extensionName="extension.name"
-                        @close="emitClose">
+                        @close="emitClose"
+                        :title="checkoutError && checkoutError.title"
+                        :detail="checkoutError && checkoutError.detail"
+                        :documentationLink="checkoutError && checkoutError.meta && checkoutError.meta.documentationLink">
                     </sw-extension-adding-failed>
                 {% endblock %}
             </template>
@@ -77,6 +80,12 @@
                                                     <span v-if="variant.trialPhaseIncluded">
                                                         {{ $tc('sw-extension-store.component.sw-extension-buy-modal.variantCard.hasTrialPhase') }}
                                                     </span>
+
+                                                    {# TODO: change text to the API response text #}
+                                                    {# TODO: add v-if so that it will only be shown if text exists #}
+                                                    <span class="sw-extension-buy-modal__variant-text-block">
+                                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta eaque earum tempora!
+                                                    </span>
                                                 {% endblock %}
                                             </li>
                                         {% endblock %}
@@ -120,6 +129,25 @@
                                 {% endblock %}
                             {% endblock %}
                         </div>
+                    {% endblock %}
+
+                    {% block sw_extension_payment_selection %}
+                        <sw-single-select
+                            v-if="showPaymentSelection"
+                            :options="paymentMeans"
+                             {# TODO: add a translation #}
+                            :placeholder="'Select a payment method..'"
+                            valueProperty="id"
+                            v-model="cart.payment.paymentMean.id">
+                        </sw-single-select>
+                    {% endblock %}
+
+                    {% block sw_extension_payment_general_text_block %}
+                        {# TODO: change text to the API response text #}
+                        {# TODO: add v-if so that it will only be shown if text exists #}
+                        <p class="sw-extension-buy-modal__general-text-block">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam eos et excepturi id in inventore itaque iusto quia similique suscipit!
+                        </p>
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_accept_toc %}
