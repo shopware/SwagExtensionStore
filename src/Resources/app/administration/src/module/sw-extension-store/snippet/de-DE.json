@@ -1,7 +1,7 @@
 {
     "sw-extension-store": {
         "tabs": {
-            "apps": "Apps & Plugins",
+            "apps": "Apps",
             "themes": "Themes"
         },
         "updateWarning": {
@@ -11,10 +11,9 @@
             "requestDescription": "Du musst auf die neueste Version upgraden, um neue und aktualisierte Erweiterungen oder Themes für deinen Shop zu erhalten.",
             "update": "Update"
         },
-        "entityTypes": {
-            "app": "App",
-            "plugin": "Plugin",
-            "theme": "Theme"
+        "typeLabels": {
+            "self-hosted": "Self hosted",
+            "cloud": "Cloud"
         }
     }
 }

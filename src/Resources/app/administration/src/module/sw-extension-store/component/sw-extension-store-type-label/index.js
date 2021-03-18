@@ -11,7 +11,7 @@ Shopware.Component.register('sw-extension-type-label', {
             type: String,
             required: true,
             validator(value) {
-                const validTypes = ['app', 'extension', 'plugin'];
+                const validTypes = ['app', 'plugin'];
 
                 return validTypes.includes(value);
             }
@@ -19,8 +19,8 @@ Shopware.Component.register('sw-extension-type-label', {
     },
 
     computed: {
-        labelPath() {
-            return `sw-extension-store.entityTypes.${this.type}`;
+        isApp() {
+            return this.type === 'app';
         }
     }
 });
