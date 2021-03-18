@@ -9,7 +9,7 @@ const { Component } = Shopware;
 Component.register('sw-extension-store-index', {
     template,
 
-    inject: ['extensionApiService'],
+    inject: ['extensionApiService', 'shopwareExtensionService', 'storeService'],
 
     props: {
         id: {
@@ -21,7 +21,8 @@ Component.register('sw-extension-store-index', {
 
     data() {
         return {
-            updateAvailable: false
+            isAvailable: false,
+            failReason: ''
         };
     },
 
@@ -56,6 +57,16 @@ Component.register('sw-extension-store-index', {
         },
 
         async checkStoreUpdates() {
+            try {
+                await this.storeService.ping();
+            } catch (err) {
+                this.failReason = 'offline';
+                this.isAvailable = false;
+                return;
+            }
+
+            this.shopwareExtensionService.updateExtensionData();
+
             const extensionStore = await this.getExtensionStore();
 
             if (!extensionStore) {
@@ -63,11 +74,12 @@ Component.register('sw-extension-store-index', {
             }
 
             if (this.isUpdateable(extensionStore)) {
-                this.updateAvailable = true;
+                this.isAvailable = true;
                 return;
             }
 
-            this.updateAvailable = false;
+            this.failReason = 'outdated';
+            this.isAvailable = false;
         },
 
         getExtensionStore() {
