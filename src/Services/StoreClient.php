@@ -19,20 +19,18 @@ class StoreClient
     private const SHOPWARE_PLATFORM_TOKEN_HEADER = 'X-Shopware-Platform-Token';
     private const SHOPWARE_SHOP_SECRET_HEADER = 'X-Shopware-Shop-Secret';
 
-    private const SBP_API_LIST_FILTERS = '/swplatform/extensionstore/extensions/filter';
-    private const SBP_API_DETAIL_EXTENSION = '/swplatform/extensionstore/extensions/%d';
-    private const SBP_API_DETAIL_EXTENSION_REVIEWS = '/swplatform/extensionstore/extensions/%d/reviews';
-    private const SBP_API_CREATE_CART = '/swplatform/extensionstore/baskets';
-    private const SBP_API_ORDER_CART = '/swplatform/extensionstore/orders';
-    private const SBP_API_LIST_EXTENSIONS = '/swplatform/extensionstore/extensions';
-    private const SBP_API_LIST_CATEGORIES = '/swplatform/extensionstore/categories';
-
     private StoreService $storeService;
     private SystemConfigService $configService;
     private AbstractAuthenticationProvider $authenticationProvider;
+    private array $endpoints;
 
-    public function __construct(StoreService $storeService, SystemConfigService $configService, AbstractAuthenticationProvider $authenticationProvider)
-    {
+    public function __construct(
+        array $endpoints,
+        StoreService $storeService,
+        SystemConfigService $configService,
+        AbstractAuthenticationProvider $authenticationProvider
+    ) {
+        $this->endpoints = $endpoints;
         $this->storeService = $storeService;
         $this->configService = $configService;
         $this->authenticationProvider = $authenticationProvider;
@@ -43,7 +41,7 @@ class StoreClient
         $language = $this->storeService->getLanguageByContext($context);
 
         try {
-            $response = $this->getClient()->get(self::SBP_API_LIST_CATEGORIES, [
+            $response = $this->getClient()->get($this->endpoints['categories'], [
                 'query' => $this->storeService->getDefaultQueryParameters($language, false),
                 'headers' => $this->getHeaders(),
             ]);
@@ -59,7 +57,7 @@ class StoreClient
         $language = $this->storeService->getLanguageByContext($context);
 
         try {
-            $response = $this->getClient()->get(self::SBP_API_LIST_EXTENSIONS, [
+            $response = $this->getClient()->get($this->endpoints['list_extensions'], [
                 'query' => array_merge($this->storeService->getDefaultQueryParameters($language, false), $criteria->getQueryParameter()),
                 'headers' => $this->getHeaders(),
             ]);
@@ -80,7 +78,7 @@ class StoreClient
         $language = $this->storeService->getLanguageByContext($context);
 
         try {
-            $response = $this->getClient()->get(self::SBP_API_LIST_FILTERS, [
+            $response = $this->getClient()->get($this->endpoints['filter'], [
                 'query' => array_merge($this->storeService->getDefaultQueryParameters($language, false), $parameters),
                 'headers' => $this->getHeaders(),
             ]);
@@ -96,7 +94,7 @@ class StoreClient
         $language = $this->storeService->getLanguageByContext($context);
 
         try {
-            $response = $this->getClient()->get(sprintf(self::SBP_API_DETAIL_EXTENSION, $id), [
+            $response = $this->getClient()->get(sprintf($this->endpoints['extension_detail'], $id), [
                 'query' => $this->storeService->getDefaultQueryParameters($language, false),
                 'headers' => $this->getHeaders(),
             ]);
@@ -112,7 +110,7 @@ class StoreClient
         $language = $this->storeService->getLanguageByContext($context);
 
         try {
-            $response = $this->getClient()->get(sprintf(self::SBP_API_DETAIL_EXTENSION_REVIEWS, $id), [
+            $response = $this->getClient()->get(sprintf($this->endpoints['reviews'], $id), [
                 'query' => array_merge($this->storeService->getDefaultQueryParameters($language, false), $criteria->getQueryParameter()),
                 'headers' => $this->getHeaders(),
             ]);
@@ -128,7 +126,7 @@ class StoreClient
         $language = $this->storeService->getLanguageByContext($context);
 
         try {
-            $response = $this->getClient()->post(self::SBP_API_CREATE_CART, [
+            $response = $this->getClient()->post($this->endpoints['create_basket'], [
                 'query' => $this->storeService->getDefaultQueryParameters($language, false),
                 'headers' => $this->getHeaders($this->authenticationProvider->getUserStoreToken($context)),
                 'json' => [
@@ -150,11 +148,25 @@ class StoreClient
     public function orderCart(CartStruct $cartStruct, Context $context): void
     {
         try {
-            $this->getClient()->post(self::SBP_API_ORDER_CART, [
+            $this->getClient()->post($this->endpoints['order_basket'], [
                 'query' => $this->storeService->getDefaultQueryParameters('en-GB', false),
                 'headers' => $this->getHeaders($this->authenticationProvider->getUserStoreToken($context)),
                 'json' => $cartStruct,
             ]);
+        } catch (ClientException $e) {
+            throw new StoreApiException($e);
+        }
+    }
+
+    public function availablePaymentMeans(Context $context): array
+    {
+        try {
+            $response = $this->getClient()->get($this->endpoints['payment_means'], [
+                'query' => $this->storeService->getDefaultQueryParameters('en-GB', false),
+                'headers' => $this->getHeaders($this->authenticationProvider->getUserStoreToken($context)),
+            ]);
+
+            return json_decode((string) $response->getBody(), true);
         } catch (ClientException $e) {
             throw new StoreApiException($e);
         }

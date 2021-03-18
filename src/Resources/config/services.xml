@@ -3,7 +3,18 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
+    <parameters>
+        <parameter key="swag_extension_store.endpoints" type="collection">
+            <parameter key="categories">/swplatform/extensionstore/categories</parameter>
+            <parameter key="list_extensions">/swplatform/extensionstore/extensions</parameter>
+            <parameter key="extension_detail">/swplatform/extensionstore/extensions/%d</parameter>
+            <parameter key="filter">/swplatform/extensionstore/extensions/filter</parameter>
+            <parameter key="reviews">/swplatform/extensionstore/extensions/%d/reviews</parameter>
+            <parameter key="create_basket">/swplatform/extensionstore/baskets</parameter>
+            <parameter key="order_basket">/swplatform/extensionstore/orders</parameter>
+            <parameter key="payment_means">/swplatform/extensionstore/paymentmeans</parameter>
+        </parameter>
+    </parameters>
     <services>
         <!-- Controller -->
         <service id="SwagExtensionStore\Controller\BasketController" public="true">
@@ -30,6 +41,7 @@
         </service>
 
         <service id="SwagExtensionStore\Services\StoreClient">
+            <argument>%swag_extension_store.endpoints%</argument>
             <argument type="service" id="Shopware\Core\Framework\Store\Services\StoreService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="Shopware\Core\Framework\Store\Authentication\AbstractAuthenticationProvider"/>

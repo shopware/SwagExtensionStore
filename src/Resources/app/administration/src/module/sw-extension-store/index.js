@@ -6,9 +6,11 @@ import './component/sw-extension-store-listing-filter';
 import './component/sw-extension-buy-modal';
 import './component/sw-extension-listing-card';
 import './component/sw-extension-store-update-warning';
+import './component/sw-extension-store-offline-error';
 import './component/sw-extension-store-label';
 import './component/sw-extension-store-type-label';
 import './component/sw-extension-store-label-display';
+
 import ExtensionStoreDataService from './service/extension-store-data.service';
 import ExtensionLicenseService from './service/extension-store-licenses.service';
 

@@ -11,6 +11,10 @@
             "requestDescription": "Du musst auf die neueste Version upgraden, um neue und aktualisierte Erweiterungen oder Themes für deinen Shop zu erhalten.",
             "update": "Update"
         },
+        "offline": {
+            "headline": "Shopware Store nicht verfügbar",
+            "description": "Überprüfe Deine Internetverbindung oder versuche es später noch einmal."
+        },
         "typeLabels": {
             "self-hosted": "Self hosted",
             "cloud": "Cloud"
