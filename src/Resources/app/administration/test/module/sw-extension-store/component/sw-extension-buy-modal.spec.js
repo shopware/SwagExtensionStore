@@ -4,8 +4,8 @@ import vuei18n from 'vue-i18n';
 
 /* service */
 import 'src/module/sw-extension/service';
-import LicenseViolationsService from 'SwagExtensionStore/extensions/service/license-violations.service';
-import LicenseViolationStore from 'SwagExtensionStore/extensions/state/license-violation.store';
+import LicenseViolationsService from 'src/app/service/license-violations.service';
+import LicenseViolationStore from 'src/app/state/license-violation.store';
 
 /* components */
 import 'src/app/component/base/sw-alert';
