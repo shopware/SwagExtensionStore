@@ -124,6 +124,17 @@ Component.register('sw-extension-buy-modal', {
 
         showPaymentSelection() {
             return this.cart && this.cart.payment && this.cart.payment.chargingAmount > 0;
+        },
+
+        paymentText() {
+            if (!this.cart || !this.cart.paymentText) {
+                return null;
+            }
+
+            return this.$sanitize(this.cart.paymentText, {
+                ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong'],
+                ALLOWED_ATTR: ['href', 'target']
+            });
         }
     },
 
@@ -219,31 +230,7 @@ Component.register('sw-extension-buy-modal', {
         variantsCardLabel(variant) {
             const price = this.shopwareExtensionService.getPriceFromVariant(variant);
 
-            // TODO: will be served from the SBP
-            switch (variant.type) {
-                case this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.FREE:
-                    return this.$tc(
-                        'sw-extension-store.component.sw-extension-buy-modal.variantCard.free'
-                    );
-
-                case this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.RENT:
-                    return this.$tc(
-                        'sw-extension-store.component.sw-extension-buy-modal.variantCard.rent',
-                        0,
-                        { price: Utils.format.currency(price, 'EUR') }
-                    );
-
-                case this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.BUY:
-                    return this.$tc(
-                        'sw-extension-store.component.sw-extension-buy-modal.variantCard.buy',
-                        0,
-                        { price: Utils.format.currency(price, 'EUR') }
-                    );
-
-                default:
-                    // TODO: remove to a better fallback
-                    return `${variant.type} ${Utils.format.currency(price, 'EUR')}`;
-            }
+            return `${variant.label || variant.type} ${Utils.format.currency(price, 'EUR')}`;
         },
 
         handleErrors(error) {

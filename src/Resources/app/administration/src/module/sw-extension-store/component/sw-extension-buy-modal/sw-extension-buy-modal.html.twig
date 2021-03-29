@@ -143,10 +143,9 @@
                     {% endblock %}
 
                     {% block sw_extension_payment_general_text_block %}
-                        {# TODO: change text to the API response text #}
-                        {# TODO: add v-if so that it will only be shown if text exists #}
-                        <p class="sw-extension-buy-modal__general-text-block">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam eos et excepturi id in inventore itaque iusto quia similique suscipit!
+                        <p class="sw-extension-buy-modal__general-text-block"
+                           v-if="paymentText"
+                           v-html="paymentText">
                         </p>
                     {% endblock %}
 
