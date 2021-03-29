@@ -18,6 +18,9 @@
         "typeLabels": {
             "self-hosted": "Self hosted",
             "cloud": "Cloud"
+        },
+        "buy-modal": {
+            "paymentSelectionPlaceholder": "Select a payment method..."
         }
     }
 }

@@ -135,8 +135,7 @@
                         <sw-single-select
                             v-if="showPaymentSelection"
                             :options="paymentMeans"
-                             {# TODO: add a translation #}
-                            :placeholder="'Select a payment method..'"
+                            :placeholder="$tc('sw-extension-store.buy-modal.paymentSelectionPlaceholder')"
                             valueProperty="id"
                             v-model="cart.payment.paymentMean.id">
                         </sw-single-select>
