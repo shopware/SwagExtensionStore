@@ -21,7 +21,7 @@ Component.register('sw-extension-store-index', {
 
     data() {
         return {
-            isAvailable: false,
+            isAvailable: true,
             failReason: ''
         };
     },
@@ -74,12 +74,12 @@ Component.register('sw-extension-store-index', {
             }
 
             if (this.isUpdateable(extensionStore)) {
-                this.isAvailable = true;
+                this.isAvailable = false;
+                this.failReason = 'outdated';
                 return;
             }
 
-            this.failReason = 'outdated';
-            this.isAvailable = false;
+            this.isAvailable = true;
         },
 
         getExtensionStore() {

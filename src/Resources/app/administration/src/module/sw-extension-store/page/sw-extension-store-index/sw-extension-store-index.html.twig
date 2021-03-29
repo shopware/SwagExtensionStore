@@ -34,7 +34,7 @@
                             <router-view v-if="isAvailable"></router-view>
                         {% endblock %}
 
-                        {% block sw_extension_store_index_content_update_warning %}
+                        {% block sw_extension_store_index_content_offline_warning %}
                             <sw-extension-store-offline-warning v-else-if="failReason === 'offline'">
                             </sw-extension-store-offline-warning>
                         {% endblock %}
