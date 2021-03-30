@@ -317,9 +317,34 @@ Component.register('sw-extension-buy-modal', {
         async getPaymentMeans() {
             this.extensionStoreLicensesService.getPaymentMeans().then((response) => {
                 this.paymentMeans = response.data;
-            }).catch(e => {
-                // TODO: add error handling
-                console.log('e', e);
+            }).catch(error => {
+                const errorMessages = (error.response && error.response.data && error.response.data.errors) || [];
+
+                if (!Array.isArray(errorMessages)) {
+                    Shopware.Utils.debug.warn('Payment loading error', error);
+                    return;
+                }
+
+                errorMessages.forEach(e => {
+                    this.createNotificationError({
+                        system: true,
+                        autoClose: false,
+                        growl: true,
+                        title: e.title,
+                        message: e.detail
+                    });
+                });
+            });
+        },
+
+        legalTextForVariant(variant) {
+            if (!variant || !variant.legalText) {
+                return null;
+            }
+
+            return this.$sanitize(variant.legalText, {
+                ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong'],
+                ALLOWED_ATTR: ['href', 'target']
             });
         },
 

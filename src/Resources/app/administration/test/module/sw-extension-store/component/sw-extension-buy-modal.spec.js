@@ -19,7 +19,6 @@ import ExtensionStoreDataService from 'SwagExtensionStore/module/sw-extension-st
 import ExtensionLicenseService from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-licenses.service';
 
 /* stores */
-import pluginStore from 'src/module/sw-plugin/state/plugin.store';
 import extensionStore from 'src/module/sw-extension/store/extensions.store';
 
 /* mixin */
@@ -71,15 +70,21 @@ const httpClient = {
 
 Shopware.Application.getContainer('init').httpClient = httpClient;
 
-Shopware.State.registerModule('swPlugin', pluginStore);
 Shopware.State.registerModule('shopwareExtensions', extensionStore);
 
 describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
     let wrapper;
 
-    afterEach(() => {
+    afterEach(async () => {
+        await flushPromises();
         if (wrapper) wrapper.destroy();
     });
+
+    beforeEach(() => {
+        httpClient.get.mockImplementation((route) => {
+            return Promise.resolve();
+        });
+    })
 
     function provideTestExtension(overrides) {
         return Object.assign({
@@ -191,7 +196,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
 
     it('shows failed status if extensions could not be bought', async () => {
         httpClient.post.mockImplementation((route) => {
-            if (route === '/_action/extension-store/purchase') {
+            if (route === '/_action/extension-store/cart/order') {
                 // eslint-disable-next-line prefer-promise-reject-errors
                 return Promise.reject({
                     response: { data: { errors: [] } }
