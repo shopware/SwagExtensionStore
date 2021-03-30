@@ -16,7 +16,7 @@ use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use SwagExtensionStore\Services\StoreDataProvider;
-use SwagExtensionStore\Services\LicenseService;
+use SwagExtensionStore\Services\BasketService;
 use Symfony\Component\Filesystem\Filesystem;
 
 class LicenseServiceTest extends TestCase
@@ -25,7 +25,7 @@ class LicenseServiceTest extends TestCase
     use StoreClientBehaviour;
 
     /**
-     * @var LicenseService
+     * @var BasketService
      */
     private $licenseService;
 
@@ -36,7 +36,7 @@ class LicenseServiceTest extends TestCase
 
     public function setUp(): void
     {
-        $this->licenseService = $this->getContainer()->get(LicenseService::class);
+        $this->licenseService = $this->getContainer()->get(BasketService::class);
         $this->coreLicenseService = $this->getContainer()->get(AbstractExtensionStoreLicensesService::class);
     }
 

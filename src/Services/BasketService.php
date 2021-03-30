@@ -7,7 +7,7 @@ use Shopware\Core\Framework\Store\Services\ExtensionDownloader;
 use Shopware\Core\Framework\Store\Struct\CartPositionStruct;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 
-class LicenseService
+class BasketService
 {
     private StoreClient $client;
     private ExtensionDownloader $extensionDownloader;
@@ -28,13 +28,8 @@ class LicenseService
         $this->client->orderCart($cart, $context);
     }
 
-    /**
-     * @return array<string>
-     */
-    private function getExtensionNamesFromCart(CartStruct $cart): array
+    public function availablePaymentMeans(Context $context): array
     {
-        return array_map(static function (CartPositionStruct $position): string {
-            return $position->getExtensionName();
-        }, $cart->getPositions()->getElements());
+        return $this->client->availablePaymentMeans($context);
     }
 }

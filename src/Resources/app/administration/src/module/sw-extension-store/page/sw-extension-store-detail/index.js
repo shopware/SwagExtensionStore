@@ -11,7 +11,8 @@ Component.register('sw-extension-store-detail', {
 
     inject: [
         'extensionStoreDataService',
-        'shopwareExtensionService'
+        'shopwareExtensionService',
+        'extensionHelperService'
     ],
 
     mixins: ['sw-extension-error'],
@@ -64,7 +65,13 @@ Component.register('sw-extension-store-detail', {
 
         isInstalled() {
             return Shopware.State.get('shopwareExtensions').myExtensions.data.some((extension) => {
-                return extension.name === this.extension.name;
+                const match = extension.name === this.extension.name;
+
+                if (!match) {
+                    return false;
+                }
+
+                return !!match.installedAt;
             });
         },
 
@@ -297,7 +304,7 @@ Component.register('sw-extension-store-detail', {
             this.isInstalling = true;
 
             try {
-                await this.shopwareExtensionService.installExtension(this.extension.name, this.permissionsAccepted);
+                await this.extensionHelperService.downloadAndInstallExtension(this.extension.name, this.permissionsAccepted);
 
                 this.isInstallSuccessful = true;
             } catch (e) {

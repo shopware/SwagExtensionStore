@@ -18,7 +18,7 @@
     <services>
         <!-- Controller -->
         <service id="SwagExtensionStore\Controller\BasketController" public="true">
-            <argument type="service" id="SwagExtensionStore\Services\LicenseService"/>
+            <argument type="service" id="SwagExtensionStore\Services\BasketService"/>
         </service>
 
         <service id="SwagExtensionStore\Controller\DataController" public="true">
@@ -35,7 +35,7 @@
             <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
         </service>
 
-        <service id="SwagExtensionStore\Services\LicenseService">
+        <service id="SwagExtensionStore\Services\BasketService">
             <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
             <argument type="service" id="Shopware\Core\Framework\Store\Services\ExtensionDownloader"/>
         </service>

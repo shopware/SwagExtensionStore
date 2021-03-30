@@ -19,7 +19,10 @@
                 {% block sw_extension_buy_modal_adding_failed_content %}
                     <sw-extension-adding-failed
                         :extensionName="extension.name"
-                        @close="emitClose">
+                        @close="emitClose"
+                        :title="checkoutError && checkoutError.title"
+                        :detail="checkoutError && checkoutError.detail"
+                        :documentationLink="checkoutError && checkoutError.meta && checkoutError.meta.documentationLink">
                     </sw-extension-adding-failed>
                 {% endblock %}
             </template>
@@ -77,6 +80,11 @@
                                                     <span v-if="variant.trialPhaseIncluded">
                                                         {{ $tc('sw-extension-store.component.sw-extension-buy-modal.variantCard.hasTrialPhase') }}
                                                     </span>
+
+                                                    <span class="sw-extension-buy-modal__variant-text-block"
+                                                       v-if="variant.legalText"
+                                                       v-html="legalTextForVariant(variant)">
+                                                    </span>
                                                 {% endblock %}
                                             </li>
                                         {% endblock %}
@@ -120,6 +128,23 @@
                                 {% endblock %}
                             {% endblock %}
                         </div>
+                    {% endblock %}
+
+                    {% block sw_extension_payment_selection %}
+                        <sw-single-select
+                            v-if="showPaymentSelection"
+                            :options="paymentMeans"
+                            :placeholder="$tc('sw-extension-store.buy-modal.paymentSelectionPlaceholder')"
+                            valueProperty="id"
+                            v-model="cart.payment.paymentMean.id">
+                        </sw-single-select>
+                    {% endblock %}
+
+                    {% block sw_extension_payment_general_text_block %}
+                        <p class="sw-extension-buy-modal__general-text-block"
+                           v-if="paymentText"
+                           v-html="paymentText">
+                        </p>
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_accept_toc %}
