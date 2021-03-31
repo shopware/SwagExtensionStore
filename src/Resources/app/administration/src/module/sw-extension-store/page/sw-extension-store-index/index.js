@@ -31,6 +31,10 @@ Component.register('sw-extension-store-index', {
             return Shopware.State.get('shopwareExtensions').search.filter;
         },
 
+        searchValue() {
+            return Shopware.State.get('shopwareExtensions').search.term;
+        },
+
         isTheme() {
             const isTheme = this.$route.name.includes('theme');
 
