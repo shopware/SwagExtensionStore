@@ -225,6 +225,7 @@
                     <sw-extension-permissions-modal
                         v-if="showPermissionsModal"
                         :extensionLabel="extension.label"
+                        :domains="extension.domains"
                         :permissions="extension.permissions"
                         @modal-close="closePermissionsModal">
                     </sw-extension-permissions-modal>

@@ -313,6 +313,7 @@
                 <sw-extension-permissions-modal
                     v-if="showPermissionsModal"
                     :extensionLabel="extension.label"
+                    :domains="extension.domains"
                     :permissions="extension.permissions"
                     @modal-close="closePermissionsModal">
                 </sw-extension-permissions-modal>
@@ -322,6 +323,7 @@
                 <sw-extension-permissions-modal
                     v-if="showAcceptPermissionsModal"
                     :extensionLabel="extension.label"
+                    :domains="extension.domains"
                     :permissions="extension.permissions"
                     :actionLabel="$tc('sw-extension-store.component.sw-extension-card-base.labelAcceptAndInstall')"
                     @modal-close="closeAcceptPermissionsModal"
