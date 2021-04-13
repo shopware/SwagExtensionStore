@@ -1,18 +1,42 @@
 {
-  "name": "swag/swag-extension-store",
-  "description": "SWAG Extension Store",
-  "type": "shopware-platform-plugin",
-  "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "SwagExtensionStore\\": "src/"
+    "name": "swag/swag-extension-store",
+    "version": "1.0.0",
+    "description": "SWAG Extension Store",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "shopware AG",
+            "homepage": "https://shopware.com"
+        }
+    ],
+    "require": {
+        "shopware/core": "~6.4",
+        "shopware/administration": "~6.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "SwagExtensionStore\\": "src/"
+        }
+    },
+    "extra": {
+        "shopware-plugin-class": "SwagExtensionStore\\SwagExtensionStore",
+        "copyright": "shopware AG",
+        "label": {
+            "de-DE": "Erweiterungen Store",
+            "en-GB": "Extension Store"
+        },
+        "description": {
+            "de-DE": "Entdecken und kaufen Sie Erweiterungen ganz einfach, direkt in Ihrem eigenen Shopware-Shop. Erhalten Sie Zugang zu vielen Erweiterungen, die Sie in Ihren Shop integrieren können.",
+            "en-GB": "Explore and buy extensions easily, right from within your own Shopware shop. Get access to loads of helpful Extensions and modern Themes that can be integrated into your shop."
+        },
+        "manufacturerLink": {
+            "de-DE": "https://www.shopware.com/en/",
+            "en-GB": "https://www.shopware.com/en/"
+        },
+        "supportLink": {
+            "de-DE": "https://www.shopware.com/en/",
+            "en-GB": "https://www.shopware.com/en/"
+        }
     }
-  },
-  "extra": {
-    "shopware-plugin-class": "SwagExtensionStore\\SwagExtensionStore",
-    "label": {
-      "de-DE": "Erweiterungen Store",
-      "en-GB": "Extension Store"
-    }
-  }
 }

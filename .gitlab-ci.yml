@@ -8,8 +8,8 @@ variables:
     FEATURE_ALL: 'major'
 
 stages:
-    - Static analysis
     - Testing
+    - Deploy
 
 default:
     image: shopware/development:7.4-composer-2
@@ -23,32 +23,8 @@ default:
         - cp -v dev-ops/gitlab/.psh.yaml.override .
         - /entrypoint supervisord > /dev/null 2>&1 &
 
-Check built JS files:
-    stage: Static analysis
-    services:
-        -   name: mysql:5.7
-            alias: mysql
-    script:
-        - ./psh.phar init
-        - php bin/console plugin:install --activate SwagExtensionStore
-        - ./psh.phar storefront:install-dependencies
-        - ./psh.phar administration:install-dependencies
-        - ./psh.phar administration:build
-        - ./psh.phar storefront:build
-        - cd $CI_PROJECT_DIR/development/custom/plugins/SwagExtensionStore
-        - >
-            if ! git diff --quiet --ignore-submodules HEAD --; then
-                echo "Built Javascript files differ. Update the dependencies and execute 'administration:build' and 'storefront:build' again";
-                git status;
-                exit 1;
-            else
-                echo "Everything ok"
-                exit 0;
-            fi
-    allow_failure: false
-
 ESLint:
-    stage: Static analysis
+    stage: Testing
     script:
         - cd $CI_PROJECT_DIR/development/custom/plugins/SwagExtensionStore/src/Resources/app/administration
         - npm ci
@@ -77,7 +53,6 @@ Administration Jest:
         reports:
             junit: development/build/artifacts/jest/customized-products.junit.xml
 
-
 PHPUnit:
     stage: Testing
     timeout: 1h 00m
@@ -93,3 +68,55 @@ PHPUnit:
         - php bin/console plugin:install --activate $PLUGINNAME -c
         - ./psh.phar init-test-databases
         - ./vendor/bin/phpunit -c $(pwd)/custom/plugins/$PLUGINNAME/phpunit.xml
+
+
+Build Zip:
+    stage: Deploy
+    image:
+        name: ghcr.io/friendsofshopware/platform-plugin-dev:v6.4.0
+        entrypoint: [""]
+    variables:
+        GIT_DEPTH: 0
+    before_script: []
+    script:
+        - start-mysql
+        - ln -s "$(pwd)" "/plugins/${CI_PROJECT_NAME}"
+        - npm install --prefix src/Resources/app/administration/
+        - pack-plugin "${CI_PROJECT_NAME}"
+        - plugin-uploader ext:validate "$(realpath "SwagExtensionStore.zip")"
+    artifacts:
+        paths:
+            - SwagExtensionStore*.zip
+
+Upload Zip to Store:
+    stage: Deploy
+    only:
+        refs:
+        - master
+    when: manual
+    image:
+        name: ghcr.io/friendsofshopware/platform-plugin-dev:v6.4.0
+        entrypoint: [""]
+    variables:
+        GIT_DEPTH: 0
+    before_script: []
+    script:
+        - start-mysql
+        - ln -s "$(pwd)" "/plugins/${CI_PROJECT_NAME}"
+        - npm install --prefix src/Resources/app/administration/
+        - pack-plugin "${CI_PROJECT_NAME}"
+        - plugin-uploader ext:upload "$(realpath "SwagExtensionStore.zip")"
+
+Update Store Information:
+    stage: Deploy
+    only:
+        refs:
+        - master
+    image:
+        name: ghcr.io/friendsofshopware/platform-plugin-dev:v6.4.0
+        entrypoint: [""]
+    variables:
+        GIT_DEPTH: 0
+    before_script: []
+    script:
+        - plugin-uploader ext:update .
