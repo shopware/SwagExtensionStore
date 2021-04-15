@@ -45,6 +45,7 @@
             <argument type="service" id="Shopware\Core\Framework\Store\Services\StoreService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="Shopware\Core\Framework\Store\Authentication\AbstractAuthenticationProvider"/>
+            <argument type="service" id="shopware.store_client"/>
         </service>
     </services>
 </container>
