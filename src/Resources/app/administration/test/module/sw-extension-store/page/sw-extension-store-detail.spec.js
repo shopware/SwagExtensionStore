@@ -24,7 +24,9 @@ function createWrapper() {
             }
         },
         provide: {
-            shopwareExtensionService: {},
+            shopwareExtensionService: {
+                updateExtensionData: jest.fn()
+            },
             extensionStoreDataService: {}
         }
     });
