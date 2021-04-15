@@ -155,3 +155,13 @@ $padding-summary-card: 24px;
         margin-top: 5px;
     }
 }
+
+.sw-extension-store-detail__account-modal {
+    .sw-modal__body {
+        padding: 0;
+    }
+
+    .sw-meteor-card {
+        margin: 0;
+    }
+}
