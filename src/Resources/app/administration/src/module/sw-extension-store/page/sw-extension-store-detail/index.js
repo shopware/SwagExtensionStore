@@ -217,6 +217,10 @@ Component.register('sw-extension-store-detail', {
         }
     },
 
+    created() {
+        this.shopwareExtensionService.updateExtensionData();
+    },
+
     methods: {
         async fetchExtension() {
             this.isLoading = true;
@@ -304,7 +308,7 @@ Component.register('sw-extension-store-detail', {
             this.isInstalling = true;
 
             try {
-                await this.extensionHelperService.downloadAndInstallExtension(this.extension.name, this.permissionsAccepted);
+                await this.extensionHelperService.downloadAndActivateExtension(this.extension.name, this.permissionsAccepted);
 
                 this.isInstallSuccessful = true;
             } catch (e) {
