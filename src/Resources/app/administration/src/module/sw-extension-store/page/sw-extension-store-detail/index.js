@@ -31,6 +31,7 @@ Component.register('sw-extension-store-detail', {
             showBuyModal: false,
             showPermissionsModal: false,
             showAcceptPermissionsModal: false,
+            showAccountModal: false,
             isInstalling: false,
             isInstallSuccessful: false,
             permissionsAccepted: false,
@@ -263,12 +264,36 @@ Component.register('sw-extension-store-detail', {
             this.$router.push(Object.assign({}, this.route, { hash: null }));
         },
 
+        async onClickAddExtension() {
+            await this.shopwareExtensionService.checkLogin();
+
+            if (!Shopware.State.get('shopwareExtensions').loginStatus) {
+                this.openAccountModal();
+                return;
+            }
+
+            this.openBuyModal();
+        },
+
+        onLoginSuccess() {
+            this.closeAccountModal();
+            this.openBuyModal();
+        },
+
         openBuyModal() {
             this.showBuyModal = true;
         },
 
         closeBuyModal() {
             this.showBuyModal = false;
+        },
+
+        openAccountModal() {
+            this.showAccountModal = true;
+        },
+
+        closeAccountModal() {
+            this.showAccountModal = false;
         },
 
         openPermissionsModal() {

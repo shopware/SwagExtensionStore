@@ -127,11 +127,11 @@ Component.register('sw-extension-buy-modal', {
         },
 
         paymentText() {
-            if (!this.cart || !this.cart.paymentText) {
+            if (!this.cart || !this.cart.payment || !this.cart.payment.paymentText) {
                 return null;
             }
 
-            return this.$sanitize(this.cart.paymentText, {
+            return this.$sanitize(this.cart.payment.paymentText, {
                 ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong'],
                 ALLOWED_ATTR: ['href', 'target']
             });

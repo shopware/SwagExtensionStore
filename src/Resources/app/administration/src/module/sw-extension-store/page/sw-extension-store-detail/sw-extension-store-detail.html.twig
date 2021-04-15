@@ -104,7 +104,7 @@
                         <template v-if="isPurchasable">
                             {% block sw_extension_store_detail_smart_bar_actions_add %}
                                 {% block sw_extension_store_detail_smart_bar_actions_add_button %}
-                                    <sw-button variant="primary" @click="openBuyModal">
+                                    <sw-button variant="primary" @click="onClickAddExtension">
                                         {{ $tc('sw-extension-store.detail.labelButtonAddExtension') }}
                                     </sw-button>
                                 {% endblock %}
@@ -124,7 +124,7 @@
                                 {% endblock %}
 
                                 {% block sw_extension_store_detail_smart_bar_actions_trial_info %}
-                                    <sw-button v-if="recommendedVariant.trialPhaseIncluded" class="sw-extension-store-detail__trial-info" @click="openBuyModal">
+                                    <sw-button v-if="recommendedVariant.trialPhaseIncluded" class="sw-extension-store-detail__trial-info" @click="onClickAddExtension">
                                         {{ $tc('sw-extension-store.component.sw-extension-buy-modal.variantCard.hasTrialPhase') }}
                                     </sw-button>
                                 {% endblock %}
@@ -329,6 +329,17 @@
                     @modal-close="closeAcceptPermissionsModal"
                     @close-with-action="closePermissionsModalAndInstallExtension">
                 </sw-extension-permissions-modal>
+            {% endblock %}
+
+            {% block sw_extension_store_detail_page_account_modal %}
+                <sw-modal v-if="showAccountModal"
+                          class="sw-extension-store-detail__account-modal"
+                          variant="large"
+                          @modal-close="closeAccountModal">
+                    <sw-extension-my-extensions-account
+                        @login-success="onLoginSuccess">
+                    </sw-extension-my-extensions-account>
+                </sw-modal>
             {% endblock %}
         {% endblock %}
     </sw-meteor-page>

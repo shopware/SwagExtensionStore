@@ -14,7 +14,7 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class StoreClient
 {
-    private ?Client $client = null;
+    private Client $client;
 
     private const SHOPWARE_PLATFORM_TOKEN_HEADER = 'X-Shopware-Platform-Token';
     private const SHOPWARE_SHOP_SECRET_HEADER = 'X-Shopware-Shop-Secret';
@@ -28,12 +28,14 @@ class StoreClient
         array $endpoints,
         StoreService $storeService,
         SystemConfigService $configService,
-        AbstractAuthenticationProvider $authenticationProvider
+        AbstractAuthenticationProvider $authenticationProvider,
+        Client $client
     ) {
         $this->endpoints = $endpoints;
         $this->storeService = $storeService;
         $this->configService = $configService;
         $this->authenticationProvider = $authenticationProvider;
+        $this->client = $client;
     }
 
     public function getCategories(Context $context): array
@@ -41,7 +43,7 @@ class StoreClient
         $language = $this->storeService->getLanguageByContext($context);
 
         try {
-            $response = $this->getClient()->get($this->endpoints['categories'], [
+            $response = $this->client->get($this->endpoints['categories'], [
                 'query' => $this->storeService->getDefaultQueryParameters($language, false),
                 'headers' => $this->getHeaders(),
             ]);
@@ -57,7 +59,7 @@ class StoreClient
         $language = $this->storeService->getLanguageByContext($context);
 
         try {
-            $response = $this->getClient()->get($this->endpoints['list_extensions'], [
+            $response = $this->client->get($this->endpoints['list_extensions'], [
                 'query' => array_merge($this->storeService->getDefaultQueryParameters($language, false), $criteria->getQueryParameter()),
                 'headers' => $this->getHeaders(),
             ]);
@@ -78,7 +80,7 @@ class StoreClient
         $language = $this->storeService->getLanguageByContext($context);
 
         try {
-            $response = $this->getClient()->get($this->endpoints['filter'], [
+            $response = $this->client->get($this->endpoints['filter'], [
                 'query' => array_merge($this->storeService->getDefaultQueryParameters($language, false), $parameters),
                 'headers' => $this->getHeaders(),
             ]);
@@ -94,7 +96,7 @@ class StoreClient
         $language = $this->storeService->getLanguageByContext($context);
 
         try {
-            $response = $this->getClient()->get(sprintf($this->endpoints['extension_detail'], $id), [
+            $response = $this->client->get(sprintf($this->endpoints['extension_detail'], $id), [
                 'query' => $this->storeService->getDefaultQueryParameters($language, false),
                 'headers' => $this->getHeaders(),
             ]);
@@ -110,7 +112,7 @@ class StoreClient
         $language = $this->storeService->getLanguageByContext($context);
 
         try {
-            $response = $this->getClient()->get(sprintf($this->endpoints['reviews'], $id), [
+            $response = $this->client->get(sprintf($this->endpoints['reviews'], $id), [
                 'query' => array_merge($this->storeService->getDefaultQueryParameters($language, false), $criteria->getQueryParameter()),
                 'headers' => $this->getHeaders(),
             ]);
@@ -126,7 +128,7 @@ class StoreClient
         $language = $this->storeService->getLanguageByContext($context);
 
         try {
-            $response = $this->getClient()->post($this->endpoints['create_basket'], [
+            $response = $this->client->post($this->endpoints['create_basket'], [
                 'query' => $this->storeService->getDefaultQueryParameters($language, false),
                 'headers' => $this->getHeaders($this->authenticationProvider->getUserStoreToken($context)),
                 'json' => [
@@ -148,7 +150,7 @@ class StoreClient
     public function orderCart(CartStruct $cartStruct, Context $context): void
     {
         try {
-            $this->getClient()->post($this->endpoints['order_basket'], [
+            $this->client->post($this->endpoints['order_basket'], [
                 'query' => $this->storeService->getDefaultQueryParameters('en-GB', false),
                 'headers' => $this->getHeaders($this->authenticationProvider->getUserStoreToken($context)),
                 'json' => $cartStruct,
@@ -161,7 +163,7 @@ class StoreClient
     public function availablePaymentMeans(Context $context): array
     {
         try {
-            $response = $this->getClient()->get($this->endpoints['payment_means'], [
+            $response = $this->client->get($this->endpoints['payment_means'], [
                 'query' => $this->storeService->getDefaultQueryParameters('en-GB', false),
                 'headers' => $this->getHeaders($this->authenticationProvider->getUserStoreToken($context)),
             ]);
@@ -183,7 +185,7 @@ class StoreClient
 
     private function getHeaders(?string $storeToken = null): array
     {
-        $headers = $this->getClient()->getConfig('headers');
+        $headers = $this->client->getConfig('headers');
 
         if ($storeToken) {
             $headers[self::SHOPWARE_PLATFORM_TOKEN_HEADER] = $storeToken;
