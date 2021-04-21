@@ -107,7 +107,7 @@ class DataControllerTest extends TestCase
         $this->getRequestHandler()->reset();
         $this->getRequestHandler()->append(new Response(200, [], $categoryResponse));
 
-        $response = $this->controller->getCategories(Context::createDefaultContext(new AdminApiSource(Uuid::randomHex())));
+        $response = $this->controller->getCategories(Context::createDefaultContext());
 
         static::assertSame(json_encode($categoryAsArray), $response->getContent());
     }

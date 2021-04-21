@@ -34,7 +34,7 @@ class CategoryProviderTest extends TestCase
         $this->getRequestHandler()->reset();
         $this->getRequestHandler()->append(new Response(200, [], $categoryResponse));
 
-        $categories = $categoryProvider->getCategories(Context::createDefaultContext(new AdminApiSource(Uuid::randomHex())));
+        $categories = $categoryProvider->getCategories(Context::createDefaultContext());
 
         static::assertEquals(\count($categoryAsArray), $categories->count());
         static::assertEquals($categoryAsArray, \json_decode(\json_encode($categories), true));
