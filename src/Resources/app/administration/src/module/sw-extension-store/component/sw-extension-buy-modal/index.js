@@ -64,6 +64,17 @@ Component.register('sw-extension-buy-modal', {
         },
 
         formattedPrice() {
+            const cartPosition = this.cart && this.cart.positions && this.cart.positions[0];
+            const netPrice = cartPosition && cartPosition.netPrice;
+
+            if (netPrice && cartPosition && cartPosition.firstMonthFree) {
+                return Utils.format.currency(0, 'EUR');
+            }
+
+            if (netPrice) {
+                return Utils.format.currency(Math.round(netPrice, 2), 'EUR');
+            }
+
             return Utils.format.currency(
                 this.shopwareExtensionService.getPriceFromVariant(this.selectedVariant), 'EUR'
             );
@@ -123,7 +134,9 @@ Component.register('sw-extension-buy-modal', {
         },
 
         showPaymentSelection() {
-            return this.cart && this.cart.payment && this.cart.payment.chargingAmount > 0;
+            // charging amount needs to be above 0 and paymentMean id have to exists
+            return this.cart && this.cart.payment && this.cart.payment.chargingAmount > 0 &&
+                this.cart.payment.paymentMean && this.cart.payment.paymentMean.id;
         },
 
         paymentText() {
@@ -227,10 +240,47 @@ Component.register('sw-extension-buy-modal', {
             }
         },
 
-        variantsCardLabel(variant) {
-            const price = this.shopwareExtensionService.getPriceFromVariant(variant);
+        variantPrice(variant) {
+            const netPrice = Utils.format.currency(Math.round(variant.netPrice), 'EUR');
+            const discountCampaign = variant.discountCampaign;
+            const discountStartDate = discountCampaign && new Date(Date.parse(discountCampaign.startDate));
+            const discountEndDate = discountCampaign && new Date(Date.parse(discountCampaign.endDate));
+            const discountPrice = discountCampaign && Utils.format.currency(
+                Math.round(discountCampaign.discountedPrice),
+                'EUR'
+            );
 
-            return `${variant.label || variant.type} ${Utils.format.currency(price, 'EUR')}`;
+            if (variant.trialPhaseIncluded && variant.type === 'rent') {
+                if (discountCampaign && discountStartDate < (new Date())) {
+                    return this.$t('sw-extension-store.buy-modal.rent.priceTrialAndDiscount', {
+                        trialPrice: Utils.format.currency(0, 'EUR'),
+                        discountPrice: discountPrice,
+                        discountEnds: Shopware.Utils.format.date(discountEndDate),
+                        netPrice: netPrice
+                    });
+                }
+
+                return this.$t('sw-extension-store.buy-modal.rent.priceTrialWithoutDiscount', {
+                    trialPrice: Utils.format.currency(0, 'EUR'),
+                    netPrice: netPrice
+                });
+            }
+
+            if (variant.type === 'rent' && discountCampaign && discountStartDate < (new Date())) {
+                return this.$t('sw-extension-store.buy-modal.rent.priceWithoutTrialWithDiscount', {
+                    discountPrice: discountPrice,
+                    discountEnds: Shopware.Utils.format.date(discountEndDate),
+                    netPrice: netPrice
+                });
+            }
+
+            if (variant.type === 'rent') {
+                return this.$t('sw-extension-store.buy-modal.rent.priceWithoutTrialWithoutDiscount', {
+                    netPrice: netPrice
+                });
+            }
+
+            return netPrice;
         },
 
         handleErrors(error) {

@@ -20,7 +20,13 @@
             "cloud": "Cloud"
         },
         "buy-modal": {
-            "paymentSelectionPlaceholder": "Select a payment method..."
+            "paymentSelectionPlaceholder": "Select a payment method...",
+            "rent": {
+                "priceTrialAndDiscount": "{trialPrice} / first month, following {discountPrice} until {discountEnds}, then ${netPrice}",
+                "priceTrialWithoutDiscount": "{trialPrice} / first month, following {netPrice} / month",
+                "priceWithoutTrialWithDiscount": "{discountPrice} / month until {discountEnds}, then {netPrice}",
+                "priceWithoutTrialWithoutDiscount": "{netPrice} / month"
+            }
         }
     }
 }

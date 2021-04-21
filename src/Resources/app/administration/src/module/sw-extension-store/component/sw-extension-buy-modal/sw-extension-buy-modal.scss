@@ -17,6 +17,18 @@ $padding-summary-card: 24px;
         .sw-extension-buy-modal__variants-card:not(:last-child) {
             margin-bottom: 16px;
         }
+
+        &.sw-extension-buy-modal__variants-selection-single-entry {
+            .sw-extension-buy-modal__variants-card {
+                border: none;
+                background-color: transparent;
+                padding: 0;
+            }
+
+            .sw-field--radio {
+                display: none;
+            }
+        }
     }
 
     .sw-extension-buy-modal__extension-summary {
