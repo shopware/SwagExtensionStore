@@ -30,7 +30,9 @@
             <template v-else>
                 {% block sw_extension_buy_modal_content_not_installed %}
                     {% block sw_extension_buy_modal_variant_selection %}
-                        <div class="sw-extension-buy-modal__variants-selection">
+                        <div class="sw-extension-buy-modal__variants-selection" :class="{
+                            'sw-extension-buy-modal__variants-selection-single-entry': recommendedVariants.length <= 1
+                        }">
                             {% block sw_extension_buy_modal_variant_selection_content %}
                                 {% block sw_extension_buy_modal_variant_selection_extension_preview %}
                                     <div class="sw-extension-buy-modal__extension-summary">
@@ -74,11 +76,11 @@
                                                 {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label %}
                                                     <label :for="`sw-extension-buy-modal__variant-${variant.type}`"
                                                            class="sw-extension-buy-modal__variant-description">
-                                                        {{ variantsCardLabel(variant) }}
+                                                        {{ variant.label || variant.type }}
                                                     </label>
 
-                                                    <span v-if="variant.trialPhaseIncluded">
-                                                        {{ $tc('sw-extension-store.component.sw-extension-buy-modal.variantCard.hasTrialPhase') }}
+                                                    <span>
+                                                        {{ variantPrice(variant) }}
                                                     </span>
 
                                                     <span class="sw-extension-buy-modal__variant-text-block"
