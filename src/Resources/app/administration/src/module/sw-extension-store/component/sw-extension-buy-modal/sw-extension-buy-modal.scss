@@ -145,6 +145,7 @@ $padding-summary-card: 24px;
                     background: none;
                     border: none;
                     padding: 0;
+                    margin-bottom: 4px;
                     color: $color-shopware-brand-500;
                     font-weight: $font-weight-regular;
                     text-decoration: underline;
@@ -165,6 +166,10 @@ $padding-summary-card: 24px;
         font-size: $font-size-small;
         line-height: 22px;
         margin-top: 5px;
+    }
+
+    .sw-field__label .is--required::after {
+        display: none;
     }
 }
 
