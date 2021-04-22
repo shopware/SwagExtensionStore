@@ -333,7 +333,7 @@ Component.register('sw-extension-store-detail', {
             this.isInstalling = true;
 
             try {
-                await this.extensionHelperService.downloadAndActivateExtension(this.extension.name, this.permissionsAccepted);
+                await this.extensionHelperService.downloadAndActivateExtension(this.extension.name, this.extension.type);
 
                 this.isInstallSuccessful = true;
             } catch (e) {
