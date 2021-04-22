@@ -167,7 +167,31 @@
                                     </div>
                                 </div>
 
-                                <div class="sw-field__label">
+                                <div class="sw-field__label" v-if="legalText">
+                                    <label :for="`permissions-checkbox--${extension.name}`" class="is--required">
+                                        <span>
+                                            {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.introText') }}
+                                        </span>
+                                    </label>
+                                    <sw-button @click="openPermissionsModal">
+                                        {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.buttonPermissions') }}
+                                    </sw-button>
+                                    <label :for="`permissions-checkbox--${extension.name}`" class="is--required">
+                                        <span>
+                                            {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.middleText') }}
+                                        </span>
+                                    </label>
+                                    <sw-button @click="openLegalTextModal">
+                                        {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.buttonAppProvider') }}
+                                    </sw-button>
+                                    <label :for="`permissions-checkbox--${extension.name}`" class="is--required">
+                                        <span>
+                                            {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.endText') }}
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div class="sw-field__label" v-else>
                                     <label :for="`permissions-checkbox--${extension.name}`" class="is--required">
                                         <span>{{ $tc('sw-extension-store.component.sw-extension-buy-modal.labelAcceptPermissions') }}</span>
                                     </label>
@@ -240,6 +264,24 @@
                         :privacyPolicyExtension="extension.privacyPolicyExtension"
                         @modal-close="closePrivacyModal">
                     </sw-extension-privacy-policy-extensions-modal>
+                {% endblock %}
+
+                {% block sw_extension_buy_modal_legal_text_modal %}
+                    <sw-modal
+                        v-if="showLegalTextModal"
+                        @modal-close="closeLegalTextModal"
+                        :title="$t('sw-extension-store.buy-modal.legalTextModal.title')">
+                        <div v-html="legalText"></div>
+
+                        <template #modal-footer>
+                            <sw-button
+                                variant="primary"
+                                size="small"
+                                @click="closeLegalTextModal">
+                                {{ $tc('global.default.close') }}
+                            </sw-button>
+                        </template>
+                    </sw-modal>
                 {% endblock %}
             </template>
         {% endblock %}

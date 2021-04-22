@@ -32,6 +32,7 @@ Component.register('sw-extension-buy-modal', {
             isLoading: false,
             permissionsAccepted: false,
             showPermissionsModal: false,
+            showLegalTextModal: false,
             privacyExtensionsAccepted: false,
             showPrivacyModal: false,
             checkoutStep: null,
@@ -145,8 +146,19 @@ Component.register('sw-extension-buy-modal', {
             }
 
             return this.$sanitize(this.cart.payment.paymentText, {
-                ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong'],
-                ALLOWED_ATTR: ['href', 'target']
+                ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong', 'p', 'br'],
+                ALLOWED_ATTR: ['href', 'target', 'rel']
+            });
+        },
+
+        legalText() {
+            if (!this.cart || !this.cart.legalText) {
+                return null;
+            }
+
+            return this.$sanitize(this.cart.legalText, {
+                ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong', 'p', 'br'],
+                ALLOWED_ATTR: ['href', 'target', 'rel']
             });
         }
     },
@@ -356,6 +368,14 @@ Component.register('sw-extension-buy-modal', {
             this.showPermissionsModal = false;
         },
 
+        openLegalTextModal() {
+            this.showLegalTextModal = true;
+        },
+
+        closeLegalTextModal() {
+            this.showLegalTextModal = false;
+        },
+
         async fetchPlan() {
             this.isLoading = true;
             await this.shopwareExtensionService.checkLogin();
@@ -393,8 +413,8 @@ Component.register('sw-extension-buy-modal', {
             }
 
             return this.$sanitize(variant.legalText, {
-                ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong'],
-                ALLOWED_ATTR: ['href', 'target']
+                ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong', 'p', 'br'],
+                ALLOWED_ATTR: ['href', 'target', 'rel']
             });
         },
 

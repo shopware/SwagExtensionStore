@@ -21,6 +21,18 @@
         },
         "buy-modal": {
             "paymentSelectionPlaceholder": "Wähle eine Zahlungsmethode...",
+            "checkboxes": {
+                "permissionsAndAppProvider": {
+                    "introText": "Ich bin mir bewusst, dass diese App weitere",
+                    "buttonPermissions": "Berechtigungen",
+                    "middleText": "benötigt und akzeptiere den",
+                    "buttonAppProvider": "App-Anbieter",
+                    "endText": "als neuen Unterauftragnehmer von Shopware"
+                }
+            },
+            "legalTextModal": {
+                "title": "Unterauftragnehmer von Shopware"
+            },
             "rent": {
                 "priceTrialAndDiscount": "{trialPrice} / erster Monat, folgende {discountPrice} bis {discountEnds}, danach ${netPrice}",
                 "priceTrialWithoutDiscount": "{trialPrice} / erster Monat, danach {netPrice} / month",

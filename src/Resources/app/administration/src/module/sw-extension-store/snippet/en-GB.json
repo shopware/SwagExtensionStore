@@ -21,6 +21,18 @@
         },
         "buy-modal": {
             "paymentSelectionPlaceholder": "Select a payment method...",
+            "checkboxes": {
+                "permissionsAndAppProvider": {
+                    "introText": "I am aware that this app needs further",
+                    "buttonPermissions": "permissions",
+                    "middleText": "and accept the",
+                    "buttonAppProvider": "app provider",
+                    "endText": "as new sub-processor of Shopware"
+                }
+            },
+            "legalTextModal": {
+                "title": "Subprocessor of Shopware"
+            },
             "rent": {
                 "priceTrialAndDiscount": "{trialPrice} / first month, following {discountPrice} until {discountEnds}, then ${netPrice}",
                 "priceTrialWithoutDiscount": "{trialPrice} / first month, following {netPrice} / month",
