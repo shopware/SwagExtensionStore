@@ -23,8 +23,8 @@
         "shopware-plugin-class": "SwagExtensionStore\\SwagExtensionStore",
         "copyright": "shopware AG",
         "label": {
-            "de-DE": "Erweiterungen Store",
-            "en-GB": "Extension Store"
+            "de-DE": "Shopware Store",
+            "en-GB": "Shopware Store"
         },
         "description": {
             "de-DE": "Entdecken und kaufen Sie Erweiterungen ganz einfach, direkt in Ihrem eigenen Shopware-Shop. Erhalten Sie Zugang zu vielen Erweiterungen, die Sie in Ihren Shop integrieren können.",
