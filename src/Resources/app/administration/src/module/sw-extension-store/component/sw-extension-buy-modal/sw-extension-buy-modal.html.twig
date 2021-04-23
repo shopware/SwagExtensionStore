@@ -99,12 +99,6 @@
                     {% block sw_extension_buy_modal_summary %}
                         <div class="sw-extension-buy-modal__variant-summary">
                             {% block sw_extension_buy_modal_summary_content %}
-                                {% block sw_extension_buy_modal_summary_label_plus_vat %}
-                                    <p :class="vatIncludedClasses">
-                                        {{ $tc('sw-extension-store.component.sw-extension-buy-modal.variantSummary.labelVat') }}
-                                    </p>
-                                {% endblock %}
-
                                 {% block sw_extension_buy_modal_summary_price %}
                                     <p class="sw-extension-buy-modal__variant-summary-price">
                                         {% block sw_extension_buy_modal_summary_price_content %}
@@ -123,8 +117,14 @@
                                     </p>
                                 {% endblock %}
 
+                                {% block sw_extension_buy_modal_summary_label_plus_vat %}
+                                    <p class="sw-extension-buy-modal__variant-summary-price-subline" :class="vatIncludedClasses">
+                                        {{ $tc('sw-extension-store.component.sw-extension-buy-modal.variantSummary.labelVat') }}
+                                    </p>
+                                {% endblock %}
+
                                 {% block sw_extension_buy_modal_summary_renewal_date %}
-                                    <p :class="renewalDateClasses">
+                                    <p class="sw-extension-buy-modal__variant-summary-price-subline" :class="renewalDateClasses">
                                         {{ $tc('sw-extension-store.component.sw-extension-buy-modal.variantSummary.renewal', 0, { renewalDate: dateFilter(todayPlusOneMonth) }) }}
                                     </p>
                                 {% endblock %}

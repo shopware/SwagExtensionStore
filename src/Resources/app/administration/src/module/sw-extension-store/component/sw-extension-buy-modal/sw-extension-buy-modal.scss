@@ -1,11 +1,11 @@
 @import "~scss/variables";
 @import "~scss/mixins";
 
-$padding-summary-card: 24px;
+$padding-summary-card: 22px;
 
 .sw-extension-buy-modal {
     .is--hidden {
-        visibility: hidden;
+        display: none;
     }
 
     .sw-extension-buy-modal__variants-selection {
@@ -99,6 +99,11 @@ $padding-summary-card: 24px;
         color: $color-gray-500;
         font-size: $font-size-small;
         text-align: right;
+
+        .sw-extension-buy-modal__variant-summary-price-subline {
+            font-size: $font-size-extra-small;
+            color: $color-darkgray-200;
+        }
     }
 
     .sw-extension-buy-modal__variant-summary-price {
