@@ -23,6 +23,11 @@ $padding-summary-card: 24px;
                 border: none;
                 background-color: transparent;
                 padding: 0;
+                cursor: default;
+
+                label {
+                    cursor: default;
+                }
             }
 
             .sw-field--radio {
