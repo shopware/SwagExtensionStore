@@ -102,6 +102,7 @@ describe('sw-extension-listing-card', () => {
             id: 1,
             label: 'Test',
             name: 'Test',
+            labels: [],
             variants: [
                 {
                     id: 79102,
@@ -120,6 +121,7 @@ describe('sw-extension-listing-card', () => {
             id: 1,
             label: 'Test',
             name: 'Test',
+            labels: [],
             variants: [
                 {
                     id: 79102,
@@ -143,6 +145,7 @@ describe('sw-extension-listing-card', () => {
             id: 1,
             label: 'Test',
             name: 'Test',
+            labels: [],
             variants: [
                 {
                     id: 79102,
@@ -161,6 +164,7 @@ describe('sw-extension-listing-card', () => {
             id: 1,
             label: 'Test',
             name: 'Test',
+            labels: [],
             variants: [
                 {
                     id: 79102,
@@ -180,6 +184,7 @@ describe('sw-extension-listing-card', () => {
         wrapper = createWrapper({
             label: 'Test',
             name: 'Test',
+            labels: [],
             variants: [
                 {
                     id: 79102,
@@ -205,6 +210,7 @@ describe('sw-extension-listing-card', () => {
         wrapper = createWrapper({
             label: 'Test',
             name: 'Test',
+            labels: [],
             variants: []
         });
 
@@ -215,6 +221,7 @@ describe('sw-extension-listing-card', () => {
         wrapper = createWrapper({
             label: 'Test',
             name: 'Test2',
+            labels: [],
             variants: []
         });
 
@@ -226,6 +233,7 @@ describe('sw-extension-listing-card', () => {
             id: 1,
             label: 'Test',
             name: 'Test2',
+            labels: [],
             variants: [{
                 id: 10,
                 type: 'buy',
@@ -248,6 +256,7 @@ describe('sw-extension-listing-card', () => {
         wrapper = createWrapper({
             label: 'A Label',
             shortDescription: 'A short description',
+            labels: [],
             variants: [{
                 id: 11,
                 type: 'rent',
@@ -285,6 +294,7 @@ describe('sw-extension-listing-card', () => {
             languages: [],
             rating: 3,
             numberOfRatings: 10,
+            labels: [],
             variants: [{
                 id: 10,
                 type: 'buy',
@@ -312,13 +322,11 @@ describe('sw-extension-listing-card', () => {
                 },
                 extensions: []
             }],
-
-            images:
-                [{
-                    remoteLink: 'https://example.com',
-                    raw: null,
-                    extensions: []
-                }],
+            images: [{
+                remoteLink: 'https://example.com',
+                raw: null,
+                extensions: []
+            }],
             icon: null,
             iconRaw: null,
             active: false,
@@ -351,6 +359,7 @@ describe('sw-extension-listing-card', () => {
             languages: [],
             rating: 3,
             numberOfRatings: 10,
+            labels: [],
             variants: [{
                 id: 10,
                 type: 'buy',
@@ -406,6 +415,7 @@ describe('sw-extension-listing-card', () => {
             languages: [],
             rating: 3,
             numberOfRatings: 10,
+            labels: [],
             variants: [{
                 id: 10,
                 type: 'buy',
