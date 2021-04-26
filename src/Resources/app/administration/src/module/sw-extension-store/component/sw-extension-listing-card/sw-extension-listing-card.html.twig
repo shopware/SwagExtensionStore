@@ -46,7 +46,11 @@
                     {% endblock %}
 
                     {% block sw_extension_listing_card_label_display %}
-                        <sw-extension-store-label-display :labels="extension.labels" class="sw-extension-listing-card__label-display"/>
+                        <sw-extension-store-label-display
+                            v-if="extension.labels.length > 0"
+                            :labels="extension.labels"
+                            class="sw-extension-listing-card__label-display">
+                        </sw-extension-store-label-display>
                     {% endblock %}
                 </div>
             {% endblock %}

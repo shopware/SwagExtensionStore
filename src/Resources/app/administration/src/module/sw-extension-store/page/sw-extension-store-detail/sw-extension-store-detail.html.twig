@@ -227,10 +227,9 @@
                             {% block sw_extension_store_detail_card_details_producer_website %}
                                 <template v-if="extension.producerWebsite">
                                     <dt>
-                                        <a :href="extension.producerWebsite" target="_blank" class="sw-extension-store-detail__external-link">
+                                        <sw-external-link :href="extension.producerWebsite">
                                             {{ $tc('sw-extension-store.detail.details.labelWebsite') }}
-                                            <sw-icon name="small-arrow-small-external" size="10px"></sw-icon>
-                                        </a>
+                                        </sw-external-link>
                                     </dt>
                                     <dd></dd>
                                 </template>
@@ -239,10 +238,9 @@
                             {% block sw_extension_store_detail_card_details_privacy_policy %}
                                 <template v-if="extension.privacyPolicyLink">
                                     <dt>
-                                        <a :href="extension.privacyPolicyLink" target="_blank" class="sw-extension-store-detail__external-link">
+                                        <sw-external-link :href="extension.privacyPolicyLink">
                                             {{ $tc('sw-extension-store.detail.details.labelPrivacy') }}
-                                            <sw-icon name="small-arrow-small-external" size="10px"></sw-icon>
-                                        </a>
+                                        </sw-external-link>
                                     </dt>
                                     <dd></dd>
                                 </template>
