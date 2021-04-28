@@ -254,7 +254,7 @@ Component.register('sw-extension-store-detail', {
 
             const elementWithHashId = this.$el.querySelector(this.$route.hash);
             const pageBody = document.querySelector('div.sw-meteor-page__body');
-            const header = document.querySelector('header.head-area');
+            const header = document.querySelector('header.sw-meteor-page__head-area');
 
             const topOfElement = elementWithHashId.offsetTop - header.getBoundingClientRect().height;
 
