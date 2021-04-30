@@ -21,6 +21,7 @@ $padding-summary-card: 22px;
         &.sw-extension-buy-modal__variants-selection-single-entry {
             .sw-extension-buy-modal__variants-card {
                 border: none;
+                grid-column-gap: 0;
                 background-color: transparent;
                 padding: 0;
                 cursor: default;
