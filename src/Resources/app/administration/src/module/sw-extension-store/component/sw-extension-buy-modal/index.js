@@ -296,67 +296,6 @@ Component.register('sw-extension-buy-modal', {
         },
 
         handleErrors(error) {
-            const noDefaultPayment = error.response.data.errors.find(
-                (e) => e.code === 'SAAS_EXTENSION_ORDER__NO_DEFAULT_PAYMENT_MEAN'
-            );
-
-            const noCompany = error.response.data.errors.find(
-                (e) => e.code === 'SAAS_COMPANY__MISSING'
-            );
-
-            if (noDefaultPayment) {
-                this.createNotificationError({
-                    system: true,
-                    autoClose: false,
-                    growl: true,
-                    title: this.$tc('global.default.error'),
-                    message: this.$tc('sw-extension-store.errors.SAAS_EXTENSION_ORDER__NO_DEFAULT_PAYMENT_MEAN.message'),
-                    actions: [
-                        {
-                            label: this.$tc('sw-extension-store.errors.SAAS_EXTENSION_ORDER__NO_DEFAULT_PAYMENT_MEAN.labelLink'),
-                            method: () => {
-                                this.emitClose();
-
-                                this.$nextTick(() => {
-                                    this.$router.push({
-                                        name: 'sw.rufus.settings.billing.index',
-                                        params: { defaultTab: 'payment' }
-                                    });
-                                });
-                            }
-                        }
-                    ]
-                });
-            }
-
-            if (noCompany) {
-                this.createNotificationError({
-                    system: true,
-                    autoClose: false,
-                    growl: true,
-                    title: this.$tc('global.default.error'),
-                    message: this.$tc('sw-extension-store.errors.SAAS_COMPANY__MISSING.message'),
-                    actions: [
-                        {
-                            label: this.$tc('sw-extension-store.errors.SAAS_COMPANY__MISSING.labelLink'),
-                            method: () => {
-                                this.emitClose();
-
-                                this.$nextTick(() => {
-                                    this.$router.push({
-                                        name: 'sw.rufus.settings.company.index'
-                                    });
-                                });
-                            }
-                        }
-                    ]
-                });
-            }
-
-            error.response.data.errors = error.response.data.errors.filter(
-                (e) => e.code !== 'SAAS_EXTENSION_ORDER__NO_DEFAULT_PAYMENT_MEAN' && e.code !== 'SAAS_COMPANY__MISSING'
-            );
-
             this.showExtensionErrors(error);
         },
 
