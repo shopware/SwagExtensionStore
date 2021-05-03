@@ -308,7 +308,7 @@ Component.register('sw-extension-store-detail', {
             this.showAcceptPermissionsModal = true;
         },
 
-        async closeAcceptPermissionsModal() {
+        closeAcceptPermissionsModal() {
             this.showAcceptPermissionsModal = false;
         },
 

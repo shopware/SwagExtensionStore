@@ -21,6 +21,7 @@ $padding-summary-card: 22px;
         &.sw-extension-buy-modal__variants-selection-single-entry {
             .sw-extension-buy-modal__variants-card {
                 border: none;
+                grid-column-gap: 0;
                 background-color: transparent;
                 padding: 0;
                 cursor: default;
@@ -38,7 +39,7 @@ $padding-summary-card: 22px;
 
     .sw-extension-buy-modal__extension-summary {
         display: grid;
-        grid-template-columns: 64px 1fr;
+        grid-template-columns: 72px 1fr;
         grid-column-gap: 12px;
         align-items: center;
         margin-bottom: 24px;
@@ -121,7 +122,7 @@ $padding-summary-card: 22px;
     .sw-extension-buy-modal__content-installed {
         text-align: center;
 
-        .saas-rufus-circle-icon {
+        .sw-circle-icon {
             margin: 16px auto;
         }
 
