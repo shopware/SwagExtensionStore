@@ -182,6 +182,16 @@ $padding-summary-card: 22px;
     .sw-field__label .is--required::after {
         display: none;
     }
+
+    .sw-extension-buy-modal__external-link {
+        color: $color-shopware-brand-500;
+
+        .sw-icon {
+            height: 10px;
+            width: 16px;
+            margin-bottom: 2px;
+        }
+    }
 }
 
 .sw-extension-store-detail__account-modal {

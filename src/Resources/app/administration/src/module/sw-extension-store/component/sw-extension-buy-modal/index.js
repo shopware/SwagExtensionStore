@@ -115,7 +115,8 @@ Component.register('sw-extension-buy-modal', {
             return this.tocAccepted &&
                 this.permissionsAccepted &&
                 this.privacyExtensionsAccepted &&
-                this.userCanBuyFromStore;
+                this.userCanBuyFromStore &&
+                !this.showPaymentWarning;
         },
 
         /* onPrem we need to check if the user is connected to the store in saas we check if the user has a plan */
@@ -124,6 +125,11 @@ Component.register('sw-extension-buy-modal', {
             // eslint-disable-next-line no-unused-vars
             const trigger = this.tocAccepted;
             return Shopware.State.get('shopwareExtensions').loginStatus;
+        },
+
+        showPaymentWarning() {
+            return (this.paymentMeans || []).length <= 0 &&
+                this.cart && this.cart.payment && this.cart.payment.paymentMeanRequired;
         },
 
         checkoutSteps() {
@@ -135,9 +141,8 @@ Component.register('sw-extension-buy-modal', {
         },
 
         showPaymentSelection() {
-            // charging amount needs to be above 0 and paymentMean id have to exists
-            return this.cart && this.cart.payment && this.cart.payment.chargingAmount > 0 &&
-                this.cart.payment.paymentMean && this.cart.payment.paymentMean.id;
+            return (this.paymentMeans || []).length > 0 &&
+                this.cart && this.cart.payment && this.cart.payment.paymentMeanRequired;
         },
 
         paymentText() {
@@ -160,6 +165,24 @@ Component.register('sw-extension-buy-modal', {
                 ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong', 'p', 'br'],
                 ALLOWED_ATTR: ['href', 'target', 'rel']
             });
+        },
+
+        selectedPaymentMean: {
+            get() {
+                return this.cart &&
+                    this.cart.payment &&
+                    this.cart.payment.paymentMean &&
+                    this.cart.payment.paymentMean.id;
+            },
+            set(paymentId) {
+                if (this.cart && this.cart.payment && this.cart.payment.paymentMean) {
+                    this.cart.payment.paymentMean.id = paymentId;
+                }
+
+                this.cart.payment.paymentMean = {
+                    id: paymentId
+                };
+            }
         }
     },
 

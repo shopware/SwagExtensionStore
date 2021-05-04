@@ -138,7 +138,7 @@
                             :options="paymentMeans"
                             :placeholder="$tc('sw-extension-store.buy-modal.paymentSelectionPlaceholder')"
                             valueProperty="id"
-                            v-model="cart.payment.paymentMean.id">
+                            v-model="selectedPaymentMean">
                         </sw-single-select>
                     {% endblock %}
 
@@ -233,6 +233,21 @@
                         <sw-alert v-if="!userCanBuyFromStore" variant="info">
                             {% block sw_extension_buy_modal_alert_can_not_buy_content %}
                                 {{ $tc('sw-extension-store.component.sw-extension-buy-modal.alertCanNotBuy.text') }}
+                            {% endblock %}
+                        </sw-alert>
+                    {% endblock %}
+
+                    {% block sw_extension_buy_modal_alert_payment_means_required %}
+                        <sw-alert v-if="showPaymentWarning" variant="warning">
+                            {% block sw_extension_buy_modal_alert_payment_means_required_content %}
+                                {{ $t('sw-extension-store.buy-modal.warnings.paymentMeansRequiredText') }}
+                                <a :href="cart && cart.payment && cart.payment.registrationUrl"
+                                   target="_blank"
+                                   rel="nofollow"
+                                   class="sw-extension-buy-modal__external-link">
+                                    {{ $t('sw-extension-store.buy-modal.warnings.paymentMeansRequiredLinkText') }}
+                                    <sw-icon name="default-arrow-simple-right"></sw-icon>
+                                </a>
                             {% endblock %}
                         </sw-alert>
                     {% endblock %}
