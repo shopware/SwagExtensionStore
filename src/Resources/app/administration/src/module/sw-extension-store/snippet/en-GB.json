@@ -38,6 +38,10 @@
                 "priceTrialWithoutDiscount": "{trialPrice} / first month, following {netPrice} / month",
                 "priceWithoutTrialWithDiscount": "{discountPrice} / month until {discountEnds}, then {netPrice}",
                 "priceWithoutTrialWithoutDiscount": "{netPrice} / month"
+            },
+            "warnings": {
+                "paymentMeansRequiredText": "In order to purchase this app you'll have to",
+                "paymentMeansRequiredLinkText": "add a payment method"
             }
         }
     }
