@@ -19,10 +19,10 @@
                 {% block sw_extension_buy_modal_adding_failed_content %}
                     <sw-extension-adding-failed
                         :extensionName="extension.name"
-                        @close="emitClose"
                         :title="checkoutError && checkoutError.title"
                         :detail="checkoutError && checkoutError.detail"
-                        :documentationLink="checkoutError && checkoutError.meta && checkoutError.meta.documentationLink">
+                        :documentationLink="checkoutErrorDocumentationLink"
+                        @close="emitClose">
                     </sw-extension-adding-failed>
                 {% endblock %}
             </template>
