@@ -157,6 +157,23 @@
                                 @modal-close="closeBuyModal">
                             </sw-extension-buy-modal>
                         {% endblock %}
+
+                        {% block sw_extension_store_detail_installation_failed_modal %}
+                            <sw-modal v-if="showInstallationFailedModal"
+                                      :title="extension.label"
+                                      variant="small"
+                                      @modal-close="closeInstallationFailedModal">
+                                {% block sw_extension_store_detail_installation_failed_modal_content %}
+                                    <sw-extension-adding-failed
+                                        :extensionName="extension.name"
+                                        :title="installationError && installationError.title"
+                                        :detail="installationError && installationError.detail"
+                                        :documentationLink="installationErrorDocumentationLink"
+                                        @close="closeInstallationFailedModal">
+                                    </sw-extension-adding-failed>
+                                {% endblock %}
+                            </sw-modal>
+                        {% endblock %}
                     {% endblock %}
                 </template>
             {% endblock %}

@@ -32,10 +32,12 @@ Component.register('sw-extension-store-detail', {
             showPermissionsModal: false,
             showAcceptPermissionsModal: false,
             showAccountModal: false,
+            showInstallationFailedModal: false,
             isInstalling: false,
             isInstallSuccessful: false,
             permissionsAccepted: false,
-            isDescriptionCollapsed: false
+            isDescriptionCollapsed: false,
+            installationError: null
         };
     },
 
@@ -180,6 +182,10 @@ Component.register('sw-extension-store-detail', {
 
         hasPermissions() {
             return Object.keys(this.extension.permissions).length;
+        },
+
+        installationErrorDocumentationLink() {
+            return Utils.get(this.installationError, 'meta.documentationLink', null);
         }
     },
 
@@ -235,8 +241,8 @@ Component.register('sw-extension-store-detail', {
                     this.id,
                     { ...Shopware.Context.api, languageId: this.languageId }
                 );
-            } catch (e) {
-                this.showExtensionErrors(e);
+            } catch (error) {
+                this.showExtensionErrors(error);
             } finally {
                 this.isLoading = false;
             }
@@ -336,8 +342,14 @@ Component.register('sw-extension-store-detail', {
                 await this.extensionHelperService.downloadAndActivateExtension(this.extension.name, this.extension.type);
 
                 this.isInstallSuccessful = true;
-            } catch (e) {
-                this.showExtensionErrors(e);
+            } catch (error) {
+                this.showExtensionErrors(error);
+
+                if (Utils.get(error, 'response.data.errors[0]', null)) {
+                    this.installationError = error.response.data.errors[0];
+                }
+
+                this.showInstallationFailedModal = true;
             } finally {
                 this.isInstalling = false;
             }
@@ -361,6 +373,10 @@ Component.register('sw-extension-store-detail', {
 
         expandDescription() {
             this.isDescriptionCollapsed = false;
+        },
+
+        closeInstallationFailedModal() {
+            this.showInstallationFailedModal = false;
         }
     }
 });

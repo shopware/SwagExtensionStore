@@ -183,6 +183,10 @@ Component.register('sw-extension-buy-modal', {
                     id: paymentId
                 };
             }
+        },
+
+        checkoutErrorDocumentationLink() {
+            return Utils.get(this.checkoutError, 'meta.documentationLink', null);
         }
     },
 
@@ -247,7 +251,7 @@ Component.register('sw-extension-buy-modal', {
                 this.handleErrors(error);
                 checkoutResult = this.checkoutSteps.FAILED;
 
-                if (error && error.response && error.response.data && Array.isArray(error.response.data.errors)) {
+                if (Utils.get(error, 'response.data.errors[0]', null)) {
                     this.checkoutError = error.response.data.errors[0];
                 }
             } finally {
