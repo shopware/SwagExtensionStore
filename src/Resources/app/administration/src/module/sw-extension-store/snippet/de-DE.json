@@ -27,7 +27,8 @@
                     "buttonPermissions": "Berechtigungen",
                     "middleText": "benötigt und akzeptiere den",
                     "buttonAppProvider": "App-Anbieter",
-                    "endText": "als neuen Unterauftragnehmer von Shopware"
+                    "endText": "als neuen Unterauftragnehmer von Shopware",
+                    "appProviderStartText": "Ich akzeptiere den"
                 }
             },
             "legalTextModal": {

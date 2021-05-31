@@ -31,6 +31,7 @@ Component.register('sw-extension-buy-modal', {
             selectedVariantId: null,
             isLoading: false,
             permissionsAccepted: false,
+            legalTextAccepted: false,
             showPermissionsModal: false,
             showLegalTextModal: false,
             privacyExtensionsAccepted: false,
@@ -114,6 +115,7 @@ Component.register('sw-extension-buy-modal', {
         canPurchaseExtension() {
             return this.tocAccepted &&
                 this.permissionsAccepted &&
+                this.legalTextAccepted &&
                 this.privacyExtensionsAccepted &&
                 this.userCanBuyFromStore &&
                 !this.showPaymentWarning;
@@ -190,19 +192,32 @@ Component.register('sw-extension-buy-modal', {
         }
     },
 
-    created() {
+    async created() {
         const variantId = this.recommendedVariants.length > 0 ? this.recommendedVariants[0].id : null;
 
         this.setSelectedVariantId(variantId);
         this.permissionsAccepted = !this.extensionHasPermissions;
         this.privacyExtensionsAccepted = !this.extension.privacyPolicyExtension;
 
-        this.fetchPlan();
+        await this.fetchPlan();
+
+        this.legalTextAccepted = !this.legalText;
     },
 
     watch: {
         selectedVariantId() {
             this.getCart();
+        },
+
+        /**
+         * Watcher to automatically sync the `legalTextAccepted` value with the permissions.
+         * When an App has permissions which need to be accepted, the permissions automatically accept
+         * the `legalText` as well because for Apps they are combined in a single checkbox.
+         *
+         * @param value
+         */
+        permissionsAccepted(value) {
+            this.legalTextAccepted = value;
         }
     },
 

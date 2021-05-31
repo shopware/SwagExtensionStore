@@ -203,6 +203,26 @@
                         </div>
                     {% endblock %}
 
+                    {% block sw_extension_buy_modal_accept_extension_app_provider %}
+                        <sw-checkbox-field
+                            v-if="!extensionHasPermissions && legalText"
+                            v-model="legalTextAccepted"
+                            class="sw-extension-buy-modal__checkbox sw-extension-buy-modal__checkbox-app-provider"
+                        >
+                            <template #label>
+                                {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.appProviderStartText') }}
+                                <a
+                                    @click.prevent="openLegalTextModal"
+                                    class="link"
+                                    href="#"
+                                >
+                                    {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.buttonAppProvider') }}
+                                </a>
+                                {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.endText') }}
+                            </template>
+                        </sw-checkbox-field>
+                    {% endblock %}
+
                     {% block sw_extension_buy_modal_accept_extension_privacy_policy_extensions %}
                         <div v-if="extension.privacyPolicyExtension" class="sw-extension-buy-modal__checkbox sw-field sw-field--checkbox">
                             <div class="sw-field--checkbox__content">
