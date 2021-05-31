@@ -135,7 +135,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         });
     }
 
-    it('does not show permissions and privacy checkbox if extension has not entries', () => {
+    it('does not show permissions and privacy checkbox if extension has not entries', async () => {
         wrapper = createWrapper({
             variants: [{
                 id: 78674,
@@ -147,8 +147,8 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             }]
         });
 
-        expect(wrapper.find('input[name="permissions-checkbox--test-app"]').exists()).toBe(false);
-        expect(wrapper.find('input[name="privacy-extensions-checkbox--test-app"]').exists()).toBe(false);
+        expect(wrapper.find('.sw-extension-buy-modal__checkbox-permissions--test-app').exists()).toBe(false);
+        expect(wrapper.find('.sw-extension-buy-modal__checkbox-privacy-policy--test-app').exists()).toBe(false);
     });
 
     it('opens and closes permission modal correctly', async () => {
@@ -169,7 +169,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             }
         });
 
-        await wrapper.get('label[for="permissions-checkbox--test-app"] + button').trigger('click');
+        await wrapper.get('.sw-extension-buy-modal__checkbox-permissions--test-app .permissions-modal-trigger').trigger('click');
         await wrapper.get('sw-extension-permissions-modal-stub').vm.$emit('modal-close');
 
         expect(wrapper.find('sw-extension-permissions-modal-stub').exists()).toBe(false);
@@ -188,7 +188,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             privacyPolicyExtension: 'Don\'t talk about the fight club!'
         });
 
-        await wrapper.get('label[for="privacy-extensions-checkbox--test-app"] + button').trigger('click');
+        await wrapper.get('.sw-extension-buy-modal__checkbox-privacy-policy--test-app .privacy-policy-modal-trigger').trigger('click');
         await wrapper.get('sw-extension-privacy-policy-extensions-modal-stub').vm.$emit('modal-close');
 
         expect(wrapper.find('sw-extension-privacy-policy-extensions-modal-stub').exists()).toBe(false);

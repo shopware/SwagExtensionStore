@@ -154,53 +154,45 @@
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_accept_extension_permissions %}
-                        <div v-if="extensionHasPermissions" class="sw-extension-buy-modal__checkbox sw-field sw-field--checkbox">
-                            <div class="sw-field--checkbox__content">
-                                <div class="sw-field__checkbox">
-                                    <input type="checkbox"
-                                           :id="`permissions-checkbox--${extension.name}`"
-                                           :name="`permissions-checkbox--${extension.name}`"
-                                           v-model="permissionsAccepted">
-
-                                    <div class="sw-field__checkbox-state">
-                                        <sw-icon name="small-default-checkmark-line-small" size="16"></sw-icon>
-                                    </div>
-                                </div>
-
-                                <div class="sw-field__label" v-if="legalText">
-                                    <label :for="`permissions-checkbox--${extension.name}`" class="is--required">
-                                        <span>
-                                            {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.introText') }}
-                                        </span>
-                                    </label>
-                                    <sw-button @click="openPermissionsModal">
+                        <sw-checkbox-field
+                            v-if="extensionHasPermissions"
+                            class="sw-extension-buy-modal__checkbox sw-extension-buy-modal__checkbox-permissions"
+                            :class="`sw-extension-buy-modal__checkbox-permissions--${extension.name}`"
+                            v-model="permissionsAccepted"
+                        >
+                            <template #label>
+                                <span v-if="legalText">
+                                    {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.introText') }}
+                                    <a
+                                        href="#"
+                                        class="link permissions-modal-trigger"
+                                        @click.prevent="openPermissionsModal"
+                                    >
                                         {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.buttonPermissions') }}
-                                    </sw-button>
-                                    <label :for="`permissions-checkbox--${extension.name}`" class="is--required">
-                                        <span>
-                                            {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.middleText') }}
-                                        </span>
-                                    </label>
-                                    <sw-button @click="openLegalTextModal">
+                                    </a>
+                                    {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.middleText') }}
+                                    <a
+                                        href="#"
+                                        class="link legal-text-modal-trigger"
+                                        @click.prevent="openLegalTextModal"
+                                    >
                                         {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.buttonAppProvider') }}
-                                    </sw-button>
-                                    <label :for="`permissions-checkbox--${extension.name}`" class="is--required">
-                                        <span>
-                                            {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.endText') }}
-                                        </span>
-                                    </label>
-                                </div>
+                                    </a>
+                                    {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.endText') }}
+                                </span>
 
-                                <div class="sw-field__label" v-else>
-                                    <label :for="`permissions-checkbox--${extension.name}`" class="is--required">
-                                        <span>{{ $tc('sw-extension-store.component.sw-extension-buy-modal.labelAcceptPermissions') }}</span>
-                                    </label>
-                                    <sw-button @click="openPermissionsModal">
+                                <span v-else>
+                                    {{ $tc('sw-extension-store.component.sw-extension-buy-modal.labelAcceptPermissions') }}
+                                    <a
+                                        href="#"
+                                        class="link permissions-modal-trigger"
+                                        @click="openPermissionsModal"
+                                    >
                                         {{ $tc('sw-extension-store.detail.labelButtonShowPermissions') }}
-                                    </sw-button>
-                                </div>
-                            </div>
-                        </div>
+                                    </a>
+                                </span>
+                            </template>
+                        </sw-checkbox-field>
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_accept_extension_app_provider %}
@@ -208,12 +200,13 @@
                             v-if="!extensionHasPermissions && legalText"
                             v-model="legalTextAccepted"
                             class="sw-extension-buy-modal__checkbox sw-extension-buy-modal__checkbox-app-provider"
+                            :class="`sw-extension-buy-modal__checkbox-app-provider--${extension.name}`"
                         >
                             <template #label>
                                 {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.appProviderStartText') }}
                                 <a
                                     @click.prevent="openLegalTextModal"
-                                    class="link"
+                                    class="link legal-text-modal-trigger"
                                     href="#"
                                 >
                                     {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.buttonAppProvider') }}
@@ -224,29 +217,25 @@
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_accept_extension_privacy_policy_extensions %}
-                        <div v-if="extension.privacyPolicyExtension" class="sw-extension-buy-modal__checkbox sw-field sw-field--checkbox">
-                            <div class="sw-field--checkbox__content">
-                                <div class="sw-field__checkbox">
-                                    <input type="checkbox"
-                                           :id="`privacy-extensions-checkbox--${extension.name}`"
-                                           :name="`privacy-extensions-checkbox--${extension.name}`"
-                                           v-model="privacyExtensionsAccepted">
-
-                                    <div class="sw-field__checkbox-state">
-                                        <sw-icon name="small-default-checkmark-line-small" size="16"></sw-icon>
-                                    </div>
-                                </div>
-
-                                <div class="sw-field__label">
-                                    <label :for="`privacy-extensions-checkbox--${extension.name}`" class="is--required">
-                                        <span>{{ $tc('sw-extension-store.component.sw-extension-buy-modal.labelAcceptPrivacyExtensions') }}</span>
-                                    </label>
-                                    <sw-button @click="openPrivacyModal">
-                                        {{ $tc('sw-extension-store.component.sw-extension-buy-modal.buttonShowPrivacyExtensions') }}
-                                    </sw-button>
-                                </div>
-                            </div>
-                        </div>
+                        <sw-checkbox-field
+                            v-if="extension.privacyPolicyExtension"
+                            v-model="privacyExtensionsAccepted"
+                            class="sw-extension-buy-modal__checkbox-privacy-policy"
+                            :class="`sw-extension-buy-modal__checkbox-privacy-policy--${extension.name}`"
+                        >
+                            <template #label>
+                                <span class="is--required">
+                                    {{ $tc('sw-extension-store.component.sw-extension-buy-modal.labelAcceptPrivacyExtensions') }}
+                                </span>
+                                <a
+                                    href="#"
+                                    class="link privacy-policy-modal-trigger"
+                                    @click.prevent="openPrivacyModal"
+                                >
+                                    {{ $tc('sw-extension-store.component.sw-extension-buy-modal.buttonShowPrivacyExtensions') }}
+                                </a>
+                            </template>
+                        </sw-checkbox-field>
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_alert_can_not_buy %}
