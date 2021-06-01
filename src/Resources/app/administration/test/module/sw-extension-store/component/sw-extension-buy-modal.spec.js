@@ -137,7 +137,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         });
     }
 
-    it('does not show permissions and privacy checkbox if extension has not entries', async () => {
+    it('does not show permissions and privacy checkbox if extension has not entries', () => {
         wrapper = createWrapper({
             variants: [{
                 id: 78674,
