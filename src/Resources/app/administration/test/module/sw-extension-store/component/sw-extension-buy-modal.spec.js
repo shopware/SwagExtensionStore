@@ -130,7 +130,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 'sw-extension-privacy-policy-extensions-modal': true
             },
             mocks: {
-                $tc: (key) => key
+                $tc: (key) => key,
+                $t: (key) => key,
+                $sanitize: key => key
             }
         });
     }
@@ -192,6 +194,60 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         await wrapper.get('sw-extension-privacy-policy-extensions-modal-stub').vm.$emit('modal-close');
 
         expect(wrapper.find('sw-extension-privacy-policy-extensions-modal-stub').exists()).toBe(false);
+    });
+
+    it('should show app provider legal text checkbox and modal for on-premise plugins without permissions', async () => {
+        Shopware.State.commit('shopwareExtensions/setLoginStatus', true);
+
+        // Mock request which creates and returns a new cart item
+        httpClient.post.mockImplementation((route) => {
+            if (route === '/_action/extension-store/cart/new') {
+                return Promise.resolve({
+                    data: {
+                        bookingShop: {},
+                        grossPrice: 0,
+                        licenseShop: {},
+                        legalText: '<p>Sub processor text</p>'
+                    }
+                });
+            }
+
+            return Promise.resolve();
+        });
+
+        wrapper = await createWrapper({
+            variants: [{
+                id: 78674,
+                type: 'buy',
+                netPrice: 497,
+                trialPhaseIncluded: false,
+                discountCampaign: null,
+                extensions: []
+            }],
+            type: 'plugin'
+        });
+
+        // Check gtc checkbox to re-evaluate computed `userCanBuyFromStore`
+        await wrapper.get('.sw-gtc-checkbox input').setChecked(true);
+        await wrapper.vm.$nextTick();
+
+        await flushPromises();
+
+        // App provider checkbox should exist
+        expect(wrapper.find('.sw-extension-buy-modal__checkbox-app-provider').exists()).toBeTruthy();
+
+        // Open app provider details via link
+        await wrapper.get('.sw-extension-buy-modal__checkbox-app-provider--test-app .legal-text-modal-trigger').trigger('click');
+
+        // Expect app provider detail modal to be present with correct legal text
+        expect(wrapper.find('.sw-extension-buy-modal__legal-text-modal').exists()).toBeTruthy();
+        expect(wrapper.find('.sw-extension-buy-modal__legal-text-modal').text()).toBe('Sub processor text');
+
+        // Close the app provider detail modal again
+        await wrapper.get('.sw-extension-buy-modal__legal-text-modal').vm.$emit('modal-close');
+
+        // Expect app provider detail modal to be removed
+        expect(wrapper.find('.sw-extension-buy-modal__legal-text-modal').exists()).toBeFalsy();
     });
 
     it('shows failed status if extensions could not be bought', async () => {

@@ -294,6 +294,7 @@
                     <sw-modal
                         v-if="showLegalTextModal"
                         @modal-close="closeLegalTextModal"
+                        class="sw-extension-buy-modal__legal-text-modal"
                         :title="$t('sw-extension-store.buy-modal.legalTextModal.title')">
                         <div v-html="legalText"></div>
 
