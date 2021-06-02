@@ -27,7 +27,8 @@
                     "buttonPermissions": "permissions",
                     "middleText": "and accept the",
                     "buttonAppProvider": "app provider",
-                    "endText": "as new sub-processor of Shopware"
+                    "endText": "as new sub-processor of Shopware",
+                    "appProviderStartText": "I accept the"
                 }
             },
             "legalTextModal": {
