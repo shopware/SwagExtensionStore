@@ -100,5 +100,7 @@ Shopware.Module.register('sw-extension-store', {
                 name: 'sw.extension.store.listing'
             };
         }
+
+        next(currentRoute);
     }
 });
