@@ -105,7 +105,12 @@
                             {% block sw_extension_store_detail_smart_bar_actions_add %}
                                 {% block sw_extension_store_detail_smart_bar_actions_add_button %}
                                     <sw-button variant="primary" @click="onClickAddExtension">
-                                        {{ $tc('sw-extension-store.detail.labelButtonAddExtension') }}
+                                        <template v-if="extension.isTheme">
+                                            {{ $tc('sw-extension-store.detail.labelButtonAddTheme') }}
+                                        </template>
+                                        <template v-else>
+                                            {{ $tc('sw-extension-store.detail.labelButtonAddExtension') }}
+                                        </template>
                                     </sw-button>
                                 {% endblock %}
 
@@ -139,13 +144,23 @@
                                     @click="handleInstallWithPermissionsModal"
                                     :isLoading="isInstalling"
                                     :processSuccess="isInstallSuccessful">
-                                    {{ $tc('sw-extension-store.detail.labelButtonInstallExtension') }}
+                                    <template v-if="extension.isTheme">
+                                        {{ $tc('sw-extension-store.detail.labelButtonInstallTheme') }}
+                                    </template>
+                                    <template v-else>
+                                        {{ $tc('sw-extension-store.detail.labelButtonInstallExtension') }}
+                                    </template>
                                 </sw-button-process>
                             {% endblock %}
 
                             {% block sw_extension_store_detail_smart_bar_actions_open %}
                                 <sw-button v-else-if="canBeOpened" variant="primary" @click="openExtension">
-                                    {{ $tc('sw-extension-store.detail.labelButtonOpenExtension') }}
+                                    <template v-if="extension.isTheme">
+                                        {{ $tc('sw-extension-store.detail.labelButtonOpenTheme') }}
+                                    </template>
+                                    <template v-else>
+                                        {{ $tc('sw-extension-store.detail.labelButtonOpenExtension') }}
+                                    </template>
                                 </sw-button>
                             {% endblock %}
                         </template>
