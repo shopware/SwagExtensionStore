@@ -7,12 +7,12 @@
         "updateWarning": {
             "headlineFirst": "We've updated the Shopware Store.",
             "headlineSecond": "Take a moment to update to the latest version.",
-            "description": "There are now even more ways to discover great Extensions that'll help you grow your business.",
-            "requestDescription": "You need to upgrade to the latest version to get new and updated Extensions or Themes for your shop.",
+            "description": "Discover numerous great extensions that'll help you grow your business.",
+            "requestDescription": "You'll need to upgrade to the latest version to get new and updated extensions or themes for your shop.",
             "update": "Update"
         },
         "offline": {
-            "headline": "Shopware Store is not available",
+            "headline": "The Shopware Store is not available",
             "description": "Check your internet connection or try again later."
         },
         "typeLabels": {
@@ -32,7 +32,7 @@
                 }
             },
             "legalTextModal": {
-                "title": "Subprocessor of Shopware"
+                "title": "Sub-processor of Shopware"
             },
             "rent": {
                 "priceTrialAndDiscount": "{trialPrice} / first month, following {discountPrice} until {discountEnds}, then ${netPrice}",
