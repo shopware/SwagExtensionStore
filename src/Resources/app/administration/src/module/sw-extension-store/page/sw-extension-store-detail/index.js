@@ -37,7 +37,8 @@ Component.register('sw-extension-store-detail', {
             isInstallSuccessful: false,
             permissionsAccepted: false,
             isDescriptionCollapsed: false,
-            installationError: null
+            installationError: null,
+            fetchError: false
         };
     },
 
@@ -101,7 +102,7 @@ Component.register('sw-extension-store-detail', {
                 return '';
             }
 
-            return this.extension.languages.map((language) => language).join(', ');
+            return this.extension.languages.join(', ');
         },
 
         isPurchasable() {
@@ -237,11 +238,18 @@ Component.register('sw-extension-store-detail', {
             }
 
             try {
+                this.fetchError = false;
                 this.extension = await this.extensionStoreDataService.getDetail(
                     this.id,
                     { ...Shopware.Context.api, languageId: this.languageId }
                 );
             } catch (error) {
+                const errorData = error.response.data.errors[0];
+
+                if (errorData.code === 'FRAMEWORK__STORE_ERROR' && errorData.title === 'Extension unknown') {
+                    this.fetchError = errorData;
+                }
+
                 this.showExtensionErrors(error);
             } finally {
                 this.isLoading = false;
