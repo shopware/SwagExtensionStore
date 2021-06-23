@@ -1,5 +1,20 @@
 {% block sw_extension_store_detail %}
-    <sw-meteor-page class="sw-extension-store-detail" v-if="suspended || isLoading" :hideIcon="suspended">
+    <div class="sw-extension-store-offline-error" v-if="fetchError">
+        <sw-label appearance="pill" variant="danger">
+            <sw-icon name="default-badge-error" size="30px"></sw-icon>
+        </sw-label>
+        <h2>
+            {{ fetchError.title }}
+        </h2>
+        <p>
+            {{ fetchError.detail }}
+        </p>
+        <a :href="fetchError.meta.documentationLink">
+            Link
+        </a>
+    </div>
+
+    <sw-meteor-page class="sw-extension-store-detail" v-else-if="suspended || isLoading" :hideIcon="suspended">
         {% block sw_extension_store_detail_loader %}<sw-loader></sw-loader>{% endblock %}
     </sw-meteor-page>
 
