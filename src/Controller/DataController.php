@@ -74,7 +74,7 @@ class DataController
 
     /**
      * @Since("6.4.0.0")
-     * @Route("/api/_action/extension-store/store-filters", name="api.extension.store_filters", Methods={"GET"})
+     * @Route("/api/_action/extension-store/store-filters", name="api.extension.store_filters", methods={"GET"})
      */
     public function listingFilters(Request $request, Context $context): JsonResponse
     {
@@ -85,7 +85,7 @@ class DataController
 
     /**
      * @Since("6.4.0.0")
-     * @Route("/api/_action/extension-store/store-categories", name="api.extension.store_categories", Methods={"GET"})
+     * @Route("/api/_action/extension-store/store-categories", name="api.extension.store_categories", methods={"GET"})
      */
     public function getCategories(Context $context): JsonResponse
     {
