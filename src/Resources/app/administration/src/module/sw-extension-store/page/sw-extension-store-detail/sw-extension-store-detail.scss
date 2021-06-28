@@ -229,4 +229,9 @@
     .sw-extension-store-detail__changelog-text {
         grid-area: changelog;
     }
+
+    .sw-extension-store-detail__alert {
+        max-width: 960px;
+        margin: 0 auto 40px auto;
+    }
 }
