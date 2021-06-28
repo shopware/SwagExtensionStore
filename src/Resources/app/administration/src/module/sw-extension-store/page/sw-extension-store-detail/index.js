@@ -248,6 +248,17 @@ Component.register('sw-extension-store-detail', {
 
                 if (errorData.code === 'FRAMEWORK__STORE_ERROR' && errorData.title === 'Extension unknown') {
                     this.fetchError = errorData;
+
+                    // eslint-disable-next-line max-len
+                    const docLink = this.$tc('sw-extension.errors.messageToTheShopwareDocumentation', 0, errorData.meta);
+
+                    this.createNotificationError({
+                        title: errorData.title,
+                        message: `${errorData.detail} <br> ${docLink}`,
+                        autoClose: false
+                    });
+
+                    return;
                 }
 
                 this.showExtensionErrors(error);
