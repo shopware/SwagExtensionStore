@@ -4,10 +4,12 @@
             {% block sw_extension_store_index_slot_search_bar %}
                 <template #search-bar>
                     {% block sw_extension_store_index_search_bar %}
-                        <sw-search-bar @search="updateSearch"
-                                       :initialSearch="searchValue"
-                                       :initialSearchType="$tc('sw-extension.mainMenu.mainMenuItemExtensionStore')">
-                        </sw-search-bar>
+                        <sw-search-bar 
+                            :key="storeSearchKey"
+                            @search="updateSearch"
+                            :initialSearch="searchValue"
+                            :initialSearchType="$tc('sw-extension.mainMenu.mainMenuItemExtensionStore')"
+                        />
                     {% endblock %}
                 </template>
             {% endblock %}
