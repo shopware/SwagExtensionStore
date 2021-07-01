@@ -27,6 +27,10 @@ Component.register('sw-extension-store-index', {
     },
 
     computed: {
+        storeSearchKey() {
+            return this.$route.name;
+        },
+
         activeFilters() {
             return Shopware.State.get('shopwareExtensions').search.filter;
         },
