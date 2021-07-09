@@ -250,13 +250,13 @@
                         <sw-alert v-if="showPaymentWarning" variant="warning">
                             {% block sw_extension_buy_modal_alert_payment_means_required_content %}
                                 {{ $t('sw-extension-store.buy-modal.warnings.paymentMeansRequiredText') }}
-                                <a :href="cart && cart.payment && cart.payment.registrationUrl"
-                                   target="_blank"
-                                   rel="nofollow"
-                                   class="sw-extension-buy-modal__external-link">
+                                <sw-external-link
+                                    :href="cart && cart.payment && cart.payment.registrationUrl"
+                                    class="sw-extension-buy-modal__external-link"
+                                >
                                     {{ $t('sw-extension-store.buy-modal.warnings.paymentMeansRequiredLinkText') }}
                                     <sw-icon name="default-arrow-simple-right"></sw-icon>
-                                </a>
+                                </sw-external-link>
                             {% endblock %}
                         </sw-alert>
                     {% endblock %}

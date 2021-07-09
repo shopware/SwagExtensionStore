@@ -40,11 +40,14 @@
                     {% block sw_extension_store_detail_smart_bar_producer_name %}
                         <span v-if="extension.producerWebsite && extension.producerName">
                             {{ $tc('sw-extension-store.detail.labelBy') }}
-                            <a  :href="extension.producerWebsite"
-                                target="_blank"
-                                class="link sw-extension-store-detail__producer-link">
+
+                            <sw-external-link
+                                small
+                                :href="extension.producerWebsite"
+                                class="link sw-extension-store-detail__producer-link"
+                            >
                                 {{ extension.producerName }}
-                            </a>
+                        </sw-external-link>
                         </span>
 
                         <span v-else-if="extension.producerName">
