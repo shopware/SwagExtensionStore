@@ -15,6 +15,11 @@
             "headline": "Der Shopware Store ist nicht verfügbar",
             "description": "Überprüfe Deine Internetverbindung oder versuche es später noch einmal."
         },
+        "detail": {
+            "enterpriseContactLinkText": "Vertrieb kontaktieren",
+            "enterpriseContactUrl": "https://www.shopware.com/de/enterprise-kontakt",
+            "enterpriseFeatureAlertText": "Diese Erweiterung ist Bestandteil der Enterprise Edition."
+        },
         "typeLabels": {
             "self-hosted": "Selbst-gehosted",
             "cloud": "Cloud"

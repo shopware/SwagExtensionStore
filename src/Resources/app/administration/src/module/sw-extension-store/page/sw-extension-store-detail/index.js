@@ -68,14 +68,8 @@ Component.register('sw-extension-store-detail', {
         },
 
         isInstalled() {
-            return Shopware.State.get('shopwareExtensions').myExtensions.data.some((extension) => {
-                const match = extension.name === this.extension.name;
-
-                if (!match) {
-                    return false;
-                }
-
-                return !!match.installedAt;
+            return !!Shopware.State.get('shopwareExtensions').myExtensions.data.some((extension) => {
+                return extension.installedAt && extension.name === this.extension.name;
             });
         },
 
@@ -107,6 +101,10 @@ Component.register('sw-extension-store-detail', {
 
         isPurchasable() {
             if (this.suspended) {
+                return false;
+            }
+
+            if (!this.extension.variants.length) {
                 return false;
             }
 
@@ -187,6 +185,14 @@ Component.register('sw-extension-store-detail', {
 
         installationErrorDocumentationLink() {
             return Utils.get(this.installationError, 'meta.documentationLink', null);
+        },
+
+        isEnterpriseFeature() {
+            if (this.suspended) {
+                return false;
+            }
+
+            return !!this.extension.addons.find(addon => addon === 'SW6_EnterpriseFeature');
         }
     },
 

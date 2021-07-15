@@ -15,6 +15,11 @@
             "headline": "The Shopware Store is not available",
             "description": "Check your internet connection or try again later."
         },
+        "detail": {
+            "enterpriseContactLinkText": "Contact us",
+            "enterpriseContactUrl": "https://www.shopware.com/en/enterprise-contact",
+            "enterpriseFeatureAlertText": "This extension is a component of the Enterprise Edition."
+        },
         "typeLabels": {
             "self-hosted": "Self hosted",
             "cloud": "Cloud"
