@@ -13,6 +13,11 @@ import './component/sw-extension-store-label-display';
 
 import ExtensionStoreDataService from './service/extension-store-data.service';
 import ExtensionLicenseService from './service/extension-store-licenses.service';
+import ExtensionStoreMarketingService from './service/extension-store-marketing.service';
+
+import MarketingState from './state/marketing.state';
+
+import initMarketing from './init/marketing.init';
 
 Shopware.Application.addServiceProvider('extensionStoreDataService', () => {
     return new ExtensionStoreDataService(
@@ -27,6 +32,18 @@ Shopware.Application.addServiceProvider('extensionStoreLicensesService', () => {
         Shopware.Service('loginService')
     );
 });
+
+Shopware.Application.addServiceProvider('extensionStoreMarketingService', () => {
+    return new ExtensionStoreMarketingService(
+        Shopware.Application.getContainer('init').httpClient,
+        Shopware.Service('loginService')
+    );
+});
+
+Shopware.State.registerModule('extensionStoreMarketing', MarketingState)
+
+// initialize marketing campaigns directly
+initMarketing();
 
 Shopware.Module.register('sw-extension-store', {
     routePrefixName: 'sw.extension',

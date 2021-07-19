@@ -49,6 +49,11 @@
                 "paymentMeansRequiredText": "In order to purchase this app you'll have to",
                 "paymentMeansRequiredLinkText": "add a payment method"
             }
+        },
+        "marketing": {
+            "error": {
+                "loadCampaignsError": "The campaigns could not be loaded"
+            }
         }
     }
 }
