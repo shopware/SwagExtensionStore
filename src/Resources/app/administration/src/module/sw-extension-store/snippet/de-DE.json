@@ -49,11 +49,6 @@
                 "paymentMeansRequiredText": "Um diese App zu kaufen, musst Du",
                 "paymentMeansRequiredLinkText": "eine Zahlungsmethode hinzufügen"
             }
-        },
-        "marketing": {
-            "error": {
-                "loadCampaignsError": "Die Kampagnen konnten nicht geladen werden"
-            }
         }
     }
 }
