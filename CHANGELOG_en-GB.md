@@ -10,3 +10,8 @@
 - If the installation of an extension failed, an error modal is displayed on the extension detail page
 - A checkbox for the AVV is now also displayed if no permissions are required
 - Fixed a bug in the RouteMiddleware. This caused that some plugins could no longer extend routes
+
+# 1.3.0
+- Fix annotation in route that breaks compatibility
+- Keep search term when navigation through the extension store
+- Fix detail page of Enterprise extensions
