@@ -21,8 +21,10 @@ Component.register('sw-extension-store-index', {
 
     data() {
         return {
-            isAvailable: true,
-            failReason: ''
+            isAvailable: false,
+            failReason: '',
+            listingError: null,
+            isLoading: false
         };
     },
 
@@ -65,11 +67,14 @@ Component.register('sw-extension-store-index', {
         },
 
         async checkStoreUpdates() {
+            this.isLoading = true;
+
             try {
                 await this.storeService.ping();
             } catch (err) {
                 this.failReason = 'offline';
                 this.isAvailable = false;
+                this.isLoading = false;
                 return;
             }
 
@@ -78,16 +83,27 @@ Component.register('sw-extension-store-index', {
             const extensionStore = await this.getExtensionStore();
 
             if (!extensionStore) {
+                this.isLoading = false;
                 return;
             }
 
             if (this.isUpdateable(extensionStore)) {
                 this.isAvailable = false;
                 this.failReason = 'outdated';
+                this.isLoading = false;
                 return;
             }
 
             this.isAvailable = true;
+            this.isLoading = false;
+        },
+
+        onExtensionListingError(e) {
+            const errors = Shopware.Service('extensionErrorService').handleErrorResponse(e, this);
+
+            this.isAvailable = false;
+            this.listingError = errors && errors[0];
+            this.failReason = 'listing_error';
         },
 
         getExtensionStore() {

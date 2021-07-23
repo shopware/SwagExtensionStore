@@ -1,5 +1,20 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import 'SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-index';
+import ExtensionErrorService from 'src/module/sw-extension/service/extension-error.service';
+
+const storePingMock = jest.fn(() => Promise.resolve({}));
+const myExtensionsMock = jest.fn(() => Promise.resolve([{
+    name: 'SwagExtensionStore',
+    latestVersion: null,
+    version: '1.3.0'
+}]));
+
+Shopware.Application.addServiceProvider('extensionErrorService', () => {
+    return new ExtensionErrorService({}, {
+        title: 'global.default.error',
+        message: 'global.notification.unspecifiedSaveErrorMessage'
+    });
+});
 
 function createWrapper() {
     const localVue = createLocalVue();
@@ -10,35 +25,52 @@ function createWrapper() {
         mocks: {
             $tc: v => v,
             $route: {
-                name: 'sw.extension.store.listing.app'
+                name: 'sw.extension.store.listing.app',
+                meta: {
+                    $module: {}
+                }
             }
         },
         stubs: {
-            'sw-meteor-page': {
-                template: `
-<div class="sw-meteor-page">
-    <slot name="search-bar"></slot>
-</div>
-                `
-            },
+            'sw-meteor-page': Shopware.Component.build('sw-meteor-page'),
             'sw-search-bar': {
                 template: '<div class="sw-search-bar"></div>'
-            }
+            },
+            'sw-notification-center': true,
+            'sw-meteor-navigation': true,
+            'sw-loader': true,
+            'sw-tabs': true,
+            'router-view': true,
+            'sw-extension-store-error-card': true,
+            'sw-extension-store-update-warning': true
         },
         provide: {
-            extensionStoreActionService: jest.fn(),
-            shopwareExtensionService: jest.fn(),
-            storeService: jest.fn(),
+            extensionStoreActionService: {
+                getMyExtensions: myExtensionsMock
+            },
+            shopwareExtensionService: {
+                updateExtensionData: jest.fn()
+            },
+            storeService: {
+                ping: storePingMock
+            },
+            extensionErrorService: Shopware.Service('extensionErrorService'),
         }
     });
 }
 
 const setSearchValueMock = jest.fn();
 describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-index', () => {
-    /** @type Wrapper */
-    let wrapper;
+    beforeAll(async () => {
+        // Workaround to activate FEATURE_NEXT_12608 for sw-meteor-page
+        // global.activeFeatureFlags is currently not available within plugins
+        jest.spyOn(Shopware.Feature, 'isActive').mockImplementation((flag) => {
+            return flag === 'FEATURE_NEXT_12608';
+        });
 
-    beforeAll(async () => (
+        await import('src/app/component/meteor/sw-meteor-page');
+        await import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail');
+
         Shopware.State.registerModule('shopwareExtensions', {
             namespaced: true,
             state: {
@@ -49,24 +81,25 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
             mutations: {
                 setSearchValue: setSearchValueMock
             }
-        })
-    ));
+        });
+    });
 
     beforeEach(async () => {
         Shopware.State.get('shopwareExtensions').search.filter = {};
-        wrapper = await createWrapper();
+        storePingMock.mockClear();
         setSearchValueMock.mockClear();
-    });
-
-    afterEach(async () => {
-        if (wrapper) await wrapper.destroy();
+        myExtensionsMock.mockClear();
     });
 
     it('should be a Vue.JS component', async () => {
+        const wrapper = await createWrapper();
+
         expect(wrapper.vm).toBeTruthy();
     });
 
     it('should commit the search value to the store', async () => {
+        const wrapper = await createWrapper();
+
         expect(setSearchValueMock).not.toHaveBeenCalled();
 
         const searchBar = wrapper.find('.sw-search-bar');
@@ -79,6 +112,8 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
     });
 
     it('should filter to only app extensions', async () => {
+        await createWrapper();
+
         const filter = Shopware.State.get('shopwareExtensions').search.filter;
 
         expect(filter).toEqual({
@@ -87,6 +122,8 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
     });
 
     it('should filter to only theme extensions', async () => {
+        const wrapper = await createWrapper();
+
         wrapper.vm.$route.name = 'sw.extension.store.listing.theme';
         await wrapper.vm.$nextTick();
 
@@ -95,5 +132,66 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         expect(filter).toEqual({
             group: 'themes'
         });
+    });
+
+    it('should show error message when store is offline', async () => {
+        // Reject store ping to simulate offline store
+        storePingMock.mockImplementationOnce(() =>  Promise.reject());
+
+        const wrapper = await createWrapper();
+
+        expect(wrapper.find('sw-extension-store-error-card-stub').attributes().variant).toBe('danger');
+        expect(wrapper.find('sw-extension-store-error-card-stub').attributes().title).toBe('sw-extension-store.offline.headline');
+        expect(wrapper.find('sw-extension-store-error-card-stub').text()).toBe('sw-extension-store.offline.description');
+    });
+
+    it('should show update message when newer version is available', async () => {
+        // Mock higher `latestVersion` to show update card
+        myExtensionsMock.mockImplementationOnce(() =>  Promise.resolve([{
+            name: 'SwagExtensionStore',
+            latestVersion: '1.4.0',
+            version: '1.3.0'
+        }]));
+
+        const wrapper = await createWrapper();
+
+        // Wait for loader to disappear
+        await wrapper.vm.$nextTick();
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.find('sw-extension-store-update-warning-stub').exists()).toBe(true);
+    });
+
+    it('should show listing errors on listing errors event', async () => {
+        const wrapper = await createWrapper();
+
+        // Wait for loader to disappear
+        await wrapper.vm.$nextTick();
+        await wrapper.vm.$nextTick();
+
+        // Mock listing error response
+        const listingError = new Error();
+        listingError.response = {
+            data: {
+                errors: [
+                    {
+                        code: 'FRAMEWORK__STORE_ERROR',
+                        detail: 'The given Shopware version is unknown, please contact our customer service',
+                        meta: {
+                            documentationLink: 'https://docs.shopware.com'
+                        },
+                        status: '500',
+                        title: 'Shopware version is unknown'
+                    }
+                ]
+            }
+        };
+
+        // Emit listing error on router view
+        await wrapper.get('router-view-stub').vm.$emit('extension-listing-errors', listingError);
+
+        expect(wrapper.find('sw-extension-store-error-card-stub').attributes().title).toBe('Shopware version is unknown');
+        expect(wrapper.find('sw-extension-store-error-card-stub').attributes().variant).toBe('danger');
+        expect(wrapper.find('sw-extension-store-error-card-stub').text()).toBe('The given Shopware version is unknown, please contact our customer service');
     });
 });

@@ -5,8 +5,7 @@
             "themes": "Themes"
         },
         "updateWarning": {
-            "headlineFirst": "Wir haben den Shopware Store aktualisiert.",
-            "headlineSecond": "Nimm Dir einen Moment Zeit, um auf die neueste Version zu aktualisieren.",
+            "headline": "Wir haben den Shopware Store aktualisiert.<br>Nimm Dir einen Moment Zeit, um auf die neueste Version zu aktualisieren.",
             "description": "Entdecke zahlreiche, großartige Erweiterungen, die Dir helfen, Dein Geschäft auszubauen.",
             "requestDescription": "Du musst auf die neueste Version upgraden, um neue und aktualisierte Erweiterungen oder Themes für Deinen Shop zu erhalten.",
             "update": "Update"

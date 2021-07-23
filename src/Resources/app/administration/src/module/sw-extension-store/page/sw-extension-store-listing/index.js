@@ -89,6 +89,7 @@ Component.register('sw-extension-store-listing', {
                 await this.search();
             } catch (e) {
                 this.showExtensionErrors(e);
+                this.$emit('extension-listing-errors', e);
             } finally {
                 this.isLoading = false;
             }
