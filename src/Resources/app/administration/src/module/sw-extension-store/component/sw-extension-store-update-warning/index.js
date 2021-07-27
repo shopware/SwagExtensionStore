@@ -9,7 +9,11 @@ const { Mixin, Component } = Shopware;
 Component.register('sw-extension-store-update-warning', {
     template,
 
-    inject: ['shopwareExtensionService', 'cacheApiService'],
+    inject: [
+        'shopwareExtensionService',
+        'extensionStoreActionService',
+        'cacheApiService'
+    ],
 
     mixins: [
         Mixin.getByName('notification')
@@ -28,6 +32,7 @@ Component.register('sw-extension-store-update-warning', {
             this.isUpdating = true;
 
             try {
+                await this.extensionStoreActionService.downloadExtension('SwagExtensionStore');
                 await this.shopwareExtensionService.updateExtension('SwagExtensionStore', 'plugin');
                 await this.clearCacheAndReloadPage();
             } catch (e) {
