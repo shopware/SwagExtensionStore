@@ -10,3 +10,6 @@
 /src/Resources/app/administration/eslint.junit.xml
 
 /.phpunit.result.cache
+
+#ignore distributed files
+/src/Resources/public

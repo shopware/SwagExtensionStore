@@ -2,7 +2,7 @@ import { shallowMount } from '@vue/test-utils';
 import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-listing-card';
 
 import ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
-import ShopwareDiscountCampaignService from 'src/module/sw-extension/service/discount-campaign.service';
+import ShopwareDiscountCampaignService from 'src/app/service/discount-campaign.service';
 
 
 beforeAll(() => {
