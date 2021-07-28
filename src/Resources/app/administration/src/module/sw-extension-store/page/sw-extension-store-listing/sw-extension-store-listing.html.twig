@@ -4,6 +4,20 @@
             <sw-loader v-if="isLoading"></sw-loader>
         {% endblock %}
 
+        {% block sw_extension_store_listing_banner %}
+            <template v-if="campaignPropertyMappingComponentExists">
+                <sw-campaign-property-mapping component-name="storeBanner">
+                    <template #default="{ mappedProperties }">
+                        <div v-if="mappedProperties">
+                            <sw-extension-store-listing-banner
+                                v-bind="mappedProperties"
+                            ></sw-extension-store-listing-banner>
+                        </div>
+                    </template>
+                </sw-campaign-property-mapping>
+            </template>
+        {% endblock %}
+
         {% block sw_extension_store_listing_filter %}
             <sw-extension-store-listing-filter></sw-extension-store-listing-filter>
         {% endblock %}

@@ -1,0 +1,34 @@
+{% block sw_extension_store_listing_banner %}
+<sw-meteor-card class="sw-extension-store-listing-banner" @click.native="onClickBanner">
+    {% block sw_extension_store_listing_banner_container %}
+    <div class="sw-extension-store-listing-banner__container" :style="containerStyles">
+        {% block sw_extension_store_listing_banner_container_content %}
+        <div class="sw-extension-store-listing-banner__content">
+            {% block sw_extension_store_listing_banner_container_content_headline %}
+            <h3 :style="{ color: textColor }" v-html="headline"></h3>
+            {% endblock %}
+
+            {% block sw_extension_store_listing_banner_container_content_description %}
+            <p class="sw-extension-store-listing-banner__description"
+               v-html="$sanitize(text, { ALLOWED_TAGS: ['b', 'i', 'u', 'br'] })"
+               :style="{ color: textColor }"
+            ></p>
+            {% endblock %}
+
+            {% block sw_extension_store_listing_banner_container_content_cta %}
+            <p class="sw-extension-store-listing-banner__cta" :style="{ color: textColor }">
+                {% block sw_extension_store_listing_banner_container_content_cta_text %}
+                {{ textAction }}
+                {% endblock %}
+
+                {% block sw_extension_store_listing_banner_container_content_cta_icon %}
+                <sw-icon name="default-arrow-simple-right" size="12" :color="textColor"></sw-icon>
+                {% endblock %}
+            </p>
+            {% endblock %}
+        </div>
+        {% endblock %}
+    </div>
+    {% endblock %}
+</sw-meteor-card>
+{% endblock %}
