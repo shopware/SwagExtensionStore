@@ -25,7 +25,11 @@ function createWrapper() {
                 template: '<div class="sw-search-bar"></div>'
             }
         },
-        provide: {}
+        provide: {
+            extensionStoreActionService: jest.fn(),
+            shopwareExtensionService: jest.fn(),
+            storeService: jest.fn(),
+        }
     });
 }
 

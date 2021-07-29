@@ -10,6 +10,7 @@ import './component/sw-extension-store-offline-error';
 import './component/sw-extension-store-label';
 import './component/sw-extension-store-type-label';
 import './component/sw-extension-store-label-display';
+import './component/sw-extension-store-listing-banner';
 
 import ExtensionStoreDataService from './service/extension-store-data.service';
 import ExtensionLicenseService from './service/extension-store-licenses.service';
