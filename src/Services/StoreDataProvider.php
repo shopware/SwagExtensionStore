@@ -13,6 +13,7 @@ use Shopware\Core\Framework\Store\Struct\ReviewSummaryStruct;
 class StoreDataProvider
 {
     public const HEADER_NAME_TOTAL_COUNT = 'SW-Meta-Total';
+
     private StoreClient $client;
     private ExtensionLoader $extensionLoader;
 

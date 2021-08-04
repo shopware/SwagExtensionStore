@@ -1,10 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SwagExtensionStore\Services;
 
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Store\Services\ExtensionDownloader;
-use Shopware\Core\Framework\Store\Struct\CartPositionStruct;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 
 class BasketService

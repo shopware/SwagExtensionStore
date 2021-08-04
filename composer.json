@@ -19,6 +19,11 @@
             "SwagExtensionStore\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "SwagExtensionStore\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "shopware-plugin-class": "SwagExtensionStore\\SwagExtensionStore",
         "copyright": "shopware AG",
