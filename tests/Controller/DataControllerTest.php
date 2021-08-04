@@ -4,14 +4,11 @@ namespace SwagExtensionStore\Tests\Api;
 
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Shopware\Core\Framework\Api\Context\AdminApiSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Feature;
-use Shopware\Core\Framework\Store\Api\ExtensionStoreDataController;
 use Shopware\Core\Framework\Test\Store\ExtensionBehaviour;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Shopware\Core\Framework\Uuid\Uuid;
 use SwagExtensionStore\Controller\DataController;
 use SwagExtensionStore\Services\StoreDataProvider;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,10 +19,7 @@ class DataControllerTest extends TestCase
     use StoreClientBehaviour;
     use ExtensionBehaviour;
 
-    /**
-     * @var DataController
-     */
-    private $controller;
+    private DataController $controller;
 
     protected function setUp(): void
     {
@@ -132,10 +126,7 @@ class DataControllerTest extends TestCase
                 $matches = [];
                 preg_match('/\/swplatform\/extensionstore\/extensions\/(.*)/', $request->getUri()->getPath(), $matches);
 
-                static::assertEquals(
-                    $extensionId,
-                    $matches[1]
-                );
+                static::assertEquals($extensionId, $matches[1]);
 
                 return new Response(
                     200,
@@ -155,10 +146,7 @@ class DataControllerTest extends TestCase
                 $matches = [];
                 preg_match('/\/swplatform\/extensionstore\/extensions\/(.*)\/reviews/', $request->getUri()->getPath(), $matches);
 
-                static::assertEquals(
-                    $extensionId,
-                    $matches[1]
-                );
+                static::assertEquals($extensionId, $matches[1]);
 
                 return new Response(
                     200,

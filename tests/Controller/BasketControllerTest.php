@@ -8,12 +8,13 @@ use Shopware\Core\Framework\Feature;
 use Shopware\Core\Framework\Store\Exception\InvalidExtensionIdException;
 use Shopware\Core\Framework\Store\Exception\InvalidVariantIdException;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use SwagExtensionStore\Controller\BasketController;
 use SwagExtensionStore\Services\BasketService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class LicensesControllerTest extends TestCase
+class BasketControllerTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
@@ -27,9 +28,7 @@ class LicensesControllerTest extends TestCase
     {
         $provider = $this->createMock(BasketService::class);
 
-        $controller = new BasketController(
-            $provider
-        );
+        $controller = new BasketController($provider);
 
         $request = new Request();
         $request->request->set('extensionId', 'foo');
@@ -42,9 +41,7 @@ class LicensesControllerTest extends TestCase
     {
         $provider = $this->createMock(BasketService::class);
 
-        $controller = new BasketController(
-            $provider
-        );
+        $controller = new BasketController($provider);
 
         $request = new Request();
         $request->request->set('extensionId', 1);
@@ -58,9 +55,7 @@ class LicensesControllerTest extends TestCase
     {
         $provider = $this->createMock(BasketService::class);
 
-        $controller = new BasketController(
-            $provider
-        );
+        $controller = new BasketController($provider);
 
         $request = new Request();
         $request->request->set('extensionId', 1);
@@ -69,5 +64,39 @@ class LicensesControllerTest extends TestCase
         $response = $controller->createCart($request, Context::createDefaultContext());
 
         static::assertEquals(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testAvailablePaymentMeans(): void
+    {
+        $service = $this->createMock(BasketService::class);
+        $service->expects(self::once())
+            ->method('availablePaymentMeans')
+            ->willReturn(['payment-mean-1', 'payment-mean-2']);
+
+        $controller = new BasketController($service);
+
+        $response = $controller->availablePaymentMeans(Context::createDefaultContext());
+
+        static::assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        static::assertEquals(json_encode(['payment-mean-1', 'payment-mean-2']), $response->getContent());
+    }
+
+    public function testOrderCart(): void
+    {
+        $context = Context::createDefaultContext();
+        $requestDataBag = new RequestDataBag([
+            'positions' => [],
+        ]);
+
+        $service = $this->createMock(BasketService::class);
+        $service->expects(self::once())
+            ->method('orderCart');
+
+        $controller = new BasketController($service);
+
+        $response = $controller->orderCart($requestDataBag, $context);
+
+        static::assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+        static::assertEmpty($response->getContent());
     }
 }

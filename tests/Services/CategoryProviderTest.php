@@ -1,16 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 
 namespace SwagExtensionStore\Tests\Services;
 
-
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Shopware\Core\Framework\Api\Context\AdminApiSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Shopware\Core\Framework\Uuid\Uuid;
 use SwagExtensionStore\Services\CategoryProvider;
 
 class CategoryProviderTest extends TestCase

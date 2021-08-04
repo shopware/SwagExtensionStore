@@ -23,15 +23,8 @@ class StoreDataProviderTest extends TestCase
     use StoreClientBehaviour;
     use ExtensionBehaviour;
 
-    /**
-     * @var StoreDataProvider
-     */
-    private $extensionDataProvider;
-
-    /**
-     * @var Context
-     */
-    private $context;
+    private StoreDataProvider $extensionDataProvider;
+    private Context $context;
 
     public function setUp(): void
     {
@@ -106,10 +99,7 @@ class StoreDataProviderTest extends TestCase
                 $matches = [];
                 preg_match('/\/swplatform\/extensionstore\/extensions\/(.*)\/reviews/', $request->getUri()->getPath(), $matches);
 
-                static::assertEquals(
-                    $extensionId,
-                    $matches[1]
-                );
+                static::assertEquals($extensionId, $matches[1]);
 
                 return new Response(
                     200,
@@ -140,10 +130,7 @@ class StoreDataProviderTest extends TestCase
                 $matches = [];
                 preg_match('/\/swplatform\/extensionstore\/extensions\/(.*)/', $request->getUri()->getPath(), $matches);
 
-                static::assertEquals(
-                    $extensionId,
-                    $matches[1]
-                );
+                static::assertEquals($extensionId, $matches[1]);
 
                 return new Response(
                     200,

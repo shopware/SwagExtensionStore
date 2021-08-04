@@ -1,8 +1,6 @@
-<?php
-
+<?php declare(strict_types=1);
 
 namespace SwagExtensionStore\Tests\Services;
-
 
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -17,22 +15,14 @@ use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use SwagExtensionStore\Services\StoreDataProvider;
 use SwagExtensionStore\Services\BasketService;
-use Symfony\Component\Filesystem\Filesystem;
 
 class LicenseServiceTest extends TestCase
 {
     use IntegrationTestBehaviour;
     use StoreClientBehaviour;
 
-    /**
-     * @var BasketService
-     */
-    private $licenseService;
-
-    /**
-     * @var AbstractExtensionStoreLicensesService
-     */
-    private $coreLicenseService;
+    private BasketService $licenseService;
+    private AbstractExtensionStoreLicensesService $coreLicenseService;
 
     public function setUp(): void
     {
@@ -42,7 +32,9 @@ class LicenseServiceTest extends TestCase
 
     public function testCreateCart(): void
     {
-        $this->getContainer()->get(SystemConfigService::class)->set(StoreService::CONFIG_KEY_STORE_LICENSE_DOMAIN, 'localhost');
+        $this->getContainer()
+            ->get(SystemConfigService::class)
+            ->set(StoreService::CONFIG_KEY_STORE_LICENSE_DOMAIN, 'localhost');
         $this->setResponsesToPurchaseExtension();
 
         $cart = $this->licenseService->createCart(5, 5, $this->getContextWithStoreToken());
@@ -52,13 +44,15 @@ class LicenseServiceTest extends TestCase
     public function testCancelSubscriptionRemovesLicense(): void
     {
         $context = $this->getContextWithStoreToken();
-        $this->getContainer()->get(SystemConfigService::class)->set(StoreService::CONFIG_KEY_STORE_LICENSE_DOMAIN, 'localhost');
+        $this->getContainer()
+            ->get(SystemConfigService::class)
+            ->set(StoreService::CONFIG_KEY_STORE_LICENSE_DOMAIN, 'localhost');
         $this->setResponsesToPurchaseExtension();
 
         $cart = $this->licenseService->createCart(5, 5, $context);
         $this->licenseService->orderCart($cart, $context);
 
-        $this->setCancelationResponses();
+        $this->setCancellationResponses();
 
         $this->coreLicenseService->cancelSubscription(1, $context);
 
@@ -72,22 +66,22 @@ class LicenseServiceTest extends TestCase
     {
         $userId = Uuid::randomHex();
 
-        $data = [
-            [
-                'id' => $userId,
-                'localeId' => $this->getLocaleIdOfSystemLanguage(),
-                'username' => 'foobar',
-                'password' => 'asdasdasdasd',
-                'firstName' => 'Foo',
-                'lastName' => 'Bar',
-                'email' => 'foo@bar.com',
-                'storeToken' => Uuid::randomHex(),
-                'admin' => true,
-                'aclRoles' => [],
-            ],
-        ];
+        $data = [[
+            'id' => $userId,
+            'localeId' => $this->getLocaleIdOfSystemLanguage(),
+            'username' => 'foobar',
+            'password' => 'asdasdasdasd',
+            'firstName' => 'Foo',
+            'lastName' => 'Bar',
+            'email' => 'foo@bar.com',
+            'storeToken' => Uuid::randomHex(),
+            'admin' => true,
+            'aclRoles' => [],
+        ]];
 
-        $this->getContainer()->get('user.repository')->create($data, Context::createDefaultContext());
+        $this->getContainer()
+            ->get('user.repository')
+            ->create($data, Context::createDefaultContext());
         $source = new AdminApiSource($userId);
         $source->setIsAdmin(true);
 
@@ -116,7 +110,7 @@ class LicenseServiceTest extends TestCase
         $this->getRequestHandler()->append(new Response(200, [], $licenseBody));
     }
 
-    private function setCancelationResponses(): void
+    private function setCancellationResponses(): void
     {
         $licenses = \json_decode(\file_get_contents(__DIR__ . '/../_fixtures/responses/licenses.json'), true);
         $licenses[0]['extension']['name'] = 'TestApp';

@@ -1,8 +1,9 @@
 <?xml version="1.0" ?>
-
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
+>
     <parameters>
         <parameter key="swag_extension_store.endpoints" type="collection">
             <parameter key="categories">/swplatform/extensionstore/categories</parameter>
@@ -16,6 +17,28 @@
         </parameter>
     </parameters>
     <services>
+        <!-- Authentication -->
+        <service id="SwagExtensionStore\Authentication\InstanceServicePolyfill">
+            <argument>%kernel.shopware_version%</argument>
+            <argument>%instance_id%</argument>
+        </service>
+
+        <service id="SwagExtensionStore\Authentication\LocaleProviderPolyfill">
+            <argument type="service" id="user.repository"/>
+        </service>
+
+        <service id="SwagExtensionStore\Authentication\StoreRequestOptionsProviderPolyfill">
+            <argument type="service" id="user.repository"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="SwagExtensionStore\Authentication\InstanceServicePolyfill"/>
+            <argument type="service" id="SwagExtensionStore\Authentication\LocaleProviderPolyfill"/>
+        </service>
+
+        <service id="SwagExtensionStore\Authentication\StoreRequestOptionsProviderWrapper">
+            <argument type="service" id="SwagExtensionStore\Authentication\StoreRequestOptionsProviderPolyfill"/>
+            <argument type="service" id="Shopware\Core\Framework\Store\Authentication\StoreRequestOptionsProvider" on-invalid="null"/>
+        </service>
+
         <!-- Controller -->
         <service id="SwagExtensionStore\Controller\BasketController" public="true">
             <argument type="service" id="SwagExtensionStore\Services\BasketService"/>
@@ -26,26 +49,30 @@
             <argument type="service" id="SwagExtensionStore\Services\CategoryProvider"/>
         </service>
 
-        <service id="SwagExtensionStore\Services\StoreDataProvider">
+        <!-- Services -->
+        <service id="SwagExtensionStore\Services\BasketService">
             <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
-            <argument type="service" id="Shopware\Core\Framework\Store\Services\ExtensionLoader"/>
+            <argument type="service" id="Shopware\Core\Framework\Store\Services\ExtensionDownloader"/>
         </service>
 
         <service id="SwagExtensionStore\Services\CategoryProvider">
             <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
         </service>
 
-        <service id="SwagExtensionStore\Services\BasketService">
-            <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
-            <argument type="service" id="Shopware\Core\Framework\Store\Services\ExtensionDownloader"/>
+        <service id="SwagExtensionStore\Services\EndpointProvider">
+            <argument>%swag_extension_store.endpoints%</argument>
         </service>
 
         <service id="SwagExtensionStore\Services\StoreClient">
-            <argument>%swag_extension_store.endpoints%</argument>
-            <argument type="service" id="Shopware\Core\Framework\Store\Services\StoreService"/>
+            <argument type="service" id="SwagExtensionStore\Services\EndpointProvider"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-            <argument type="service" id="Shopware\Core\Framework\Store\Authentication\AbstractAuthenticationProvider"/>
+            <argument type="service" id="SwagExtensionStore\Authentication\StoreRequestOptionsProviderWrapper"/>
             <argument type="service" id="shopware.store_client"/>
+        </service>
+
+        <service id="SwagExtensionStore\Services\StoreDataProvider">
+            <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
+            <argument type="service" id="Shopware\Core\Framework\Store\Services\ExtensionLoader"/>
         </service>
     </services>
 </container>

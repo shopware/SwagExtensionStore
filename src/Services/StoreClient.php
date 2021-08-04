@@ -1,51 +1,41 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SwagExtensionStore\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Store\Authentication\AbstractAuthenticationProvider;
 use Shopware\Core\Framework\Store\Exception\StoreApiException;
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
-use Shopware\Core\Framework\Store\Services\StoreService;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use SwagExtensionStore\Authentication\StoreRequestOptionsProviderWrapper;
 
 class StoreClient
 {
+    private EndpointProvider $endpointProvider;
+    private SystemConfigService $configService;
+    private StoreRequestOptionsProviderWrapper $storeRequestOptionsProvider;
     private Client $client;
 
-    private const SHOPWARE_PLATFORM_TOKEN_HEADER = 'X-Shopware-Platform-Token';
-    private const SHOPWARE_SHOP_SECRET_HEADER = 'X-Shopware-Shop-Secret';
-
-    private StoreService $storeService;
-    private SystemConfigService $configService;
-    private AbstractAuthenticationProvider $authenticationProvider;
-    private array $endpoints;
-
     public function __construct(
-        array $endpoints,
-        StoreService $storeService,
+        EndpointProvider $endpointProvider,
         SystemConfigService $configService,
-        AbstractAuthenticationProvider $authenticationProvider,
+        StoreRequestOptionsProviderWrapper $storeRequestOptionsProvider,
         Client $client
     ) {
-        $this->endpoints = $endpoints;
-        $this->storeService = $storeService;
+        $this->endpointProvider = $endpointProvider;
         $this->configService = $configService;
-        $this->authenticationProvider = $authenticationProvider;
+        $this->storeRequestOptionsProvider = $storeRequestOptionsProvider;
         $this->client = $client;
     }
 
     public function getCategories(Context $context): array
     {
-        $language = $this->storeService->getLanguageByContext($context);
-
         try {
-            $response = $this->client->get($this->endpoints['categories'], [
-                'query' => $this->storeService->getDefaultQueryParameters($language, false),
-                'headers' => $this->getHeaders(),
+            $response = $this->client->get($this->endpointProvider->get('categories'), [
+                'query' => $this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context),
+                'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
             ]);
         } catch (ClientException $e) {
             throw new StoreApiException($e);
@@ -56,12 +46,10 @@ class StoreClient
 
     public function listExtensions(ExtensionCriteria $criteria, Context $context): array
     {
-        $language = $this->storeService->getLanguageByContext($context);
-
         try {
-            $response = $this->client->get($this->endpoints['list_extensions'], [
-                'query' => array_merge($this->storeService->getDefaultQueryParameters($language, false), $criteria->getQueryParameter()),
-                'headers' => $this->getHeaders(),
+            $response = $this->client->get($this->endpointProvider->get('list_extensions'), [
+                'query' => array_merge($this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context), $criteria->getQueryParameter()),
+                'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
             ]);
         } catch (ClientException $e) {
             throw new StoreApiException($e);
@@ -77,12 +65,10 @@ class StoreClient
 
     public function listListingFilters(array $parameters, Context $context): array
     {
-        $language = $this->storeService->getLanguageByContext($context);
-
         try {
-            $response = $this->client->get($this->endpoints['filter'], [
-                'query' => array_merge($this->storeService->getDefaultQueryParameters($language, false), $parameters),
-                'headers' => $this->getHeaders(),
+            $response = $this->client->get($this->endpointProvider->get('filter'), [
+                'query' => array_merge($this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context), $parameters),
+                'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
             ]);
         } catch (ClientException $e) {
             throw new StoreApiException($e);
@@ -93,12 +79,10 @@ class StoreClient
 
     public function extensionDetail(int $id, Context $context): array
     {
-        $language = $this->storeService->getLanguageByContext($context);
-
         try {
-            $response = $this->client->get(sprintf($this->endpoints['extension_detail'], $id), [
-                'query' => $this->storeService->getDefaultQueryParameters($language, false),
-                'headers' => $this->getHeaders(),
+            $response = $this->client->get(sprintf($this->endpointProvider->get('extension_detail'), $id), [
+                'query' => $this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context),
+                'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
             ]);
         } catch (ClientException $e) {
             throw new StoreApiException($e);
@@ -109,12 +93,10 @@ class StoreClient
 
     public function extensionDetailReviews(int $id, ExtensionCriteria $criteria, Context $context): array
     {
-        $language = $this->storeService->getLanguageByContext($context);
-
         try {
-            $response = $this->client->get(sprintf($this->endpoints['reviews'], $id), [
-                'query' => array_merge($this->storeService->getDefaultQueryParameters($language, false), $criteria->getQueryParameter()),
-                'headers' => $this->getHeaders(),
+            $response = $this->client->get(sprintf($this->endpointProvider->get('reviews'), $id), [
+                'query' => array_merge($this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context), $criteria->getQueryParameter()),
+                'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
             ]);
         } catch (ClientException $e) {
             throw new StoreApiException($e);
@@ -125,12 +107,10 @@ class StoreClient
 
     public function createCart(int $extensionId, int $variantId, Context $context): CartStruct
     {
-        $language = $this->storeService->getLanguageByContext($context);
-
         try {
-            $response = $this->client->post($this->endpoints['create_basket'], [
-                'query' => $this->storeService->getDefaultQueryParameters($language, false),
-                'headers' => $this->getHeaders($this->authenticationProvider->getUserStoreToken($context)),
+            $response = $this->client->post($this->endpointProvider->get('create_basket'), [
+                'query' => $this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context),
+                'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
                 'json' => [
                     'extensions' => [
                         [
@@ -150,9 +130,9 @@ class StoreClient
     public function orderCart(CartStruct $cartStruct, Context $context): void
     {
         try {
-            $this->client->post($this->endpoints['order_basket'], [
-                'query' => $this->storeService->getDefaultQueryParameters('en-GB', false),
-                'headers' => $this->getHeaders($this->authenticationProvider->getUserStoreToken($context)),
+            $this->client->post($this->endpointProvider->get('order_basket'), [
+                'query' => $this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context),
+                'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
                 'json' => $cartStruct,
             ]);
         } catch (ClientException $e) {
@@ -163,39 +143,14 @@ class StoreClient
     public function availablePaymentMeans(Context $context): array
     {
         try {
-            $response = $this->client->get($this->endpoints['payment_means'], [
-                'query' => $this->storeService->getDefaultQueryParameters('en-GB', false),
-                'headers' => $this->getHeaders($this->authenticationProvider->getUserStoreToken($context)),
+            $response = $this->client->get($this->endpointProvider->get('payment_means'), [
+                'query' => $this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context),
+                'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
             ]);
 
             return json_decode((string) $response->getBody(), true);
         } catch (ClientException $e) {
             throw new StoreApiException($e);
         }
-    }
-
-    private function getClient(): Client
-    {
-        if ($this->client === null) {
-            $this->client = $this->storeService->createClient();
-        }
-
-        return $this->client;
-    }
-
-    private function getHeaders(?string $storeToken = null): array
-    {
-        $headers = $this->client->getConfig('headers');
-
-        if ($storeToken) {
-            $headers[self::SHOPWARE_PLATFORM_TOKEN_HEADER] = $storeToken;
-        }
-
-        $shopSecret = $this->configService->get('core.store.shopSecret');
-        if ($shopSecret) {
-            $headers[self::SHOPWARE_SHOP_SECRET_HEADER] = $shopSecret;
-        }
-
-        return $headers;
     }
 }
