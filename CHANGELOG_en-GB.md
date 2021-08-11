@@ -1,5 +1,4 @@
 # 1.0.0
-
 - First release in Store
 
 # 1.1.0
@@ -15,3 +14,6 @@
 - Fix annotation in route that breaks compatibility
 - Keep search term when navigation through the extension store
 - Fix detail page of Enterprise extensions
+
+# 1.4.0
+- Fix price precision display in extension buy modal

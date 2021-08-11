@@ -126,7 +126,7 @@
                                         @click="onClickAddExtension"
                                         class="sw-extension-store-detail__action-add-extension"
                                     >
-                                        <template v-if="extension.isTheme">
+                                        <template v-if="extension && extension.isTheme">
                                             {{ $tc('sw-extension-store.detail.labelButtonAddTheme') }}
                                         </template>
                                         <template v-else>
@@ -167,7 +167,7 @@
                                     :processSuccess="isInstallSuccessful"
                                     class="sw-extension-store-detail__action-install-extension"
                                 >
-                                    <template v-if="extension.isTheme">
+                                    <template v-if="extension && extension.isTheme">
                                         {{ $tc('sw-extension-store.detail.labelButtonInstallTheme') }}
                                     </template>
                                     <template v-else>
@@ -183,7 +183,7 @@
                                     @click="openExtension"
                                     class="sw-extension-store-detail__action-open-extension"
                                 >
-                                    <template v-if="extension.isTheme">
+                                    <template v-if="extension && extension.isTheme">
                                         {{ $tc('sw-extension-store.detail.labelButtonOpenTheme') }}
                                     </template>
                                     <template v-else>
