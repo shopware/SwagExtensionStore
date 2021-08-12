@@ -167,7 +167,7 @@ Component.register('sw-extension-store-detail', {
 
         variantClass() {
             return {
-                'is--theme': this.extension.isTheme
+                'is--theme': this.extension && this.extension.isTheme
             };
         },
 

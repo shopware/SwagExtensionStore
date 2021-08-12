@@ -40,7 +40,7 @@
                 "title": "Sub-processor of Shopware"
             },
             "rent": {
-                "priceTrialAndDiscount": "{trialPrice} / first month, following {discountPrice} until {discountEnds}, then ${netPrice}",
+                "priceTrialAndDiscount": "{trialPrice} / first month, following {discountPrice} until {discountEnds}, then {netPrice}",
                 "priceTrialWithoutDiscount": "{trialPrice} / first month, following {netPrice} / month",
                 "priceWithoutTrialWithDiscount": "{discountPrice} / month until {discountEnds}, then {netPrice}",
                 "priceWithoutTrialWithoutDiscount": "{netPrice} / month"

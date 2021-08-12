@@ -1,5 +1,4 @@
 # 1.0.0
-
 - Erster Release im Store
 
 # 1.1.0
@@ -15,3 +14,6 @@
 - Fehler in Route behoben, der die Kompatibilität bricht
 - Der Suchbegriff bleibt erhalten während man durch den Extension Store navigiert
 - Fehler bei der Anzeige der Detailseite von Enterprise Erweiterungen behoben 
+
+# 1.4.0
+- Korrigiert die Nachkommastellen in der Preisdarstellung im Erweiterungskaufmodal

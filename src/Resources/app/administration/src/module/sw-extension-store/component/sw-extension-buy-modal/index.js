@@ -74,7 +74,7 @@ Component.register('sw-extension-buy-modal', {
             }
 
             if (netPrice) {
-                return Utils.format.currency(Math.round(netPrice, 2), 'EUR');
+                return Utils.format.currency(netPrice, 'EUR', 2);
             }
 
             return Utils.format.currency(
@@ -295,13 +295,14 @@ Component.register('sw-extension-buy-modal', {
         },
 
         variantPrice(variant) {
-            const netPrice = Utils.format.currency(Math.round(variant.netPrice), 'EUR');
+            const netPrice = Utils.format.currency(variant.netPrice, 'EUR', 2);
             const discountCampaign = variant.discountCampaign;
             const discountStartDate = discountCampaign && new Date(Date.parse(discountCampaign.startDate));
             const discountEndDate = discountCampaign && new Date(Date.parse(discountCampaign.endDate));
             const discountPrice = discountCampaign && Utils.format.currency(
-                Math.round(discountCampaign.discountedPrice),
-                'EUR'
+                discountCampaign.discountedPrice,
+                'EUR',
+                2,
             );
 
             if (variant.trialPhaseIncluded && variant.type === 'rent') {
