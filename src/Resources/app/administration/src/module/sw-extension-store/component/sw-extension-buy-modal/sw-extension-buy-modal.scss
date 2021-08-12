@@ -91,6 +91,18 @@ $padding-summary-card: 22px;
         font-size: $font-size-default;
     }
 
+    &__variant-actual-price {
+        font-weight: $font-weight-bold;
+    }
+
+    &__variant-original-price {
+        text-decoration: line-through;
+    }
+
+    .is--discounted {
+        color: $color-crimson-400;
+    }
+
     .sw-extension-buy-modal__variant-summary {
         margin-bottom: 16px;
         padding: $padding-summary-card;

@@ -40,9 +40,9 @@
                 "title": "Unterauftragnehmer von Shopware"
             },
             "rent": {
-                "priceTrialAndDiscount": "{trialPrice} / erster Monat, folgende {discountPrice} bis {discountEnds}, danach {netPrice}",
-                "priceTrialWithoutDiscount": "{trialPrice} / erster Monat, danach {netPrice} / Monat",
-                "priceWithoutTrialWithDiscount": "{discountPrice} / Monat bis {discountEnds}, danach {netPrice}",
+                "priceTrialAndDiscount": "<strong>{trialPrice} / erster Monat</strong><br/>folgende {discountPrice} bis {discountEnds}<br/>danach {netPrice}",
+                "priceTrialWithoutDiscount": "<strong>{trialPrice} / erster Monat</strong><br/>danach {netPrice} / Monat",
+                "priceWithoutTrialWithDiscount": "<strong>{discountPrice} / Monat bis {discountEnds}</strong><br/>danach {netPrice}",
                 "priceWithoutTrialWithoutDiscount": "{netPrice} / Monat"
             },
             "warnings": {
