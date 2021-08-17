@@ -294,48 +294,80 @@ Component.register('sw-extension-buy-modal', {
             }
         },
 
+        /**
+         * @deprecated tag:v2.0.0 - will be removed; use `renderBuyPrice` or `renderRentPrice` instead
+         */
         variantPrice(variant) {
-            const netPrice = Utils.format.currency(variant.netPrice, 'EUR', 2);
-            const discountCampaign = variant.discountCampaign;
-            const discountStartDate = discountCampaign && new Date(Date.parse(discountCampaign.startDate));
-            const discountEndDate = discountCampaign && new Date(Date.parse(discountCampaign.endDate));
-            const discountPrice = discountCampaign && Utils.format.currency(
-                discountCampaign.discountedPrice,
-                'EUR',
-                2,
-            );
+            if (variant.type === 'rent') {
+                return this.renderRentPrice(variant);
+            }
 
-            if (variant.trialPhaseIncluded && variant.type === 'rent') {
-                if (discountCampaign && discountStartDate < (new Date())) {
-                    return this.$t('sw-extension-store.buy-modal.rent.priceTrialAndDiscount', {
-                        trialPrice: Utils.format.currency(0, 'EUR'),
-                        discountPrice: discountPrice,
-                        discountEnds: Shopware.Utils.format.date(discountEndDate),
-                        netPrice: netPrice
+            if (variant.type === 'buy') {
+                return this.renderBuyPrice(variant);
+            }
+
+            return this.getNetPrice(variant);
+        },
+
+        getDiscountClasses(variant) {
+            return {
+                'is--discounted': this.hasDiscount(variant)
+            };
+        },
+
+        hasDiscount(variant) {
+            const campaign = variant.discountCampaign;
+            return campaign
+                && new Date(Date.parse(campaign.startDate)) < (new Date())
+                && new Date(Date.parse(campaign.endDate)) >= (new Date());
+        },
+
+        renderPrice(price) {
+            return Utils.format.currency(price, 'EUR');
+        },
+
+        renderBuyPrice(variant) {
+            if (this.hasDiscount(variant)) {
+                return this.renderPrice(variant.discountCampaign.discountedPrice);
+            }
+
+            return this.renderPrice(variant.netPrice);
+        },
+
+        renderRentPrice(variant) {
+            const netPrice = this.renderPrice(variant.netPrice);
+            const trialPrice = this.renderPrice(0);
+            const campaign = variant.discountCampaign;
+            const discountPrice = campaign ? this.renderPrice(campaign.discountedPrice) : trialPrice;
+            const discountEnds = Shopware.Utils.format.date(campaign ? new Date(Date.parse(campaign.endDate)) : null);
+
+            if (variant.trialPhaseIncluded) {
+                if (this.hasDiscount(variant)) {
+                    return this.$tc('sw-extension-store.buy-modal.rent.priceTrialAndDiscount', 0, {
+                        netPrice,
+                        trialPrice,
+                        discountPrice,
+                        discountEnds
                     });
                 }
 
-                return this.$t('sw-extension-store.buy-modal.rent.priceTrialWithoutDiscount', {
-                    trialPrice: Utils.format.currency(0, 'EUR'),
-                    netPrice: netPrice
+                return this.$tc('sw-extension-store.buy-modal.rent.priceTrialWithoutDiscount', 0, {
+                    netPrice,
+                    trialPrice
                 });
             }
 
-            if (variant.type === 'rent' && discountCampaign && discountStartDate < (new Date())) {
-                return this.$t('sw-extension-store.buy-modal.rent.priceWithoutTrialWithDiscount', {
-                    discountPrice: discountPrice,
-                    discountEnds: Shopware.Utils.format.date(discountEndDate),
-                    netPrice: netPrice
+            if (this.hasDiscount(variant)) {
+                return this.$tc('sw-extension-store.buy-modal.rent.priceWithoutTrialWithDiscount', 0, {
+                    netPrice,
+                    discountPrice,
+                    discountEnds
                 });
             }
 
-            if (variant.type === 'rent') {
-                return this.$t('sw-extension-store.buy-modal.rent.priceWithoutTrialWithoutDiscount', {
-                    netPrice: netPrice
-                });
-            }
-
-            return netPrice;
+            return this.$tc('sw-extension-store.buy-modal.rent.priceWithoutTrialWithoutDiscount', 0, {
+                netPrice
+            });
         },
 
         handleErrors(error) {

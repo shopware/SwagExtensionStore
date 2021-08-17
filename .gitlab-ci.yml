@@ -30,6 +30,9 @@ ESLint:
         - npm ci
         - npm run lint-ci
     artifacts:
+        when: always
+        paths:
+            - custom/plugins/SwagExtensionStore/src/Resources/app/administration/eslint.junit.xml
         reports:
             junit: $CI_PROJECT_DIR/development/custom/plugins/SwagExtensionStore/src/Resources/app/administration/eslint.junit.xml
 

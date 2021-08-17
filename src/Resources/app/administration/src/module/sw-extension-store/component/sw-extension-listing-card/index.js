@@ -27,8 +27,9 @@ Component.register('sw-extension-listing-card', {
             const image = Utils.get(this.extension, 'images[0]', null);
 
             if (!image) {
+                const previewImage = this.assetFilter('/administration/static/img/theme/default_theme_preview.jpg');
                 return {
-                    'background-image': `url('${this.assetFilter('/administration/static/img/theme/default_theme_preview.jpg')}')`
+                    'background-image': `url('${previewImage}')`
                 };
             }
 
@@ -75,7 +76,8 @@ Component.register('sw-extension-listing-card', {
         },
 
         isLicensed() {
-            const extension = Shopware.State.get('shopwareExtensions').myExtensions.data.find((installedExtension) => installedExtension.name === this.extension.name);
+            const extension = Shopware.State.get('shopwareExtensions').myExtensions.data
+                .find((installedExtension) => installedExtension.name === this.extension.name);
 
             if (extension === undefined) {
                 return false;

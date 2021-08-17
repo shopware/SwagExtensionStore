@@ -4,7 +4,9 @@ namespace SwagExtensionStore\Services;
 
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Store\Services\ExtensionDownloader;
+use Shopware\Core\Framework\Store\Struct\CartPositionStruct;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
+use Shopware\Core\Framework\Util\FloatComparator;
 
 class BasketService
 {
@@ -19,7 +21,8 @@ class BasketService
 
     public function createCart(int $extensionId, int $variantId, Context $context): CartStruct
     {
-        return $this->client->createCart($extensionId, $variantId, $context);
+        $cart = $this->client->createCart($extensionId, $variantId, $context);
+        return $this->ensureFloatPrecision($cart);
     }
 
     public function orderCart(CartStruct $cart, Context $context): void
@@ -30,5 +33,23 @@ class BasketService
     public function availablePaymentMeans(Context $context): array
     {
         return $this->client->availablePaymentMeans($context);
+    }
+
+    protected function ensureFloatPrecision(CartStruct $cart): CartStruct
+    {
+        $cart->setGrossPrice(FloatComparator::cast($cart->getGrossPrice()));
+        $cart->setNetPrice(FloatComparator::cast($cart->getNetPrice()));
+        $cart->setTaxValue(FloatComparator::cast($cart->getTaxValue()));
+        $cart->setTaxRate(FloatComparator::cast($cart->getTaxRate()));
+
+        /** @var CartPositionStruct $position */
+        foreach ($cart->getPositions() as $position) {
+            $position->setGrossPrice(FloatComparator::cast($position->getGrossPrice()));
+            $position->setNetPrice(FloatComparator::cast($position->getNetPrice()));
+            $position->setPseudoPrice(FloatComparator::cast($position->getPseudoPrice()));
+            $position->setTaxValue(FloatComparator::cast($position->getTaxValue()));
+        }
+
+        return $cart;
     }
 }
