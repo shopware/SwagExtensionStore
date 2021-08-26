@@ -4,6 +4,9 @@
             "apps": "Apps",
             "themes": "Themes"
         },
+        "listing":  {
+            "placeholderSearchBar": "Finde Erweiterungen..."
+        },
         "updateWarning": {
             "headlineFirst": "Wir haben den Shopware Store aktualisiert.",
             "headlineSecond": "Nimm Dir einen Moment Zeit, um auf die neueste Version zu aktualisieren.",

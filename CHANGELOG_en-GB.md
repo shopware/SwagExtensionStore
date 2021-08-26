@@ -18,3 +18,4 @@
 # 1.4.0
 - Fix price precision display in extension buy modal
 - Improves price display in buy modal, if products are discounted
+- Added a placeholder to the search bar
