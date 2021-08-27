@@ -18,4 +18,4 @@
 # 1.4.0
 - Korrigiert die Nachkommastellen in der Preisdarstellung im Erweiterungskaufmodal
 - Verbessert die Preisdarstellung im Kaufen-Modal, wenn Produkte rabattiert sind
-- Platzhalter zur Suchleiste hinzugefügt
+- Platzhalter zur Suchleiste hinzugefügt und den `initialSearchType` umbenannt
