@@ -123,12 +123,17 @@
             line-height: inherit;
         }
 
-        .sw-extension-store-detail__discounted-price {
+        .is--discounted {
             color: $color-crimson-400;
-            margin-bottom: 0;
 
-            s {
+            > .sw-extension-store-detail__net-price {
+                text-decoration: line-through;
+            }
+
+            > .sw-extension-store-detail__discounted-price {
                 margin-left: 4px;
+                font-weight: bolder;
+                font-size: $font-size-large;
             }
         }
 

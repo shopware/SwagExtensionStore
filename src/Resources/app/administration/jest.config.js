@@ -3,7 +3,8 @@
 module.exports = {
     preset: '@shopware-ag/jest-preset-sw6-admin',
     globals: {
-        adminPath: process.env.ADMIN_PATH // required, e.g. /www/sw6/platform/src/Administration/Resources/app/administration
+        // required, e.g. /www/sw6/platform/src/Administration/Resources/app/administration
+        adminPath: process.env.ADMIN_PATH,
     },
 
     moduleNameMapper: {

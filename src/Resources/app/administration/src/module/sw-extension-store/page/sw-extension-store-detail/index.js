@@ -138,24 +138,30 @@ Component.register('sw-extension-store-detail', {
 
         discountClass() {
             return {
-                'sw-extension-store-detail__discounted-price': this.hasActiveDiscount
+                'is--discounted': this.hasActiveDiscount
             };
         },
 
+        discountedPrice() {
+            return this.shopwareExtensionService.getPriceFromVariant(this.recommendedVariant);
+        },
+
+        /**
+         * @deprecated v2.0.0 - Will be removed, use renderPrice for display instead
+         */
         calculatedPrice() {
             if (!this.recommendedVariant) {
                 return null;
             }
 
             const label = this.hasActiveDiscount ? 'labelDiscountedPrice' : 'labelPrice';
-            const discountedPrice = this.shopwareExtensionService.getPriceFromVariant(this.recommendedVariant);
             const text = this.$tc(
                 `sw-extension-store.general.${label}`,
                 this.shopwareExtensionService.mapVariantToRecommendation(this.recommendedVariant),
                 {
                     price: Utils.format.currency(this.recommendedVariant.netPrice, 'EUR'),
-                    discountedPrice: this.recommendedVariant.netPrice !== discountedPrice ?
-                        Utils.format.currency(discountedPrice, 'EUR') : null
+                    discountedPrice: this.recommendedVariant.netPrice !== this.discountedPrice ?
+                        Utils.format.currency(this.discountedPrice, 'EUR') : null
                 }
             );
 
@@ -302,6 +308,10 @@ Component.register('sw-extension-store-detail', {
             }
 
             this.openBuyModal();
+        },
+
+        renderPrice(price) {
+            return Utils.format.currency(price, 'EUR');
         },
 
         onLoginSuccess() {

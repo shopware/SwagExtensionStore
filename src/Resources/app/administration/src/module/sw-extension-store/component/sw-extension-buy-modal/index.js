@@ -82,6 +82,10 @@ Component.register('sw-extension-buy-modal', {
             );
         },
 
+        trialPrice() {
+            return this.renderPrice(0);
+        },
+
         purchaseButtonLabel() {
             switch (this.selectedVariant.type) {
                 case this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.FREE:
@@ -299,13 +303,9 @@ Component.register('sw-extension-buy-modal', {
         },
 
         /**
-         * @deprecated tag:v2.0.0 - will be removed; use `renderBuyPrice` or `renderRentPrice` instead
+         * @deprecated tag:v2.0.0 - will be removed; use `renderBuyPrice` instead
          */
         variantPrice(variant) {
-            if (variant.type === 'rent') {
-                return this.renderRentPrice(variant);
-            }
-
             if (variant.type === 'buy') {
                 return this.renderBuyPrice(variant);
             }
@@ -338,40 +338,14 @@ Component.register('sw-extension-buy-modal', {
             return this.renderPrice(variant.netPrice);
         },
 
-        renderRentPrice(variant) {
-            const netPrice = this.renderPrice(variant.netPrice);
-            const trialPrice = this.renderPrice(0);
-            const campaign = variant.discountCampaign;
-            const discountPrice = campaign ? this.renderPrice(campaign.discountedPrice) : trialPrice;
-            const discountEnds = Shopware.Utils.format.date(campaign ? new Date(Date.parse(campaign.endDate)) : null);
+        getDiscountPrice(variant) {
+            return variant.discountCampaign ? this.renderPrice(variant.discountCampaign.discountedPrice) : this.trialPrice;
+        },
 
-            if (variant.trialPhaseIncluded) {
-                if (this.hasDiscount(variant)) {
-                    return this.$tc('sw-extension-store.buy-modal.rent.priceTrialAndDiscount', 0, {
-                        netPrice,
-                        trialPrice,
-                        discountPrice,
-                        discountEnds
-                    });
-                }
-
-                return this.$tc('sw-extension-store.buy-modal.rent.priceTrialWithoutDiscount', 0, {
-                    netPrice,
-                    trialPrice
-                });
-            }
-
-            if (this.hasDiscount(variant)) {
-                return this.$tc('sw-extension-store.buy-modal.rent.priceWithoutTrialWithDiscount', 0, {
-                    netPrice,
-                    discountPrice,
-                    discountEnds
-                });
-            }
-
-            return this.$tc('sw-extension-store.buy-modal.rent.priceWithoutTrialWithoutDiscount', 0, {
-                netPrice
-            });
+        getDiscountEnds(variant) {
+            return Utils.format.date(
+                variant.discountCampaign ? new Date(Date.parse(variant.discountCampaign.endDate)) : null
+            );
         },
 
         handleErrors(error) {

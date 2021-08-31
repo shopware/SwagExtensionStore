@@ -1,5 +1,11 @@
 {
     "sw-extension-store": {
+        "general": {
+            "labelPrice": "Kostenlos | {price}/Monat | {price}",
+            "labelFree": "Kostenlos",
+            "labelRentSuffix": "/Monat*",
+            "labelDiscountedPrice": "Kostenlos | <s>{price}</s> <strong>{discountedPrice}</strong>/Monat | <s>{price}</s> <strong>{discountedPrice}</strong>"
+        },
         "tabs": {
             "apps": "Apps",
             "themes": "Themes"
@@ -42,10 +48,9 @@
                 "title": "Unterauftragnehmer von Shopware"
             },
             "rent": {
-                "priceTrialAndDiscount": "<strong>{trialPrice} / erster Monat</strong><br/>folgende {discountPrice} bis {discountEnds}<br/>danach {netPrice}",
-                "priceTrialWithoutDiscount": "<strong>{trialPrice} / erster Monat</strong><br/>danach {netPrice} / Monat",
-                "priceWithoutTrialWithDiscount": "<strong>{discountPrice} / Monat bis {discountEnds}</strong><br/>danach {netPrice}",
-                "priceWithoutTrialWithoutDiscount": "{netPrice} / Monat"
+                "priceDisplay": "{priceDisplay}/Monat",
+                "freeTrial": "30-Tage-Testversion",
+                "disclaimer": "Es können zusätzliche Kosten anfallen."
             },
             "warnings": {
                 "paymentMeansRequiredText": "Um diese App zu kaufen, musst Du",
