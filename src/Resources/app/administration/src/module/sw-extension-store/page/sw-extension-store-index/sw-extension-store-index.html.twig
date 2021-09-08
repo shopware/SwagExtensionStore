@@ -4,7 +4,7 @@
             {% block sw_extension_store_index_slot_search_bar %}
                 <template #search-bar>
                     {% block sw_extension_store_index_search_bar %}
-                        <sw-search-bar 
+                        <sw-search-bar
                             :key="storeSearchKey"
                             @search="updateSearch"
                             :initialSearch="searchValue"
@@ -35,21 +35,48 @@
 
             {% block sw_extension_store_index_slot_default %}
                 <template #default>
-                    {% block sw_extension_store_index_content %}
-                        {% block sw_extension_store_index_content_view %}
-                            <router-view v-if="isAvailable"></router-view>
-                        {% endblock %}
 
-                        {% block sw_extension_store_index_content_offline_warning %}
-                            <sw-extension-store-offline-warning v-else-if="failReason === 'offline'">
-                            </sw-extension-store-offline-warning>
-                        {% endblock %}
-
-                        {% block sw_extension_store_index_content_update_warning %}
-                            <sw-extension-store-update-warning v-else>
-                            </sw-extension-store-update-warning>
-                        {% endblock %}
+                    {% block sw_extension_store_index_loader %}
+                        <sw-loader v-if="isLoading"></sw-loader>
                     {% endblock %}
+
+                    <template v-else>
+                        {% block sw_extension_store_index_content %}
+                            {% block sw_extension_store_index_content_view %}
+                                <router-view
+                                    v-if="isAvailable"
+                                    @extension-listing-errors="onExtensionListingError">
+                                </router-view>
+                            {% endblock %}
+
+                            {% block sw_extension_store_index_content_offline_warning %}
+                                <sw-extension-store-error-card
+                                    v-else-if="failReason === 'offline'"
+                                    :title="$tc('sw-extension-store.offline.headline')"
+                                    variant="danger"
+                                >
+                                    {{ $tc('sw-extension-store.offline.description') }}
+                                </sw-extension-store-error-card>
+                            {% endblock %}
+
+                            {% block sw_extension_store_index_content_update_warning %}
+                                <sw-extension-store-update-warning v-else-if="failReason === 'outdated'">
+                                </sw-extension-store-update-warning>
+                            {% endblock %}
+
+                            {% block sw_extension_store_index_content_listing_error %}
+                                <sw-extension-store-error-card
+                                    v-else
+                                    :title="listingError && listingError.title"
+                                    variant="danger"
+                                >
+                                    <template v-if="listingError">
+                                        {{ listingError.message }}
+                                    </template>
+                                </sw-extension-store-error-card>
+                            {% endblock %}
+                        {% endblock %}
+                    </template>
                 </template>
             {% endblock %}
         {% endblock %}

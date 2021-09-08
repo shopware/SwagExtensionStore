@@ -1,0 +1,43 @@
+{% block sw_extension_store_error_card %}
+    <sw-meteor-card
+        class="sw-extension-store-error-card"
+        :class="componentClasses"
+    >
+        {% block sw_extension_store_error_card_label %}
+            <sw-label
+                class="sw-extension-store-error-card__label"
+                appearance="pill"
+                :variant="variant"
+            >
+                <slot name="icon">
+                    {% block sw_extension_store_error_card_icon %}
+                        <sw-icon
+                            :name="iconName"
+                            size="30px"
+                        />
+                    {% endblock %}
+                </slot>
+            </sw-label>
+        {% endblock %}
+
+        {% block sw_extension_store_error_card_title %}
+            <h2 v-if="title"
+                v-html="title"
+                class="sw-extension-store-error-card__title"
+            >
+            </h2>
+        {% endblock %}
+
+        {% block sw_extension_store_error_card_message %}
+            <div class="sw-extension-store-error-card__message">
+                <slot></slot>
+            </div>
+        {% endblock %}
+
+        {% block sw_extension_store_error_card_actions %}
+            <div class="sw-extension-store-error-card__actions">
+                <slot name="actions"></slot>
+            </div>
+        {% endblock %}
+    </sw-meteor-card>
+{% endblock %}
