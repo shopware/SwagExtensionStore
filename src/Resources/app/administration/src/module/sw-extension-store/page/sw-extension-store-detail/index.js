@@ -38,7 +38,8 @@ Component.register('sw-extension-store-detail', {
             permissionsAccepted: false,
             isDescriptionCollapsed: false,
             installationError: null,
-            fetchError: false
+            fetchError: false,
+            canBeOpened: false
         };
     },
 
@@ -48,7 +49,7 @@ Component.register('sw-extension-store-detail', {
         },
 
         license() {
-            if (this.extension === null) {
+            if (this.suspended) {
                 return null;
             }
 
@@ -113,10 +114,6 @@ Component.register('sw-extension-store-detail', {
 
         languageId() {
             return Shopware.State.get('session').languageId;
-        },
-
-        canBeOpened() {
-            return this.shopwareExtensionService.canBeOpened(this.extension);
         },
 
         recommendedVariant() {
@@ -231,8 +228,9 @@ Component.register('sw-extension-store-detail', {
         }
     },
 
-    created() {
-        this.shopwareExtensionService.updateExtensionData();
+    async created() {
+        await this.shopwareExtensionService.updateExtensionData();
+        this.canBeOpened = await this.shopwareExtensionService.canBeOpened(this.extension);
     },
 
     methods: {

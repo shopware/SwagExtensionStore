@@ -9,12 +9,12 @@ use Shopware\Core\Framework\Store\Exception\InvalidExtensionIdException;
 use Shopware\Core\Framework\Store\Exception\InvalidVariantIdException;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
-use SwagExtensionStore\Controller\BasketController;
-use SwagExtensionStore\Services\BasketService;
+use SwagExtensionStore\Controller\LicenseController;
+use SwagExtensionStore\Services\LicenseService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class BasketControllerTest extends TestCase
+class LicenseControllerTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
@@ -26,9 +26,9 @@ class BasketControllerTest extends TestCase
 
     public function testPurchaseExtensionWithInvalidExtensionId(): void
     {
-        $provider = $this->createMock(BasketService::class);
+        $provider = $this->createMock(LicenseService::class);
 
-        $controller = new BasketController($provider);
+        $controller = new LicenseController($provider);
 
         $request = new Request();
         $request->request->set('extensionId', 'foo');
@@ -39,9 +39,9 @@ class BasketControllerTest extends TestCase
 
     public function testPurchaseExtensionWithInvalidVariantId(): void
     {
-        $provider = $this->createMock(BasketService::class);
+        $provider = $this->createMock(LicenseService::class);
 
-        $controller = new BasketController($provider);
+        $controller = new LicenseController($provider);
 
         $request = new Request();
         $request->request->set('extensionId', 1);
@@ -53,9 +53,9 @@ class BasketControllerTest extends TestCase
 
     public function testPurchaseExtension(): void
     {
-        $provider = $this->createMock(BasketService::class);
+        $provider = $this->createMock(LicenseService::class);
 
-        $controller = new BasketController($provider);
+        $controller = new LicenseController($provider);
 
         $request = new Request();
         $request->request->set('extensionId', 1);
@@ -68,12 +68,12 @@ class BasketControllerTest extends TestCase
 
     public function testAvailablePaymentMeans(): void
     {
-        $service = $this->createMock(BasketService::class);
+        $service = $this->createMock(LicenseService::class);
         $service->expects(self::once())
             ->method('availablePaymentMeans')
             ->willReturn(['payment-mean-1', 'payment-mean-2']);
 
-        $controller = new BasketController($service);
+        $controller = new LicenseController($service);
 
         $response = $controller->availablePaymentMeans(Context::createDefaultContext());
 
@@ -88,11 +88,11 @@ class BasketControllerTest extends TestCase
             'positions' => [],
         ]);
 
-        $service = $this->createMock(BasketService::class);
+        $service = $this->createMock(LicenseService::class);
         $service->expects(self::once())
             ->method('orderCart');
 
-        $controller = new BasketController($service);
+        $controller = new LicenseController($service);
 
         $response = $controller->orderCart($requestDataBag, $context);
 

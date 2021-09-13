@@ -6,7 +6,6 @@
 >
     <parameters>
         <parameter key="swag_extension_store.endpoints" type="collection">
-            <parameter key="categories">/swplatform/extensionstore/categories</parameter>
             <parameter key="list_extensions">/swplatform/extensionstore/extensions</parameter>
             <parameter key="extension_detail">/swplatform/extensionstore/extensions/%d</parameter>
             <parameter key="filter">/swplatform/extensionstore/extensions/filter</parameter>
@@ -40,32 +39,21 @@
         </service>
 
         <!-- Controller -->
-        <service id="SwagExtensionStore\Controller\BasketController" public="true">
-            <argument type="service" id="SwagExtensionStore\Services\BasketService"/>
+        <service id="SwagExtensionStore\Controller\LicenseController" public="true">
+            <argument type="service" id="SwagExtensionStore\Services\LicenseService"/>
         </service>
 
         <service id="SwagExtensionStore\Controller\DataController" public="true">
             <argument type="service" id="SwagExtensionStore\Services\StoreDataProvider"/>
-            <argument type="service" id="SwagExtensionStore\Services\CategoryProvider"/>
         </service>
 
         <!-- Services -->
-        <service id="SwagExtensionStore\Services\BasketService">
+        <service id="SwagExtensionStore\Services\LicenseService">
             <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
-            <argument type="service" id="Shopware\Core\Framework\Store\Services\ExtensionDownloader"/>
-        </service>
-
-        <service id="SwagExtensionStore\Services\CategoryProvider">
-            <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
-        </service>
-
-        <service id="SwagExtensionStore\Services\EndpointProvider">
-            <argument>%swag_extension_store.endpoints%</argument>
         </service>
 
         <service id="SwagExtensionStore\Services\StoreClient">
-            <argument type="service" id="SwagExtensionStore\Services\EndpointProvider"/>
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument>%swag_extension_store.endpoints%</argument>
             <argument type="service" id="SwagExtensionStore\Authentication\StoreRequestOptionsProviderWrapper"/>
             <argument type="service" id="shopware.store_client"/>
         </service>

@@ -8,46 +8,28 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Store\Exception\StoreApiException;
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
-use Shopware\Core\System\SystemConfig\SystemConfigService;
 use SwagExtensionStore\Authentication\StoreRequestOptionsProviderWrapper;
 
 class StoreClient
 {
-    private EndpointProvider $endpointProvider;
-    private SystemConfigService $configService;
+    private array $endpoints;
     private StoreRequestOptionsProviderWrapper $storeRequestOptionsProvider;
     private Client $client;
 
     public function __construct(
-        EndpointProvider $endpointProvider,
-        SystemConfigService $configService,
+        array $endpoints,
         StoreRequestOptionsProviderWrapper $storeRequestOptionsProvider,
         Client $client
     ) {
-        $this->endpointProvider = $endpointProvider;
-        $this->configService = $configService;
+        $this->endpoints = $endpoints;
         $this->storeRequestOptionsProvider = $storeRequestOptionsProvider;
         $this->client = $client;
-    }
-
-    public function getCategories(Context $context): array
-    {
-        try {
-            $response = $this->client->get($this->endpointProvider->get('categories'), [
-                'query' => $this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context),
-                'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
-            ]);
-        } catch (ClientException $e) {
-            throw new StoreApiException($e);
-        }
-
-        return json_decode((string) $response->getBody(), true);
     }
 
     public function listExtensions(ExtensionCriteria $criteria, Context $context): array
     {
         try {
-            $response = $this->client->get($this->endpointProvider->get('list_extensions'), [
+            $response = $this->client->get($this->endpoints['list_extensions'], [
                 'query' => array_merge($this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context), $criteria->getQueryParameter()),
                 'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
             ]);
@@ -66,7 +48,7 @@ class StoreClient
     public function listListingFilters(array $parameters, Context $context): array
     {
         try {
-            $response = $this->client->get($this->endpointProvider->get('filter'), [
+            $response = $this->client->get($this->endpoints['filter'], [
                 'query' => array_merge($this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context), $parameters),
                 'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
             ]);
@@ -80,7 +62,7 @@ class StoreClient
     public function extensionDetail(int $id, Context $context): array
     {
         try {
-            $response = $this->client->get(sprintf($this->endpointProvider->get('extension_detail'), $id), [
+            $response = $this->client->get(sprintf($this->endpoints['extension_detail'], $id), [
                 'query' => $this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context),
                 'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
             ]);
@@ -94,7 +76,7 @@ class StoreClient
     public function extensionDetailReviews(int $id, ExtensionCriteria $criteria, Context $context): array
     {
         try {
-            $response = $this->client->get(sprintf($this->endpointProvider->get('reviews'), $id), [
+            $response = $this->client->get(sprintf($this->endpoints['reviews'], $id), [
                 'query' => array_merge($this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context), $criteria->getQueryParameter()),
                 'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
             ]);
@@ -108,7 +90,7 @@ class StoreClient
     public function createCart(int $extensionId, int $variantId, Context $context): CartStruct
     {
         try {
-            $response = $this->client->post($this->endpointProvider->get('create_basket'), [
+            $response = $this->client->post($this->endpoints['create_basket'], [
                 'query' => $this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context),
                 'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
                 'json' => [
@@ -130,7 +112,7 @@ class StoreClient
     public function orderCart(CartStruct $cartStruct, Context $context): void
     {
         try {
-            $this->client->post($this->endpointProvider->get('order_basket'), [
+            $this->client->post($this->endpoints['order_basket'], [
                 'query' => $this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context),
                 'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
                 'json' => $cartStruct,
@@ -143,7 +125,7 @@ class StoreClient
     public function availablePaymentMeans(Context $context): array
     {
         try {
-            $response = $this->client->get($this->endpointProvider->get('payment_means'), [
+            $response = $this->client->get($this->endpoints['payment_means'], [
                 'query' => $this->storeRequestOptionsProvider->getDefaultQueryParametersFromContext($context),
                 'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
             ]);

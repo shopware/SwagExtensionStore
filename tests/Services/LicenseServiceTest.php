@@ -13,20 +13,21 @@ use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use SwagExtensionStore\Services\StoreClient;
 use SwagExtensionStore\Services\StoreDataProvider;
-use SwagExtensionStore\Services\BasketService;
+use SwagExtensionStore\Services\LicenseService;
 
 class LicenseServiceTest extends TestCase
 {
     use IntegrationTestBehaviour;
     use StoreClientBehaviour;
 
-    private BasketService $licenseService;
+    private LicenseService $licenseService;
     private AbstractExtensionStoreLicensesService $coreLicenseService;
 
     public function setUp(): void
     {
-        $this->licenseService = $this->getContainer()->get(BasketService::class);
+        $this->licenseService = $this->getContainer()->get(LicenseService::class);
         $this->coreLicenseService = $this->getContainer()->get(AbstractExtensionStoreLicensesService::class);
     }
 
@@ -39,6 +40,21 @@ class LicenseServiceTest extends TestCase
 
         $cart = $this->licenseService->createCart(5, 5, $this->getContextWithStoreToken());
         static::assertInstanceOf(CartStruct::class, $cart);
+    }
+
+    public function testAvailablePaymentMeans(): void
+    {
+        $storeClientMock = $this->createMock(StoreClient::class);
+        $storeClientMock->method('availablePaymentMeans')
+            ->willReturn(['test' => 'success']);
+
+        $response = (new LicenseService(
+            $storeClientMock,
+        ))->availablePaymentMeans(Context::createDefaultContext());
+
+        static::assertSame([
+            'test' => 'success'
+        ], $response);
     }
 
     public function testCancelSubscriptionRemovesLicense(): void

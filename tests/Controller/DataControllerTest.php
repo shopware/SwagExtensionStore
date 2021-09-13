@@ -88,24 +88,6 @@ class DataControllerTest extends TestCase
         static::assertArrayHasKey('reviews', $data);
     }
 
-    public function testCategories(): void
-    {
-        $categoryResponse = \file_get_contents(__DIR__ . '/../_fixtures/categories-listing.json');
-        // add extensions to compare structs later
-        $categoryAsArray = array_map(function ($category) {
-            $category['extensions'] = [];
-
-            return $category;
-        }, \json_decode($categoryResponse, true));
-
-        $this->getRequestHandler()->reset();
-        $this->getRequestHandler()->append(new Response(200, [], $categoryResponse));
-
-        $response = $this->controller->getCategories(Context::createDefaultContext());
-
-        static::assertSame(json_encode($categoryAsArray), $response->getContent());
-    }
-
     private function setListingResponse(): void
     {
         $requestHandler = $this->getRequestHandler();

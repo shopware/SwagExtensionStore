@@ -10,8 +10,6 @@ use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Shopware\Core\Framework\Test\TestCaseHelper\ReflectionHelper;
-use Shopware\Core\System\SystemConfig\SystemConfigService;
 use SwagExtensionStore\Services\StoreClient;
 
 class StoreClientTest extends TestCase
@@ -26,14 +24,6 @@ class StoreClientTest extends TestCase
     {
         $this->context = Context::createDefaultContext();
         $this->storeClient = $this->getContainer()->get(StoreClient::class);
-    }
-
-    public function testGetCategoriesException(): void
-    {
-        $this->setUpRequestHandler(400);
-
-        static::expectException(StoreApiException::class);
-        $this->storeClient->getCategories($this->context);
     }
 
     public function testListExtensionsException(): void
