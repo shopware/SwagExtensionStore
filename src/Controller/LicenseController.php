@@ -10,7 +10,7 @@ use Shopware\Core\Framework\Store\Exception\InvalidExtensionIdException;
 use Shopware\Core\Framework\Store\Exception\InvalidVariantIdException;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
-use SwagExtensionStore\Services\BasketService;
+use SwagExtensionStore\Services\LicenseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,11 +21,11 @@ use Symfony\Component\Routing\Annotation\Route;
  * @RouteScope(scopes={"api"})
  * @Acl({"system.plugin_maintain"})
  */
-class BasketController
+class LicenseController
 {
-    private BasketService $licenseService;
+    private LicenseService $licenseService;
 
-    public function __construct(BasketService $licenseService)
+    public function __construct(LicenseService $licenseService)
     {
         $this->licenseService = $licenseService;
     }

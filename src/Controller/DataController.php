@@ -7,7 +7,6 @@ use Shopware\Core\Framework\Routing\Annotation\Acl;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Routing\Annotation\Since;
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
-use SwagExtensionStore\Services\CategoryProvider;
 use SwagExtensionStore\Services\StoreDataProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,12 +21,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class DataController
 {
     private StoreDataProvider $dataProvider;
-    private CategoryProvider $categoryProvider;
 
-    public function __construct(StoreDataProvider $dataProvider, CategoryProvider $categoryProvider)
+    public function __construct(StoreDataProvider $dataProvider)
     {
         $this->dataProvider = $dataProvider;
-        $this->categoryProvider = $categoryProvider;
     }
 
     /**
@@ -81,14 +78,5 @@ class DataController
         return new JsonResponse(
             $this->dataProvider->getListingFilters($request->query->all(), $context)
         );
-    }
-
-    /**
-     * @Since("6.4.0.0")
-     * @Route("/api/_action/extension-store/store-categories", name="api.extension.store_categories", methods={"GET"})
-     */
-    public function getCategories(Context $context): JsonResponse
-    {
-        return new JsonResponse($this->categoryProvider->getCategories($context));
     }
 }

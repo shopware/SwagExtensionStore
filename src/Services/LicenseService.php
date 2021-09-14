@@ -3,20 +3,17 @@
 namespace SwagExtensionStore\Services;
 
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Store\Services\ExtensionDownloader;
 use Shopware\Core\Framework\Store\Struct\CartPositionStruct;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Util\FloatComparator;
 
-class BasketService
+class LicenseService
 {
     private StoreClient $client;
-    private ExtensionDownloader $extensionDownloader;
 
-    public function __construct(StoreClient $client, ExtensionDownloader $extensionDownloader)
+    public function __construct(StoreClient $client)
     {
         $this->client = $client;
-        $this->extensionDownloader = $extensionDownloader;
     }
 
     public function createCart(int $extensionId, int $variantId, Context $context): CartStruct

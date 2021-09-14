@@ -4,14 +4,6 @@ export default class ExtensionLicenseService extends Shopware.Classes.ApiService
         this.name = 'extensionStoreLicensesService';
     }
 
-    async purchaseExtension(extensionId, variantId, tocAccepted, permissionsAccepted) {
-        await this.httpClient.post(
-            `/_action/${this.apiEndpoint}/purchase`,
-            { extensionId, variantId, tocAccepted, permissionsAccepted },
-            { headers: this.basicHeaders(), version: 3 }
-        );
-    }
-
     newCart(extensionId, variantId) {
         return this.httpClient.post(
             `/_action/${this.apiEndpoint}/cart/new`,
