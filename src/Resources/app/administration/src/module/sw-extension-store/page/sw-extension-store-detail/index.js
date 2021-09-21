@@ -372,7 +372,7 @@ Component.register('sw-extension-store-detail', {
                     this.installationError = error.response.data.errors[0];
                 }
 
-                this.showInstallationFailedModal = true;
+                this.openInstallationFailedModal();
             } finally {
                 this.isInstalling = false;
             }
@@ -396,6 +396,10 @@ Component.register('sw-extension-store-detail', {
 
         expandDescription() {
             this.isDescriptionCollapsed = false;
+        },
+
+        openInstallationFailedModal() {
+            this.showInstallationFailedModal = true;
         },
 
         closeInstallationFailedModal() {

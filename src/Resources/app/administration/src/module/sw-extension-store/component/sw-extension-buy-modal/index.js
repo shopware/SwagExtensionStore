@@ -258,7 +258,7 @@ Component.register('sw-extension-buy-modal', {
             let checkoutResult = null;
 
             try {
-                await this.extensionStoreLicensesService.orderCart(this.cart);
+                await this.orderCart();
 
                 await this.shopwareExtensionService.updateExtensionData();
                 checkoutResult = this.checkoutSteps.SUCCESS;
@@ -275,6 +275,10 @@ Component.register('sw-extension-buy-modal', {
 
                 this.isLoading = false;
             }
+        },
+
+        async orderCart() {
+            await this.extensionStoreLicensesService.orderCart(this.cart);
         },
 
         async getCart() {
