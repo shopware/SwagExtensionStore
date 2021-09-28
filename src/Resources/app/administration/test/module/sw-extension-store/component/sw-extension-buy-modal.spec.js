@@ -112,9 +112,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             stubs: {
                 'sw-modal': {
                     template: `<div class="sw-modal">
-    <slot name="default"></slot>
-    <slot name="footer"></slot>
-</div>`
+                                   <slot name="default"></slot>
+                                   <slot name="footer"></slot>
+                               </div>`
                 },
                 'sw-alert': Shopware.Component.build('sw-alert'),
                 'sw-button': Shopware.Component.build('sw-button'),
@@ -127,7 +127,8 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 'sw-icon': true,
                 'sw-loader': true,
                 'sw-extension-permissions-modal': true,
-                'sw-extension-privacy-policy-extensions-modal': true
+                'sw-extension-privacy-policy-extensions-modal': true,
+                'sw-external-link': true,
             },
             mocks: {
                 $tc: (key) => key,

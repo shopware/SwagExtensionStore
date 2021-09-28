@@ -136,7 +136,17 @@
                                 {% endblock %}
 
                                 {% block sw_extension_store_detail_smart_bar_price %}
-                                    <span v-if="calculatedPrice" v-html="calculatedPrice" :class="discountClass"></span>
+                                    <template v-if="recommendedVariant && recommendedVariant.netPrice == 0">
+                                        <span class="sw-extension-store-detail__price-free">{{ $tc('sw-extension-store.general.labelFree') }}</span>
+                                    </template>
+                                    <span v-else-if="recommendedVariant"
+                                          :class="discountClass">
+                                        <span class="sw-extension-store-detail__net-price">{{ renderPrice(recommendedVariant.netPrice) }}</span
+                                        ><span v-if="recommendedVariant.netPrice !== discountedPrice"
+                                               class="sw-extension-store-detail__discounted-price">{{ renderPrice(discountedPrice) }}</span
+                                        ><span v-if="shopwareExtensionService.mapVariantToRecommendation(recommendedVariant) === 1"
+                                               class="sw-extension-store-detail__rent-suffix">{{ $tc('sw-extension-store.general.labelRentSuffix') }}</span>
+                                    </span>
                                 {% endblock %}
 
                                 {% block sw_extension_store_detail_smart_bar_discounted_price_info %}

@@ -91,16 +91,25 @@ $padding-summary-card: 22px;
         font-size: $font-size-default;
     }
 
-    &__variant-actual-price {
+    .sw-extension-buy-modal__list-price {
         font-weight: $font-weight-bold;
-    }
-
-    &__variant-original-price {
-        text-decoration: line-through;
+        font-size: 16px;
     }
 
     .is--discounted {
         color: $color-crimson-400;
+
+         .sw-extension-buy-modal__list-price {
+             text-decoration: line-through;
+             margin-right: 4px;
+             font-weight: $font-weight-regular;
+             font-size: $font-size-small;
+        }
+
+        .sw-extension-buy-modal__discounted-price {
+            font-weight: $font-weight-bold;
+            font-size: $font-size-default;
+        }
     }
 
     .sw-extension-buy-modal__variant-summary {

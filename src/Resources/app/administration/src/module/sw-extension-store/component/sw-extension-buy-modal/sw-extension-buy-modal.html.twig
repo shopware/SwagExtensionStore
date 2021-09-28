@@ -2,7 +2,7 @@
     <sw-modal
         class="sw-extension-buy-modal"
         :title="$tc('sw-extension-store.component.sw-extension-buy-modal.title')"
-        size="404px"
+        size="450px"
         :isLoading="isLoading"
         @modal-close="emitClose">
 
@@ -82,33 +82,47 @@
                                                     {% endblock %}
 
                                                     {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent %}
-                                                        <span v-if="variant.type === 'rent'"
-                                                              v-html="renderRentPrice(variant)"
-                                                              :class="getDiscountClasses(variant)"/>
+                                                        <div v-if="variant.type === 'rent'"
+                                                             class="sw-extension-buy-modal__rent">
+
+                                                            {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent_prices %}
+                                                                <i18n path="sw-extension-store.buy-modal.rent.priceDisplay"
+                                                                      :class="getDiscountClasses(variant)">
+                                                                    <template #priceDisplay>
+                                                                        <span class="sw-extension-buy-modal__list-price">{{ renderPrice(variant.netPrice) }}</span
+                                                                        ><span v-if="hasDiscount(variant)"
+                                                                              class="sw-extension-buy-modal__discounted-price">{{ getDiscountPrice(variant) }}</span>
+                                                                    </template>
+                                                                </i18n>
+                                                            {% endblock %}
+
+                                                            {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent_trial %}
+                                                                <div v-if="variant.trialPhaseIncluded">{{ $tc('sw-extension-store.buy-modal.rent.freeTrial') }}</div>
+                                                            {% endblock %}
+
+                                                            {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent_disclaimer %}
+                                                                <div>{{ $tc('sw-extension-store.buy-modal.rent.disclaimer') }}</div>
+                                                            {% endblock %}
+
+                                                        </div>
                                                     {% endblock %}
 
                                                     {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_buy %}
                                                         <div v-else-if="variant.type === 'buy'"
                                                              :class="getDiscountClasses(variant)">
 
-                                                            {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_buy_actual %}
-                                                                <span class="sw-extension-buy-modal__variant-actual-price">
-                                                                    {{ renderBuyPrice(variant) }}
-                                                                </span>
-                                                            {% endblock %}
-
-                                                            {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_buy_original %}
+                                                            {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_buy_prices %}
                                                                 <span v-if="hasDiscount(variant)"
-                                                                      class="sw-extension-buy-modal__variant-original-price">
-                                                                    {{ renderPrice(variant.netPrice) }}
-                                                                </span>
+                                                                      class="sw-extension-buy-modal__list-price">{{ renderPrice(variant.netPrice) }}</span
+                                                                ><span class="sw-extension-buy-modal__discounted-price">{{ renderBuyPrice(variant) }}</span>
                                                             {% endblock %}
 
                                                         </div>
                                                     {% endblock %}
 
                                                     {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_fallback %}
-                                                        <span v-else>
+                                                        <span v-else
+                                                              class="sw-extension-buy-modal__display-default-price">
                                                             {{ renderPrice(variant.netPrice) }}
                                                         </span>
                                                     {% endblock %}
