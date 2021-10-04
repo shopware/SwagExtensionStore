@@ -52,6 +52,7 @@ Component.register('sw-extension-store-index', {
         isTheme: {
             immediate: true,
             handler(newValue) {
+                Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'page', value: 1 });
                 this.$set(this.activeFilters, 'group', newValue);
             }
         }
