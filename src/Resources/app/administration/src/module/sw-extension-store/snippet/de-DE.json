@@ -26,7 +26,8 @@
         "detail": {
             "enterpriseContactLinkText": "Vertrieb kontaktieren",
             "enterpriseContactUrl": "https://www.shopware.com/de/enterprise-kontakt",
-            "enterpriseFeatureAlertText": "Diese Erweiterung ist Bestandteil der Enterprise Edition."
+            "enterpriseFeatureAlertText": "Diese Erweiterung ist Bestandteil der Enterprise Edition.",
+            "hasTrialPhase": "Probemonat inbegriffen"
         },
         "typeLabels": {
             "self-hosted": "Selbst-gehosted",

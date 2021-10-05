@@ -193,6 +193,10 @@ Component.register('sw-extension-buy-modal', {
 
         checkoutErrorDocumentationLink() {
             return Utils.get(this.checkoutError, 'meta.documentationLink', null);
+        },
+
+        firstMonthFree() {
+            return this.cart.positions[0].firstMonthFree;
         }
     },
 

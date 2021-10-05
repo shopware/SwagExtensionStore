@@ -97,7 +97,7 @@
                                                             {% endblock %}
 
                                                             {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent_trial %}
-                                                                <div v-if="variant.trialPhaseIncluded">{{ $tc('sw-extension-store.buy-modal.rent.freeTrial') }}</div>
+                                                                <div v-if="variant.trialPhaseIncluded && firstMonthFree">{{ $tc('sw-extension-store.buy-modal.rent.freeTrial') }}</div>
                                                             {% endblock %}
 
                                                             {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent_disclaimer %}
