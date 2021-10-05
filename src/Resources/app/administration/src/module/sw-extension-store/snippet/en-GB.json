@@ -26,7 +26,8 @@
         "detail": {
             "enterpriseContactLinkText": "Contact us",
             "enterpriseContactUrl": "https://www.shopware.com/en/enterprise-contact",
-            "enterpriseFeatureAlertText": "This extension is a component of the Enterprise Edition."
+            "enterpriseFeatureAlertText": "This extension is a component of the Enterprise Edition.",
+            "hasTrialPhase": "trial month included"
         },
         "typeLabels": {
             "self-hosted": "Self hosted",
