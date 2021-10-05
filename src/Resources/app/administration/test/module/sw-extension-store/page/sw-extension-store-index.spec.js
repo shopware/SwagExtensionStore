@@ -100,7 +100,11 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
     it('should commit the search value to the store', async () => {
         const wrapper = await createWrapper();
 
-        expect(setSearchValueMock).not.toHaveBeenCalled();
+        expect(setSearchValueMock).toHaveBeenCalledTimes(1);
+        expect(setSearchValueMock).toHaveBeenCalledWith(expect.anything(), {
+            key: 'page',
+            value: 1
+        });
 
         const searchBar = wrapper.find('.sw-search-bar');
         await searchBar.vm.$emit('search', 'Nice theme');
