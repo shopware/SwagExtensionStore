@@ -56,7 +56,10 @@
             "warnings": {
                 "paymentMeansRequiredText": "In order to purchase this app you'll have to",
                 "paymentMeansRequiredLinkText": "add a payment method"
-            }
+            },
+          "getCartError": {
+              "message": "We're having trouble processing your order. Please try again in a few minutes."
+          }
         }
     }
 }

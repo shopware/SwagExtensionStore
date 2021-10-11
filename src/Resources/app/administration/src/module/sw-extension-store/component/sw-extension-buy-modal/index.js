@@ -299,10 +299,12 @@ Component.register('sw-extension-buy-modal', {
             try {
                 const response = await this.extensionStoreLicensesService.newCart(this.extension.id, this.selectedVariantId);
                 this.cart = response.data;
-            } catch (e) {
-                Shopware.Utils.debug.warn('Error: ', e);
-            } finally {
+            } catch (error) {
+                this.createNotificationError({
+                    message: this.$tc('sw-extension-store.buy-modal.getCartError.message')
+                });
                 this.isLoading = false;
+                this.emitClose();
             }
         },
 

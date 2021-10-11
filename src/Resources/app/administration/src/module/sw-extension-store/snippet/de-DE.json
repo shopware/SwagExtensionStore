@@ -56,6 +56,9 @@
             "warnings": {
                 "paymentMeansRequiredText": "Um diese App zu kaufen, musst Du",
                 "paymentMeansRequiredLinkText": "eine Zahlungsmethode hinzufügen"
+            },
+            "getCartError": {
+                "message": "Wir haben Probleme bei der Verarbeitung Deiner Bestellung. Bitte versuche es in ein paar Minuten erneut."
             }
         }
     }
