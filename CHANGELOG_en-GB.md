@@ -19,4 +19,7 @@
 - Fix price precision display in extension buy modal
 - Improved and refactored price display on buy detail page and in buy modal
 - Added a placeholder to the search bar and renamed the `initialSearchType`
+- Improved error messages
+- Fixed a bug that didn't reset the page when switching between tabs
+- Improved display in buy modal, if trial month has been already used
 - Improved error handling in the order process in the buy modal

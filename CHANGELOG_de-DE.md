@@ -19,4 +19,7 @@
 - Korrigiert die Nachkommastellen in der Preisdarstellung im Erweiterungskaufmodal
 - Verbessert und refaktoriert die Preisdarstellung auf der Kaufen-Detailseite und dem Kaufen-Modal
 - Platzhalter zur Suchleiste hinzugefügt und den `initialSearchType` umbenannt
-- Fehlerbehandlung im Bestellprozess im Kaufen-Modal verbessert
+- Verbessert Fehlermeldungen
+- Fehler behoben, der beim Wechseln der Tabs die Seite nicht zurücksetzte
+- Verbessert Darstellung im Kaufen-Modal, wenn Probemonat bereits genutzt wurde
+- Verbessert Fehlerbehandlung im Bestellprozess im Kaufen-Modal
