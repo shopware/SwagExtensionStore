@@ -23,3 +23,6 @@
 - Fixed a bug that didn't reset the page when switching between tabs
 - Improved display in buy modal, if trial month has been already used
 - Improved error handling in the order process in the buy modal
+
+# 1.4.1
+- Fixed bug that kept the buy modal in loading state after changing the variant
