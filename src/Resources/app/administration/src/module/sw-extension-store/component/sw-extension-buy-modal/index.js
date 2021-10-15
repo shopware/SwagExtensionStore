@@ -196,7 +196,7 @@ Component.register('sw-extension-buy-modal', {
         },
 
         firstMonthFree() {
-            return this.cart.positions[0].firstMonthFree;
+            return this.cart && this.cart.positions[0] && this.cart.positions[0].firstMonthFree === true;
         }
     },
 
@@ -303,8 +303,9 @@ Component.register('sw-extension-buy-modal', {
                 this.createNotificationError({
                     message: this.$tc('sw-extension-store.buy-modal.getCartError.message')
                 });
-                this.isLoading = false;
                 this.emitClose();
+            } finally {
+                this.isLoading = false;
             }
         },
 
