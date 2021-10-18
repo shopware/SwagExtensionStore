@@ -93,9 +93,6 @@ Build Zip:
 
 Upload Zip to Store:
     stage: Deploy
-    only:
-        refs:
-        - master
     when: manual
     image:
         name: ghcr.io/friendsofshopware/platform-plugin-dev:v6.4.0
@@ -112,9 +109,6 @@ Upload Zip to Store:
 
 Update Store Information:
     stage: Deploy
-    only:
-        refs:
-        - master
     image:
         name: ghcr.io/friendsofshopware/platform-plugin-dev:v6.4.0
         entrypoint: [""]
