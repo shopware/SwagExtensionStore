@@ -23,3 +23,6 @@
 - Fehler behoben, der beim Wechseln der Tabs die Seite nicht zurücksetzte
 - Verbessert Darstellung im Kaufen-Modal, wenn Probemonat bereits genutzt wurde
 - Verbessert Fehlerbehandlung im Bestellprozess im Kaufen-Modal
+
+# 1.4.1
+- Fehler behoben, der beim Wechseln der Variante das Kaufen-Modal im Ladezustand lässt
