@@ -26,3 +26,6 @@
 
 # 1.4.1
 - Fixed bug that kept the buy modal in loading state after changing the variant
+
+# 1.4.2
+- Fixed bug that didn't interrupt the buying process in case of an error

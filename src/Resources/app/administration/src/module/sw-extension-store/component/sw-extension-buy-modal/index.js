@@ -300,9 +300,8 @@ Component.register('sw-extension-buy-modal', {
                 const response = await this.extensionStoreLicensesService.newCart(this.extension.id, this.selectedVariantId);
                 this.cart = response.data;
             } catch (error) {
-                this.createNotificationError({
-                    message: this.$tc('sw-extension-store.buy-modal.getCartError.message')
-                });
+                this.handleErrors(error);
+                this.isLoading = false;
                 this.emitClose();
             } finally {
                 this.isLoading = false;
