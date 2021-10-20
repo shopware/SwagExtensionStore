@@ -26,3 +26,6 @@
 
 # 1.4.1
 - Fehler behoben, der beim Wechseln der Variante das Kaufen-Modal im Ladezustand lässt
+
+# 1.4.2
+- Fehler behoben, der den Kaufprozess im Fehlerfall nicht unterbrochen hat
