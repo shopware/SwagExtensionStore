@@ -10,6 +10,7 @@ use Shopware\Core\Framework\Store\Exception\InvalidVariantIdException;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use SwagExtensionStore\Controller\LicenseController;
+use SwagExtensionStore\Exception\InvalidExtensionCartException;
 use SwagExtensionStore\Services\LicenseService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -98,5 +99,20 @@ class LicenseControllerTest extends TestCase
 
         static::assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
         static::assertEmpty($response->getContent());
+    }
+
+    public function testOrderCartWithEmptyRequestDataBag(): void
+    {
+        $context = Context::createDefaultContext();
+        $requestDataBag = new RequestDataBag([
+            'positions' => null,
+        ]);
+
+        $service = $this->createMock(LicenseService::class);
+
+        $controller = new LicenseController($service);
+
+        static::expectException(InvalidExtensionCartException::class);
+        $controller->orderCart($requestDataBag, $context);
     }
 }

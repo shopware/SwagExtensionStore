@@ -10,6 +10,7 @@ use Shopware\Core\Framework\Store\Exception\InvalidExtensionIdException;
 use Shopware\Core\Framework\Store\Exception\InvalidVariantIdException;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
+use SwagExtensionStore\Exception\InvalidExtensionCartException;
 use SwagExtensionStore\Services\LicenseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,7 +59,11 @@ class LicenseController
      */
     public function orderCart(RequestDataBag $bag, Context $context): Response
     {
-        $cart = CartStruct::fromArray($bag->all());
+        try {
+            $cart = CartStruct::fromArray($bag->all());
+        } catch (\TypeError $e) {
+            throw new InvalidExtensionCartException();
+        }
 
         $this->licenseService->orderCart($cart, $context);
 
