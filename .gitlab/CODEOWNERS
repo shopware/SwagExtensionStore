@@ -1,0 +1,13 @@
+[sources]
+/src                @product/engineering/solution-teams/ctrl-alt-elite
+/tests              @product/engineering/solution-teams/ctrl-alt-elite
+.gitignore          @product/engineering/solution-teams/ctrl-alt-elite
+CHANGELOG_de-DE     @product/engineering/solution-teams/ctrl-alt-elite
+CHANGELOG_en-GB     @product/engineering/solution-teams/ctrl-alt-elite
+composer.json       @product/engineering/solution-teams/ctrl-alt-elite
+phpunit.xml         @product/engineering/solution-teams/ctrl-alt-elite
+README.md           @product/engineering/solution-teams/ctrl-alt-elite
+
+[operations]
+/.gitlab            @product/engineering/solution-teams/ctrl-alt-elite @product/engineering/operations
+.gitlab-ci.yml      @product/engineering/solution-teams/ctrl-alt-elite @product/engineering/operations
