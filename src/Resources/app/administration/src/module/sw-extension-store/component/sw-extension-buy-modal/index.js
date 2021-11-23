@@ -218,6 +218,17 @@ Component.register('sw-extension-buy-modal', {
         },
 
         /**
+         * userCanBuyFromStore is used in the getCart() method to make an early return
+         *
+         * @param value
+         */
+        userCanBuyFromStore(value) {
+            if (value) {
+                this.getCart();
+            }
+        },
+
+        /**
          * Watcher to automatically sync the `legalTextAccepted` value with the permissions.
          * When an App has permissions which need to be accepted, the permissions automatically accept
          * the `legalText` as well because for Apps they are combined in a single checkbox.
@@ -378,7 +389,6 @@ Component.register('sw-extension-buy-modal', {
             this.isLoading = true;
             await this.shopwareExtensionService.checkLogin();
             await this.getPaymentMeans();
-            await this.getCart();
             this.isLoading = false;
         },
 

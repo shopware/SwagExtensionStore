@@ -29,3 +29,5 @@
 
 # 1.4.2
 - Fehler behoben, der den Kaufprozess im Fehlerfall nicht unterbrochen hat
+- Verbessert den Aufruf der Methode `getCart` in der Komponente `sw-extension-buy-modal`, um sicherzustellen, dass keine zweite Anfrage unnötig gesendet wird
+- Erhöht die Version des `@shopware-ag/jest-preset-sw6-admin` Package

@@ -29,3 +29,5 @@
 
 # 1.4.2
 - Fixed bug that didn't interrupt the buying process in case of an error
+- Changed calling of the `getCart` method in the component `sw-extension-buy-modal` to ensure that no second request is sent unnecessarily.
+- Increases the version of the `@shopware-ag/jest-preset-sw6-admin` package
