@@ -10,7 +10,7 @@
         "unit": "jest --config jest.config.js --ci",
         "unit-watch": "jest --config jest.config.js --watch",
         "lint": "eslint --ext .js,.vue src",
-        "lint-ci": "npm run lint -- --format junit > eslint.junit.xml"
+        "lint-ci": "npm run lint -- --format junit --output-file eslint.junit.xml"
     },
     "author": "",
     "license": "MIT",
