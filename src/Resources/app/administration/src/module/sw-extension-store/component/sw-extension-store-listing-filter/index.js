@@ -82,15 +82,7 @@ Component.register('sw-extension-store-listing-filter', {
             const categoryFilter = listingFiltersCopy.find(filter => filter.type === 'category');
 
             if (categoryFilter) {
-                const rootOptions = categoryFilter.options.filter(option => option.parent === null);
-
-                categoryFilter.options = rootOptions.reduce((acc, rootOption) => {
-                    const children = categoryFilter.options.filter(option => option.parent === rootOption.value);
-
-                    acc.push(rootOption, ...children);
-
-                    return acc;
-                }, []);
+                categoryFilter.options = this.getOrderedCategories(categoryFilter.options);
             }
 
             return listingFiltersCopy;
@@ -164,14 +156,54 @@ Component.register('sw-extension-store-listing-filter', {
 
         categoryDepth(category) {
             let depth = 0;
-            let currentParent = category.parent;
+            let currentParent = this.getCategoryByName(category.parent);
 
             while (currentParent) {
                 depth += 1;
-                currentParent = currentParent.parent;
+                currentParent = this.getCategoryByName(currentParent.parent) ?
+                    this.getCategoryByName(currentParent.parent) :
+                    null;
             }
 
             return depth;
+        },
+
+        getCategoryByName(name) {
+            const categoryFilter = this.listingFilters.find(filter => filter.type === 'category');
+            return categoryFilter.options.find((category) => {
+                return category.label === name
+                    || category.value === name
+                    || category.name === name;
+            });
+        },
+
+        getOrderedCategories(categories) {
+            const lookup = new Map();
+
+            // add a root
+            lookup.set(null, { value: null, children: [] });
+
+            // add all nodes to lookup
+            categories.forEach((option) => {
+                lookup.set(option.value, { value: option, children: [] });
+            });
+
+            // link children
+            categories.forEach((option) => {
+                lookup.get(option.parent).children.push(lookup.get(option.value));
+            });
+
+            // denormalize lookup
+            return this.flatTree(lookup.get(null));
+        },
+
+        flatTree(root) {
+            const flat = root.value ? [root.value] : [];
+
+            root.children.sort((a, b) => a.value.position - b.value.position)
+                .forEach((child) => flat.push(...this.flatTree(child)));
+
+            return flat;
         }
     }
 });
