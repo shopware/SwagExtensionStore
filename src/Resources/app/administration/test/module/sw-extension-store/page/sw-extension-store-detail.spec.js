@@ -1,6 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 
-function createWrapper(extensionCustomProps = {}) {
+function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
     const localVue = createLocalVue();
     localVue.filter('date', v => v);
 
@@ -52,6 +52,9 @@ function createWrapper(extensionCustomProps = {}) {
             'sw-icon': true,
             'sw-meteor-card': true,
             'sw-button': true,
+            'sw-button-group': true,
+            'sw-context-button': true,
+            'sw-context-menu-item': true,
             'sw-extension-ratings-card': true,
             'sw-button-process': true,
             'sw-alert': true,
@@ -63,7 +66,7 @@ function createWrapper(extensionCustomProps = {}) {
                 updateExtensionData: jest.fn(),
                 isVariantDiscounted: jest.fn(),
                 orderVariantsByRecommendation: () => [],
-                canBeOpened: () => true,
+                canBeOpened: () => canBeOpened,
                 getOpenLink: () => null
             },
             extensionStoreDataService: {
@@ -113,7 +116,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
     afterEach(() => {
         Shopware.State.get('session').languageId = '';
-        Shopware.State.get('shopwareExtensions').myExtensions = null
+        Shopware.State.get('shopwareExtensions').myExtensions = null;
     });
 
     it('should be a Vue.JS component', async () => {
@@ -133,13 +136,13 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
             data: [{
                 active: true,
                 name: 'SwagB2BPlatform',
-                storeLicense: null,
+                storeLicense: false,
                 id: 1337
             }]
         };
 
         const wrapper = await createWrapper({
-            storeLicense: null,
+            storeLicense: false,
             addons: ['SW6_EnterpriseFeature'],
             variants: [],
         });
@@ -156,7 +159,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 data: [{
                     active: true,
                     name: 'TestExtension',
-                    storeLicense: null,
+                    storeLicense: false,
                     id: 1337
                 }]
             };
@@ -207,6 +210,66 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
             expect(wrapper.find('.sw-extension-store-detail__action-open-extension').text())
                 .toBe('sw-extension-store.detail.labelButtonOpenExtension');
+        });
+
+        it('should render "configuration" context menu when extension is installed, licensed and configurable', async () => {
+            Shopware.State.get('shopwareExtensions').myExtensions = {
+                data: [{
+                    active: true,
+                    name: 'SwagB2BPlatform',
+                    storeLicense: { variants: [{}] },
+                    id: 1337,
+                    configurable: true,
+                    installedAt: {
+                        date: "2021-07-08 07:34:11.794000",
+                        timezone: "UTC",
+                        timezone_type: 3
+                    }
+                }]
+            };
+
+            const wrapper = await createWrapper({
+                installedAt: {
+                    date: "2021-07-08 07:34:11.794000",
+                    timezone: "UTC",
+                    timezone_type: 3
+                }
+            });
+
+            await wrapper.vm.$nextTick();
+
+            expect(wrapper.find('.sw-extension-store-detail__action-context').text())
+                .toBe('sw-extension-store.detail.openConfiguration');
+        });
+
+        it('should render "configuration" button when extension is installed, licensed and configurable but can\'t be opened', async () => {
+            Shopware.State.get('shopwareExtensions').myExtensions = {
+                data: [{
+                    active: true,
+                    name: 'SwagB2BPlatform',
+                    storeLicense: { variants: [{}] },
+                    configurable: true,
+                    id: 1337,
+                    installedAt: {
+                        date: "2021-07-08 07:34:11.794000",
+                        timezone: "UTC",
+                        timezone_type: 3
+                    }
+                }]
+            };
+
+            const wrapper = await createWrapper({
+                installedAt: {
+                    date: "2021-07-08 07:34:11.794000",
+                    timezone: "UTC",
+                    timezone_type: 3
+                }
+            }, false);
+
+            await wrapper.vm.$nextTick();
+
+            expect(wrapper.find('.sw-extension-store-detail__action-open-configuration').text())
+                .toBe('sw-extension-store.detail.openConfiguration');
         });
 
         it('should render "contact us" button when extension is not licensed and has enterprise flag', async () => {

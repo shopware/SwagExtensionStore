@@ -48,30 +48,30 @@ Component.register('sw-extension-store-detail', {
             return this.extension === null;
         },
 
-        license() {
+        extensionMetaData() {
             if (this.suspended) {
                 return null;
             }
 
-            const extension = Shopware.State.get('shopwareExtensions').myExtensions.data.find((ext) => {
-                return ext.id === this.extension.id;
+            return Shopware.State.get('shopwareExtensions').myExtensions.data.find((extension) => {
+                return extension.id === this.extension.id;
             });
-
-            if (extension === undefined) {
-                return null;
-            }
-
-            return extension.storeLicense ? extension.storeLicense : null;
         },
 
         isLicensed() {
-            return !!this.license;
+            if (!this.extensionMetaData) {
+                return false;
+            }
+
+            return !!this.extensionMetaData.storeLicense;
         },
 
         isInstalled() {
-            return !!Shopware.State.get('shopwareExtensions').myExtensions.data.some((extension) => {
-                return extension.installedAt && extension.name === this.extension.name;
-            });
+            return !!this.extensionMetaData && !!this.extensionMetaData.installedAt;
+        },
+
+        isConfigurable() {
+            return !!this.extensionMetaData && this.extensionMetaData.configurable;
         },
 
         images() {
@@ -388,12 +388,30 @@ Component.register('sw-extension-store-detail', {
             }
         },
 
+        async finishedInstall() {
+            await this.shopwareExtensionService.updateExtensionData();
+            this.isInstallSuccessful = false;
+        },
+
         async openExtension() {
             const openLink = await this.shopwareExtensionService.getOpenLink(this.extension);
 
             if (openLink) {
                 this.$router.push(openLink);
             }
+        },
+
+        openConfiguration() {
+            this.$router.push({ name: 'sw.extension.config', params: { namespace: this.extension.name } });
+        },
+
+        openListingPage() {
+            if (this.extension && this.extension.isTheme) {
+                this.$router.push({ name: 'sw.extension.my-extensions.listing.theme' });
+                return;
+            }
+
+            this.$router.push({ name: 'sw.extension.my-extensions.listing.app' });
         },
 
         checkDescriptionCollapsed() {

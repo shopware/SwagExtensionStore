@@ -27,7 +27,10 @@
             "enterpriseContactLinkText": "Vertrieb kontaktieren",
             "enterpriseContactUrl": "https://www.shopware.com/de/enterprise-kontakt",
             "enterpriseFeatureAlertText": "Diese Erweiterung ist Bestandteil der Enterprise Edition.",
-            "hasTrialPhase": "Probemonat inbegriffen"
+            "hasTrialPhase": "Probemonat inbegriffen",
+            "openConfiguration": "Konfiguration",
+            "themeIsAlreadyInstalled": "Theme ist bereits installiert",
+            "extensionIsAlreadyInstalled": "Erweiterung ist bereits installiert"
         },
         "typeLabels": {
             "self-hosted": "Selbst-gehosted",
