@@ -2,6 +2,7 @@
 
 namespace SwagExtensionStore\Tests\Api;
 
+use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Feature;
@@ -19,9 +20,17 @@ class LicenseControllerTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
+    /**
+     * @deprecated tag:v2.0.0 - will be removed
+     */
     public function setUp(): void
     {
-        Feature::skipTestIfInActive('FEATURE_NEXT_12608', $this);
+        try {
+            Feature::skipTestIfInActive('FEATURE_NEXT_12608', $this);
+        } catch (Warning $e) {
+
+        }
+
         parent::setUp();
     }
 

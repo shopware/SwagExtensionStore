@@ -5,6 +5,7 @@ import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-stor
 import ShopwareDiscountCampaignService from 'src/app/service/discount-campaign.service';
 import extensionStore from 'src/module/sw-extension/store/extensions.store';
 import marketingStore from 'src/app/state/marketing.store';
+import { activateFeature12608 } from "../../../_helper/activate-feature-12608";
 
 let i18n;
 
@@ -88,11 +89,9 @@ describe('src/module/component/sw-extension-store-listing-banner', () => {
     let wrapper;
 
     beforeAll(async () => {
-        Shopware.Feature.isActive = jest.fn((feature) => {
-            return feature === 'FEATURE_NEXT_12608';
-        })
+        activateFeature12608();
 
-        // import dependency async because the component is behind a feature flag
+        // import dependency async because the component is behind a feature flag prrior 6.4.8.0
         await import('src/app/component/meteor/sw-meteor-card');
 
         Shopware.Service().register('shopwareDiscountCampaignService', () => {

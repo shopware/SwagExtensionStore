@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-error-card';
+import { activateFeature12608 } from "../../../_helper/activate-feature-12608";
 
 function createWrapper(opts) {
     return shallowMount(Shopware.Component.build('sw-extension-store-error-card'), {
@@ -18,11 +19,9 @@ describe('sw-extension-listing-card', () => {
     let wrapper;
 
     beforeAll(async () => {
-        Shopware.Feature.isActive = jest.fn((feature) => {
-            return feature === 'FEATURE_NEXT_12608';
-        })
+        activateFeature12608();
 
-        // import dependency async because the component is behind a feature flag
+        // import dependency async because the component is behind a feature flag prior 6.4.8.0
         await import('src/app/component/meteor/sw-meteor-card');
     });
 

@@ -7,6 +7,10 @@ module.exports = {
         adminPath: process.env.ADMIN_PATH
     },
 
+    collectCoverageFrom: [
+        '<rootDir>/src/**/*.{js,ts}'
+    ],
+
     moduleNameMapper: {
         '^SwagExtensionStore(.*)$': '<rootDir>/src$1'
     }

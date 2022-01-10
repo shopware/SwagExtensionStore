@@ -1,4 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
+import { activateFeature12608 } from "../../../_helper/activate-feature-12608";
+import 'SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail';
 
 function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
     const localVue = createLocalVue();
@@ -81,16 +83,11 @@ function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
 
 const setSearchValueMock = jest.fn();
 describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail', () => {
-
     beforeAll(async () => {
-        // Workaround to activate FEATURE_NEXT_12608 for sw-meteor-page
-        // global.activeFeatureFlags is currently not available within plugins
-        jest.spyOn(Shopware.Feature, 'isActive').mockImplementation((flag) => {
-            return flag === 'FEATURE_NEXT_12608';
-        });
+        activateFeature12608();
 
+        // import dependency async because the component is behind a feature flag prrior 6.4.8.0
         await import('src/app/component/meteor/sw-meteor-page');
-        await import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail');
 
         Shopware.State.registerModule('shopwareExtensions', {
             namespaced: true,
