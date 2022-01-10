@@ -22,7 +22,12 @@ import ExtensionLicenseService from 'SwagExtensionStore/module/sw-extension-stor
 import extensionStore from 'src/module/sw-extension/store/extensions.store';
 
 /* mixin */
-import extensionErrorMixin from 'src/module/sw-extension/mixin/sw-extension-error.mixin';
+import ExtensionErrorMixin from 'src/module/sw-extension/mixin/sw-extension-error.mixin';
+
+// In older versions the mixin is exported instead of beeing registered
+if (ExtensionErrorMixin.methods) {
+    Shopware.Mixin.register('sw-extension-error', ExtensionErrorMixin);
+}
 
 Shopware.Application.addServiceProvider('extensionStoreDataService', () => {
     return new ExtensionStoreDataService(
@@ -98,7 +103,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
     function createWrapper(overrides) {
         const localVue = createLocalVue();
         localVue.use(vuei18n);
-        localVue.mixin(extensionErrorMixin);
+        localVue.mixin(Shopware.Mixin.getByName('sw-extension-error'));
 
         return mount(Shopware.Component.build('sw-extension-buy-modal'), {
             localVue,

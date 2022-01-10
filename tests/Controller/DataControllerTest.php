@@ -3,6 +3,7 @@
 namespace SwagExtensionStore\Tests\Api;
 
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Feature;
@@ -21,10 +22,16 @@ class DataControllerTest extends TestCase
 
     private DataController $controller;
 
+    /**
+     * @deprecated tag:2.0.0 - will not call Feature::skipTestIfInActive anymore
+     */
     protected function setUp(): void
     {
-        Feature::skipTestIfInActive('FEATURE_NEXT_12608', $this);
-        parent::setUp();
+        try {
+            Feature::skipTestIfInActive('FEATURE_NEXT_12608', $this);
+        } catch (Warning $e) {
+        }
+
         $this->controller = $this->getContainer()->get(DataController::class);
     }
 
