@@ -33,3 +33,5 @@
 - Increases the version of the `@shopware-ag/jest-preset-sw6-admin` package
 - Filter for the categories now has more levels, for more filter options
 
+# 1.5.1
+- Improved loading animation in listing
