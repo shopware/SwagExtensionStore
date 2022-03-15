@@ -105,7 +105,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         localVue.use(vuei18n);
         localVue.mixin(Shopware.Mixin.getByName('sw-extension-error'));
 
-        return mount(Shopware.Component.build('sw-extension-buy-modal'), {
+        const wrapper = mount(Shopware.Component.build('sw-extension-buy-modal'), {
             localVue,
             propsData: {
                 extension: provideTestExtension(overrides)
@@ -141,6 +141,10 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 $sanitize: key => key
             }
         });
+
+        Shopware.Application.getApplicationRoot = () => { return wrapper.vm; };
+
+        return wrapper;
     }
 
     it('does not show permissions and privacy checkbox if extension has not entries', () => {
