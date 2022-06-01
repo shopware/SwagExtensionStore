@@ -1,6 +1,7 @@
 /.idea/
 /.psh.yaml.override
 /.php_cs.cache
+/vendor
 
 ### misc
 .DS_Store

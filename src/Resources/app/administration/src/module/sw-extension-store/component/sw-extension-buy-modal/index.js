@@ -130,7 +130,9 @@ Component.register('sw-extension-buy-modal', {
             // Trigger for recompute value
             // eslint-disable-next-line no-unused-vars
             const trigger = this.tocAccepted;
-            return Shopware.State.get('shopwareExtensions').loginStatus;
+            const store = Shopware.State.get('shopwareExtensions');
+
+            return store.loginStatus || store.userInfo !== null;
         },
 
         showPaymentWarning() {

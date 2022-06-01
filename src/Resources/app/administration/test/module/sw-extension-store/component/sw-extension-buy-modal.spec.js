@@ -58,7 +58,11 @@ Shopware.Application.addServiceProvider('appModulesService', () => {
 
 Shopware.Application.addServiceProvider('storeService', () => {
     return {
-        checkLogin: () => Promise.resolve({ storeTokenExists: true })
+        checkLogin: () => Promise.resolve({
+            // keep for older shopware versions
+            storeTokenExists: true,
+            userInfo: { shopwareId: 1, email: 'user@shopware.com' }
+        })
     };
 });
 
