@@ -2,6 +2,7 @@
     {
         "id": 12089,
         "name": "TestApp",
+        "type": "app",
         "label": "AppSW63",
         "shortDescription": "App compatible with sw6.3          ___________    ___________    ___________    ___________    ___________    ___________    ___________    ___________    ___________",
         "variants": [
@@ -22,6 +23,7 @@
     {
         "id": 12086,
         "name": "TestAppCloud",
+        "type": "app",
         "label": "Cloud Test App",
         "shortDescription": "Cloud test Cloud test Cloud test Cloud test Cloud test Cloud test Cloud test Cloud test Cloud test Cloud test Cloud test Cloud test Cloud test Cloud test Cloud test",
         "variants": [
