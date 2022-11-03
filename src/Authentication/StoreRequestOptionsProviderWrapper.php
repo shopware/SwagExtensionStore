@@ -4,6 +4,9 @@ namespace SwagExtensionStore\Authentication;
 
 use Shopware\Core\Framework\Context;
 
+/**
+ * @deprecated tag:v2.0.0 - Will be removed and its usages replaced by Shopware\Core\Framework\Store\Authentication\StoreRequestOptionsProvider
+ */
 class StoreRequestOptionsProviderWrapper
 {
     private StoreRequestOptionsProviderPolyfill $polyfill;
