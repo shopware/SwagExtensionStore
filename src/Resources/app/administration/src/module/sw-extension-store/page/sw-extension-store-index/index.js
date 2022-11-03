@@ -71,6 +71,9 @@ Component.register('sw-extension-store-index', {
             this.isLoading = true;
 
             try {
+                /**
+                 * @deprecated tag:v2.0.0 - Will be removed due to deprecated core service
+                 */
                 await this.storeService.ping();
             } catch (err) {
                 this.failReason = 'offline';
@@ -118,6 +121,7 @@ Component.register('sw-extension-store-index', {
                 return false;
             }
 
+            // TODO tag:v2.0.0 Check for major version
             return extension.latestVersion !== extension.version;
         },
 

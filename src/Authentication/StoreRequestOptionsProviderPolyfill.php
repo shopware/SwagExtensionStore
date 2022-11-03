@@ -14,6 +14,9 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Core\System\User\UserEntity;
 
+/**
+ * @deprecated tag:v2.0.0 - Will be removed and its usages replaced by Shopware\Core\Framework\Store\Authentication\StoreRequestOptionsProvider
+ */
 class StoreRequestOptionsProviderPolyfill
 {
     public const CONFIG_KEY_STORE_LICENSE_DOMAIN = 'core.store.licenseHost';

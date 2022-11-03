@@ -11,6 +11,9 @@ use Shopware\Core\System\Locale\LocaleEntity;
 use Shopware\Core\System\User\UserDefinition;
 use Shopware\Core\System\User\UserEntity;
 
+/**
+ * @deprecated tag:v2.0.0 - Will be removed and its usages replaced by Shopware\Core\Framework\Store\Authentication\LocaleProvider
+ */
 class LocaleProviderPolyfill
 {
     public const LANGUAGE_FALLBACK = 'en-GB';

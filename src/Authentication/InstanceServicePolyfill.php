@@ -4,6 +4,9 @@ namespace SwagExtensionStore\Authentication;
 
 use Shopware\Core\Kernel;
 
+/**
+ * @deprecated tag:v2.0.0 - Will be removed and its usages replaced by Shopware\Core\Framework\Store\Services\InstanceService
+ */
 class InstanceServicePolyfill
 {
     private string $shopwareVersion;

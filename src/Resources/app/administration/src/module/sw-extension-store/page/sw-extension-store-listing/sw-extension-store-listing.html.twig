@@ -4,6 +4,7 @@
             <sw-loader v-if="isLoading"></sw-loader>
         {% endblock %}
 
+        <!-- @deprecated tag:v2.0.0 - Will be removed due to core deprecations -->
         {% block sw_extension_store_listing_banner %}
             <template v-if="campaignPropertyMappingComponentExists">
                 <sw-campaign-property-mapping component-name="storeBanner">
