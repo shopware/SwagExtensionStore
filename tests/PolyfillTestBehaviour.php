@@ -4,7 +4,7 @@ namespace SwagExtensionStore\Tests;
 
 use Shopware\Core\Framework\Api\Context\AdminApiSource;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
@@ -53,7 +53,7 @@ trait PolyfillTestBehaviour
         return $version === Kernel::SHOPWARE_FALLBACK_VERSION ? '___VERSION___' : $version;
     }
 
-    protected function getUserRepository(): EntityRepositoryInterface
+    protected function getUserRepository(): EntityRepository
     {
         return $this->getContainer()->get('user.repository');
     }

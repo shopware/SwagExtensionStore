@@ -4,7 +4,6 @@ namespace SwagExtensionStore\Tests\Authentication;
 
 use Shopware\Core\Framework\Api\Context\AdminApiSource;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Exception\EntityNotFoundException;
 use Shopware\Core\Framework\Uuid\Uuid;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +14,6 @@ class LocaleProviderPolyfillTest extends TestCase
 {
     use PolyfillTestBehaviour;
 
-    private EntityRepositoryInterface $userRepository;
     private LocaleProviderPolyfill $localeProvider;
 
     public function setUp(): void
