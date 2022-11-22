@@ -104,12 +104,12 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         }, overrides);
     }
 
-    function createWrapper(overrides) {
+    async function createWrapper(overrides) {
         const localVue = createLocalVue();
         localVue.use(vuei18n);
         localVue.mixin(Shopware.Mixin.getByName('sw-extension-error'));
 
-        const wrapper = mount(Shopware.Component.build('sw-extension-buy-modal'), {
+        const wrapper = mount(await Shopware.Component.build('sw-extension-buy-modal'), {
             localVue,
             propsData: {
                 extension: provideTestExtension(overrides)
@@ -125,12 +125,12 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                                    <slot name="footer"></slot>
                                </div>`
                 },
-                'sw-alert': Shopware.Component.build('sw-alert'),
-                'sw-button': Shopware.Component.build('sw-button'),
-                'sw-base-field': Shopware.Component.build('sw-base-field'),
-                'sw-field-error': Shopware.Component.build('sw-field-error'),
-                'sw-checkbox-field': Shopware.Component.build('sw-checkbox-field'),
-                'sw-gtc-checkbox': Shopware.Component.build('sw-gtc-checkbox'),
+                'sw-alert': await Shopware.Component.build('sw-alert'),
+                'sw-button': await Shopware.Component.build('sw-button'),
+                'sw-base-field': await Shopware.Component.build('sw-base-field'),
+                'sw-field-error': await Shopware.Component.build('sw-field-error'),
+                'sw-checkbox-field': await Shopware.Component.build('sw-checkbox-field'),
+                'sw-gtc-checkbox': await Shopware.Component.build('sw-gtc-checkbox'),
                 'sw-extension-adding-failed': true,
                 'sw-extension-adding-success': true,
                 'sw-icon': true,
@@ -151,8 +151,8 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         return wrapper;
     }
 
-    it('does not show permissions and privacy checkbox if extension has not entries', () => {
-        wrapper = createWrapper({
+    it('does not show permissions and privacy checkbox if extension has not entries', async () => {
+        wrapper = await createWrapper({
             variants: [{
                 id: 78674,
                 type: 'buy',
@@ -168,7 +168,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
     });
 
     it('opens and closes permission modal correctly', async () => {
-        wrapper = createWrapper({
+        wrapper = await createWrapper({
             variants: [{
                 id: 78674,
                 type: 'buy',
@@ -192,7 +192,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
     });
 
     it('opens and closes modal for privacy adjustments', async () => {
-        wrapper = createWrapper({
+        wrapper = await createWrapper({
             variants: [{
                 id: 78674,
                 type: 'buy',
@@ -229,7 +229,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             return Promise.resolve();
         });
 
-        wrapper = await createWrapper({
+        wrapper = await await createWrapper({
             variants: [{
                 id: 78674,
                 type: 'buy',

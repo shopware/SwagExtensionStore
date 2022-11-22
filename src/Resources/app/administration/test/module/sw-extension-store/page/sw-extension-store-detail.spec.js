@@ -2,7 +2,7 @@ import { createLocalVue, shallowMount } from '@vue/test-utils';
 import { activateFeature12608 } from "../../../_helper/activate-feature-12608";
 import 'SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail';
 
-function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
+async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
     const localVue = createLocalVue();
     localVue.filter('date', v => v);
 
@@ -31,7 +31,7 @@ function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
         ...extensionCustomProps
     }
 
-    return shallowMount(Shopware.Component.build('sw-extension-store-detail'), {
+    return shallowMount(await Shopware.Component.build('sw-extension-store-detail'), {
         localVue,
         propsData: {
             id: 'a1b2c3'
@@ -44,7 +44,7 @@ function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
             }
         },
         stubs: {
-            'sw-meteor-page': Shopware.Component.build('sw-meteor-page'),
+            'sw-meteor-page': await Shopware.Component.build('sw-meteor-page'),
             'sw-search-bar': {
                 template: '<div class="sw-search-bar"></div>'
             },
@@ -61,7 +61,8 @@ function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
             'sw-button-process': true,
             'sw-alert': true,
             'sw-notification-center': true,
-            'sw-meteor-navigation': true
+            'sw-meteor-navigation': true,
+            'sw-help-center': true,
         },
         provide: {
             shopwareExtensionService: {

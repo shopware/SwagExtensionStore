@@ -29,8 +29,8 @@ beforeAll(() => {
     });
 });
 
-function createWrapper(extension) {
-    return shallowMount(Shopware.Component.build('sw-extension-listing-card'), {
+async function createWrapper(extension) {
+    return shallowMount(await Shopware.Component.build('sw-extension-listing-card'), {
         propsData: {
             extension
         },
@@ -98,7 +98,7 @@ describe('sw-extension-listing-card', () => {
     });
 
     it('should be a Vue.JS component', async () => {
-        wrapper = createWrapper({
+        wrapper = await createWrapper({
             id: 1,
             label: 'Test',
             name: 'Test',
@@ -116,8 +116,8 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.vm).toBeTruthy();
     });
 
-    it('isInstalled should be false when extension is not in store', () => {
-        wrapper = createWrapper({
+    it('isInstalled should be false when extension is not in store', async () => {
+        wrapper = await createWrapper({
             id: 1,
             label: 'Test',
             name: 'Test',
@@ -159,8 +159,8 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.vm.isInstalled).toBe(true);
     });
 
-    it('previewMedia with no image', () => {
-        wrapper = createWrapper({
+    it('previewMedia with no image', async () => {
+        wrapper = await createWrapper({
             id: 1,
             label: 'Test',
             name: 'Test',
@@ -180,8 +180,8 @@ describe('sw-extension-listing-card', () => {
         });
     });
 
-    it('previewMedia gives image when set', () => {
-        wrapper = createWrapper({
+    it('previewMedia gives image when set', async () => {
+        wrapper = await createWrapper({
             label: 'Test',
             name: 'Test',
             labels: [],
@@ -206,8 +206,8 @@ describe('sw-extension-listing-card', () => {
         });
     });
 
-    it('calculatedPrice should be null when no variant given', () => {
-        wrapper = createWrapper({
+    it('calculatedPrice should be null when no variant given', async () => {
+        wrapper = await createWrapper({
             label: 'Test',
             name: 'Test',
             labels: [],
@@ -217,8 +217,8 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.vm.calculatedPrice).toBe(null);
     });
 
-    it('isLicense should be undefined when not found', () => {
-        wrapper = createWrapper({
+    it('isLicense should be undefined when not found', async () => {
+        wrapper = await createWrapper({
             label: 'Test',
             name: 'Test2',
             labels: [],
@@ -228,8 +228,8 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.vm.isLicensed).toBe(false);
     });
 
-    it('openDetailPage calls router', () => {
-        wrapper = createWrapper({
+    it('openDetailPage calls router', async () => {
+        wrapper = await createWrapper({
             id: 1,
             label: 'Test',
             name: 'Test2',
@@ -253,7 +253,7 @@ describe('sw-extension-listing-card', () => {
     });
 
     it('should display normal prices for renting', async () => {
-        wrapper = createWrapper({
+        wrapper = await createWrapper({
             label: 'A Label',
             shortDescription: 'A short description',
             labels: [],
@@ -279,7 +279,7 @@ describe('sw-extension-listing-card', () => {
 
 
     it('should display a discount for renting', async () => {
-        wrapper = createWrapper({
+        wrapper = await createWrapper({
             id: 1,
             localId: null,
             name: 'Sample Extension',
@@ -344,7 +344,7 @@ describe('sw-extension-listing-card', () => {
     });
 
     it('should display normal prices for buying', async () => {
-        wrapper = createWrapper({
+        wrapper = await createWrapper({
             id: 1,
             localId: null,
             name: 'Sample Extension',
@@ -400,7 +400,7 @@ describe('sw-extension-listing-card', () => {
     });
 
     it('should display discounted prices for buying', async () => {
-        wrapper = createWrapper({
+        wrapper = await createWrapper({
             id: 1,
             localId: null,
             name: 'Sample Extension',
