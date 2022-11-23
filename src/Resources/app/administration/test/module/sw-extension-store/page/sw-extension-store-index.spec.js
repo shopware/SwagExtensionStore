@@ -18,10 +18,10 @@ Shopware.Application.addServiceProvider('extensionErrorService', () => {
     });
 });
 
-function createWrapper() {
+async function createWrapper() {
     const localVue = createLocalVue();
 
-    return shallowMount(Shopware.Component.build('sw-extension-store-index'), {
+    return shallowMount(await Shopware.Component.build('sw-extension-store-index'), {
         localVue,
         propsData: {},
         mocks: {
@@ -34,7 +34,7 @@ function createWrapper() {
             }
         },
         stubs: {
-            'sw-meteor-page': Shopware.Component.build('sw-meteor-page'),
+            'sw-meteor-page': await Shopware.Component.build('sw-meteor-page'),
             'sw-search-bar': {
                 template: '<div class="sw-search-bar"></div>'
             },
@@ -44,7 +44,8 @@ function createWrapper() {
             'sw-tabs': true,
             'router-view': true,
             'sw-extension-store-error-card': true,
-            'sw-extension-store-update-warning': true
+            'sw-extension-store-update-warning': true,
+            'sw-help-center': true,
         },
         provide: {
             extensionStoreActionService: {

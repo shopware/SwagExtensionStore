@@ -2,8 +2,8 @@
 import { shallowMount } from '@vue/test-utils';
 import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-slider';
 
-function createWrapper() {
-    return shallowMount(Shopware.Component.build('sw-extension-store-slider'), {
+async function createWrapper() {
+    return shallowMount(await Shopware.Component.build('sw-extension-store-slider'), {
         stubs: {
             'sw-icon': {
                 template: '<div class="sw-icon"></div>'

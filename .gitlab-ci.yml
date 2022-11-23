@@ -1,28 +1,43 @@
 variables:
     DOCKER_DRIVER: overlay2
     DOCKER_HOST: "tcp://docker:2375"
-    MYSQL_ROOT_PASSWORD: app
-    WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/development/public
-    DEVELOPMENT_BRANCH: 'trunk'
-    PLATFORM_BRANCH: 'trunk'
-    FEATURE_ALL: 'major'
+    PLATFORM_BRANCH: trunk
+    MYSQL_ROOT_PASSWORD: root
+    DATABASE_URL: 'mysql://root:root@mysql:3306/shopware'
+    WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/public
+    FEATURE_ALL: major
+    PLUGIN_NAME: SwagExtensionStore
+    APP_SECRET: NotSoSecret
+    APP_URL: 'http://localhost:8000'
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "6.4"'
+      variables:
+        PLATFORM_BRANCH: "6.4"
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /1\.*/'
+      variables:
+        PLATFORM_BRANCH: "6.4"
+    - when: always
 
 stages:
     - Testing
     - Deploy
 
 default:
-    image: shopware/development:7.4-composer-2
+    image: shopware/development:8.1-composer-2
     tags:
         - t3.nano
     before_script:
         - zip -rq plugin.zip .
-        - git clone --branch $DEVELOPMENT_BRANCH https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/6/product/development.git
-        - rm -rf development/platform
-        - git clone --branch $PLATFORM_BRANCH https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/6/product/platform.git development/platform
-        - unzip -q plugin.zip -d development/custom/plugins/SwagExtensionStore
-        - cd development
-        - cp -v dev-ops/gitlab/.psh.yaml.override .
+        - mv plugin.zip /tmp/plugin.zip
+        - rm -Rf .* * || true
+        - git clone --branch $PLATFORM_BRANCH https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/6/product/platform.git .
+        - echo $PLATFORM_BRANCH
+        - mkdir -p custom/plugins
+        - mkdir -p config/jwt
+        - unzip -q /tmp/plugin.zip -d custom/plugins/$PLUGIN_NAME
+        - composer install -o
         - /entrypoint supervisord > /dev/null 2>&1 &
 
 ESLint:
@@ -30,55 +45,49 @@ ESLint:
     tags:
         - t3.medium
     script:
-        - cd $CI_PROJECT_DIR/development/custom/plugins/SwagExtensionStore/src/Resources/app/administration
+        - cd custom/plugins/SwagExtensionStore/src/Resources/app/administration
         - npm ci
         - npm run lint-ci
     artifacts:
         when: always
         paths:
-            - $CI_PROJECT_DIR/development/custom/plugins/SwagExtensionStore/src/Resources/app/administration/eslint.junit.xml
+            - custom/plugins/SwagExtensionStore/src/Resources/app/administration/eslint.junit.xml
         reports:
-            junit: $CI_PROJECT_DIR/development/custom/plugins/SwagExtensionStore/src/Resources/app/administration/eslint.junit.xml
+            junit: custom/plugins/SwagExtensionStore/src/Resources/app/administration/eslint.junit.xml
 
 Administration Jest:
     stage: Testing
     timeout: 1h 00m
     tags:
         - t3.medium
-    variables:
-        PROJECT_ROOT: $CI_PROJECT_DIR/development
-        PLUGINNAME: "SwagExtensionStore"
     services:
         -   name: mariadb:10.3
             alias: mysql
     script:
-        - ./psh.phar init
+        - composer init:db
         - php bin/console plugin:refresh
-        - php bin/console plugin:install --activate $PLUGINNAME -c
-        - npm --prefix $(pwd)/custom/plugins/$PLUGINNAME/src/Resources/app/administration/ ci
-        - npm --prefix $(pwd)/vendor/shopware/platform/src/Administration/Resources/app/administration ci
-        - ADMIN_PATH=$(pwd)/vendor/shopware/platform/src/Administration/Resources/app/administration/ npm --prefix $(pwd)/custom/plugins/$PLUGINNAME/src/Resources/app/administration/ run unit
+        - php bin/console plugin:install --activate $PLUGIN_NAME -c
+        - npm --prefix $(pwd)/custom/plugins/$PLUGIN_NAME/src/Resources/app/administration/ ci
+        - npm --prefix $(pwd)/src/Administration/Resources/app/administration ci
+        - ADMIN_PATH=$(pwd)/src/Administration/Resources/app/administration/ npm --prefix $(pwd)/custom/plugins/$PLUGIN_NAME/src/Resources/app/administration/ run unit
     artifacts:
         reports:
-            junit: development/build/artifacts/jest/customized-products.junit.xml
+            junit: build/artifacts/jest/customized-products.junit.xml
 
 PHPUnit:
     stage: Testing
     timeout: 1h 00m
     tags:
         - t3.medium
-    variables:
-        PROJECT_ROOT: $CI_PROJECT_DIR/development
-        PLUGINNAME: "SwagExtensionStore"
     services:
         -   name: mariadb:10.3
             alias: mysql
     script:
-        - ./psh.phar init
+        - composer init:db
+        - composer npm:admin ci
         - php bin/console plugin:refresh
-        - php bin/console plugin:install --activate $PLUGINNAME -c
-        - ./psh.phar init-test-databases
-        - ./vendor/bin/phpunit -c $(pwd)/custom/plugins/$PLUGINNAME/phpunit.xml
+        - php bin/console plugin:install --activate $PLUGIN_NAME -c
+        - ./vendor/bin/phpunit -c $(pwd)/custom/plugins/$PLUGIN_NAME/phpunit.xml
 
 
 Build Zip:

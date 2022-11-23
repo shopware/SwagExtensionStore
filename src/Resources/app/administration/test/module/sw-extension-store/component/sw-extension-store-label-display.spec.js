@@ -2,20 +2,20 @@ import { shallowMount } from '@vue/test-utils';
 import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-label-display';
 import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-label';
 
-function createWrapper(labels) {
-    return shallowMount(Shopware.Component.build('sw-extension-store-label-display'), {
+async function createWrapper(labels) {
+    return shallowMount(await Shopware.Component.build('sw-extension-store-label-display'), {
         propsData: {
             labels
         },
         stubs: {
-            'sw-extension-label': Shopware.Component.build('sw-extension-label')
+            'sw-extension-label': await Shopware.Component.build('sw-extension-label')
         }
     });
 }
 
 describe('sw-extension-store-label-display', () => {
     it('should be a Vue.JS component', async () => {
-        const wrapper = createWrapper([{
+        const wrapper = await createWrapper([{
             label: 'Gold zerifiziert',
             color: '#cbac44'
         }]);
@@ -24,7 +24,7 @@ describe('sw-extension-store-label-display', () => {
     });
 
     it('should display the labels with the correct background', async () => {
-        const wrapper = createWrapper([{
+        const wrapper = await createWrapper([{
             label: 'Label Text 0',
             color: '#cbac44'
         },

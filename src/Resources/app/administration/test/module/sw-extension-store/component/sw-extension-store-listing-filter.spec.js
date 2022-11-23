@@ -1,8 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-listing-filter';
 
-function createWrapper() {
-    return shallowMount(Shopware.Component.build('sw-extension-store-listing-filter'), {
+async function createWrapper() {
+    return shallowMount(await Shopware.Component.build('sw-extension-store-listing-filter'), {
         mocks: {
             $tc: v => v
         },

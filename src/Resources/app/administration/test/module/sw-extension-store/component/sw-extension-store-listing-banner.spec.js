@@ -16,7 +16,7 @@ let i18n;
  * - marketing.store
  */
 
-function createWrapper() {
+async function createWrapper() {
     return mount({
         template: `
 <div>
@@ -33,9 +33,9 @@ function createWrapper() {
         `
     }, {
         stubs: {
-            'sw-campaign-property-mapping': Shopware.Component.build('sw-campaign-property-mapping'),
-            'sw-extension-store-listing-banner': Shopware.Component.build('sw-extension-store-listing-banner'),
-            'sw-meteor-card': Shopware.Component.build('sw-meteor-card'),
+            'sw-campaign-property-mapping': await Shopware.Component.build('sw-campaign-property-mapping'),
+            'sw-extension-store-listing-banner': await Shopware.Component.build('sw-extension-store-listing-banner'),
+            'sw-meteor-card': await Shopware.Component.build('sw-meteor-card'),
             'sw-icon': true
         },
         mocks: {
@@ -117,7 +117,7 @@ describe('src/module/component/sw-extension-store-listing-banner', () => {
     });
 
     it('should not be visible when no marketing campaign exists', async () => {
-        wrapper = createWrapper();
+        wrapper = await createWrapper();
 
         expect(wrapper.find('.sw-extension-store-listing-banner').exists()).toBe(false);
     });
@@ -125,7 +125,7 @@ describe('src/module/component/sw-extension-store-listing-banner', () => {
     it('should be visible when marketing campaign exists', async () => {
         Shopware.State.commit('marketing/setCampaign', createExampleCampaign());
 
-        wrapper = createWrapper();
+        wrapper = await createWrapper();
 
         expect(wrapper.find('.sw-extension-store-listing-banner').exists()).toBe(true);
     });
@@ -133,7 +133,7 @@ describe('src/module/component/sw-extension-store-listing-banner', () => {
     it('should map the values correctly', async () => {
         Shopware.State.commit('marketing/setCampaign', createExampleCampaign());
 
-        wrapper = createWrapper();
+        wrapper = await createWrapper();
 
         // headline
         expect(wrapper.find('h3').text()).toEqual('Amazing offer')
@@ -157,7 +157,7 @@ describe('src/module/component/sw-extension-store-listing-banner', () => {
     it('should trigger the correct action', async () => {
         Shopware.State.commit('marketing/setCampaign', createExampleCampaign());
 
-        wrapper = createWrapper();
+        wrapper = await createWrapper();
 
         expect(Shopware.State.get('shopwareExtensions').search.filter).toEqual({});
 
