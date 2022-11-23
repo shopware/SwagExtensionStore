@@ -15,7 +15,13 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "6.4"'
       variables:
         PLATFORM_BRANCH: "6.4"
+    - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == "6.4"'
+      variables:
+        PLATFORM_BRANCH: "6.4"
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /1\.*/'
+      variables:
+        PLATFORM_BRANCH: "6.4"
+    - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH =~ /1\.*/'
       variables:
         PLATFORM_BRANCH: "6.4"
     - when: always
