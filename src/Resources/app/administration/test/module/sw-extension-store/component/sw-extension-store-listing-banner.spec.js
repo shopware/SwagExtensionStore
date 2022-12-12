@@ -1,6 +1,5 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import VueI18n from 'vue-i18n';
-import 'src/app/component/campaign/sw-campaign-property-mapping';
 import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-listing-banner';
 import ShopwareDiscountCampaignService from 'src/app/service/discount-campaign.service';
 import extensionStore from 'src/module/sw-extension/store/extensions.store';
@@ -12,29 +11,12 @@ let i18n;
 /**
  * This test is in integrative test which combines
  * - sw-campaign-banner
- * - sw-campaign-property-mapping
  * - marketing.store
  */
 
 async function createWrapper() {
-    return mount({
-        template: `
-<div>
-    <sw-campaign-property-mapping component-name="storeBanner">
-        <template #default="{ mappedProperties }">
-            <div v-if="mappedProperties">
-                <sw-extension-store-listing-banner
-                    v-bind="mappedProperties"
-                ></sw-extension-store-listing-banner>
-            </div>
-        </template>
-    </sw-campaign-property-mapping>
-</div>
-        `
-    }, {
+    return mount(await Shopware.Component.build('sw-extension-store-listing-banner'), {
         stubs: {
-            'sw-campaign-property-mapping': await Shopware.Component.build('sw-campaign-property-mapping'),
-            'sw-extension-store-listing-banner': await Shopware.Component.build('sw-extension-store-listing-banner'),
             'sw-meteor-card': await Shopware.Component.build('sw-meteor-card'),
             'sw-icon': true
         },

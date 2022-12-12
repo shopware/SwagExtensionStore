@@ -56,35 +56,35 @@ describe('sw-extension-store-error-card', () => {
         expect(wrapper.find('.sw-extension-store-error-card__actions sw-button-stub').text()).toBe('Check for updates');
     });
 
-    describe('render correct icons and color variants', async () => {
+    describe('render correct icons and color variants', () => {
         const testCases = [
             {
                 variant: undefined,
-                expectedIcon: 'default-badge-info',
+                expectedIcon: 'regular-info-circle',
                 expectedLabelVariant: 'neutral',
                 expectedComponentClass: 'sw-extension-store-error-card--variant-neutral'
             },
             {
                 variant: 'info',
-                expectedIcon: 'default-badge-info',
+                expectedIcon: 'regular-info-circle',
                 expectedLabelVariant: 'info',
                 expectedComponentClass: 'sw-extension-store-error-card--variant-info'
             },
             {
                 variant: 'danger',
-                expectedIcon: 'default-badge-error',
+                expectedIcon: 'regular-server',
                 expectedLabelVariant: 'danger',
                 expectedComponentClass: 'sw-extension-store-error-card--variant-danger'
             },
             {
                 variant: 'success',
-                expectedIcon: 'default-basic-checkmark-circle',
+                expectedIcon: 'regular-check-circle',
                 expectedLabelVariant: 'success',
                 expectedComponentClass: 'sw-extension-store-error-card--variant-success'
             },
             {
                 variant: 'warning',
-                expectedIcon: 'default-badge-warning',
+                expectedIcon: 'regular-exclamation-circle',
                 expectedLabelVariant: 'warning',
                 expectedComponentClass: 'sw-extension-store-error-card--variant-warning'
             },

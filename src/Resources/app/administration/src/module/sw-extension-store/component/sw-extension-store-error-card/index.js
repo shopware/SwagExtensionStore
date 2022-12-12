@@ -28,15 +28,15 @@ Component.register('sw-extension-store-error-card', {
         iconName() {
             switch (this.variant) {
                 case 'danger':
-                    return 'default-badge-error';
+                    return 'regular-server';
                 case 'info':
-                    return 'default-badge-info';
+                    return 'regular-info-circle';
                 case 'warning':
-                    return 'default-badge-warning';
+                    return 'regular-exclamation-circle';
                 case 'success':
-                    return 'default-basic-checkmark-circle';
+                    return 'regular-check-circle';
                 default:
-                    return 'default-badge-info';
+                    return 'regular-info-circle';
             }
         },
 
