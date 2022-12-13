@@ -3,8 +3,6 @@
 namespace SwagExtensionStore\Controller;
 
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Routing\Annotation\Acl;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Routing\Annotation\Since;
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use SwagExtensionStore\Services\StoreDataProvider;
@@ -15,8 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @internal
- * @RouteScope(scopes={"api"})
- * @Acl({"system.plugin_maintain"})
+ * @Route(defaults={"_routeScope"={"api"}, "_acl"={"system.plugin_maintain"}})
  */
 class DataController
 {
