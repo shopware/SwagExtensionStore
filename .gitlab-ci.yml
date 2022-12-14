@@ -2,7 +2,7 @@ variables:
     DOCKER_DRIVER: overlay2
     DOCKER_HOST: "tcp://docker:2375"
     PLATFORM_BRANCH: trunk
-    PLATFORM_PLUGIN_TAG: latest
+    PLATFORM_PLUGIN_TAG: "6.5"
     MYSQL_ROOT_PASSWORD: root
     DATABASE_URL: 'mysql://root:root@mysql:3306/shopware'
     WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/public
