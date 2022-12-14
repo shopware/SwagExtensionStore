@@ -2,6 +2,7 @@ variables:
     DOCKER_DRIVER: overlay2
     DOCKER_HOST: "tcp://docker:2375"
     PLATFORM_BRANCH: trunk
+    PLATFORM_PLUGIN_TAG: latest
     MYSQL_ROOT_PASSWORD: root
     DATABASE_URL: 'mysql://root:root@mysql:3306/shopware'
     WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/public
@@ -15,15 +16,19 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "6.4"'
       variables:
         PLATFORM_BRANCH: "6.4"
+        PLATFORM_PLUGIN_TAG: "6.4"
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == "6.4"'
       variables:
         PLATFORM_BRANCH: "6.4"
+        PLATFORM_PLUGIN_TAG: "6.4"
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /1\.*/'
       variables:
         PLATFORM_BRANCH: "6.4"
+        PLATFORM_PLUGIN_TAG: "6.4"
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH =~ /1\.*/'
       variables:
         PLATFORM_BRANCH: "6.4"
+        PLATFORM_PLUGIN_TAG: "6.4"
     - when: always
 
 stages:
@@ -101,8 +106,13 @@ Build Zip:
     tags:
         - t3.medium
     image:
-        name: ghcr.io/friendsofshopware/platform-plugin-dev:v6.4.0
+        name: ghcr.io/friendsofshopware/platform-plugin-dev:{$PLATFORM_PLUGIN_TAG}
         entrypoint: [""]
+    rules:
+      - if: $CI_COMMIT_TAG
+        when: always
+      # allow manual build to test installation from .zip
+      - when: manual
     variables:
         GIT_DEPTH: 0
     before_script: []
@@ -118,9 +128,12 @@ Build Zip:
 
 Upload Zip to Store:
     stage: Deploy
-    when: manual
+    needs: ["Build Zip"]
+    rules:
+      - if: $CI_COMMIT_TAG
+        when: always
     image:
-        name: ghcr.io/friendsofshopware/platform-plugin-dev:v6.4.0
+        name: ghcr.io/friendsofshopware/platform-plugin-dev:{$PLATFORM_PLUGIN_TAG}
         entrypoint: [""]
     variables:
         GIT_DEPTH: 0
@@ -135,8 +148,12 @@ Upload Zip to Store:
 Update Store Information:
     stage: Deploy
     image:
-        name: ghcr.io/friendsofshopware/platform-plugin-dev:v6.4.0
+        name: ghcr.io/friendsofshopware/platform-plugin-dev:{$PLATFORM_PLUGIN_TAG}
         entrypoint: [""]
+    needs: [ "Build Zip" ]
+    rules:
+      - if: $CI_COMMIT_TAG
+        when: always
     variables:
         GIT_DEPTH: 0
     before_script: []
