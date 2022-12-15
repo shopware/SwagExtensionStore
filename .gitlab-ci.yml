@@ -113,6 +113,7 @@ Build Zip:
         when: always
       # allow manual build to test installation from .zip
       - when: manual
+        allow_failure: true
     variables:
         GIT_DEPTH: 0
     before_script: []
