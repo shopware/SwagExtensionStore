@@ -38,7 +38,7 @@ $font-size-rating: 10px;
         .sw-extension-listing-card__info-name {
             cursor: pointer;
             grid-area: name;
-            font-size: $font-size-small;
+            font-size: $font-size-s;
             font-weight: $font-weight-semi-bold;
             white-space: nowrap;
             overflow: hidden;
@@ -47,7 +47,7 @@ $font-size-rating: 10px;
 
         .sw-extension-listing-card__info-description {
             grid-area: description;
-            font-size: $font-size-extra-small;
+            font-size: $font-size-xs;
             color: $color-gray-500;
         }
 
@@ -74,7 +74,7 @@ $font-size-rating: 10px;
         .sw-extension-listing-card__info-price {
             grid-area: price;
             justify-self: end;
-            font-size: $font-size-small;
+            font-size: $font-size-s;
             text-align: right;
 
             .sw-extension-listing-card__info-price-discounted {

@@ -9,7 +9,6 @@ import './component/sw-extension-store-update-warning';
 import './component/sw-extension-store-label';
 import './component/sw-extension-store-type-label';
 import './component/sw-extension-store-label-display';
-import './component/sw-extension-store-listing-banner';
 import './component/sw-extension-store-error-card';
 
 import ExtensionStoreDataService from './service/extension-store-data.service';
