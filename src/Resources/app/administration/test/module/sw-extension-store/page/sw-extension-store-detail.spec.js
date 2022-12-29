@@ -69,8 +69,7 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
                 updateExtensionData: jest.fn(),
                 isVariantDiscounted: jest.fn(),
                 orderVariantsByRecommendation: () => [],
-                canBeOpened: () => canBeOpened,
-                getOpenLink: () => null
+                getOpenLink: () => canBeOpened ? 'open-link' : null,
             },
             extensionStoreDataService: {
                 getDetail: () => {

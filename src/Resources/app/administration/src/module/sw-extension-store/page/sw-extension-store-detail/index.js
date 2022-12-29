@@ -236,7 +236,7 @@ Component.register('sw-extension-store-detail', {
 
     async created() {
         await this.shopwareExtensionService.updateExtensionData();
-        this.canBeOpened = await this.shopwareExtensionService.canBeOpened(this.extension);
+        this.canBeOpened = !!this.shopwareExtensionService.getOpenLink(this.extension);
     },
 
     methods: {

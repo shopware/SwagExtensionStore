@@ -28,7 +28,7 @@ Component.register('sw-extension-store-error-card', {
         iconName() {
             switch (this.variant) {
                 case 'danger':
-                    return 'regular-server';
+                    return 'regular-times-circle';
                 case 'info':
                     return 'regular-info-circle';
                 case 'warning':

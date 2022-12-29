@@ -9,7 +9,7 @@ const { Component } = Shopware;
 Component.register('sw-extension-store-index', {
     template,
 
-    inject: ['extensionStoreActionService', 'shopwareExtensionService', 'storeService'],
+    inject: ['extensionStoreActionService', 'shopwareExtensionService'],
 
     props: {
         id: {
@@ -69,18 +69,6 @@ Component.register('sw-extension-store-index', {
 
         async checkStoreUpdates() {
             this.isLoading = true;
-
-            try {
-                /**
-                 * @deprecated tag:v2.0.0 - Will be removed due to deprecated core service
-                 */
-                await this.storeService.ping();
-            } catch (err) {
-                this.failReason = 'offline';
-                this.isAvailable = false;
-                this.isLoading = false;
-                return;
-            }
 
             this.shopwareExtensionService.updateExtensionData();
 

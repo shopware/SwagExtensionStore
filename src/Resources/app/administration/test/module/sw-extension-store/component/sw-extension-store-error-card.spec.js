@@ -72,7 +72,7 @@ describe('sw-extension-store-error-card', () => {
             },
             {
                 variant: 'danger',
-                expectedIcon: 'regular-server',
+                expectedIcon: 'regular-times-circle',
                 expectedLabelVariant: 'danger',
                 expectedComponentClass: 'sw-extension-store-error-card--variant-danger'
             },

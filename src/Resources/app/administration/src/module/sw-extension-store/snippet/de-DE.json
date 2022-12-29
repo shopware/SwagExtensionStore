@@ -4,7 +4,8 @@
             "labelPrice": "Kostenlos | {price}/Monat | {price}",
             "labelFree": "Kostenlos",
             "labelRentSuffix": "/Monat*",
-            "labelDiscountedPrice": "Kostenlos | <s>{price}</s> <strong>{discountedPrice}</strong>/Monat | <s>{price}</s> <strong>{discountedPrice}</strong>"
+            "labelDiscountedPrice": "Kostenlos | <s>{price}</s> <strong>{discountedPrice}</strong>/Monat | <s>{price}</s> <strong>{discountedPrice}</strong>",
+            "title": "Store"
         },
         "tabs": {
             "apps": "Apps",

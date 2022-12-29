@@ -26,12 +26,12 @@
     }
 
     h2 {
-        font-size: $font-size-l;
+        font-size: $font-size-m;
     }
 
     p {
         color: $color-darkgray-200;
-        font-size: $font-size-s;
+        font-size: $font-size-xs;
         max-width: 325px;
         margin-bottom: 1.5rem;
     }
@@ -93,7 +93,7 @@
     .sw-meteor-page__smart-bar-meta {
         align-self: flex-end;
         color: $color-gray-500;
-        font-size: $font-size-xs;
+        font-size: $font-size-xxs;
         display: flex;
         flex-wrap: wrap;
         align-items: baseline;
@@ -114,7 +114,7 @@
 
     .sw-meteor-page__smart-bar-actions {
         .sw-extension-store-detail__trial-info {
-            font-size: $font-size-s;
+            font-size: $font-size-xs;
             font-weight: $font-weight-regular;
             color: $color-shopware-brand-500;
             padding: 0;
@@ -133,20 +133,20 @@
             > .sw-extension-store-detail__discounted-price {
                 margin-left: 4px;
                 font-weight: bolder;
-                font-size: $font-size-l;
+                font-size: $font-size-m;
             }
         }
 
         .sw-extension-store-detail__discounted-price-info {
             color: $color-gray-500;
-            font-size: $font-size-xs;
+            font-size: $font-size-xxs;
             margin-top: 0;
         }
     }
 
     .sw-meteor-page__smart-bar-description {
         color: $color-gray-500;
-        font-size: $font-size-s;
+        font-size: $font-size-xs;
 
         .sw-extension-store-detail__label-and-rating-overview {
             display: flex;

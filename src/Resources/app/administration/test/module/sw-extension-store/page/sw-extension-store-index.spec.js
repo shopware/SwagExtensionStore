@@ -4,7 +4,6 @@ import 'SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-ind
 import 'SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail';
 import ExtensionErrorService from 'src/module/sw-extension/service/extension-error.service';
 
-const storePingMock = jest.fn(() => Promise.resolve({}));
 const myExtensionsMock = jest.fn(() => Promise.resolve([{
     name: 'SwagExtensionStore',
     latestVersion: null,
@@ -54,9 +53,6 @@ async function createWrapper() {
             shopwareExtensionService: {
                 updateExtensionData: jest.fn()
             },
-            storeService: {
-                ping: storePingMock
-            },
             extensionErrorService: Shopware.Service('extensionErrorService'),
         }
     });
@@ -85,7 +81,6 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
 
     beforeEach(async () => {
         Shopware.State.get('shopwareExtensions').search.filter = {};
-        storePingMock.mockClear();
         setSearchValueMock.mockClear();
         myExtensionsMock.mockClear();
     });
@@ -135,17 +130,6 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         expect(filter).toEqual({
             group: 'themes'
         });
-    });
-
-    it('should show error message when store is offline', async () => {
-        // Reject store ping to simulate offline store
-        storePingMock.mockImplementationOnce(() =>  Promise.reject());
-
-        const wrapper = await createWrapper();
-
-        expect(wrapper.find('sw-extension-store-error-card-stub').attributes().variant).toBe('danger');
-        expect(wrapper.find('sw-extension-store-error-card-stub').attributes().title).toBe('sw-extension-store.offline.headline');
-        expect(wrapper.find('sw-extension-store-error-card-stub').text()).toBe('sw-extension-store.offline.description');
     });
 
     it('should show update message when newer version is available', async () => {
