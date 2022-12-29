@@ -76,7 +76,7 @@ $padding-summary-card: 22px;
         }
 
         & > * {
-            font-size: $font-size-s;
+            font-size: $font-size-xs;
             grid-column: 2;
         }
     }
@@ -88,7 +88,7 @@ $padding-summary-card: 22px;
 
     .sw-extension-buy-modal__variant-description {
         font-weight: $font-weight-semi-bold;
-        font-size: $font-size-m;
+        font-size: $font-size-s;
     }
 
     .sw-extension-buy-modal__list-price {
@@ -103,12 +103,12 @@ $padding-summary-card: 22px;
              text-decoration: line-through;
              margin-right: 4px;
              font-weight: $font-weight-regular;
-             font-size: $font-size-s;
+             font-size: $font-size-xs;
         }
 
         .sw-extension-buy-modal__discounted-price {
             font-weight: $font-weight-bold;
-            font-size: $font-size-m;
+            font-size: $font-size-s;
         }
     }
 
@@ -119,11 +119,11 @@ $padding-summary-card: 22px;
         border: 1px solid $color-shopware-brand-500;
         border-radius: 0 0 $border-radius-default $border-radius-default;
         color: $color-gray-500;
-        font-size: $font-size-s;
+        font-size: $font-size-xs;
         text-align: right;
 
         .sw-extension-buy-modal__variant-summary-price-subline {
-            font-size: $font-size-xs;
+            font-size: $font-size-xxs;
             color: $color-darkgray-200;
         }
     }
@@ -165,7 +165,7 @@ $padding-summary-card: 22px;
     }
 
     .sw-extension-buy-modal__checkbox {
-        font-size: $font-size-s;
+        font-size: $font-size-xs;
 
         .sw-field--checkbox__content {
             align-items: inherit;
@@ -188,14 +188,14 @@ $padding-summary-card: 22px;
     }
 
     .sw-extension-buy-modal__general-text-block {
-        font-size: $font-size-s;
+        font-size: $font-size-xs;
         line-height: 22px;
         margin-bottom: 21px;
         margin-top: 5px;
     }
 
     .sw-extension-buy-modal__variant-text-block {
-        font-size: $font-size-s;
+        font-size: $font-size-xs;
         line-height: 22px;
         margin-top: 5px;
     }

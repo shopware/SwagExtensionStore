@@ -29,6 +29,8 @@ Shopware.Application.addServiceProvider('extensionStoreLicensesService', () => {
 });
 
 Shopware.Module.register('sw-extension-store', {
+    title: 'sw-extension-store.general.title',
+    name: 'sw-extension-store.general.title',
     routePrefixName: 'sw.extension',
     routePrefixPath: 'sw/extension',
     routes: {

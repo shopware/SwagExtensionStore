@@ -211,7 +211,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
     });
 
     it('should show app provider legal text checkbox and modal for on-premise plugins without permissions', async () => {
-        Shopware.State.commit('shopwareExtensions/setLoginStatus', true);
+        Shopware.State.commit('shopwareExtensions/setUserInfo', { email: 'j.doe@shopware.com' });
 
         // Mock request which creates and returns a new cart item
         httpClient.post.mockImplementation((route) => {

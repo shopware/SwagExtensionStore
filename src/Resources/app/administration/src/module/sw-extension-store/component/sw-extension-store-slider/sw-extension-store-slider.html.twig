@@ -32,13 +32,13 @@
                 {% block sw_extension_store_slider_navigation_inner %}
                     <button class="sw-extension-store-slider__btn-back" @click="previous()" :disabled="isDisabledPrevious">
                         {% block sw_extension_store_slider_navigation_inner_icon_left %}
-                            <sw-icon name="default-arrow-head-left" size="20"></sw-icon>
+                            <sw-icon name="regular-chevron-left" size="20"></sw-icon>
                         {% endblock %}
                     </button>
 
                     <button class="sw-extension-store-slider__btn-next" @click="next()" :disabled="isDisabledNext">
                         {% block sw_extension_store_slider_navigation_inner_icon_right %}
-                            <sw-icon name="default-arrow-head-right" size="20"></sw-icon>
+                            <sw-icon name="regular-chevron-right" size="20"></sw-icon>
                         {% endblock %}
                     </button>
                 {% endblock %}
