@@ -206,33 +206,61 @@
 
     .sw-extension-store-detail__changelog-entry {
         display: grid;
-        grid-template-columns: auto 1fr;
+        grid-template-columns: 96px 1fr;
         grid-template-rows: auto 1fr;
-        column-gap: 1em;
+        column-gap: 40px;
         grid-template-areas:
             "version changelog"
             "date changelog";
     }
 
     .sw-extension-store-detail__changelog-entry:not(:last-child) {
-        margin-bottom: 48px;
+        margin-bottom: 32px;
+        padding-bottom: 32px;
+        border-bottom: 1px dashed $color-gray-300;
     }
 
     .sw-extension-store-detail__changelog-version {
         grid-area: version;
-        font-size: 20px;
-        justify-self: center;
-        font-weight: $font-weight-semi-bold;
+        justify-self: right;
+        text-align: right;
+        font-size: $font-size-s;
+        font-weight: $font-weight-bold;
     }
 
     .sw-extension-store-detail__changelog-creation-date {
         grid-area: date;
-        justify-self: center;
+        justify-self: right;
+        text-align: right;
+        font-size: $font-size-xxs;
+        font-weight: $font-weight-medium;
         color: $color-gray-500;
     }
 
     .sw-extension-store-detail__changelog-text {
         grid-area: changelog;
+        font-size: $font-size-xs;
+        p, ul, ol {
+            margin-bottom: 12px;
+            li:not(:last-child) {
+                margin-bottom: 8px;
+            }
+        }
+        ul {
+            list-style: none;
+            li {
+                margin-left: 16px;
+                position: relative;
+                &:before{
+                    content: "\2022";
+                    position: absolute;
+                    left: -16px;
+                }
+            }
+        }
+        ol {
+            list-style-position: inside;
+        }
     }
 
     .sw-extension-store-detail__alert {
