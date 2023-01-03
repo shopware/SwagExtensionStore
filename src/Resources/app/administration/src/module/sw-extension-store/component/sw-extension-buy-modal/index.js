@@ -78,7 +78,8 @@ Component.register('sw-extension-buy-modal', {
             }
 
             return Utils.format.currency(
-                this.shopwareExtensionService.getPriceFromVariant(this.selectedVariant), 'EUR'
+                this.shopwareExtensionService.getPriceFromVariant(this.selectedVariant),
+                'EUR'
             );
         },
 

@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-error-card';
-import { activateFeature12608 } from "../../../_helper/activate-feature-12608";
+import 'src/app/component/meteor/sw-meteor-card';
 
 async function createWrapper(opts) {
     return shallowMount(await Shopware.Component.build('sw-extension-store-error-card'), {
@@ -17,13 +17,6 @@ async function createWrapper(opts) {
 describe('sw-extension-store-error-card', () => {
     /** @type Wrapper */
     let wrapper;
-
-    beforeAll(async () => {
-        activateFeature12608();
-
-        // import dependency async because the component is behind a feature flag prior 6.4.8.0
-        await import('src/app/component/meteor/sw-meteor-card');
-    });
 
     it('should render title', async () => {
         wrapper = await createWrapper();

@@ -1,33 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-listing-card';
-
 import ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
 import ShopwareDiscountCampaignService from 'src/app/service/discount-campaign.service';
-
-
-beforeAll(() => {
-    Shopware.State.registerModule('shopwareExtensions', {
-        namespaced: true,
-        state: {
-            installedExtensions: {
-                data: [
-                    {
-                        name: 'Test',
-                        installedAt: null
-                    }
-                ]
-            },
-            licensedExtension: {
-
-            }
-        },
-        mutations: {
-            setExtension(state, extension) {
-                state.myExtensions.data = [extension];
-            }
-        }
-    });
-});
 
 async function createWrapper(extension) {
     return shallowMount(await Shopware.Component.build('sw-extension-listing-card'), {
@@ -268,7 +242,6 @@ describe('sw-extension-listing-card', () => {
             numberOfRatings: 10
         });
 
-
         expect(wrapper.find('.sw-extension-listing-card__info-name').text()).toBe('A Label');
         expect(wrapper.find('.sw-extension-listing-card__info-description').text()).toBe('A short description');
         expect(wrapper.find('.sw-extension-listing-card__info-rating-stars-count').text()).toBe('4');
@@ -276,7 +249,6 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style).toBe('background-image: url(administration/static/img/theme/default_theme_preview.jpg);');
         expect(wrapper.find('.sw-extension-listing-card__info-price').text()).toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":1,\"price\":{\"price\":\"€19.00\"}}');
     });
-
 
     it('should display a discount for renting', async () => {
         wrapper = await createWrapper({
@@ -390,7 +362,6 @@ describe('sw-extension-listing-card', () => {
             extensions: []
         });
 
-
         expect(wrapper.find('.sw-extension-listing-card__info-name').text()).toBe('Sample Extension Label');
         expect(wrapper.find('.sw-extension-listing-card__info-description').text()).toBe('Sample Extension description');
         expect(wrapper.find('.sw-extension-listing-card__info-rating-stars-count').text()).toBe('3');
@@ -449,7 +420,6 @@ describe('sw-extension-listing-card', () => {
             isTheme: true,
             extensions: []
         });
-
 
         expect(wrapper.find('.sw-extension-listing-card__info-name').text()).toBe('Sample Extension Label');
         expect(wrapper.find('.sw-extension-listing-card__info-description').text()).toBe('Sample Extension description');

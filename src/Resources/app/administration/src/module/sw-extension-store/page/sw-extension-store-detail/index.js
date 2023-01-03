@@ -296,7 +296,7 @@ Component.register('sw-extension-store-detail', {
             pageBody.scroll({ top: topOfElement, behavior: 'smooth' });
 
             // clear hash so user can click link again
-            this.$router.push(Object.assign({}, this.route, { hash: null }));
+            this.$router.push({ ...this.route, hash: null });
         },
 
         async onClickAddExtension() {
