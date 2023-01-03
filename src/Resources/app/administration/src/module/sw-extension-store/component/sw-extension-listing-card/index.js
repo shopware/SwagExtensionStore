@@ -63,7 +63,8 @@ Component.register('sw-extension-listing-card', {
                 this.shopwareExtensionService.mapVariantToRecommendation(this.recommendedVariant),
                 {
                     price: Utils.format.currency(
-                        this.shopwareExtensionService.getPriceFromVariant(this.recommendedVariant), 'EUR'
+                        this.shopwareExtensionService.getPriceFromVariant(this.recommendedVariant),
+                        'EUR'
                     )
                 }
             );

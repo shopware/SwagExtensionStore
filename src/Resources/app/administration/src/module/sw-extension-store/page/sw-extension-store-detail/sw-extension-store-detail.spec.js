@@ -1,6 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
-import { activateFeature12608 } from "../../../_helper/activate-feature-12608";
 import 'SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail';
+import 'src/app/component/meteor/sw-meteor-page';
 
 async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
     const localVue = createLocalVue();
@@ -84,11 +84,6 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
 const setSearchValueMock = jest.fn();
 describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail', () => {
     beforeAll(async () => {
-        activateFeature12608();
-
-        // import dependency async because the component is behind a feature flag prrior 6.4.8.0
-        await import('src/app/component/meteor/sw-meteor-page');
-
         Shopware.State.registerModule('shopwareExtensions', {
             namespaced: true,
             mutations: {
