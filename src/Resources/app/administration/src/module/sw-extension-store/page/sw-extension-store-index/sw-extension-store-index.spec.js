@@ -44,7 +44,7 @@ async function createWrapper() {
             'router-view': true,
             'sw-extension-store-error-card': true,
             'sw-extension-store-update-warning': true,
-            'sw-help-center': true,
+            'sw-help-center': true
         },
         provide: {
             extensionStoreActionService: {
@@ -53,7 +53,7 @@ async function createWrapper() {
             shopwareExtensionService: {
                 updateExtensionData: jest.fn()
             },
-            extensionErrorService: Shopware.Service('extensionErrorService'),
+            extensionErrorService: Shopware.Service('extensionErrorService')
         }
     });
 }
@@ -129,7 +129,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
 
     it('should show update message when newer version is available', async () => {
         // Mock higher `latestVersion` to show update card
-        myExtensionsMock.mockImplementationOnce(() =>  Promise.resolve([{
+        myExtensionsMock.mockImplementationOnce(() => Promise.resolve([{
             name: 'SwagExtensionStore',
             latestVersion: '1.4.0',
             version: '1.3.0'
@@ -172,8 +172,13 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         // Emit listing error on router view
         await wrapper.get('router-view-stub').vm.$emit('extension-listing-errors', listingError);
 
-        expect(wrapper.find('sw-extension-store-error-card-stub').attributes().title).toBe('Shopware version is unknown');
-        expect(wrapper.find('sw-extension-store-error-card-stub').attributes().variant).toBe('danger');
-        expect(wrapper.find('sw-extension-store-error-card-stub').text()).toBe('The given Shopware version is unknown, please contact our customer service');
+        expect(wrapper.find('sw-extension-store-error-card-stub').attributes().title)
+            .toBe('Shopware version is unknown');
+
+        expect(wrapper.find('sw-extension-store-error-card-stub').attributes().variant)
+            .toBe('danger');
+
+        expect(wrapper.find('sw-extension-store-error-card-stub').text())
+            .toBe('The given Shopware version is unknown, please contact our customer service');
     });
 });

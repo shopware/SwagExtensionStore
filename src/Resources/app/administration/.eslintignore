@@ -1,3 +1,2 @@
 build/*.js
 internal-rules/*.js
-src/**/*.spec.js

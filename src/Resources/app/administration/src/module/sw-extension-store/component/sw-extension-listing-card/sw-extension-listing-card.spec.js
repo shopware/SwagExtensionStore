@@ -16,7 +16,7 @@ async function createWrapper(extension) {
             'sw-extension-rating-stars': true,
             'router-link': true,
             'sw-extension-type-label': true,
-            'sw-extension-store-label-display': true,
+            'sw-extension-store-label-display': true
         },
         provide: {
             repositoryFactory: {
@@ -246,8 +246,10 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.find('.sw-extension-listing-card__info-description').text()).toBe('A short description');
         expect(wrapper.find('.sw-extension-listing-card__info-rating-stars-count').text()).toBe('4');
         expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('(10)');
-        expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style).toBe('background-image: url(administration/static/img/theme/default_theme_preview.jpg);');
-        expect(wrapper.find('.sw-extension-listing-card__info-price').text()).toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":1,\"price\":{\"price\":\"€19.00\"}}');
+        expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
+            .toBe('background-image: url(administration/static/img/theme/default_theme_preview.jpg);');
+        expect(wrapper.find('.sw-extension-listing-card__info-price').text())
+            .toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":1,\"price\":{\"price\":\"€19.00\"}}');
     });
 
     it('should display a discount for renting', async () => {
@@ -311,8 +313,10 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.find('.sw-extension-listing-card__info-description').text()).toBe('Sample Extension description');
         expect(wrapper.find('.sw-extension-listing-card__info-rating-stars-count').text()).toBe('3');
         expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('(10)');
-        expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style).toBe('background-image: url(https://example.com); background-size: cover;');
-        expect(wrapper.find('.sw-extension-listing-card__info-price').text()).toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":1,\"price\":{\"price\":\"€16.15\"}}');
+        expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
+            .toBe('background-image: url(https://example.com); background-size: cover;');
+        expect(wrapper.find('.sw-extension-listing-card__info-price').text())
+            .toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":1,\"price\":{\"price\":\"€16.15\"}}');
     });
 
     it('should display normal prices for buying', async () => {
@@ -366,8 +370,10 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.find('.sw-extension-listing-card__info-description').text()).toBe('Sample Extension description');
         expect(wrapper.find('.sw-extension-listing-card__info-rating-stars-count').text()).toBe('3');
         expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('(10)');
-        expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style).toBe('background-image: url(https://example.com); background-size: cover;');
-        expect(wrapper.find('.sw-extension-listing-card__info-price').text()).toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":2,\"price\":{\"price\":\"€25.00\"}}');
+        expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
+            .toBe('background-image: url(https://example.com); background-size: cover;');
+        expect(wrapper.find('.sw-extension-listing-card__info-price').text())
+            .toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":2,\"price\":{\"price\":\"€25.00\"}}');
     });
 
     it('should display discounted prices for buying', async () => {
@@ -425,7 +431,9 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.find('.sw-extension-listing-card__info-description').text()).toBe('Sample Extension description');
         expect(wrapper.find('.sw-extension-listing-card__info-rating-stars-count').text()).toBe('3');
         expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('(10)');
-        expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style).toBe('background-image: url(https://example.com); background-size: cover;');
-        expect(wrapper.find('.sw-extension-listing-card__info-price').text()).toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":2,\"price\":{\"price\":\"€397.00\"}}');
+        expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
+            .toBe('background-image: url(https://example.com); background-size: cover;');
+        expect(wrapper.find('.sw-extension-listing-card__info-price').text())
+            .toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":2,\"price\":{\"price\":\"€397.00\"}}');
     });
 });

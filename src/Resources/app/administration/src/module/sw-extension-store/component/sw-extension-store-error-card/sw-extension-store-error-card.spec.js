@@ -35,7 +35,8 @@ describe('sw-extension-store-error-card', () => {
             }
         });
 
-        expect(wrapper.find('.sw-extension-store-error-card__message').text()).toBe('A new version of the plugin is available.');
+        expect(wrapper.find('.sw-extension-store-error-card__message').text())
+            .toBe('A new version of the plugin is available.');
     });
 
     it('should render content in actions slot', async () => {
@@ -80,7 +81,7 @@ describe('sw-extension-store-error-card', () => {
                 expectedIcon: 'regular-exclamation-circle',
                 expectedLabelVariant: 'warning',
                 expectedComponentClass: 'sw-extension-store-error-card--variant-warning'
-            },
+            }
         ];
 
         it.each(testCases)('%p', async ({ variant, expectedIcon, expectedLabelVariant, expectedComponentClass }) => {

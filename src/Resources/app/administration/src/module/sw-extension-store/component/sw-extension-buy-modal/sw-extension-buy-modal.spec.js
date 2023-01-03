@@ -90,18 +90,19 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
     });
 
     beforeEach(() => {
-        httpClient.get.mockImplementation((route) => {
+        httpClient.get.mockImplementation(() => {
             return Promise.resolve();
         });
-    })
+    });
 
     function provideTestExtension(overrides) {
-        return Object.assign({
+        return {
             name: 'test-app',
             label: 'Test app',
             permissions: {},
-            variants: []
-        }, overrides);
+            variants: [],
+            ...overrides
+        };
     }
 
     async function createWrapper(overrides) {
@@ -109,7 +110,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         localVue.use(vuei18n);
         localVue.mixin(Shopware.Mixin.getByName('sw-extension-error'));
 
-        const wrapper = mount(await Shopware.Component.build('sw-extension-buy-modal'), {
+        const localWrapper = mount(await Shopware.Component.build('sw-extension-buy-modal'), {
             localVue,
             propsData: {
                 extension: provideTestExtension(overrides)
@@ -137,7 +138,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 'sw-loader': true,
                 'sw-extension-permissions-modal': true,
                 'sw-extension-privacy-policy-extensions-modal': true,
-                'sw-external-link': true,
+                'sw-external-link': true
             },
             mocks: {
                 $tc: (key) => key,
@@ -146,9 +147,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             }
         });
 
-        Shopware.Application.getApplicationRoot = () => { return wrapper.vm; };
+        Shopware.Application.getApplicationRoot = () => { return localWrapper.vm; };
 
-        return wrapper;
+        return localWrapper;
     }
 
     it('does not show permissions and privacy checkbox if extension has not entries', async () => {
@@ -185,7 +186,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             }
         });
 
-        await wrapper.get('.sw-extension-buy-modal__checkbox-permissions--test-app .permissions-modal-trigger').trigger('click');
+        await wrapper.get('.sw-extension-buy-modal__checkbox-permissions--test-app .permissions-modal-trigger')
+            .trigger('click');
+
         await wrapper.get('sw-extension-permissions-modal-stub').vm.$emit('modal-close');
 
         expect(wrapper.find('sw-extension-permissions-modal-stub').exists()).toBe(false);
@@ -204,7 +207,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             privacyPolicyExtension: 'Don\'t talk about the fight club!'
         });
 
-        await wrapper.get('.sw-extension-buy-modal__checkbox-privacy-policy--test-app .privacy-policy-modal-trigger').trigger('click');
+        await wrapper.get('.sw-extension-buy-modal__checkbox-privacy-policy--test-app .privacy-policy-modal-trigger')
+            .trigger('click');
+
         await wrapper.get('sw-extension-privacy-policy-extensions-modal-stub').vm.$emit('modal-close');
 
         expect(wrapper.find('sw-extension-privacy-policy-extensions-modal-stub').exists()).toBe(false);
@@ -229,7 +234,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             return Promise.resolve();
         });
 
-        wrapper = await await createWrapper({
+        wrapper = await createWrapper({
             variants: [{
                 id: 78674,
                 type: 'buy',
@@ -251,7 +256,8 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         expect(wrapper.find('.sw-extension-buy-modal__checkbox-app-provider').exists()).toBeTruthy();
 
         // Open app provider details via link
-        await wrapper.get('.sw-extension-buy-modal__checkbox-app-provider--test-app .legal-text-modal-trigger').trigger('click');
+        await wrapper.get('.sw-extension-buy-modal__checkbox-app-provider--test-app .legal-text-modal-trigger')
+            .trigger('click');
 
         // Expect app provider detail modal to be present with correct legal text
         expect(wrapper.find('.sw-extension-buy-modal__legal-text-modal').exists()).toBeTruthy();
