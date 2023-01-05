@@ -6,7 +6,7 @@
     "scripts": {
         "unit": "jest --config jest.config.js --ci",
         "unit-watch": "jest --config jest.config.js --watch",
-        "lint": "eslint --ext .js,.vue src",
+        "lint": "eslint --ext .js,.ts,.vue src",
         "lint-ci": "npm run lint -- --format junit --output-file eslint.junit.xml"
     },
     "author": "",
@@ -30,5 +30,8 @@
     "dependencies": {
         "vue": "2.6.10",
         "vue-template-compiler": "2.6.10"
+    },
+    "optionalDependencies": {
+        "administration": "^6.x"
     }
 }

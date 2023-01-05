@@ -29,7 +29,7 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
         faq: [],
         addons: [],
         ...extensionCustomProps
-    }
+    };
 
     return shallowMount(await Shopware.Component.build('sw-extension-store-detail'), {
         localVue,
@@ -62,18 +62,18 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
             'sw-alert': true,
             'sw-notification-center': true,
             'sw-meteor-navigation': true,
-            'sw-help-center': true,
+            'sw-help-center': true
         },
         provide: {
             shopwareExtensionService: {
                 updateExtensionData: jest.fn(),
                 isVariantDiscounted: jest.fn(),
                 orderVariantsByRecommendation: () => [],
-                getOpenLink: () => canBeOpened ? 'open-link' : null,
+                getOpenLink: () => (canBeOpened ? 'open-link' : null)
             },
             extensionStoreDataService: {
                 getDetail: () => {
-                    return testExtension
+                    return testExtension;
                 }
             },
             extensionHelperService: {}
@@ -136,7 +136,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
         const wrapper = await createWrapper({
             storeLicense: false,
             addons: ['SW6_EnterpriseFeature'],
-            variants: [],
+            variants: []
         });
 
         await wrapper.vm.$nextTick();
@@ -183,8 +183,8 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     storeLicense: { variants: [{}] },
                     id: 1337,
                     installedAt: {
-                        date: "2021-07-08 07:34:11.794000",
-                        timezone: "UTC",
+                        date: '2021-07-08 07:34:11.794000',
+                        timezone: 'UTC',
                         timezone_type: 3
                     }
                 }]
@@ -192,8 +192,8 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
             const wrapper = await createWrapper({
                 installedAt: {
-                    date: "2021-07-08 07:34:11.794000",
-                    timezone: "UTC",
+                    date: '2021-07-08 07:34:11.794000',
+                    timezone: 'UTC',
                     timezone_type: 3
                 }
             });
@@ -213,8 +213,8 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     id: 1337,
                     configurable: true,
                     installedAt: {
-                        date: "2021-07-08 07:34:11.794000",
-                        timezone: "UTC",
+                        date: '2021-07-08 07:34:11.794000',
+                        timezone: 'UTC',
                         timezone_type: 3
                     }
                 }]
@@ -222,8 +222,8 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
             const wrapper = await createWrapper({
                 installedAt: {
-                    date: "2021-07-08 07:34:11.794000",
-                    timezone: "UTC",
+                    date: '2021-07-08 07:34:11.794000',
+                    timezone: 'UTC',
                     timezone_type: 3
                 }
             });
@@ -243,8 +243,8 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     configurable: true,
                     id: 1337,
                     installedAt: {
-                        date: "2021-07-08 07:34:11.794000",
-                        timezone: "UTC",
+                        date: '2021-07-08 07:34:11.794000',
+                        timezone: 'UTC',
                         timezone_type: 3
                     }
                 }]
@@ -252,8 +252,8 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
             const wrapper = await createWrapper({
                 installedAt: {
-                    date: "2021-07-08 07:34:11.794000",
-                    timezone: "UTC",
+                    date: '2021-07-08 07:34:11.794000',
+                    timezone: 'UTC',
                     timezone_type: 3
                 }
             }, false);
@@ -277,7 +277,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
             const wrapper = await createWrapper({
                 storeLicense: null,
                 addons: ['SW6_EnterpriseFeature'],
-                variants: [],
+                variants: []
             });
 
             await wrapper.vm.$nextTick();
