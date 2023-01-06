@@ -224,7 +224,7 @@
         grid-area: version;
         justify-self: right;
         text-align: right;
-        font-size: $font-size-s;
+        font-size: $font-size-default;
         font-weight: $font-weight-bold;
     }
 
@@ -232,14 +232,14 @@
         grid-area: date;
         justify-self: right;
         text-align: right;
-        font-size: $font-size-xxs;
-        font-weight: $font-weight-medium;
+        font-size: $font-size-extra-small;
+        font-weight: $font-weight-semi-bold;
         color: $color-gray-500;
     }
 
     .sw-extension-store-detail__changelog-text {
         grid-area: changelog;
-        font-size: $font-size-xs;
+        font-size: $font-size-small;
         p, ul, ol {
             margin-bottom: 12px;
             li:not(:last-child) {
