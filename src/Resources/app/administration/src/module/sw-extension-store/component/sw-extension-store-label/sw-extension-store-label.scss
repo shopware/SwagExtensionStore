@@ -1,6 +1,6 @@
 @import "~scss/variables";
 
-$sw-label-border-radius: $border-radius-default / 2;
+$sw-label-border-radius: calc($border-radius-default / 2);
 $sw-label-pill-border-radius: 50px;
 
 .sw-extension-label {
