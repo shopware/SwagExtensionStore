@@ -106,7 +106,7 @@ Build Zip:
     tags:
         - t3.medium
     image:
-        name: ghcr.io/friendsofshopware/platform-plugin-dev:{$PLATFORM_PLUGIN_TAG}
+        name: ghcr.io/friendsofshopware/platform-plugin-dev:$PLATFORM_PLUGIN_TAG
         entrypoint: [""]
     rules:
       - if: $CI_COMMIT_TAG
@@ -134,7 +134,7 @@ Upload Zip to Store:
       - if: $CI_COMMIT_TAG
         when: always
     image:
-        name: ghcr.io/friendsofshopware/platform-plugin-dev:{$PLATFORM_PLUGIN_TAG}
+        name: ghcr.io/friendsofshopware/platform-plugin-dev:$PLATFORM_PLUGIN_TAG
         entrypoint: [""]
     variables:
         GIT_DEPTH: 0
@@ -149,7 +149,7 @@ Upload Zip to Store:
 Update Store Information:
     stage: Deploy
     image:
-        name: ghcr.io/friendsofshopware/platform-plugin-dev:{$PLATFORM_PLUGIN_TAG}
+        name: ghcr.io/friendsofshopware/platform-plugin-dev:$PLATFORM_PLUGIN_TAG
         entrypoint: [""]
     needs: [ "Build Zip" ]
     rules:
