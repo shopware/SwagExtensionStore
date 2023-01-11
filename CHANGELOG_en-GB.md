@@ -35,3 +35,6 @@
 
 # 1.6.0
 - Improved loading animation in listing
+
+# 1.7.0
+- Improved the display of the changelog on the details page
