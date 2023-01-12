@@ -136,7 +136,7 @@ Upload Zip to Store:
     needs: ["Build Zip"]
     rules:
       - if: $CI_COMMIT_TAG
-        when: always
+        when: manual
     image:
         name: ghcr.io/friendsofshopware/platform-plugin-dev:$PLATFORM_PLUGIN_TAG
         entrypoint: [""]
@@ -158,7 +158,7 @@ Update Store Information:
     needs: [ "Build Zip" ]
     rules:
       - if: $CI_COMMIT_TAG
-        when: always
+        when: manual
     variables:
         GIT_DEPTH: 0
     before_script: []
