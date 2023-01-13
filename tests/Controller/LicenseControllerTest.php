@@ -2,13 +2,10 @@
 
 namespace SwagExtensionStore\Tests\Api;
 
-use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Feature;
 use Shopware\Core\Framework\Store\Exception\InvalidExtensionIdException;
 use Shopware\Core\Framework\Store\Exception\InvalidVariantIdException;
-use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use SwagExtensionStore\Controller\LicenseController;
 use SwagExtensionStore\Exception\InvalidExtensionCartException;
@@ -18,22 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LicenseControllerTest extends TestCase
 {
-    use IntegrationTestBehaviour;
-
-    /**
-     * @deprecated tag:v2.0.0 - will be removed
-     */
-    public function setUp(): void
-    {
-        try {
-            Feature::skipTestIfInActive('FEATURE_NEXT_12608', $this);
-        } catch (Warning $e) {
-
-        }
-
-        parent::setUp();
-    }
-
     public function testPurchaseExtensionWithInvalidExtensionId(): void
     {
         $provider = $this->createMock(LicenseService::class);
@@ -79,7 +60,7 @@ class LicenseControllerTest extends TestCase
     public function testAvailablePaymentMeans(): void
     {
         $service = $this->createMock(LicenseService::class);
-        $service->expects(self::once())
+        $service->expects(static::once())
             ->method('availablePaymentMeans')
             ->willReturn(['payment-mean-1', 'payment-mean-2']);
 
@@ -99,7 +80,7 @@ class LicenseControllerTest extends TestCase
         ]);
 
         $service = $this->createMock(LicenseService::class);
-        $service->expects(self::once())
+        $service->expects(static::once())
             ->method('orderCart');
 
         $controller = new LicenseController($service);

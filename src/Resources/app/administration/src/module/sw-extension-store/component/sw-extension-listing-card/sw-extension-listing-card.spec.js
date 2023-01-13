@@ -34,7 +34,11 @@ async function createWrapper(extension) {
                     });
                 }
             },
-            shopwareExtensionService: new ShopwareExtensionService(undefined, undefined, new ShopwareDiscountCampaignService())
+            shopwareExtensionService: new ShopwareExtensionService(
+                undefined,
+                undefined,
+                new ShopwareDiscountCampaignService()
+            )
         }
     });
 }
@@ -249,7 +253,11 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
             .toBe('background-image: url(administration/static/img/theme/default_theme_preview.jpg);');
         expect(wrapper.find('.sw-extension-listing-card__info-price').text())
-            .toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":1,\"price\":{\"price\":\"€19.00\"}}');
+            .toBe(JSON.stringify({
+                key: 'sw-extension-store.general.labelPrice',
+                recommendation: 1,
+                price: { price: '€19.00' }
+            }));
     });
 
     it('should display a discount for renting', async () => {
@@ -316,7 +324,11 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
             .toBe('background-image: url(https://example.com); background-size: cover;');
         expect(wrapper.find('.sw-extension-listing-card__info-price').text())
-            .toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":1,\"price\":{\"price\":\"€16.15\"}}');
+            .toBe(JSON.stringify({
+                key: 'sw-extension-store.general.labelPrice',
+                recommendation: 1,
+                price: { price: '€16.15' }
+            }));
     });
 
     it('should display normal prices for buying', async () => {
@@ -373,7 +385,11 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
             .toBe('background-image: url(https://example.com); background-size: cover;');
         expect(wrapper.find('.sw-extension-listing-card__info-price').text())
-            .toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":2,\"price\":{\"price\":\"€25.00\"}}');
+            .toBe(JSON.stringify({
+                key: 'sw-extension-store.general.labelPrice',
+                recommendation: 2,
+                price: { price: '€25.00' }
+            }));
     });
 
     it('should display discounted prices for buying', async () => {
@@ -434,6 +450,10 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
             .toBe('background-image: url(https://example.com); background-size: cover;');
         expect(wrapper.find('.sw-extension-listing-card__info-price').text())
-            .toBe('{\"key\":\"sw-extension-store.general.labelPrice\",\"recommendation\":2,\"price\":{\"price\":\"€397.00\"}}');
+            .toBe(JSON.stringify({
+                key: 'sw-extension-store.general.labelPrice',
+                recommendation: 2,
+                price: { price: '€397.00' }
+            }));
     });
 });

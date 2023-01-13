@@ -55,13 +55,6 @@ Component.register('sw-extension-store-listing', {
 
         currentLocale() {
             return Shopware.State.get('session').currentLocale === 'de-DE' ? 'de' : 'en';
-        },
-
-        /**
-         * @deprecated tag:v2.0.0 - Will be removed due to deprecated core component
-         */
-        campaignPropertyMappingComponentExists() {
-            return Shopware.Component.getComponentRegistry().has('sw-campaign-property-mapping');
         }
     },
 

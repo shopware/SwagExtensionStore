@@ -146,28 +146,6 @@ Component.register('sw-extension-store-detail', {
             return this.shopwareExtensionService.getPriceFromVariant(this.recommendedVariant);
         },
 
-        /**
-         * @deprecated v2.0.0 - Will be removed, use renderPrice for display instead
-         */
-        calculatedPrice() {
-            if (!this.recommendedVariant) {
-                return null;
-            }
-
-            const label = this.hasActiveDiscount ? 'labelDiscountedPrice' : 'labelPrice';
-            const text = this.$tc(
-                `sw-extension-store.general.${label}`,
-                this.shopwareExtensionService.mapVariantToRecommendation(this.recommendedVariant),
-                {
-                    price: Utils.format.currency(this.recommendedVariant.netPrice, 'EUR'),
-                    discountedPrice: this.recommendedVariant.netPrice !== this.discountedPrice ?
-                        Utils.format.currency(this.discountedPrice, 'EUR') : null
-                }
-            );
-
-            return this.discountAppliesForMonths ? `${text}*` : text;
-        },
-
         variantClass() {
             return {
                 'is--theme': this.extension && this.extension.isTheme
@@ -302,7 +280,7 @@ Component.register('sw-extension-store-detail', {
         async onClickAddExtension() {
             await this.shopwareExtensionService.checkLogin();
 
-            if (!Shopware.State.get('shopwareExtensions').loginStatus) {
+            if (!Shopware.State.get('shopwareExtensions').userInfo) {
                 this.openAccountModal();
                 return;
             }
