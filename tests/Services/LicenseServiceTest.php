@@ -13,9 +13,9 @@ use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use SwagExtensionStore\Services\LicenseService;
 use SwagExtensionStore\Services\StoreClient;
 use SwagExtensionStore\Services\StoreDataProvider;
-use SwagExtensionStore\Services\LicenseService;
 
 class LicenseServiceTest extends TestCase
 {
@@ -23,6 +23,7 @@ class LicenseServiceTest extends TestCase
     use StoreClientBehaviour;
 
     private LicenseService $licenseService;
+
     private AbstractExtensionStoreLicensesService $coreLicenseService;
 
     public function setUp(): void
@@ -53,7 +54,7 @@ class LicenseServiceTest extends TestCase
         ))->availablePaymentMeans(Context::createDefaultContext());
 
         static::assertSame([
-            'test' => 'success'
+            'test' => 'success',
         ], $response);
     }
 
@@ -74,7 +75,7 @@ class LicenseServiceTest extends TestCase
 
         static::assertEquals(
             '/swplatform/pluginlicenses/1/cancel?shopwareVersion=___VERSION___&language=en-GB&domain=localhost',
-            $this->getRequestHandler()->getLastRequest()->getRequestTarget()
+            $this->getRequestHandler()->getLastRequest()?->getRequestTarget()
         );
     }
 
@@ -108,16 +109,20 @@ class LicenseServiceTest extends TestCase
     {
         $this->getRequestHandler()->reset();
         $exampleCart = file_get_contents(__DIR__ . '/../_fixtures/responses/example-cart.json');
+        static::assertIsString($exampleCart);
 
         // createCart will respond with a cart
         $this->getRequestHandler()->append(new Response(200, [], $exampleCart));
 
-        // processCart will return an Created Response with no body
+        // processCart will return a Created Response without body
         $this->getRequestHandler()->append(new Response(201, [], null));
 
         // return path to app files from install extension
         $this->getRequestHandler()->append(new Response(200, [], '{"location": "http://localhost/my.zip", "type": "app"}'));
-        $this->getRequestHandler()->append(new Response(200, [], file_get_contents(__DIR__ . '/../_fixtures/TestApp.zip')));
+
+        $testAppZip = file_get_contents(__DIR__ . '/../_fixtures/TestApp.zip');
+        static::assertIsString($testAppZip);
+        $this->getRequestHandler()->append(new Response(200, [], $testAppZip));
     }
 
     private function setLicensesRequest(string $licenseBody): void
@@ -128,18 +133,24 @@ class LicenseServiceTest extends TestCase
 
     private function setCancellationResponses(): void
     {
-        $licenses = \json_decode(\file_get_contents(__DIR__ . '/../_fixtures/responses/licenses.json'), true);
+        $licensesJson = \file_get_contents(__DIR__ . '/../_fixtures/responses/licenses.json');
+        static::assertIsString($licensesJson);
+        $licenses = \json_decode($licensesJson, true);
         $licenses[0]['extension']['name'] = 'TestApp';
+        $licensesJson = \json_encode($licenses);
+        static::assertIsString($licensesJson);
 
-        $this->setLicensesRequest(\json_encode($licenses));
+        $this->setLicensesRequest($licensesJson);
         $this->getRequestHandler()->append(new Response(204));
 
         unset($licenses[0]);
+        $licensesJson = \json_encode($licenses);
+        static::assertIsString($licensesJson);
         $this->getRequestHandler()->append(
             new Response(
                 200,
                 [StoreDataProvider::HEADER_NAME_TOTAL_COUNT => '0'],
-                \json_encode($licenses)
+                $licensesJson
             )
         );
     }

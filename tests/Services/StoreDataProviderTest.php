@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SwagExtensionStore\Tests\Services;
 
@@ -22,6 +22,7 @@ class StoreDataProviderTest extends TestCase
     use ExtensionBehaviour;
 
     private StoreDataProvider $extensionDataProvider;
+
     private Context $context;
 
     public function setUp(): void
@@ -41,11 +42,15 @@ class StoreDataProviderTest extends TestCase
     {
         $requestHandler = $this->getRequestHandler();
         $requestHandler->reset();
-        $requestHandler->append(new Response(200, [], file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json')));
+        $filterJson = file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json');
+        static::assertIsString($filterJson);
+        $requestHandler->append(new Response(200, [], $filterJson));
 
         $filters = $this->extensionDataProvider->getListingFilters([], Context::createDefaultContext());
 
-        static::assertSame(json_decode(file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json'), true), $filters);
+        $filterJson = file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json');
+        static::assertIsString($filterJson);
+        static::assertSame(json_decode($filterJson, true), $filters);
     }
 
     public function testItReturnsAListing(): void
@@ -88,7 +93,7 @@ class StoreDataProviderTest extends TestCase
         static::assertEquals(7, $extensionReviews['summary']->getNumberOfRatings());
     }
 
-    private function setReviewsResponse($extensionId): void
+    private function setReviewsResponse(int $extensionId): void
     {
         $requestHandler = $this->getRequestHandler();
         $requestHandler->reset();
@@ -99,11 +104,10 @@ class StoreDataProviderTest extends TestCase
 
                 static::assertEquals($extensionId, $matches[1]);
 
-                return new Response(
-                    200,
-                    [],
-                    \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-reviews.json')
-                );
+                $extensionReviewsJson = \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-reviews.json');
+                self::assertIsString($extensionReviewsJson);
+
+                return new Response(200, [], $extensionReviewsJson);
             }
         );
     }
@@ -112,14 +116,16 @@ class StoreDataProviderTest extends TestCase
     {
         $requestHandler = $this->getRequestHandler();
         $requestHandler->reset();
+        $extensionListingJson = \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-listing.json');
+        static::assertIsString($extensionListingJson);
         $requestHandler->append(new Response(
             200,
             [StoreDataProvider::HEADER_NAME_TOTAL_COUNT => '2'],
-            \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-listing.json')
+            $extensionListingJson
         ));
     }
 
-    private function setDetailResponse($extensionId): void
+    private function setDetailResponse(int $extensionId): void
     {
         $requestHandler = $this->getRequestHandler();
         $requestHandler->reset();
@@ -130,11 +136,10 @@ class StoreDataProviderTest extends TestCase
 
                 static::assertEquals($extensionId, $matches[1]);
 
-                return new Response(
-                    200,
-                    [],
-                    \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-detail.json')
-                );
+                $extensionDetailJson = \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-detail.json');
+                self::assertIsString($extensionDetailJson);
+
+                return new Response(200, [], $extensionDetailJson);
             }
         );
     }

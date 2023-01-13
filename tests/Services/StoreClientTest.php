@@ -18,6 +18,7 @@ class StoreClientTest extends TestCase
     use StoreClientBehaviour;
 
     private Context $context;
+
     private StoreClient $storeClient;
 
     public function setUp(): void
@@ -95,11 +96,11 @@ class StoreClientTest extends TestCase
         $this->storeClient->availablePaymentMeans($this->context);
     }
 
-    private function setUpRequestHandler(int $statusCode = 200)
+    private function setUpRequestHandler(int $statusCode = 200): void
     {
         $requestHandler = $this->getRequestHandler();
-        $requestHandler->append(
-            new Response($statusCode, [], file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json'))
-        );
+        $filterJson = file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json');
+        static::assertIsString($filterJson);
+        $requestHandler->append(new Response($statusCode, [], $filterJson));
     }
 }

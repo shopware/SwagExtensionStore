@@ -3,10 +3,8 @@
 namespace SwagExtensionStore\Tests\Api;
 
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Feature;
 use Shopware\Core\Framework\Test\Store\ExtensionBehaviour;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
@@ -22,16 +20,8 @@ class DataControllerTest extends TestCase
 
     private DataController $controller;
 
-    /**
-     * @deprecated tag:2.0.0 - will not call Feature::skipTestIfInActive anymore
-     */
     protected function setUp(): void
     {
-        try {
-            Feature::skipTestIfInActive('FEATURE_NEXT_12608', $this);
-        } catch (Warning $e) {
-        }
-
         $this->controller = $this->getContainer()->get(DataController::class);
     }
 
@@ -63,13 +53,15 @@ class DataControllerTest extends TestCase
 
     public function testListingFilters(): void
     {
+        $filterJson = file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json');
+        static::assertIsString($filterJson);
+
         $requestHandler = $this->getRequestHandler();
         $requestHandler->reset();
-        $requestHandler->append(new Response(200, [], file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json')));
+        $requestHandler->append(new Response(200, [], $filterJson));
 
         $response = $this->controller->listingFilters(new Request(), Context::createDefaultContext());
-
-        static::assertSame(json_encode(json_decode(file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json'))), $response->getContent());
+        static::assertJsonStringEqualsJsonFile(__DIR__ . '/../_fixtures/responses/filter.json', $response->getContent());
     }
 
     public function testDetail(): void
@@ -97,16 +89,19 @@ class DataControllerTest extends TestCase
 
     private function setListingResponse(): void
     {
+        $extensionListingJson = \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-listing.json');
+        static::assertIsString($extensionListingJson);
+
         $requestHandler = $this->getRequestHandler();
         $requestHandler->reset();
         $requestHandler->append(new Response(
             200,
             [StoreDataProvider::HEADER_NAME_TOTAL_COUNT => '2'],
-            \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-listing.json')
+            $extensionListingJson,
         ));
     }
 
-    private function setDetailResponse($extensionId): void
+    private function setDetailResponse(int $extensionId): void
     {
         $requestHandler = $this->getRequestHandler();
         $requestHandler->reset();
@@ -117,16 +112,15 @@ class DataControllerTest extends TestCase
 
                 static::assertEquals($extensionId, $matches[1]);
 
-                return new Response(
-                    200,
-                    [],
-                    \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-detail.json')
-                );
+                $extensionDetailJson = \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-detail.json');
+                static::assertIsString($extensionDetailJson);
+
+                return new Response(200, [], $extensionDetailJson);
             }
         );
     }
 
-    private function setReviewsResponse($extensionId): void
+    private function setReviewsResponse(int $extensionId): void
     {
         $requestHandler = $this->getRequestHandler();
         $requestHandler->reset();
@@ -137,11 +131,10 @@ class DataControllerTest extends TestCase
 
                 static::assertEquals($extensionId, $matches[1]);
 
-                return new Response(
-                    200,
-                    [],
-                    \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-reviews.json')
-                );
+                $extensionReviewsJson = \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-reviews.json');
+                static::assertIsString($extensionReviewsJson);
+
+                return new Response(200, [], $extensionReviewsJson);
             }
         );
     }

@@ -109,7 +109,6 @@ Component.register('sw-extension-store-index', {
                 return false;
             }
 
-            // TODO tag:v2.0.0 Check for major version
             return extension.latestVersion !== extension.version;
         },
 
