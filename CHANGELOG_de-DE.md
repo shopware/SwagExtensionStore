@@ -35,3 +35,6 @@
 
 # 1.6.0
 - Ladeanimation im Listing optimiert
+
+# 2.0.0
+- Kompatibilität mit Shopware 6.5 sichergestellt
