@@ -35,3 +35,6 @@
 
 # 1.6.0
 - Improved loading animation in listing
+
+# 2.0.0
+- Compatibility with Shopware 6.5

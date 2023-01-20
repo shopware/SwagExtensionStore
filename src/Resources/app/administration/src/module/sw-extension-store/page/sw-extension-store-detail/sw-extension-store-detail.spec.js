@@ -204,6 +204,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 .toBe('sw-extension-store.detail.labelButtonOpenExtension');
         });
 
+        /* eslint-disable-next-line max-len */
         it('should render "configuration" context menu when extension is installed, licensed and configurable', async () => {
             Shopware.State.get('shopwareExtensions').myExtensions = {
                 data: [{
@@ -234,6 +235,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 .toBe('sw-extension-store.detail.openConfiguration');
         });
 
+        /* eslint-disable-next-line max-len */
         it('should render "configuration" button when extension is installed, licensed and configurable but can\'t be opened', async () => {
             Shopware.State.get('shopwareExtensions').myExtensions = {
                 data: [{
@@ -286,6 +288,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 .toBe('sw-extension-store.detail.enterpriseContactLinkText');
         });
 
+        /* eslint-disable-next-line max-len */
         it('should not render any button when extension is not licensed, not purchasable and has no enterprise flag', async () => {
             Shopware.State.get('shopwareExtensions').myExtensions = {
                 data: [{

@@ -7,6 +7,9 @@ use Shopware\Core\Framework\Store\Struct\CartPositionStruct;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Util\FloatComparator;
 
+/**
+ * @phpstan-import-type PaymentMethod from StoreClient
+ */
 class LicenseService
 {
     private StoreClient $client;
@@ -19,6 +22,7 @@ class LicenseService
     public function createCart(int $extensionId, int $variantId, Context $context): CartStruct
     {
         $cart = $this->client->createCart($extensionId, $variantId, $context);
+
         return $this->ensureFloatPrecision($cart);
     }
 
@@ -27,6 +31,9 @@ class LicenseService
         $this->client->orderCart($cart, $context);
     }
 
+    /**
+     * @return list<PaymentMethod>
+     */
     public function availablePaymentMeans(Context $context): array
     {
         return $this->client->availablePaymentMeans($context);

@@ -72,8 +72,9 @@ class DataController
      */
     public function listingFilters(Request $request, Context $context): JsonResponse
     {
-        return new JsonResponse(
-            $this->dataProvider->getListingFilters($request->query->all(), $context)
-        );
+        /** @var array<string, string> $params */
+        $params = $request->query->all();
+
+        return new JsonResponse($this->dataProvider->getListingFilters($params, $context));
     }
 }

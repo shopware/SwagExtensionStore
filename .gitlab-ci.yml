@@ -106,23 +106,18 @@ Build Zip:
     tags:
         - t3.medium
     image:
-        name: ghcr.io/friendsofshopware/platform-plugin-dev:{$PLATFORM_PLUGIN_TAG}
-        entrypoint: [""]
+        name: ghcr.io/friendsofshopware/shopware-cli
+        entrypoint: ["/usr/local/bin/entrypoint.sh"]
     rules:
       - if: $CI_COMMIT_TAG
         when: always
       # allow manual build to test installation from .zip
       - when: manual
         allow_failure: true
-    variables:
-        GIT_DEPTH: 0
     before_script: []
     script:
-        - start-mysql
-        - ln -s "$(pwd)" "/plugins/${CI_PROJECT_NAME}"
-        - npm install --prefix src/Resources/app/administration/
-        - pack-plugin "${CI_PROJECT_NAME}"
-        - plugin-uploader ext:validate "$(realpath "SwagExtensionStore.zip")"
+        - shopware-cli extension zip . --disable-git
+        - shopware-cli extension validate SwagExtensionStore.zip
     artifacts:
         paths:
             - SwagExtensionStore*.zip
@@ -132,9 +127,9 @@ Upload Zip to Store:
     needs: ["Build Zip"]
     rules:
       - if: $CI_COMMIT_TAG
-        when: always
+        when: manual
     image:
-        name: ghcr.io/friendsofshopware/platform-plugin-dev:{$PLATFORM_PLUGIN_TAG}
+        name: ghcr.io/friendsofshopware/platform-plugin-dev:$PLATFORM_PLUGIN_TAG
         entrypoint: [""]
     variables:
         GIT_DEPTH: 0
@@ -149,12 +144,12 @@ Upload Zip to Store:
 Update Store Information:
     stage: Deploy
     image:
-        name: ghcr.io/friendsofshopware/platform-plugin-dev:{$PLATFORM_PLUGIN_TAG}
+        name: ghcr.io/friendsofshopware/platform-plugin-dev:$PLATFORM_PLUGIN_TAG
         entrypoint: [""]
     needs: [ "Build Zip" ]
     rules:
       - if: $CI_COMMIT_TAG
-        when: always
+        when: manual
     variables:
         GIT_DEPTH: 0
     before_script: []

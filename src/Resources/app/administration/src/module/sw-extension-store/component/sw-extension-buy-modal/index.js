@@ -131,9 +131,8 @@ Component.register('sw-extension-buy-modal', {
             // Trigger for recompute value
             // eslint-disable-next-line no-unused-vars
             const trigger = this.tocAccepted;
-            const store = Shopware.State.get('shopwareExtensions');
 
-            return store.loginStatus || store.userInfo !== null;
+            return Shopware.State.get('shopwareExtensions').userInfo !== null;
         },
 
         showPaymentWarning() {
@@ -320,17 +319,6 @@ Component.register('sw-extension-buy-modal', {
             } finally {
                 this.isLoading = false;
             }
-        },
-
-        /**
-         * @deprecated tag:v2.0.0 - will be removed; use `renderBuyPrice` instead
-         */
-        variantPrice(variant) {
-            if (variant.type === 'buy') {
-                return this.renderBuyPrice(variant);
-            }
-
-            return this.getNetPrice(variant);
         },
 
         getDiscountClasses(variant) {
