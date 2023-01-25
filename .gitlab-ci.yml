@@ -10,6 +10,7 @@ variables:
     PLUGIN_NAME: SwagExtensionStore
     APP_SECRET: NotSoSecret
     APP_URL: 'http://localhost:8000'
+    NODE_VERSION: 18
 
 workflow:
   rules:
@@ -17,22 +18,27 @@ workflow:
       variables:
         PLATFORM_BRANCH: "6.4"
         PLATFORM_PLUGIN_TAG: "6.4"
+        NODE_VERSION: '16'
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == "6.4"'
       variables:
         PLATFORM_BRANCH: "6.4"
         PLATFORM_PLUGIN_TAG: "6.4"
+        NODE_VERSION: '16'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /1\.*/'
       variables:
         PLATFORM_BRANCH: "6.4"
         PLATFORM_PLUGIN_TAG: "6.4"
+        NODE_VERSION: '16'
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH =~ /1\.*/'
       variables:
         PLATFORM_BRANCH: "6.4"
         PLATFORM_PLUGIN_TAG: "6.4"
+        NODE_VERSION: '16'
     - if: '$CI_COMMIT_TAG && $CI_COMMIT_TAG =~ /v1.*/'
       variables:
         PLATFORM_BRANCH: "6.4"
         PLATFORM_PLUGIN_TAG: "6.4"
+        NODE_VERSION: '16'
     - when: always
 
 stages:
@@ -110,23 +116,18 @@ Build Zip:
     tags:
         - t3.medium
     image:
-        name: ghcr.io/friendsofshopware/platform-plugin-dev:$PLATFORM_PLUGIN_TAG
-        entrypoint: [""]
+        name: ghcr.io/friendsofshopware/shopware-cli
+        entrypoint: ["/usr/local/bin/entrypoint.sh"]
     rules:
       - if: $CI_COMMIT_TAG
         when: always
       # allow manual build to test installation from .zip
       - when: manual
         allow_failure: true
-    variables:
-        GIT_DEPTH: 0
     before_script: []
     script:
-        - start-mysql
-        - ln -s "$(pwd)" "/plugins/${CI_PROJECT_NAME}"
-        - npm install --prefix src/Resources/app/administration/
-        - pack-plugin "${CI_PROJECT_NAME}"
-        - plugin-uploader ext:validate "$(realpath "SwagExtensionStore.zip")"
+        - shopware-cli extension zip . --disable-git
+        - shopware-cli extension validate SwagExtensionStore.zip
     artifacts:
         paths:
             - SwagExtensionStore*.zip
@@ -155,7 +156,7 @@ Update Store Information:
     image:
         name: ghcr.io/friendsofshopware/platform-plugin-dev:$PLATFORM_PLUGIN_TAG
         entrypoint: [""]
-    needs: [ "Build Zip" ]
+    needs: ["Build Zip"]
     rules:
       - if: $CI_COMMIT_TAG
         when: manual
