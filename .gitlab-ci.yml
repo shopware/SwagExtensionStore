@@ -10,6 +10,7 @@ variables:
     PLUGIN_NAME: SwagExtensionStore
     APP_SECRET: NotSoSecret
     APP_URL: 'http://localhost:8000'
+    NODE_VERSION: 18
 
 workflow:
   rules:
@@ -17,18 +18,22 @@ workflow:
       variables:
         PLATFORM_BRANCH: "6.4"
         PLATFORM_PLUGIN_TAG: "6.4"
+        NODE_VERSION: '16'
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == "6.4"'
       variables:
         PLATFORM_BRANCH: "6.4"
         PLATFORM_PLUGIN_TAG: "6.4"
+        NODE_VERSION: '16'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /1\.*/'
       variables:
         PLATFORM_BRANCH: "6.4"
         PLATFORM_PLUGIN_TAG: "6.4"
+        NODE_VERSION: '16'
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH =~ /1\.*/'
       variables:
         PLATFORM_BRANCH: "6.4"
         PLATFORM_PLUGIN_TAG: "6.4"
+        NODE_VERSION: '16'
     - when: always
 
 stages:
@@ -146,7 +151,7 @@ Update Store Information:
     image:
         name: ghcr.io/friendsofshopware/platform-plugin-dev:$PLATFORM_PLUGIN_TAG
         entrypoint: [""]
-    needs: [ "Build Zip" ]
+    needs: ["Build Zip"]
     rules:
       - if: $CI_COMMIT_TAG
         when: manual
