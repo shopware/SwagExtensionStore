@@ -65,6 +65,7 @@
         max-height: 332px;
         display: flex;
         overflow: hidden;
+        border-radius: $border-radius-lg;
         position: relative;
 
         .sw-extension-store-slider__slide-item {

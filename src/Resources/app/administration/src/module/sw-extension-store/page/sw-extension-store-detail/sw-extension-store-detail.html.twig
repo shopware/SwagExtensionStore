@@ -39,6 +39,7 @@
                         <img
                             :src="extension.icon"
                             class="sw-extension-store-detail__extension-icon"
+                            draggable="false"
                         >
                     {% endblock %}
                 </template>
@@ -84,39 +85,33 @@
             {% block sw_extension_store_detail_slot_smart_bar_description %}
                 <template #smart-bar-description>
                     {% block sw_extension_store_detail_smart_bar_description %}
-                        {% block sw_extension_store_detail_short_description %}
-                            <div class="sw-extension-store-detail__short-description is--wrap-content">
-                                {{ extension.shortDescription }}
-                            </div>
-                        {% endblock %}
-
                         {% block sw_extension_store_detail_label_and_rating_overview %}
                             <div class="sw-extension-store-detail__label-and-rating-overview">
-                                {% block sw_extension_store_detail_label_display %}
-                                    <sw-extension-store-label-display
-                                        v-if="extension.labels.length > 0"
-                                        :labels="extension.labels"
-                                        class="sw-extension-store-detail__label-display"
-                                    ></sw-extension-store-label-display>
-                                {% endblock %}
 
                                 {% block sw_extension_store_detail_rating_overview %}
                                     <div class="sw-extension-store-detail__rating-overview">
                                         {% block sw_extension_store_detail_rating_overview_content %}
                                             <template v-if="extension.numberOfRatings > 0">
                                                 {% block sw_extension_store_detail_rating_overview_ratings %}
-                                                    <sw-extension-rating-stars :rating="extension.rating"></sw-extension-rating-stars>
-
-                                                    <span class="sw-extension-store-detail__avg-rating">
-                                                        {{ extension.rating }}
-                                                    </span>
+                                                    <sw-extension-rating-stars
+                                                        :rating="extension.rating"
+                                                        :size="12"
+                                                    />
 
                                                     <router-link
                                                         class="sw-extension-store-detail__number-of-reviews"
                                                         :to="{ name: 'sw.extension.store.detail', params: { id: id }, hash: '#ratings-card'}"
                                                     >
-                                                        ({{ $tc('sw-extension-store.detail.numberOfRatings', extension.numberOfRatings)}})
+                                                        {{ $tc('sw-extension-store.detail.numberOfRatings', extension.numberOfRatings)}}
                                                     </router-link>
+                                                {% endblock %}
+
+                                                {% block sw_extension_store_detail_label_display %}
+                                                    <sw-extension-store-label-display
+                                                        v-if="extension.labels.length > 0"
+                                                        :labels="extension.labels"
+                                                        class="sw-extension-store-detail__label-display"
+                                                    />
                                                 {% endblock %}
                                             </template>
 
@@ -124,10 +119,10 @@
                                                 {% block sw_extension_store_detail_rating_overview_no_ratings %}
                                                     <sw-icon
                                                         name="solid-star"
-                                                        size="8px"
+                                                        size="12px"
                                                     ></sw-icon>
 
-                                                    <span>{{ $tc('sw-extension-store.detail.noRatings') }}</span>
+                                                    <span class="sw-extension-store-detail__no-ratings-text">{{ $tc('sw-extension-store.detail.noRatings') }}</span>
                                                 {% endblock %}
                                             </template>
                                         {% endblock %}
@@ -279,9 +274,8 @@
                                                     square
                                                 >
                                                     <sw-icon
-                                                        name="regular-chevron-down-s"
-                                                        size="12"
-                                                        decorative
+                                                        name="regular-chevron-down-xs"
+                                                        size="16"
                                                     ></sw-icon>
                                                 </sw-button>
                                             </template>
@@ -432,7 +426,7 @@
 
                             {% block sw_extension_store_detail_card_details_updated_at %}
                                 <dt>{{ $tc('sw-extension-store.detail.details.labelUpdatedAt') }}</dt>
-                                <dd>{{ extension.lastUpdateDate | date({ month: 'long', year: 'numeric' }) }}</dd>
+                                <dd>{{ extension.lastUpdateDate | date({ month: 'numeric', year: 'numeric', hour: undefined, minute: undefined }) }}</dd>
                             {% endblock %}
 
                             {% block sw_extension_store_detail_card_details_languages %}
@@ -517,7 +511,9 @@
                                 {% endblock %}
 
                                 {% block sw_extension_store_detail_card_changelog_entries_creation_date %}
-                                    <div class="sw-extension-store-detail__changelog-creation-date">{{ binary.creationDate | date }}</div>
+                                    <div class="sw-extension-store-detail__changelog-creation-date">
+                                        {{ dateFilter(binary.creationDate, { month: 'numeric', year: 'numeric', hour: undefined, minute: undefined }) }}
+                                    </div>
                                 {% endblock %}
 
                                 {% block sw_extension_store_detail_card_changelog_entries_changelog_text %}

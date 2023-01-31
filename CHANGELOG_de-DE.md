@@ -38,3 +38,8 @@
 
 # 2.0.0
 - Kompatibilität mit Shopware 6.5 sichergestellt
+
+# 2.1.0
+- Verschiedenste visuelle Anpassungen am Listing und der Detailseite
+- Kurzbeschreibung aus dem Header der Detailsseite entfernt
+- Aussehen der Bewertungssterne im Listing und auf der Detailseite geändert

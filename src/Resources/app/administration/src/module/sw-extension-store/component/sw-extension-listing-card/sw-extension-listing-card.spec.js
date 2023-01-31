@@ -248,8 +248,7 @@ describe('sw-extension-listing-card', () => {
 
         expect(wrapper.find('.sw-extension-listing-card__info-name').text()).toBe('A Label');
         expect(wrapper.find('.sw-extension-listing-card__info-description').text()).toBe('A short description');
-        expect(wrapper.find('.sw-extension-listing-card__info-rating-stars-count').text()).toBe('4');
-        expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('(10)');
+        expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('10');
         expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
             .toBe('background-image: url(administration/static/img/theme/default_theme_preview.jpg);');
         expect(wrapper.find('.sw-extension-listing-card__info-price').text())
@@ -319,8 +318,7 @@ describe('sw-extension-listing-card', () => {
 
         expect(wrapper.find('.sw-extension-listing-card__info-name').text()).toBe('Sample Extension Label');
         expect(wrapper.find('.sw-extension-listing-card__info-description').text()).toBe('Sample Extension description');
-        expect(wrapper.find('.sw-extension-listing-card__info-rating-stars-count').text()).toBe('3');
-        expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('(10)');
+        expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('10');
         expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
             .toBe('background-image: url(https://example.com); background-size: cover;');
         expect(wrapper.find('.sw-extension-listing-card__info-price').text())
@@ -380,8 +378,7 @@ describe('sw-extension-listing-card', () => {
 
         expect(wrapper.find('.sw-extension-listing-card__info-name').text()).toBe('Sample Extension Label');
         expect(wrapper.find('.sw-extension-listing-card__info-description').text()).toBe('Sample Extension description');
-        expect(wrapper.find('.sw-extension-listing-card__info-rating-stars-count').text()).toBe('3');
-        expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('(10)');
+        expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('10');
         expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
             .toBe('background-image: url(https://example.com); background-size: cover;');
         expect(wrapper.find('.sw-extension-listing-card__info-price').text())
@@ -445,8 +442,7 @@ describe('sw-extension-listing-card', () => {
 
         expect(wrapper.find('.sw-extension-listing-card__info-name').text()).toBe('Sample Extension Label');
         expect(wrapper.find('.sw-extension-listing-card__info-description').text()).toBe('Sample Extension description');
-        expect(wrapper.find('.sw-extension-listing-card__info-rating-stars-count').text()).toBe('3');
-        expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('(10)');
+        expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('10');
         expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
             .toBe('background-image: url(https://example.com); background-size: cover;');
         expect(wrapper.find('.sw-extension-listing-card__info-price').text())

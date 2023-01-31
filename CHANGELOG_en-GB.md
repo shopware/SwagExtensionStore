@@ -38,3 +38,8 @@
 
 # 2.0.0
 - Compatibility with Shopware 6.5
+
+# 2.1.0
+- Improved various styles in listing and on detail page
+- Removed short description from detail page header
+- Changed appearance of ratings stars in listing and on detail page

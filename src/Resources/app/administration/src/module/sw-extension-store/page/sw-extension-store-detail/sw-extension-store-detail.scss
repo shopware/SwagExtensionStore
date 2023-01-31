@@ -50,6 +50,14 @@
         h6 {
             margin-top: 1.5em;
             margin-bottom: 1em;
+
+            &:first-child {
+                margin-top: 0;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
 
         ul,
@@ -60,20 +68,13 @@
         a {
             color: $color-shopware-brand-500;
         }
-
-        & > *:first-child {
-            margin-top: 0;
-        }
-
-        & > *:last-child {
-            margin-bottom: 0;
-        }
     }
 
     .sw-extension-store-detail__extension-icon {
-        width: 64px;
-        height: 64px;
-        border-radius: $border-radius-default;
+        width: 72px;
+        height: 72px;
+        border-radius: $border-radius-lg;
+        border: 1px solid rgba(0, 0, 0, 8%);
     }
 
     .sw-meteor-page__head-area.is--scrolled .sw-extension-store-detail__extension-icon {
@@ -83,25 +84,39 @@
 
     .sw-meteor-page__head-area {
         padding-bottom: 12px;
+
+        .sw-meteor-page__smart-bar-module-info {
+            grid-template-rows: min-content auto;
+        }
     }
 
     .sw-meteor-page__smart-bar-header {
-        align-items: baseline !important;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        flex-direction: column;
+        align-items: stretch;
+
+        .sw-meteor-page__smart-bar-title {
+            font-size: $font-size-l;
+            font-weight: $font-weight-bold;
+            margin-bottom: 5px;
+            margin-top: -4px;
+        }
     }
 
     .sw-meteor-page__smart-bar-meta {
-        align-self: flex-end;
         color: $color-gray-500;
         font-size: $font-size-xxs;
         display: flex;
         flex-wrap: wrap;
         align-items: baseline;
-        margin-bottom: 5px;
+        margin-bottom: 1px;
+        font-weight: $font-weight-medium;
+        gap: 8px;
     }
 
-    .sw-extension-store-detail__extension-type-label {
-        margin-left: 10px;
+    .sw-extension-store-detail__extension-type-label,
+    .sw-extension-store-detail__label-display {
+        margin-right: 4px;
     }
 
     .sw-extension-type-label__cloud-label {
@@ -110,6 +125,7 @@
 
     .sw-extension-store-detail__producer-link {
         text-decoration: none;
+        font-weight: $font-weight-medium;
     }
 
     .sw-meteor-page__smart-bar-actions {
@@ -121,10 +137,12 @@
             border: none;
             background: none;
             line-height: inherit;
+            text-align: right;
         }
 
         .is--discounted {
             color: $color-crimson-400;
+            text-align: right;
 
             > .sw-extension-store-detail__net-price {
                 text-decoration: line-through;
@@ -141,6 +159,7 @@
             color: $color-gray-500;
             font-size: $font-size-xxs;
             margin-top: 0;
+            text-align: right;
         }
     }
 
@@ -150,7 +169,6 @@
 
         .sw-extension-store-detail__label-and-rating-overview {
             display: flex;
-            margin-top: 12px;
             gap: 8px;
 
             .sw-extension-store-detail__rating-overview {
@@ -160,14 +178,29 @@
                 align-items: center;
 
                 & > *:not(:last-child) {
-                    margin-right: 0.25em;
+                    margin-right: 8px;
                 }
 
                 a,
                 a:active,
                 a:visited {
+                    font-size: $font-size-xxs;
+                    font-weight: $font-weight-medium;
                     color: $color-shopware-brand-500;
-                    text-decoration: underline;
+                    margin-top: 2px;
+                    transition: color .2s ease;
+
+                    &:hover,
+                    &:focus,
+                    &:focus-visible,
+                    &:focus-within {
+                        color: $color-shopware-brand-700;
+                    }
+                }
+
+                .sw-extension-store-detail__no-ratings-text {
+                    font-size: $font-size-xxs;
+                    font-weight: $font-weight-medium;
                 }
             }
         }
@@ -194,6 +227,15 @@
         grid-template-columns: auto 1fr;
         justify-items: start;
         column-gap: 40px;
+        row-gap: 8px;
+
+        dt {
+            font-weight: $font-weight-semi-bold;
+
+            a {
+                font-weight: $font-weight-regular;
+            }
+        }
     }
 
     .sw-extension-store-detail__faq-question h4 {
