@@ -46,14 +46,16 @@ $padding-summary-card: 22px;
     }
 
     .sw-extension-buy-modal__extension-summary-icon {
-        width: 72px;
-        height: 72px;
+        width: 64px;
+        height: 64px;
+        border-radius: $border-radius-lg;
+        border: 1px solid rgba(0, 0, 0, 8%);
     }
 
     .sw-extension-buy-modal__extension-summary-name {
         margin-bottom: 0;
         font-weight: $font-weight-semi-bold;
-        font-size: 24px;
+        font-size: $font-size-s;
     }
 
     .sw-extension-buy-modal__variants-card {
@@ -78,6 +80,10 @@ $padding-summary-card: 22px;
         & > * {
             font-size: $font-size-xs;
             grid-column: 2;
+        }
+
+        .sw-extension-buy-modal__rent {
+            line-height: $line-height-md;
         }
     }
 
@@ -137,7 +143,7 @@ $padding-summary-card: 22px;
     }
 
     .sw-extension-buy-modal__variant-summary-actual-price {
-        font-size: 22px;
+        font-size: $font-size-m;
     }
 
     .sw-extension-buy-modal__content-installed {

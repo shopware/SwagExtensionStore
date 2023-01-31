@@ -1,19 +1,29 @@
 @import "~scss/variables";
-
-$font-size-rating: 10px;
+@import "~scss/mixins";
 
 .sw-extension-listing-card {
     display: grid;
     grid-template-rows: auto 1fr;
-    border-radius: 8px;
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    cursor: pointer;
+    border-radius: $border-radius-lg;
+    transition: box-shadow .15s ease;
+
+    @include drop-shadow-default;
+
+    &:hover {
+        box-shadow: 0 3px 4px rgba(0, 0, 0, 8%), 0 2px 1px rgba(0, 0, 0, 6%), 0 1px 6px rgba(0, 0, 0, 10%);
+
+        .sw-extension-listing-card__info-name {
+            color: $color-shopware-brand-500;
+        }
+    }
 
     .sw-extension-listing-card__preview {
         width: 100%;
-        padding-top: 75%;
-        cursor: pointer;
+        aspect-ratio: 4 / 3;
         position: relative;
+        border-bottom: 1px solid rgba(0, 0, 0, 8%);
     }
 
     &__extension-type-label {
@@ -24,11 +34,11 @@ $font-size-rating: 10px;
 
     .sw-extension-listing-card__info-grid {
         background: #fff;
-        padding: 10px 16px 14px;
+        padding: 16px;
         display: grid;
         grid-template-columns: auto 1fr;
         grid-template-rows: auto 1fr auto;
-        grid-row-gap: 3px;
+        grid-row-gap: 4px;
         grid-template-areas:
             "name name"
             "description description"
@@ -36,45 +46,65 @@ $font-size-rating: 10px;
             "label-display label-display";
 
         .sw-extension-listing-card__info-name {
-            cursor: pointer;
             grid-area: name;
             font-size: $font-size-xs;
             font-weight: $font-weight-semi-bold;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            line-height: $line-height-xs;
+            margin-bottom: 2px;
+            transition: color .15s ease;
+
+            @include truncate;
         }
 
         .sw-extension-listing-card__info-description {
+            $line-height-description: $line-height-xs;
+
             grid-area: description;
             font-size: $font-size-xxs;
+            line-height: $line-height-description;
             color: $color-gray-500;
+            height: calc($line-height-description * 2);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 4px;
+
+            &::after {
+                content: '';
+                display: block;
+                height: $line-height-description;
+                background: linear-gradient(90deg, rgba($color-white, 0), $color-white);
+                width: 40%;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+            }
         }
 
         .sw-extension-listing-card__info-rating {
             grid-area: rating;
             display: flex;
-            align-items: baseline;
-            font-size: $font-size-rating;
+            align-items: center;
+            font-size: $font-size-xxs;
 
             & > * {
                 margin-right: 1ex;
             }
-        }
 
-        .sw-extension-listing-card__info-rating-stars-count {
-            color: #919aa3;
-        }
+            .sw-extension-rating-stars__star {
+                cursor: pointer;
+            }
 
-        .sw-extension-listing-card__info-rating-count {
-            color: $color-shopware-brand-500;
-            cursor: pointer;
+            &-count {
+                color: $color-gray-500;
+                margin-top: 2px;
+            }
         }
 
         .sw-extension-listing-card__info-price {
             grid-area: price;
             justify-self: end;
-            font-size: $font-size-xs;
+            font-size: $font-size-xxs;
+            font-weight: $font-weight-semi-bold;
             text-align: right;
 
             .sw-extension-listing-card__info-price-discounted {
