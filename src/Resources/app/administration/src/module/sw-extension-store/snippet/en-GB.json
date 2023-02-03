@@ -3,7 +3,7 @@
         "general": {
             "labelPrice": "Free | {price}/month | {price}",
             "labelFree": "Free",
-            "labelRentSuffix": "/month*",
+            "labelRentSuffix": "/ month*",
             "labelDiscountedPrice": "Free | <s>{price}</s> <strong>{discountedPrice}</strong>/month | <s>{price}</s> <strong>{discountedPrice}</strong>",
             "title": "Store"
         },
