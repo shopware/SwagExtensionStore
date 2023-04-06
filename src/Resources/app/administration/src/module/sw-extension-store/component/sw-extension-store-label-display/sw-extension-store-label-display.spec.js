@@ -1,6 +1,14 @@
 import { shallowMount } from '@vue/test-utils';
-import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-label-display';
-import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-label';
+
+Shopware.Component.register(
+    'sw-extension-store-label-display',
+    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-label-display')
+);
+Shopware.Component.register(
+    'sw-extension-label',
+    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-label')
+);
+
 
 async function createWrapper(labels) {
     return shallowMount(await Shopware.Component.build('sw-extension-store-label-display'), {

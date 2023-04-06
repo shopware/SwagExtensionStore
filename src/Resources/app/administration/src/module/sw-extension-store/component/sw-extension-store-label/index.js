@@ -4,7 +4,7 @@ import './sw-extension-store-label.scss';
 /**
  * @private
  */
-Shopware.Component.register('sw-extension-label', {
+export default {
     template,
 
     props: {
@@ -31,4 +31,4 @@ Shopware.Component.register('sw-extension-label', {
             return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000' : '#fff';
         }
     }
-});
+};

@@ -1,12 +1,10 @@
 import template from './sw-extension-store-error-card.html.twig';
 import './sw-extension-store-error-card.scss';
 
-const { Component } = Shopware;
-
 /**
  * @private
  */
-Component.register('sw-extension-store-error-card', {
+export default {
     template,
 
     props: {
@@ -46,4 +44,4 @@ Component.register('sw-extension-store-error-card', {
             ];
         }
     }
-});
+};

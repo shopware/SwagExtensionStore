@@ -6,15 +6,6 @@ import vuei18n from 'vue-i18n';
 import 'src/module/sw-extension/service';
 import LicenseViolationsService from 'src/app/service/license-violations.service';
 import LicenseViolationStore from 'src/app/state/license-violation.store';
-
-/* components */
-import 'src/app/component/base/sw-alert';
-import 'src/app/component/base/sw-button';
-import 'src/app/component/form/field-base/sw-base-field';
-import 'src/app/component/form/field-base/sw-field-error';
-import 'src/app/component/form/sw-checkbox-field';
-import 'src/app/component/form/sw-gtc-checkbox';
-import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-buy-modal';
 import ExtensionStoreDataService from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-data.service';
 import ExtensionLicenseService from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-licenses.service';
 
@@ -23,6 +14,19 @@ import extensionStore from 'src/module/sw-extension/store/extensions.store';
 
 /* mixin */
 import ExtensionErrorMixin from 'src/module/sw-extension/mixin/sw-extension-error.mixin';
+
+/* components */
+import 'src/app/component/base/sw-alert';
+import 'src/app/component/base/sw-button';
+import 'src/app/component/form/field-base/sw-base-field';
+import 'src/app/component/form/field-base/sw-field-error';
+import 'src/app/component/form/sw-checkbox-field';
+import 'src/app/component/form/sw-gtc-checkbox';
+
+Shopware.Component.register(
+    'sw-extension-buy-modal',
+    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-buy-modal')
+);
 
 // In older versions the mixin is exported instead of beeing registered
 if (ExtensionErrorMixin.methods) {

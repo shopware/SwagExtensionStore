@@ -3,7 +3,7 @@ import template from './sw-extension-store-type-label.html.twig';
 /**
  * @private
  */
-Shopware.Component.register('sw-extension-type-label', {
+export default {
     template,
 
     props: {
@@ -23,4 +23,4 @@ Shopware.Component.register('sw-extension-type-label', {
             return this.type === 'app';
         }
     }
-});
+};

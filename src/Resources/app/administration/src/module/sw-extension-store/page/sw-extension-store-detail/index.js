@@ -1,12 +1,12 @@
 import template from './sw-extension-store-detail.html.twig';
 import './sw-extension-store-detail.scss';
 
-const { Component, Utils } = Shopware;
+const { Utils } = Shopware;
 
 /**
  * @private
  */
-Component.register('sw-extension-store-detail', {
+export default {
     template,
 
     inject: [
@@ -412,4 +412,4 @@ Component.register('sw-extension-store-detail', {
             this.showInstallationFailedModal = false;
         }
     }
-});
+};

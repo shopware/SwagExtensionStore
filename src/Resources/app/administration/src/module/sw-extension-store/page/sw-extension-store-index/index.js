@@ -1,12 +1,10 @@
 import template from './sw-extension-store-index.html.twig';
 import './sw-extension-store-index.scss';
 
-const { Component } = Shopware;
-
 /**
  * @private
  */
-Component.register('sw-extension-store-index', {
+export default {
     template,
 
     inject: ['extensionStoreActionService', 'shopwareExtensionService'],
@@ -116,4 +114,4 @@ Component.register('sw-extension-store-index', {
             Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'term', value: term });
         }
     }
-});
+};

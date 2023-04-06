@@ -1,12 +1,10 @@
 import template from './sw-extension-store-label-display.html.twig';
 import './sw-extension-store-label-display.scss';
 
-const { Component } = Shopware;
-
 /**
  * @private
  */
-Component.register('sw-extension-store-label-display', {
+export default {
     template,
 
     props: {
@@ -15,4 +13,4 @@ Component.register('sw-extension-store-label-display', {
             required: true
         }
     }
-});
+};
