@@ -1,12 +1,12 @@
 import template from './sw-extension-buy-modal.html.twig';
 import './sw-extension-buy-modal.scss';
 
-const { Component, Utils } = Shopware;
+const { Utils } = Shopware;
 
 /**
  * @private
  */
-Component.register('sw-extension-buy-modal', {
+export default {
     template,
 
     inject: [
@@ -425,4 +425,4 @@ Component.register('sw-extension-buy-modal', {
             this.showPrivacyModal = false;
         }
     }
-});
+};

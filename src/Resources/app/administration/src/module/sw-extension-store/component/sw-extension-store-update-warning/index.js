@@ -1,12 +1,12 @@
 import template from './sw-extension-store-update-warning.html.twig';
 import './sw-extension-store-update-warning.scss';
 
-const { Mixin, Component } = Shopware;
+const { Mixin } = Shopware;
 
 /**
  * @private
  */
-Component.register('sw-extension-store-update-warning', {
+export default {
     template,
 
     inject: [
@@ -53,4 +53,4 @@ Component.register('sw-extension-store-update-warning', {
             });
         }
     }
-});
+};

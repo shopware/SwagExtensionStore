@@ -1,6 +1,10 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
-import 'SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail';
 import 'src/app/component/meteor/sw-meteor-page';
+
+Shopware.Component.register(
+    'sw-extension-store-detail',
+    () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail')
+);
 
 async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
     const localVue = createLocalVue();

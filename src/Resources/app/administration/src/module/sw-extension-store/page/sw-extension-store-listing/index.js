@@ -1,12 +1,10 @@
 import template from './sw-extension-store-listing.html.twig';
 import './sw-extension-store-listing.scss';
 
-const { Component } = Shopware;
-
 /**
  * @private
  */
-Component.register('sw-extension-store-listing', {
+export default {
     name: 'sw-extension-store-listing',
     template,
 
@@ -107,4 +105,4 @@ Component.register('sw-extension-store-listing', {
             Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'page', value: page });
         }
     }
-});
+};

@@ -1,5 +1,9 @@
 import { shallowMount } from '@vue/test-utils';
-import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-listing-filter';
+
+Shopware.Component.register(
+    'sw-extension-store-listing-filter',
+    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-listing-filter')
+);
 
 async function createWrapper() {
     return shallowMount(await Shopware.Component.build('sw-extension-store-listing-filter'), {

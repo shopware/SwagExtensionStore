@@ -3,12 +3,10 @@ import './sw-extension-listing-card.scss';
 
 const { Utils, Filter } = Shopware;
 
-const { Component } = Shopware;
-
 /**
  * @private
  */
-Component.register('sw-extension-listing-card', {
+export default {
     template,
 
     inject: [
@@ -100,4 +98,4 @@ Component.register('sw-extension-listing-card', {
             });
         }
     }
-});
+};

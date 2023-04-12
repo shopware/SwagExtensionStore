@@ -2,9 +2,8 @@ import template from './sw-extension-store-slider.html.twig';
 import './sw-extension-store-slider.scss';
 
 const maxSlides = 3;
-const { Component } = Shopware;
 
-Component.register('sw-extension-store-slider', {
+export default {
     template,
 
     props: {
@@ -187,4 +186,4 @@ Component.register('sw-extension-store-slider', {
             };
         }
     }
-});
+};

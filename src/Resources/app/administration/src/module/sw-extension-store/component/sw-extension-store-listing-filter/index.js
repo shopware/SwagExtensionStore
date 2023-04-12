@@ -1,10 +1,9 @@
 import template from './sw-extension-store-listing-filter.html.twig';
 import './sw-extension-store-listing-filter.scss';
 
-const { Component } = Shopware;
 const { Criteria } = Shopware.Data;
 
-Component.register('sw-extension-store-listing-filter', {
+export default {
     template,
 
     mixins: [
@@ -206,4 +205,4 @@ Component.register('sw-extension-store-listing-filter', {
             return flat;
         }
     }
-});
+};

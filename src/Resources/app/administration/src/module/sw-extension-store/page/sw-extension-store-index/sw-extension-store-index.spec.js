@@ -1,8 +1,15 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
-import 'SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-index';
-import 'SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail';
 import ExtensionErrorService from 'src/module/sw-extension/service/extension-error.service';
 import 'src/app/component/meteor/sw-meteor-page';
+
+Shopware.Component.register(
+    'sw-extension-store-index',
+    () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-index')
+);
+Shopware.Component.register(
+    'sw-extension-store-detail',
+    () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail')
+);
 
 const myExtensionsMock = jest.fn(() => Promise.resolve([{
     name: 'SwagExtensionStore',

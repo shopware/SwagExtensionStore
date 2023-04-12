@@ -1,6 +1,10 @@
 import { shallowMount } from '@vue/test-utils';
-import 'SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-error-card';
 import 'src/app/component/meteor/sw-meteor-card';
+
+Shopware.Component.register(
+    'sw-extension-store-error-card',
+    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-error-card')
+);
 
 async function createWrapper(opts) {
     return shallowMount(await Shopware.Component.build('sw-extension-store-error-card'), {
