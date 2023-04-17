@@ -1,6 +1,6 @@
 {
     "name": "swag/swag-extension-store",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "description": "SWAG Extension Store",
     "type": "shopware-platform-plugin",
     "license": "MIT",
@@ -32,7 +32,7 @@
             "en-GB": "Shopware Store"
         },
         "description": {
-            "de-DE": "Entdecken und kaufen Sie Erweiterungen ganz einfach, direkt in Ihrem eigenen Shopware-Shop. Erhalten Sie Zugang zu vielen Erweiterungen, die Sie in Ihren Shop integrieren können.",
+            "de-DE": "Entdecke und kaufe Erweiterungen ganz einfach, direkt in Deinem eigenen Shopware-Shop. Erhalte Zugang zu vielen Erweiterungen, die Du in Deinen Shop integrieren kannst.",
             "en-GB": "Explore and buy extensions easily, right from within your own Shopware shop. Get access to loads of helpful Extensions and modern Themes that can be integrated into your shop."
         },
         "manufacturerLink": {
