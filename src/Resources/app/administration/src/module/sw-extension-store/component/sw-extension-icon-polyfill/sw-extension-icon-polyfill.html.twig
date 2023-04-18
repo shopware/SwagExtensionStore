@@ -1,0 +1,10 @@
+<div class="sw-extension-icon-polyfill">
+    <sw-extension-icon v-if="hasCoreComponent" v-bind="{ src, alt }"/>
+    <div v-else class="sw-extension-icon sw-extension-icon-polyfill__root">
+        <img class="sw-extension-icon-polyfill__icon"
+             draggable="false"
+             :src="src"
+             :alt="alt"
+        >
+    </div>
+</div>

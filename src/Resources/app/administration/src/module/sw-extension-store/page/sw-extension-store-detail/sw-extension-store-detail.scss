@@ -70,16 +70,9 @@
         }
     }
 
-    .sw-extension-store-detail__extension-icon {
+    .sw-extension-icon {
         width: 72px;
         height: 72px;
-        border-radius: $border-radius-lg;
-        border: 1px solid rgba(0, 0, 0, 8%);
-    }
-
-    .sw-meteor-page__head-area.is--scrolled .sw-extension-store-detail__extension-icon {
-        width: 32px;
-        height: 32px;
     }
 
     .sw-meteor-page__head-area {

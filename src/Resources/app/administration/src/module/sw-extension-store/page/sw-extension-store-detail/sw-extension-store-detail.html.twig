@@ -36,11 +36,10 @@
             {% block sw_extension_store_detail_slot_icon %}
                 <template #smart-bar-icon>
                     {% block sw_extension_store_detail_icon %}
-                        <img
-                            :src="extension.icon"
+                        <sw-extension-icon-polyfill
                             class="sw-extension-store-detail__extension-icon"
-                            draggable="false"
-                        >
+                            :src="extension.icon"
+                        />
                     {% endblock %}
                 </template>
             {% endblock %}
