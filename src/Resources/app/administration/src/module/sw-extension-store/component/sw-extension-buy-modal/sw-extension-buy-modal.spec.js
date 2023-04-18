@@ -142,7 +142,8 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 'sw-loader': true,
                 'sw-extension-permissions-modal': true,
                 'sw-extension-privacy-policy-extensions-modal': true,
-                'sw-external-link': true
+                'sw-external-link': true,
+                'sw-extension-icon-polyfill': true
             },
             mocks: {
                 $tc: (key) => key,

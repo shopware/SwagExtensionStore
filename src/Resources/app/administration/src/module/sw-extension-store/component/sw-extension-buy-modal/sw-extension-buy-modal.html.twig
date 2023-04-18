@@ -38,7 +38,7 @@
                                     <div class="sw-extension-buy-modal__extension-summary">
                                         {% block sw_extension_buy_modal_variant_selection_extension_preview_content %}
                                             {% block sw_extension_buy_modal_variant_selection_extension_icon %}
-                                                <img :src="extension.icon" class="sw-extension-buy-modal__extension-summary-icon">
+                                                <sw-extension-icon-polyfill :src="extension.icon" />
                                             {% endblock %}
 
                                             {% block sw_extension_buy_modal_variant_selection_extension_name %}

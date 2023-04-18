@@ -66,7 +66,8 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
             'sw-alert': true,
             'sw-notification-center': true,
             'sw-meteor-navigation': true,
-            'sw-help-center': true
+            'sw-help-center': true,
+            'sw-extension-icon-polyfill': true
         },
         provide: {
             shopwareExtensionService: {
