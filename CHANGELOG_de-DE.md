@@ -43,3 +43,4 @@
 - Verschiedenste visuelle Anpassungen am Listing und der Detailseite
 - Kurzbeschreibung aus dem Header der Detailsseite entfernt
 - Aussehen der Bewertungssterne im Listing und auf der Detailseite geändert
+- Neuladen der Administration nach dem Installieren eines Plugins

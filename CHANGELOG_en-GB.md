@@ -43,3 +43,4 @@
 - Improved various styles in listing and on detail page
 - Removed short description from detail page header
 - Changed appearance of ratings stars in listing and on detail page
+- Reload the administration after installing a plugin

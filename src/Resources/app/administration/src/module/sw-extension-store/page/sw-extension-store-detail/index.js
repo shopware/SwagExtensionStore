@@ -12,7 +12,8 @@ export default {
     inject: [
         'extensionStoreDataService',
         'shopwareExtensionService',
-        'extensionHelperService'
+        'extensionHelperService',
+        'cacheApiService'
     ],
 
     mixins: ['sw-extension-error'],
@@ -352,6 +353,10 @@ export default {
             try {
                 await this.extensionHelperService.downloadAndActivateExtension(this.extension.name, this.extension.type);
 
+                if (this.extension.type === 'plugin') {
+                    await this.clearCacheAndReloadPage();
+                }
+
                 this.isInstallSuccessful = true;
             } catch (error) {
                 this.showExtensionErrors(error);
@@ -410,6 +415,12 @@ export default {
 
         closeInstallationFailedModal() {
             this.showInstallationFailedModal = false;
+        },
+
+        async clearCacheAndReloadPage() {
+            await this.cacheApiService.clear();
+
+            window.location.reload();
         }
     }
 };

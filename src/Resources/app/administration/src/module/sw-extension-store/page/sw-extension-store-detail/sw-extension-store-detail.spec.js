@@ -1,10 +1,20 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import 'src/app/component/meteor/sw-meteor-page';
+import 'src/app/component/base/sw-button';
+import 'src/app/component/base/sw-button-process';
 
 Shopware.Component.register(
     'sw-extension-store-detail',
     () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail')
 );
+
+const cacheApiService = {
+    clear: jest.fn(() => Promise.resolve())
+};
+
+const extensionHelperService = {
+    downloadAndActivateExtension: jest.fn(() => Promise.resolve())
+};
 
 async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
     const localVue = createLocalVue();
@@ -57,12 +67,12 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
             'sw-extension-store-slider': true,
             'sw-icon': true,
             'sw-meteor-card': true,
-            'sw-button': true,
+            'sw-button': await Shopware.Component.build('sw-button'),
             'sw-button-group': true,
             'sw-context-button': true,
             'sw-context-menu-item': true,
             'sw-extension-ratings-card': true,
-            'sw-button-process': true,
+            'sw-button-process': await Shopware.Component.build('sw-button-process'),
             'sw-alert': true,
             'sw-notification-center': true,
             'sw-meteor-navigation': true,
@@ -81,13 +91,16 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
                     return testExtension;
                 }
             },
-            extensionHelperService: {}
+            extensionHelperService,
+            cacheApiService
         }
     });
 }
 
 const setSearchValueMock = jest.fn();
 describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail', () => {
+    const originalWindowLocation = window.location;
+
     beforeAll(async () => {
         Shopware.State.registerModule('shopwareExtensions', {
             namespaced: true,
@@ -95,6 +108,15 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 setSearchValue: setSearchValueMock
             }
         });
+
+        Object.defineProperty(window, 'location', {
+            configurable: true,
+            value: { reload: jest.fn() }
+        });
+    });
+
+    afterAll(() => {
+        Object.defineProperty(window, 'location', { configurable: true, value: originalWindowLocation });
     });
 
     beforeEach(() => {
@@ -148,6 +170,32 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
         expect(wrapper.find('.sw-extension-store-detail__alert').text())
             .toBe('sw-extension-store.detail.enterpriseFeatureAlertText');
+    });
+
+    it('should reload the administration when a plugin is installed', async () => {
+        const wrapper = await createWrapper();
+        await wrapper.vm.$nextTick();
+
+        const installButton = await wrapper.find('.sw-extension-store-detail__action-install-extension');
+        await installButton.trigger('click');
+        await wrapper.vm.$nextTick();
+
+        expect(extensionHelperService.downloadAndActivateExtension).toHaveBeenCalledTimes(1);
+        expect(cacheApiService.clear).toHaveBeenCalledTimes(1);
+        expect(window.location.reload).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not reload the administration when an app is installed', async () => {
+        const wrapper = await createWrapper({ type: 'app' });
+        await wrapper.vm.$nextTick();
+
+        const installButton = await wrapper.find('.sw-extension-store-detail__action-install-extension');
+        await installButton.trigger('click');
+        await wrapper.vm.$nextTick();
+
+        expect(extensionHelperService.downloadAndActivateExtension).toHaveBeenCalledTimes(1);
+        expect(cacheApiService.clear).not.toHaveBeenCalled();
+        expect(window.location.reload).not.toHaveBeenCalled();
     });
 
     describe('verify smart bar primary action buttons', () => {
