@@ -44,3 +44,4 @@
 - Removed short description from detail page header
 - Changed appearance of ratings stars in listing and on detail page
 - Reload the administration after installing a plugin
+- Fixed an error in the CSS of the login modal on the extension detail page
