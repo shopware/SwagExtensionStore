@@ -32,6 +32,7 @@ async function createWrapper() {
         propsData: {},
         mocks: {
             $tc: v => v,
+            $t: v => v,
             $route: {
                 name: 'sw.extension.store.listing.app',
                 meta: {
