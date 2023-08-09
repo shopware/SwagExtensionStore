@@ -122,6 +122,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
     beforeEach(() => {
         Shopware.State.get('session').languageId = 'b2c3d4';
         Shopware.State.get('shopwareExtensions').myExtensions = {
+            loading: false,
             data: [{
                 active: true,
                 name: 'SwagB2BPlatform',
@@ -135,7 +136,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
     afterEach(() => {
         Shopware.State.get('session').languageId = '';
-        Shopware.State.get('shopwareExtensions').myExtensions = null;
+        Shopware.State.get('shopwareExtensions').myExtensions = { data: [], loading: false };
     });
 
     it('should be a Vue.JS component', async () => {
