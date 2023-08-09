@@ -5,7 +5,6 @@ import vuei18n from 'vue-i18n';
 /* service */
 import 'src/module/sw-extension/service';
 import LicenseViolationsService from 'src/app/service/license-violations.service';
-import LicenseViolationStore from 'src/app/state/license-violation.store';
 import ExtensionStoreDataService from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-data.service';
 import ExtensionLicenseService from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-licenses.service';
 
@@ -13,7 +12,7 @@ import ExtensionLicenseService from 'SwagExtensionStore/module/sw-extension-stor
 import extensionStore from 'src/module/sw-extension/store/extensions.store';
 
 /* mixin */
-import ExtensionErrorMixin from 'src/module/sw-extension/mixin/sw-extension-error.mixin';
+import 'src/module/sw-extension/mixin/sw-extension-error.mixin';
 
 /* components */
 import 'src/app/component/base/sw-alert';
@@ -27,11 +26,6 @@ Shopware.Component.register(
     'sw-extension-buy-modal',
     () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-buy-modal')
 );
-
-// In older versions the mixin is exported instead of beeing registered
-if (ExtensionErrorMixin.methods) {
-    Shopware.Mixin.register('sw-extension-error', ExtensionErrorMixin);
-}
 
 Shopware.Application.addServiceProvider('extensionStoreDataService', () => {
     return new ExtensionStoreDataService(
@@ -50,9 +44,6 @@ Shopware.Application.addServiceProvider('extensionStoreLicensesService', () => {
 Shopware.Application.addServiceProvider('licenseViolationService', () => {
     return LicenseViolationsService(Shopware.Application.getContainer('service').storeService);
 });
-
-Shopware.State.registerModule('licenseViolation', LicenseViolationStore);
-
 
 Shopware.Application.addServiceProvider('appModulesService', () => {
     return {
