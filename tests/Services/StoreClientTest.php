@@ -21,7 +21,7 @@ class StoreClientTest extends TestCase
 
     private StoreClient $storeClient;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->context = Context::createDefaultContext();
         $this->storeClient = $this->getContainer()->get(StoreClient::class);
