@@ -23,7 +23,7 @@ class DataController
         $this->dataProvider = $dataProvider;
     }
 
-    #[Route("/api/_action/extension-store/list", name: "api.extension.list", methods: ["POST", "GET"])]
+    #[Route('/api/_action/extension-store/list', name: 'api.extension.list', methods: ['POST', 'GET'])]
     public function getExtensionList(Request $request, Context $context): Response
     {
         if ($request->getMethod() === Request::METHOD_POST) {
@@ -42,13 +42,13 @@ class DataController
         ]);
     }
 
-    #[Route("/api/_action/extension-store/detail/{id}", name: "api.extension.detail", methods: ["GET"])]
+    #[Route('/api/_action/extension-store/detail/{id}', name: 'api.extension.detail', methods: ['GET'])]
     public function detail(int $id, Context $context): Response
     {
         return new JsonResponse($this->dataProvider->getExtensionDetails($id, $context));
     }
 
-    #[Route("/api/_action/extension-store/{id}/reviews", name: "api.extension.reviews", methods: ["GET"])]
+    #[Route('/api/_action/extension-store/{id}/reviews', name: 'api.extension.reviews', methods: ['GET'])]
     public function reviews(int $id, Request $request, Context $context): Response
     {
         $criteria = ExtensionCriteria::fromArray($request->query->all());
@@ -56,7 +56,7 @@ class DataController
         return new JsonResponse($this->dataProvider->getReviews($id, $criteria, $context));
     }
 
-    #[Route("/api/_action/extension-store/store-filters", name: "api.extension.store_filters", methods: ["GET"])]
+    #[Route('/api/_action/extension-store/store-filters', name: 'api.extension.store_filters', methods: ['GET'])]
     public function listingFilters(Request $request, Context $context): JsonResponse
     {
         /** @var array<string, string> $params */

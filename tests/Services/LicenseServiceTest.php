@@ -26,7 +26,7 @@ class LicenseServiceTest extends TestCase
 
     private AbstractExtensionStoreLicensesService $coreLicenseService;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->licenseService = $this->getContainer()->get(LicenseService::class);
         $this->coreLicenseService = $this->getContainer()->get(AbstractExtensionStoreLicensesService::class);

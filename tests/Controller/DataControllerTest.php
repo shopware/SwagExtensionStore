@@ -14,9 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DataControllerTest extends TestCase
 {
+    use ExtensionBehaviour;
     use IntegrationTestBehaviour;
     use StoreClientBehaviour;
-    use ExtensionBehaviour;
 
     private DataController $controller;
 

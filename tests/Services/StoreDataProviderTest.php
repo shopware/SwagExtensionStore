@@ -17,15 +17,15 @@ use SwagExtensionStore\Services\StoreDataProvider;
 
 class StoreDataProviderTest extends TestCase
 {
+    use ExtensionBehaviour;
     use IntegrationTestBehaviour;
     use StoreClientBehaviour;
-    use ExtensionBehaviour;
 
     private StoreDataProvider $extensionDataProvider;
 
     private Context $context;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->extensionDataProvider = $this->getContainer()->get(StoreDataProvider::class);
         $this->context = $this->createAdminStoreContext();

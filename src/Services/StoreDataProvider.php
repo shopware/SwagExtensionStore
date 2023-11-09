@@ -42,6 +42,7 @@ class StoreDataProvider
     public function getExtensionDetails(int $id, Context $context): ExtensionStruct
     {
         $detailResponse = $this->client->extensionDetail($id, $context);
+
         return $this->extensionLoader->loadFromArray($context, $detailResponse);
     }
 
@@ -51,6 +52,7 @@ class StoreDataProvider
     public function getReviews(int $extensionId, ExtensionCriteria $criteria, Context $context): array
     {
         $reviewsResponse = $this->client->extensionDetailReviews($extensionId, $criteria, $context);
+
         return [
             'summary' => ReviewSummaryStruct::fromArray($reviewsResponse['summary']),
             'reviews' => new ReviewCollection($reviewsResponse['reviews']),
