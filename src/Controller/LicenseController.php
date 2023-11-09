@@ -17,8 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @internal
- * @Route(defaults={"_routeScope"={"api"}, "_acl"={"system.plugin_maintain"}})
  */
+#[Route(defaults: ['_routeScope' => ['api'], '_acl' => ['system.plugin_maintain']])]
 class LicenseController
 {
     private LicenseService $licenseService;
@@ -28,10 +28,7 @@ class LicenseController
         $this->licenseService = $licenseService;
     }
 
-    /**
-     * @Since("6.4.0.0")
-     * @Route("/api/_action/extension-store/cart/new", name="api.extension.create_new_cart", methods={"POST"})
-     */
+    #[Route("/api/_action/extension-store/cart/new", name: "api.extension.create_new_cart", methods: ["POST"])]
     public function createCart(Request $request, Context $context): JsonResponse
     {
         $extensionId = $request->request->get('extensionId');
@@ -50,10 +47,7 @@ class LicenseController
         return new JsonResponse($cart);
     }
 
-    /**
-     * @Since("6.4.0.0")
-     * @Route("/api/_action/extension-store/cart/order", name="api.extension.order", methods={"POST"})
-     */
+    #[Route("/api/_action/extension-store/cart/order", name: "api.extension.order", methods: ["POST"])]
     public function orderCart(RequestDataBag $bag, Context $context): Response
     {
         try {
@@ -67,10 +61,7 @@ class LicenseController
         return new Response('', Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @Since("6.4.0.0")
-     * @Route("/api/_action/extension-store/cart/payment-means", name="api.extension.payment-means", methods={"GET"})
-     */
+    #[Route("/api/_action/extension-store/cart/payment-means", name: "api.extension.payment-means", methods: ["GET"])]
     public function availablePaymentMeans(Context $context): Response
     {
         return new JsonResponse($this->licenseService->availablePaymentMeans($context));

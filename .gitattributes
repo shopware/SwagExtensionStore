@@ -10,7 +10,6 @@
 /src/Resources/app/administration/.eslintrc.js export-ignore
 /src/Resources/app/administration/jest.config.js export-ignore
 /.gitlab-ci.yml export-ignore
-/.shopware-extension.yml export-ignore
 /CHANGELOG_de-DE.md export-ignore
 /CHANGELOG_en-GB.md export-ignore
 /phpunit.xml export-ignore
