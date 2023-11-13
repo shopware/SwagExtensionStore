@@ -1,3 +1,3 @@
 [operations]
-/.gitlab            @product/engineering/solution-teams/ctrl-alt-elite @product/engineering/operations
-.gitlab-ci.yml      @product/engineering/solution-teams/ctrl-alt-elite @product/engineering/operations
+/.gitlab/       @product/engineering/operations
+.gitlab-ci.yml  @product/engineering/operations
