@@ -49,6 +49,7 @@ async function createWrapper() {
             'sw-meteor-navigation': true,
             'sw-loader': true,
             'sw-tabs': true,
+            'sw-tabs-item': true,
             'router-view': true,
             'sw-extension-store-error-card': true,
             'sw-extension-store-update-warning': true,

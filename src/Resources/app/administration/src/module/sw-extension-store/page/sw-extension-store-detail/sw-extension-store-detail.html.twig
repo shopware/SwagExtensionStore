@@ -425,7 +425,7 @@
 
                             {% block sw_extension_store_detail_card_details_updated_at %}
                                 <dt>{{ $tc('sw-extension-store.detail.details.labelUpdatedAt') }}</dt>
-                                <dd>{{ extension.lastUpdateDate | date({ month: 'numeric', year: 'numeric', hour: undefined, minute: undefined }) }}</dd>
+                                <dd>{{ dateFilter(extension.lastUpdateDate, { month: 'numeric', year: 'numeric', hour: undefined, minute: undefined }) }}</dd>
                             {% endblock %}
 
                             {% block sw_extension_store_detail_card_details_languages %}

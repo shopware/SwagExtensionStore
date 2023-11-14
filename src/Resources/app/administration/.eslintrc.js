@@ -13,7 +13,9 @@ module.exports = {
     },
 
     globals: {
-        Shopware: true
+        Shopware: true,
+        flushPromises: true,
+        wrapTestComponent: true
     },
 
     plugins: [
@@ -51,6 +53,6 @@ module.exports = {
             vue: 'never'
         }],
         'internal-rules/no-src-imports': 'error',
-        'import/no-extraneous-dependencies': ['error', { optionalDependencies: ['src/**/*.spec.[t|j]s'] }]
+        'import/no-extraneous-dependencies': ['error', { optionalDependencies: ['src/**/*.spec.[t|j]s', 'src/**/*.spec.vue3.[t|j]s'] }]
     }
 };

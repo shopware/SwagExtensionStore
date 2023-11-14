@@ -5,7 +5,7 @@ module.exports = {
         return {
             ImportDeclaration(node) {
                 // allow src imports in tests
-                if ((new RegExp('\\.spec.[t|j]s')).test(context.getFilename())) {
+                if ((new RegExp('\\.spec\\.(vue3\\.)?[t|j]s')).test(context.getFilename())) {
                     return;
                 }
 

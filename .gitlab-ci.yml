@@ -79,16 +79,25 @@ Administration Jest:
     services:
         -   name: mariadb:10.3
             alias: mysql
+    variables:
+        JEST_COMMAND: unit
     script:
         - composer init:db
         - php bin/console plugin:refresh
         - php bin/console plugin:install --activate $PLUGIN_NAME -c
         - npm --prefix $(pwd)/custom/plugins/$PLUGIN_NAME/src/Resources/app/administration/ ci
         - npm --prefix $(pwd)/src/Administration/Resources/app/administration ci
-        - ADMIN_PATH=$(pwd)/src/Administration/Resources/app/administration/ npm --prefix $(pwd)/custom/plugins/$PLUGIN_NAME/src/Resources/app/administration/ run unit
+        - npm --prefix $(pwd)/src/Administration/Resources/app/administration run unit-setup
+        - php $(pwd)/bin/console framework:schema -s 'entity-schema' $(pwd)/src/Administration/Resources/app/administration/test/_mocks_/entity-schema.json
+        - ADMIN_PATH=$(pwd)/src/Administration/Resources/app/administration/ npm --prefix $(pwd)/custom/plugins/$PLUGIN_NAME/src/Resources/app/administration/ run $JEST_COMMAND
     artifacts:
         reports:
-            junit: build/artifacts/jest/customized-products.junit.xml
+            junit: build/artifacts/jest/swag-extension-store.junit.xml
+
+Administration Jest Vue3:
+    extends: "Administration Jest"
+    variables:
+      JEST_COMMAND: unit:vue3
 
 PHPUnit:
     stage: Testing

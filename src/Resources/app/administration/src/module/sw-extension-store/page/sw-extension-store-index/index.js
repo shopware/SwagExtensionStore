@@ -7,7 +7,7 @@ import './sw-extension-store-index.scss';
 export default {
     template,
 
-    inject: ['extensionStoreActionService', 'shopwareExtensionService'],
+    inject: ['extensionStoreActionService', 'shopwareExtensionService', 'feature'],
 
     props: {
         id: {
@@ -51,7 +51,11 @@ export default {
             immediate: true,
             handler(newValue) {
                 Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'page', value: 1 });
-                this.$set(this.activeFilters, 'group', newValue);
+                if (this.feature.isActive('VUE3')) {
+                    this.activeFilters.group = newValue;
+                } else {
+                    this.$set(this.activeFilters, 'group', newValue);
+                }
             }
         }
     },
