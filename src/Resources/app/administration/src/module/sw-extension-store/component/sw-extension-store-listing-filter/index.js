@@ -10,7 +10,7 @@ export default {
         'notification'
     ],
 
-    inject: ['extensionStoreDataService'],
+    inject: ['extensionStoreDataService', 'feature'],
 
     data() {
         return {
@@ -123,7 +123,11 @@ export default {
                 return;
             }
 
-            this.$set(this.activeFilters, filter.name, value);
+            if (this.feature.isActive('VUE3')) {
+                this.activeFilters[filter.name] = value;
+            } else {
+                this.$set(this.activeFilters, filter.name, value);
+            }
         },
 
         getOptionsForFilter(filter) {

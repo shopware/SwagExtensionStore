@@ -1,5 +1,4 @@
 import { mount, createLocalVue } from '@vue/test-utils';
-import flushPromises from 'flush-promises';
 import vuei18n from 'vue-i18n';
 
 /* service */

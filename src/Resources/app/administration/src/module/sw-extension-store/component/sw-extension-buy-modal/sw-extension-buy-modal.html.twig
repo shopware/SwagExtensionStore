@@ -86,6 +86,18 @@
                                                              class="sw-extension-buy-modal__rent">
 
                                                             {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent_prices %}
+                                                                {% if VUE3 %}
+                                                                <i18n-t
+                                                                    keypath="sw-extension-store.buy-modal.rent.priceDisplay"
+                                                                    tag="span"
+                                                                    :class="getDiscountClasses(variant)">
+                                                                    <template #priceDisplay>
+                                                                        <span class="sw-extension-buy-modal__list-price">{{ renderPrice(variant.netPrice) }}</span
+                                                                        ><span v-if="hasDiscount(variant)"
+                                                                              class="sw-extension-buy-modal__discounted-price">{{ getDiscountPrice(variant) }}</span>
+                                                                    </template>
+                                                                </i18n-t>
+                                                                {% else %}
                                                                 <i18n path="sw-extension-store.buy-modal.rent.priceDisplay"
                                                                       :class="getDiscountClasses(variant)">
                                                                     <template #priceDisplay>
@@ -94,6 +106,7 @@
                                                                               class="sw-extension-buy-modal__discounted-price">{{ getDiscountPrice(variant) }}</span>
                                                                     </template>
                                                                 </i18n>
+                                                                {% endif %}
                                                             {% endblock %}
 
                                                             {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent_trial %}
@@ -184,7 +197,12 @@
                             :options="paymentMeans"
                             :placeholder="$tc('sw-extension-store.buy-modal.paymentSelectionPlaceholder')"
                             valueProperty="id"
-                            v-model="selectedPaymentMean">
+                            {% if VUE3 %}
+                            v-model:value="selectedPaymentMean"
+                            {% else %}
+                            v-model="selectedPaymentMean"
+                            {% endif %}
+                        >
                         </sw-single-select>
                     {% endblock %}
 
@@ -196,7 +214,14 @@
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_accept_toc %}
-                        <sw-gtc-checkbox v-model="tocAccepted"></sw-gtc-checkbox>
+                        <sw-gtc-checkbox
+                            {% if VUE3 %}
+                            v-model:value="tocAccepted"
+                            {% else %}
+                            v-model="tocAccepted"
+                            {% endif %}
+                        >
+                        </sw-gtc-checkbox>
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_accept_extension_permissions %}
@@ -204,7 +229,12 @@
                             v-if="extensionHasPermissions"
                             class="sw-extension-buy-modal__checkbox sw-extension-buy-modal__checkbox-permissions"
                             :class="`sw-extension-buy-modal__checkbox-permissions--${extension.name}`"
+                            {% if VUE3 %}
+                            v-model:value="permissionsAccepted"
+                            {% else %}
                             v-model="permissionsAccepted"
+                            {% endif %}
+
                         >
                             <template #label>
                                 <span v-if="legalText">

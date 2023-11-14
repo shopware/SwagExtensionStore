@@ -14,6 +14,10 @@ export default {
         'extensionStoreLicensesService'
     ],
 
+    emits: [
+        'modal-close'
+    ],
+
     mixins: [
         'sw-extension-error'
     ],

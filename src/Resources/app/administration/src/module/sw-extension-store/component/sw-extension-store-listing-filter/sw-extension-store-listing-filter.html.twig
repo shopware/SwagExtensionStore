@@ -8,9 +8,14 @@
                         size="small"
                         :label="$tc('sw-extension.store.listing.sort')"
                         :options="sortingOptions"
-                        :value="sortingValue"
                         valueProperty="orderIdentifier"
-                        @change="setSelectedSorting">
+                        :value="sortingValue"
+                        {% if VUE3 %}
+                        @update:value="setSelectedSorting"
+                        {% else %}
+                        @change="setSelectedSorting"
+                        {% endif %}
+                    >
                     </sw-meteor-single-select>
                 {% endblock %}
 
@@ -23,8 +28,12 @@
                         :label="filter.label"
                         :options="getOptionsForFilter(filter)"
                         :value="getValueForFilter(filter)"
-                        @change="changeValueForFilter(filter, $event)">
-
+                        {% if VUE3 %}
+                        @update:value="changeValueForFilter(filter, $event)"
+                        {% else %}
+                        @change="changeValueForFilter(filter, $event)"
+                        {% endif %}
+                    >
                         <template v-if="filter.type === 'category'"
                                   #result-label-property="{ item, valueProperty }">
                             {% block sw_extension_store_listing_filter_category_filter_result %}
@@ -35,7 +44,6 @@
                                 </div>
                             {% endblock %}
                         </template>
-
                     </sw-meteor-single-select>
                 {% endblock %}
             {% endblock %}
