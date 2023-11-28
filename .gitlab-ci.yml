@@ -2,7 +2,7 @@ variables:
     DOCKER_DRIVER: overlay2
     DOCKER_HOST: "tcp://docker:2375"
     PLATFORM_BRANCH: trunk
-    PLATFORM_PLUGIN_TAG: "6.5"
+    PLATFORM_PLUGIN_TAG: "6.6"
     MYSQL_ROOT_PASSWORD: root
     DATABASE_URL: 'mysql://root:root@mysql:3306/shopware'
     WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/public
@@ -10,30 +10,10 @@ variables:
     PLUGIN_NAME: SwagExtensionStore
     APP_SECRET: NotSoSecret
     APP_URL: 'http://localhost:8000'
-    NODE_VERSION: 18
+    NODE_VERSION: 20
 
 workflow:
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "6.4"'
-      variables:
-        PLATFORM_BRANCH: "6.4"
-        PLATFORM_PLUGIN_TAG: "6.4"
-        NODE_VERSION: '16'
-    - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == "6.4"'
-      variables:
-        PLATFORM_BRANCH: "6.4"
-        PLATFORM_PLUGIN_TAG: "6.4"
-        NODE_VERSION: '16'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /1\.*/'
-      variables:
-        PLATFORM_BRANCH: "6.4"
-        PLATFORM_PLUGIN_TAG: "6.4"
-        NODE_VERSION: '16'
-    - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH =~ /1\.*/'
-      variables:
-        PLATFORM_BRANCH: "6.4"
-        PLATFORM_PLUGIN_TAG: "6.4"
-        NODE_VERSION: '16'
     - when: always
 
 stages:
@@ -41,9 +21,9 @@ stages:
     - Deploy
 
 default:
-    image: shopware/development:8.1-composer-2
+    image: shopware/development:8.2-composer-2
     tags:
-        - t3.nano
+        - shopware
     before_script:
         - zip -rq plugin.zip .
         - mv plugin.zip /tmp/plugin.zip
@@ -55,11 +35,12 @@ default:
         - unzip -q /tmp/plugin.zip -d custom/plugins/$PLUGIN_NAME
         - composer install -o
         - /entrypoint supervisord > /dev/null 2>&1 &
+        - composer init:db
+        - php bin/console plugin:refresh
+        - php bin/console plugin:install --activate $PLUGIN_NAME -c
 
 ESLint:
     stage: Testing
-    tags:
-        - t3.medium
     script:
         - cd custom/plugins/SwagExtensionStore/src/Resources/app/administration
         - npm ci
@@ -71,20 +52,22 @@ ESLint:
         reports:
             junit: custom/plugins/SwagExtensionStore/src/Resources/app/administration/eslint.junit.xml
 
+Code Style and PHPStan:
+  stage: Testing
+  script:
+    - cd custom/plugins/$PLUGIN_NAME
+    - composer run ecs-dry
+    - composer run phpstan
+
 Administration Jest:
     stage: Testing
     timeout: 1h 00m
-    tags:
-        - t3.medium
     services:
         -   name: mariadb:10.3
             alias: mysql
     variables:
         JEST_COMMAND: unit
     script:
-        - composer init:db
-        - php bin/console plugin:refresh
-        - php bin/console plugin:install --activate $PLUGIN_NAME -c
         - npm --prefix $(pwd)/custom/plugins/$PLUGIN_NAME/src/Resources/app/administration/ ci
         - npm --prefix $(pwd)/src/Administration/Resources/app/administration ci
         - npm --prefix $(pwd)/src/Administration/Resources/app/administration run unit-setup
@@ -102,23 +85,15 @@ Administration Jest Vue3:
 PHPUnit:
     stage: Testing
     timeout: 1h 00m
-    tags:
-        - t3.medium
     services:
         -   name: mariadb:10.3
             alias: mysql
     script:
-        - composer init:db
-        - composer npm:admin ci
-        - php bin/console plugin:refresh
-        - php bin/console plugin:install --activate $PLUGIN_NAME -c
         - ./vendor/bin/phpunit -c $(pwd)/custom/plugins/$PLUGIN_NAME/phpunit.xml
 
 
 Build Zip:
     stage: Deploy
-    tags:
-        - t3.medium
     image:
         name: ghcr.io/friendsofshopware/shopware-cli
         entrypoint: ["/usr/local/bin/entrypoint.sh"]

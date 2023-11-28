@@ -8,7 +8,6 @@ use Shopware\Core\Framework\Api\Context\AdminApiSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Store\Services\AbstractExtensionStoreLicensesService;
 use Shopware\Core\Framework\Store\Services\StoreService;
-use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Shopware\Core\Framework\Uuid\Uuid;
@@ -28,19 +27,19 @@ class LicenseServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->licenseService = $this->getContainer()->get(LicenseService::class);
-        $this->coreLicenseService = $this->getContainer()->get(AbstractExtensionStoreLicensesService::class);
+        $this->licenseService = static::getContainer()->get(LicenseService::class);
+        $this->coreLicenseService = static::getContainer()->get(AbstractExtensionStoreLicensesService::class);
     }
 
     public function testCreateCart(): void
     {
-        $this->getContainer()
+        static::getContainer()
             ->get(SystemConfigService::class)
             ->set(StoreService::CONFIG_KEY_STORE_LICENSE_DOMAIN, 'localhost');
         $this->setResponsesToPurchaseExtension();
 
         $cart = $this->licenseService->createCart(5, 5, $this->getContextWithStoreToken());
-        static::assertInstanceOf(CartStruct::class, $cart);
+        static::assertCount(1, $cart->getPositions());
     }
 
     public function testAvailablePaymentMeans(): void
@@ -61,7 +60,7 @@ class LicenseServiceTest extends TestCase
     public function testCancelSubscriptionRemovesLicense(): void
     {
         $context = $this->getContextWithStoreToken();
-        $this->getContainer()
+        static::getContainer()
             ->get(SystemConfigService::class)
             ->set(StoreService::CONFIG_KEY_STORE_LICENSE_DOMAIN, 'localhost');
         $this->setResponsesToPurchaseExtension();
@@ -73,9 +72,9 @@ class LicenseServiceTest extends TestCase
 
         $this->coreLicenseService->cancelSubscription(1, $context);
 
-        static::assertEquals(
+        static::assertSame(
             '/swplatform/pluginlicenses/1/cancel?shopwareVersion=___VERSION___&language=en-GB&domain=localhost',
-            $this->getRequestHandler()->getLastRequest()?->getRequestTarget()
+            $this->getStoreRequestHandler()->getLastRequest()?->getRequestTarget()
         );
     }
 
@@ -96,7 +95,7 @@ class LicenseServiceTest extends TestCase
             'aclRoles' => [],
         ]];
 
-        $this->getContainer()
+        static::getContainer()
             ->get('user.repository')
             ->create($data, Context::createDefaultContext());
         $source = new AdminApiSource($userId);
@@ -107,28 +106,28 @@ class LicenseServiceTest extends TestCase
 
     private function setResponsesToPurchaseExtension(): void
     {
-        $this->getRequestHandler()->reset();
+        $this->getStoreRequestHandler()->reset();
         $exampleCart = file_get_contents(__DIR__ . '/../_fixtures/responses/example-cart.json');
         static::assertIsString($exampleCart);
 
         // createCart will respond with a cart
-        $this->getRequestHandler()->append(new Response(200, [], $exampleCart));
+        $this->getStoreRequestHandler()->append(new Response(200, [], $exampleCart));
 
         // processCart will return a Created Response without body
-        $this->getRequestHandler()->append(new Response(201, [], null));
+        $this->getStoreRequestHandler()->append(new Response(201, [], null));
 
         // return path to app files from install extension
-        $this->getRequestHandler()->append(new Response(200, [], '{"location": "http://localhost/my.zip", "type": "app"}'));
+        $this->getStoreRequestHandler()->append(new Response(200, [], '{"location": "http://localhost/my.zip", "type": "app"}'));
 
         $testAppZip = file_get_contents(__DIR__ . '/../_fixtures/TestApp.zip');
         static::assertIsString($testAppZip);
-        $this->getRequestHandler()->append(new Response(200, [], $testAppZip));
+        $this->getStoreRequestHandler()->append(new Response(200, [], $testAppZip));
     }
 
     private function setLicensesRequest(string $licenseBody): void
     {
-        $this->getRequestHandler()->reset();
-        $this->getRequestHandler()->append(new Response(200, [], $licenseBody));
+        $this->getStoreRequestHandler()->reset();
+        $this->getStoreRequestHandler()->append(new Response(200, [], $licenseBody));
     }
 
     private function setCancellationResponses(): void
@@ -141,12 +140,12 @@ class LicenseServiceTest extends TestCase
         static::assertIsString($licensesJson);
 
         $this->setLicensesRequest($licensesJson);
-        $this->getRequestHandler()->append(new Response(204));
+        $this->getStoreRequestHandler()->append(new Response(204));
 
         unset($licenses[0]);
         $licensesJson = \json_encode($licenses);
         static::assertIsString($licensesJson);
-        $this->getRequestHandler()->append(
+        $this->getStoreRequestHandler()->append(
             new Response(
                 200,
                 [StoreDataProvider::HEADER_NAME_TOTAL_COUNT => '0'],

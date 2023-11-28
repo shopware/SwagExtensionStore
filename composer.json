@@ -1,6 +1,6 @@
 {
     "name": "swag/swag-extension-store",
-    "version": "2.1.0",
+    "version": "3.0.0",
     "description": "SWAG Extension Store",
     "type": "shopware-platform-plugin",
     "license": "MIT",
@@ -11,8 +11,8 @@
         }
     ],
     "require": {
-        "shopware/core": "~6.5",
-        "shopware/administration": "~6.5"
+        "shopware/core": "~6.6",
+        "shopware/administration": "~6.6"
     },
     "autoload": {
         "psr-4": {
@@ -43,5 +43,21 @@
             "de-DE": "https://www.shopware.com/en/",
             "en-GB": "https://www.shopware.com/en/"
         }
+    },
+    "scripts": {
+        "ecs-dry": [
+            "@php ../../../vendor/bin/ecs check"
+        ],
+        "ecs-fix": [
+            "@php ../../../vendor/bin/ecs check --fix"
+        ],
+        "phpstan": [
+            "@php tests/phpstan/bootstrap.php",
+            "@php ../../../vendor/bin/phpstan analyze --configuration phpstan.neon"
+        ],
+        "static-analyze": [
+            "@ecs-fix",
+            "@phpstan"
+        ]
     }
 }

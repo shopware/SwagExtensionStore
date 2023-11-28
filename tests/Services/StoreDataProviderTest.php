@@ -7,7 +7,6 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
-use Shopware\Core\Framework\Store\Struct\ExtensionCollection;
 use Shopware\Core\Framework\Store\Struct\ReviewCollection;
 use Shopware\Core\Framework\Store\Struct\ReviewSummaryStruct;
 use Shopware\Core\Framework\Test\Store\ExtensionBehaviour;
@@ -27,7 +26,7 @@ class StoreDataProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->extensionDataProvider = $this->getContainer()->get(StoreDataProvider::class);
+        $this->extensionDataProvider = static::getContainer()->get(StoreDataProvider::class);
         $this->context = $this->createAdminStoreContext();
 
         $this->installApp(__DIR__ . '/../_fixtures/TestApp');
@@ -40,7 +39,7 @@ class StoreDataProviderTest extends TestCase
 
     public function testGetListingFilters(): void
     {
-        $requestHandler = $this->getRequestHandler();
+        $requestHandler = $this->getStoreRequestHandler();
         $requestHandler->reset();
         $filterJson = file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json');
         static::assertIsString($filterJson);
@@ -64,8 +63,7 @@ class StoreDataProviderTest extends TestCase
 
         $listing = $this->extensionDataProvider->getListing($criteria, $this->context);
 
-        static::assertInstanceOf(ExtensionCollection::class, $listing);
-        static::assertEquals(2, $listing->count());
+        static::assertCount(2, $listing);
     }
 
     public function testItReturnsAnExtensionDetail(): void
@@ -75,9 +73,8 @@ class StoreDataProviderTest extends TestCase
         $this->setDetailResponse($extensionId);
         $extensionDetail = $this->extensionDataProvider->getExtensionDetails($extensionId, $this->context);
 
-        static::assertNotNull($extensionDetail);
-        static::assertEquals($extensionId, $extensionDetail->getId());
-        static::assertEquals('Change your privacy policy!', $extensionDetail->getPrivacyPolicyExtension());
+        static::assertSame($extensionId, $extensionDetail->getId());
+        static::assertSame('Change your privacy policy!', $extensionDetail->getPrivacyPolicyExtension());
     }
 
     public function testItReturnsReviewsForExtension(): void
@@ -90,19 +87,19 @@ class StoreDataProviderTest extends TestCase
         static::assertInstanceOf(ReviewCollection::class, $extensionReviews['reviews']);
         static::assertInstanceOf(ReviewSummaryStruct::class, $extensionReviews['summary']);
         static::assertCount(3, $extensionReviews['reviews']);
-        static::assertEquals(7, $extensionReviews['summary']->getNumberOfRatings());
+        static::assertSame(7, $extensionReviews['summary']->getNumberOfRatings());
     }
 
     private function setReviewsResponse(int $extensionId): void
     {
-        $requestHandler = $this->getRequestHandler();
+        $requestHandler = $this->getStoreRequestHandler();
         $requestHandler->reset();
         $requestHandler->append(
             function (Request $request) use ($extensionId): Response {
                 $matches = [];
                 preg_match('/\/swplatform\/extensionstore\/extensions\/(.*)\/reviews/', $request->getUri()->getPath(), $matches);
 
-                static::assertEquals($extensionId, $matches[1]);
+                static::assertSame($extensionId, (int) $matches[1]);
 
                 $extensionReviewsJson = \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-reviews.json');
                 self::assertIsString($extensionReviewsJson);
@@ -114,7 +111,7 @@ class StoreDataProviderTest extends TestCase
 
     private function setListingResponse(): void
     {
-        $requestHandler = $this->getRequestHandler();
+        $requestHandler = $this->getStoreRequestHandler();
         $requestHandler->reset();
         $extensionListingJson = \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-listing.json');
         static::assertIsString($extensionListingJson);
@@ -127,14 +124,14 @@ class StoreDataProviderTest extends TestCase
 
     private function setDetailResponse(int $extensionId): void
     {
-        $requestHandler = $this->getRequestHandler();
+        $requestHandler = $this->getStoreRequestHandler();
         $requestHandler->reset();
         $requestHandler->append(
             function (Request $request) use ($extensionId): Response {
                 $matches = [];
                 preg_match('/\/swplatform\/extensionstore\/extensions\/(.*)/', $request->getUri()->getPath(), $matches);
 
-                static::assertEquals($extensionId, $matches[1]);
+                static::assertSame($extensionId, (int) $matches[1]);
 
                 $extensionDetailJson = \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-detail.json');
                 self::assertIsString($extensionDetailJson);

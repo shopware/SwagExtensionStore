@@ -3,11 +3,10 @@
 namespace SwagExtensionStore\Controller;
 
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Store\Exception\InvalidExtensionIdException;
-use Shopware\Core\Framework\Store\Exception\InvalidVariantIdException;
+use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
-use SwagExtensionStore\Exception\InvalidExtensionCartException;
+use SwagExtensionStore\Exception\ExtensionStoreException;
 use SwagExtensionStore\Services\LicenseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @internal
  */
+#[Package('services-settings')]
 #[Route(defaults: ['_routeScope' => ['api'], '_acl' => ['system.plugin_maintain']])]
 class LicenseController
 {
@@ -34,11 +34,11 @@ class LicenseController
         $variantId = $request->request->get('variantId');
 
         if (!is_numeric($extensionId)) {
-            throw new InvalidExtensionIdException();
+            throw ExtensionStoreException::invalidExtensionId();
         }
 
         if (!is_numeric($variantId)) {
-            throw new InvalidVariantIdException();
+            throw ExtensionStoreException::invalidVariantId();
         }
 
         $cart = $this->licenseService->createCart((int) $extensionId, (int) $variantId, $context);
@@ -52,7 +52,7 @@ class LicenseController
         try {
             $cart = CartStruct::fromArray($bag->all());
         } catch (\TypeError $e) {
-            throw new InvalidExtensionCartException();
+            throw ExtensionStoreException::invalidExtensionCart($e->getMessage());
         }
 
         $this->licenseService->orderCart($cart, $context);
