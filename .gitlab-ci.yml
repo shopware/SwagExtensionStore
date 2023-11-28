@@ -1,7 +1,7 @@
 variables:
     DOCKER_DRIVER: overlay2
     DOCKER_HOST: "tcp://docker:2375"
-    PLATFORM_BRANCH: trunk
+    PLATFORM_BRANCH: 6.5.x
     PLATFORM_PLUGIN_TAG: "6.5"
     MYSQL_ROOT_PASSWORD: root
     DATABASE_URL: 'mysql://root:root@mysql:3306/shopware'
@@ -14,26 +14,6 @@ variables:
 
 workflow:
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "6.4"'
-      variables:
-        PLATFORM_BRANCH: "6.4"
-        PLATFORM_PLUGIN_TAG: "6.4"
-        NODE_VERSION: '16'
-    - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == "6.4"'
-      variables:
-        PLATFORM_BRANCH: "6.4"
-        PLATFORM_PLUGIN_TAG: "6.4"
-        NODE_VERSION: '16'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /1\.*/'
-      variables:
-        PLATFORM_BRANCH: "6.4"
-        PLATFORM_PLUGIN_TAG: "6.4"
-        NODE_VERSION: '16'
-    - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH =~ /1\.*/'
-      variables:
-        PLATFORM_BRANCH: "6.4"
-        PLATFORM_PLUGIN_TAG: "6.4"
-        NODE_VERSION: '16'
     - when: always
 
 stages:
@@ -43,7 +23,7 @@ stages:
 default:
     image: shopware/development:8.1-composer-2
     tags:
-        - t3.nano
+        - shopware
     before_script:
         - zip -rq plugin.zip .
         - mv plugin.zip /tmp/plugin.zip
@@ -58,8 +38,6 @@ default:
 
 ESLint:
     stage: Testing
-    tags:
-        - t3.medium
     script:
         - cd custom/plugins/SwagExtensionStore/src/Resources/app/administration
         - npm ci
@@ -74,8 +52,6 @@ ESLint:
 Administration Jest:
     stage: Testing
     timeout: 1h 00m
-    tags:
-        - t3.medium
     services:
         -   name: mariadb:10.3
             alias: mysql
@@ -102,8 +78,6 @@ Administration Jest Vue3:
 PHPUnit:
     stage: Testing
     timeout: 1h 00m
-    tags:
-        - t3.medium
     services:
         -   name: mariadb:10.3
             alias: mysql
@@ -117,8 +91,6 @@ PHPUnit:
 
 Build Zip:
     stage: Deploy
-    tags:
-        - t3.medium
     image:
         name: ghcr.io/friendsofshopware/shopware-cli
         entrypoint: ["/usr/local/bin/entrypoint.sh"]
