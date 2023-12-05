@@ -1,7 +1,4 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import 'src/app/component/meteor/sw-meteor-page';
-import 'src/app/component/base/sw-button';
-import 'src/app/component/base/sw-button-process';
+import { mount } from '@vue/test-utils';
 
 Shopware.Component.register(
     'sw-extension-store-detail',
@@ -17,9 +14,6 @@ const extensionHelperService = {
 };
 
 async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
-    const localVue = createLocalVue();
-    localVue.filter('date', v => v);
-
     const testExtension = {
         id: 1337,
         categories: [
@@ -45,53 +39,48 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
         ...extensionCustomProps
     };
 
-    return shallowMount(await Shopware.Component.build('sw-extension-store-detail'), {
-        localVue,
-        propsData: {
+    return mount(await Shopware.Component.build('sw-extension-store-detail'), {
+        props: {
             id: 'a1b2c3'
         },
-        mocks: {
-            $tc: v => v,
-            $route: {
-                hash: '',
-                meta: {}
+        global: {
+            renderStubDefaultSlot: true,
+            stubs: {
+                'sw-meteor-page': await wrapTestComponent('sw-meteor-page'),
+                'sw-search-bar': {
+                    template: '<div class="sw-search-bar"></div>'
+                },
+                'sw-loader': true,
+                'sw-extension-type-label': true,
+                'sw-extension-store-slider': true,
+                'sw-icon': true,
+                'sw-meteor-card': true,
+                'sw-button': await wrapTestComponent('sw-button'),
+                'sw-button-group': true,
+                'sw-context-button': true,
+                'sw-context-menu-item': true,
+                'sw-extension-ratings-card': true,
+                'sw-button-process': await wrapTestComponent('sw-button-process'),
+                'sw-alert': true,
+                'sw-notification-center': true,
+                'sw-meteor-navigation': true,
+                'sw-help-center': true
+            },
+            provide: {
+                shopwareExtensionService: {
+                    updateExtensionData: jest.fn(),
+                    isVariantDiscounted: jest.fn(),
+                    orderVariantsByRecommendation: () => [],
+                    getOpenLink: () => (canBeOpened ? 'open-link' : null)
+                },
+                extensionStoreDataService: {
+                    getDetail: () => {
+                        return testExtension;
+                    }
+                },
+                extensionHelperService,
+                cacheApiService
             }
-        },
-        stubs: {
-            'sw-meteor-page': await Shopware.Component.build('sw-meteor-page'),
-            'sw-search-bar': {
-                template: '<div class="sw-search-bar"></div>'
-            },
-            'sw-loader': true,
-            'sw-extension-type-label': true,
-            'sw-extension-store-slider': true,
-            'sw-icon': true,
-            'sw-meteor-card': true,
-            'sw-button': await Shopware.Component.build('sw-button'),
-            'sw-button-group': true,
-            'sw-context-button': true,
-            'sw-context-menu-item': true,
-            'sw-extension-ratings-card': true,
-            'sw-button-process': await Shopware.Component.build('sw-button-process'),
-            'sw-alert': true,
-            'sw-notification-center': true,
-            'sw-meteor-navigation': true,
-            'sw-help-center': true
-        },
-        provide: {
-            shopwareExtensionService: {
-                updateExtensionData: jest.fn(),
-                isVariantDiscounted: jest.fn(),
-                orderVariantsByRecommendation: () => [],
-                getOpenLink: () => (canBeOpened ? 'open-link' : null)
-            },
-            extensionStoreDataService: {
-                getDetail: () => {
-                    return testExtension;
-                }
-            },
-            extensionHelperService,
-            cacheApiService
         }
     });
 }
@@ -138,12 +127,6 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
         Shopware.State.get('shopwareExtensions').myExtensions = { data: [], loading: false };
     });
 
-    it('should be a Vue.JS component', async () => {
-        const wrapper = await createWrapper();
-
-        expect(wrapper.vm).toBeTruthy();
-    });
-
     it('should show all extension category names', async () => {
         const wrapper = await createWrapper();
 
@@ -165,20 +148,19 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
             addons: ['SW6_EnterpriseFeature'],
             variants: []
         });
+        await flushPromises();
 
-        await wrapper.vm.$nextTick();
-
-        expect(wrapper.find('.sw-extension-store-detail__alert').text())
+        expect(wrapper.get('.sw-extension-store-detail__alert').text())
             .toBe('sw-extension-store.detail.enterpriseFeatureAlertText');
     });
 
     it('should reload the administration when a plugin is installed', async () => {
         const wrapper = await createWrapper();
-        await wrapper.vm.$nextTick();
+        await flushPromises();
 
-        const installButton = await wrapper.find('.sw-extension-store-detail__action-install-extension');
+        const installButton = await wrapper.get('.sw-extension-store-detail__action-install-extension');
         await installButton.trigger('click');
-        await wrapper.vm.$nextTick();
+        await flushPromises();
 
         expect(extensionHelperService.downloadAndActivateExtension).toHaveBeenCalledTimes(1);
         expect(cacheApiService.clear).toHaveBeenCalledTimes(1);
@@ -187,11 +169,11 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
     it('should not reload the administration when an app is installed', async () => {
         const wrapper = await createWrapper({ type: 'app' });
-        await wrapper.vm.$nextTick();
+        await flushPromises();
 
-        const installButton = await wrapper.find('.sw-extension-store-detail__action-install-extension');
+        const installButton = await wrapper.get('.sw-extension-store-detail__action-install-extension');
         await installButton.trigger('click');
-        await wrapper.vm.$nextTick();
+        await flushPromises();
 
         expect(extensionHelperService.downloadAndActivateExtension).toHaveBeenCalledTimes(1);
         expect(cacheApiService.clear).not.toHaveBeenCalled();
@@ -212,19 +194,17 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
             const wrapper = await createWrapper({
                 storeLicense: null
             });
+            await flushPromises();
 
-            await wrapper.vm.$nextTick();
-
-            expect(wrapper.find('.sw-extension-store-detail__action-add-extension').text())
+            expect(wrapper.get('.sw-extension-store-detail__action-add-extension').text())
                 .toBe('sw-extension-store.detail.labelButtonAddExtension');
         });
 
         it('should render "install" button when extension is not installed but already licensed', async () => {
             const wrapper = await createWrapper();
+            await flushPromises();
 
-            await wrapper.vm.$nextTick();
-
-            expect(wrapper.find('.sw-extension-store-detail__action-install-extension').text())
+            expect(wrapper.get('.sw-extension-store-detail__action-install-extension').text())
                 .toBe('sw-extension-store.detail.labelButtonInstallExtension');
         });
 
@@ -250,10 +230,9 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     timezone_type: 3
                 }
             });
+            await flushPromises();
 
-            await wrapper.vm.$nextTick();
-
-            expect(wrapper.find('.sw-extension-store-detail__action-open-extension').text())
+            expect(wrapper.get('.sw-extension-store-detail__action-open-extension').text())
                 .toBe('sw-extension-store.detail.labelButtonOpenExtension');
         });
 
@@ -281,10 +260,9 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     timezone_type: 3
                 }
             });
+            await flushPromises();
 
-            await wrapper.vm.$nextTick();
-
-            expect(wrapper.find('.sw-extension-store-detail__action-context').text())
+            expect(wrapper.get('.sw-extension-store-detail__action-context').text())
                 .toBe('sw-extension-store.detail.openConfiguration');
         });
 
@@ -312,10 +290,9 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     timezone_type: 3
                 }
             }, false);
+            await flushPromises();
 
-            await wrapper.vm.$nextTick();
-
-            expect(wrapper.find('.sw-extension-store-detail__action-open-configuration').text())
+            expect(wrapper.get('.sw-extension-store-detail__action-open-configuration').text())
                 .toBe('sw-extension-store.detail.openConfiguration');
         });
 
@@ -334,10 +311,9 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 addons: ['SW6_EnterpriseFeature'],
                 variants: []
             });
+            await flushPromises();
 
-            await wrapper.vm.$nextTick();
-
-            expect(wrapper.find('.sw-extension-store-detail__action-enterprise-contact').text())
+            expect(wrapper.get('.sw-extension-store-detail__action-enterprise-contact').text())
                 .toBe('sw-extension-store.detail.enterpriseContactLinkText');
         });
 
@@ -356,8 +332,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 storeLicense: null,
                 variants: []
             });
-
-            await wrapper.vm.$nextTick();
+            await flushPromises();
 
             expect(wrapper.find('.sw-extension-store-detail__action-add-extension').exists()).toBe(false);
             expect(wrapper.find('.sw-extension-store-detail__action-open-extension').exists()).toBe(false);

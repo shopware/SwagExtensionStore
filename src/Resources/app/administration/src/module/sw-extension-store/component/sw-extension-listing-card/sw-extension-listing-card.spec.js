@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
 import ShopwareDiscountCampaignService from 'src/app/service/discount-campaign.service';
 
@@ -8,41 +8,43 @@ Shopware.Component.register(
 );
 
 async function createWrapper(extension) {
-    return shallowMount(await Shopware.Component.build('sw-extension-listing-card'), {
-        propsData: {
+    return mount(await Shopware.Component.build('sw-extension-listing-card'), {
+        props: {
             extension
         },
-        mocks: {
-            $tc: (key, recommendation, price) => JSON.stringify({ key, recommendation, price })
-        },
-        stubs: {
-            'sw-icon': true,
-            'sw-extension-rating-stars': true,
-            'router-link': true,
-            'sw-extension-type-label': true,
-            'sw-extension-store-label-display': true
-        },
-        provide: {
-            repositoryFactory: {
-                create: () => {
-                    return {};
-                }
+        global: {
+            stubs: {
+                'sw-icon': true,
+                'sw-extension-rating-stars': true,
+                'router-link': true,
+                'sw-extension-type-label': true,
+                'sw-extension-store-label-display': true
             },
-            systemConfigApiService: {
-                getValues: () => {
-                    return Promise.resolve({
-                        'core.store.apiUri': 'https://api.shopware.com',
-                        'core.store.licenseHost': 'sw6.test.shopware.in',
-                        'core.store.shopSecret': 'very.s3cret',
-                        'core.store.shopwareId': 'max@muster.com'
-                    });
-                }
+            provide: {
+                repositoryFactory: {
+                    create: () => {
+                        return {};
+                    }
+                },
+                systemConfigApiService: {
+                    getValues: () => {
+                        return Promise.resolve({
+                            'core.store.apiUri': 'https://api.shopware.com',
+                            'core.store.licenseHost': 'sw6.test.shopware.in',
+                            'core.store.shopSecret': 'very.s3cret',
+                            'core.store.shopwareId': 'max@muster.com'
+                        });
+                    }
+                },
+                shopwareExtensionService: new ShopwareExtensionService(
+                    undefined,
+                    undefined,
+                    new ShopwareDiscountCampaignService()
+                )
             },
-            shopwareExtensionService: new ShopwareExtensionService(
-                undefined,
-                undefined,
-                new ShopwareDiscountCampaignService()
-            )
+            mocks: {
+                $tc: (key, recommendation, price) => JSON.stringify({ key, recommendation, price })
+            }
         }
     });
 }

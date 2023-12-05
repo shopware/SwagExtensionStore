@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 
 Shopware.Component.register(
     'sw-extension-store-slider',
@@ -7,18 +7,17 @@ Shopware.Component.register(
 );
 
 async function createWrapper() {
-    return shallowMount(await Shopware.Component.build('sw-extension-store-slider'), {
-        stubs: {
-            'sw-icon': {
-                template: '<div class="sw-icon"></div>'
-            }
-        },
-        provide: {},
-        mocks: {
-            $tc: t => t
-        },
-        propsData: {
+    return mount(await Shopware.Component.build('sw-extension-store-slider'), {
+        props: {
             images: []
+        },
+        global: {
+            stubs: {
+                'sw-icon': {
+                    template: '<div class="sw-icon"></div>'
+                }
+            },
+            provide: {}
         }
     });
 }
@@ -29,10 +28,6 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
 
     beforeEach(async () => {
         wrapper = await createWrapper();
-    });
-
-    afterEach(async () => {
-        if (wrapper) wrapper.destroy();
     });
 
     it('should be a Vue.js component', async () => {
@@ -152,7 +147,7 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         expect(activeItems.length).toBe(3);
 
         // check if image sources are set correctly
-        activeItems.wrappers.forEach(activeItem => {
+        activeItems.forEach(activeItem => {
             const dataKey = activeItem.attributes()['data-key'];
             expect(activeItem.find('img').attributes().src).toEqual(images[dataKey]);
         });
@@ -279,7 +274,7 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         expect(thirdItem.classes()).not.toContain('is--active');
 
         // back button should be disabled
-        expect(buttonBack.attributes().disabled).toBe('disabled');
+        expect(buttonBack.attributes().disabled).toBeDefined();
 
         // a click on this should not trigger anything
         await buttonBack.trigger('click');
@@ -359,7 +354,7 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         expect(thirdItem.classes()).toContain('is--active');
 
         // next button should be disabled
-        expect(buttonNext.attributes().disabled).toBe('disabled');
+        expect(buttonNext.attributes().disabled).toBeDefined();
 
         // a click on this should not trigger anything
         await buttonNext.trigger('click');

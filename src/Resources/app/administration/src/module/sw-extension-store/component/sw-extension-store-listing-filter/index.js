@@ -123,11 +123,7 @@ export default {
                 return;
             }
 
-            if (this.feature.isActive('VUE3')) {
-                this.activeFilters[filter.name] = value;
-            } else {
-                this.$set(this.activeFilters, filter.name, value);
-            }
+            this.activeFilters[filter.name] = value;
         },
 
         getOptionsForFilter(filter) {

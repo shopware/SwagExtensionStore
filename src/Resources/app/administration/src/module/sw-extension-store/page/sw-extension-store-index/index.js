@@ -50,12 +50,11 @@ export default {
         isTheme: {
             immediate: true,
             handler(newValue) {
-                Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'page', value: 1 });
-                if (this.feature.isActive('VUE3')) {
-                    this.activeFilters.group = newValue;
-                } else {
-                    this.$set(this.activeFilters, 'group', newValue);
-                }
+                Shopware.State.commit('shopwareExtensions/setSearchValue', {
+                    key: 'page',
+                    value: 1
+                });
+                this.activeFilters.group = newValue;
             }
         }
     },
@@ -115,7 +114,10 @@ export default {
         },
 
         updateSearch(term) {
-            Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'term', value: term });
+            Shopware.State.commit('shopwareExtensions/setSearchValue', {
+                key: 'term',
+                value: term
+            });
         }
     }
 };
