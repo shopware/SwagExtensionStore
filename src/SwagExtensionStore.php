@@ -2,8 +2,10 @@
 
 namespace SwagExtensionStore;
 
+use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Plugin;
 
+#[Package('services-settings')]
 class SwagExtensionStore extends Plugin
 {
 }

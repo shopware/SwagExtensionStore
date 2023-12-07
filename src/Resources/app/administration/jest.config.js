@@ -1,6 +1,7 @@
 const { resolve, join } = require('path');
 
-const adminPath = process.env.ADMIN_PATH ? process.env.ADMIN_PATH : join(__dirname, '../../../../../../../src/Administration/Resources/app/administration');
+const adminPath = process.env.ADMIN_PATH ? process.env.ADMIN_PATH :
+    resolve(join(__dirname, '../../../../../../../src/Administration/Resources/app/administration'));
 process.env.ADMIN_PATH = adminPath;
 
 // For a detailed explanation regarding each configuration property, visit:
@@ -13,8 +14,12 @@ module.exports = {
     },
 
     setupFilesAfterEnv: [
-        resolve(join(adminPath, '/test/_setup/prepare_environment.js')),
-        resolve(join(__dirname, '/test/_setup/prepare_environment.js'))
+        join(adminPath, '/test/_setup/prepare_environment.js')
+    ],
+
+    testMatch: [
+        '<rootDir>/src/**/*.spec.js',
+        '<rootDir>/src/**/*.spec.ts'
     ],
 
     collectCoverageFrom: [
@@ -30,7 +35,9 @@ module.exports = {
         // See https://github.com/uuidjs/uuid/issues/451
         '^uuid$': require.resolve('uuid'),
         '^\@shopware-ag\/admin-extension-sdk\/es\/(.*)':
-            `${process.env.ADMIN_PATH}/node_modules/@shopware-ag/admin-extension-sdk/umd/$1`
+            `${process.env.ADMIN_PATH}/node_modules/@shopware-ag/admin-extension-sdk/umd/$1`,
+        vue$: '<rootDir>/node_modules/@vue/compat/dist/vue.cjs.js',
+        '@vue/test-utils': '<rootDir>/node_modules/@vue/test-utils'
     },
 
     transformIgnorePatterns: [

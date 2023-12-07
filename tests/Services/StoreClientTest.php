@@ -24,14 +24,14 @@ class StoreClientTest extends TestCase
     protected function setUp(): void
     {
         $this->context = Context::createDefaultContext();
-        $this->storeClient = $this->getContainer()->get(StoreClient::class);
+        $this->storeClient = static::getContainer()->get(StoreClient::class);
     }
 
     public function testListExtensionsException(): void
     {
         $this->setUpRequestHandler(400);
 
-        static::expectException(StoreApiException::class);
+        $this->expectException(StoreApiException::class);
         $this->storeClient->listExtensions(new ExtensionCriteria(), $this->context);
     }
 
@@ -39,7 +39,7 @@ class StoreClientTest extends TestCase
     {
         $this->setUpRequestHandler(400);
 
-        static::expectException(StoreApiException::class);
+        $this->expectException(StoreApiException::class);
         $this->storeClient->listListingFilters([], $this->context);
     }
 
@@ -47,7 +47,7 @@ class StoreClientTest extends TestCase
     {
         $this->setUpRequestHandler(400);
 
-        static::expectException(StoreApiException::class);
+        $this->expectException(StoreApiException::class);
         $this->storeClient->extensionDetail(1337, $this->context);
     }
 
@@ -55,7 +55,7 @@ class StoreClientTest extends TestCase
     {
         $this->setUpRequestHandler(400);
 
-        static::expectException(StoreApiException::class);
+        $this->expectException(StoreApiException::class);
         $this->storeClient->extensionDetailReviews(1337, new ExtensionCriteria(), $this->context);
     }
 
@@ -63,7 +63,7 @@ class StoreClientTest extends TestCase
     {
         $this->setUpRequestHandler(400);
 
-        static::expectException(StoreApiException::class);
+        $this->expectException(StoreApiException::class);
         $this->storeClient->createCart(69, 1337, $this->context);
     }
 
@@ -71,7 +71,7 @@ class StoreClientTest extends TestCase
     {
         $this->setUpRequestHandler(400);
 
-        static::expectException(StoreApiException::class);
+        $this->expectException(StoreApiException::class);
         $this->storeClient->orderCart(new CartStruct(), $this->context);
     }
 
@@ -81,7 +81,6 @@ class StoreClientTest extends TestCase
 
         $response = $this->storeClient->availablePaymentMeans($this->context);
 
-        static::assertIsArray($response);
         static::assertArrayHasKey('filter', $response);
         static::assertCount(3, $response['filter']);
         static::assertArrayHasKey('sorting', $response);
@@ -92,13 +91,13 @@ class StoreClientTest extends TestCase
     {
         $this->setUpRequestHandler(400);
 
-        static::expectException(StoreApiException::class);
+        $this->expectException(StoreApiException::class);
         $this->storeClient->availablePaymentMeans($this->context);
     }
 
     private function setUpRequestHandler(int $statusCode = 200): void
     {
-        $requestHandler = $this->getRequestHandler();
+        $requestHandler = $this->getStoreRequestHandler();
         $filterJson = file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json');
         static::assertIsString($filterJson);
         $requestHandler->append(new Response($statusCode, [], $filterJson));

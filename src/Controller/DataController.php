@@ -3,7 +3,9 @@
 namespace SwagExtensionStore\Controller;
 
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
+use SwagExtensionStore\Services\StoreClient;
 use SwagExtensionStore\Services\StoreDataProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +14,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @internal
+ *
+ * @phpstan-import-type RequestQueryParameters from StoreClient
  */
+#[Package('services-settings')]
 #[Route(defaults: ['_routeScope' => ['api'], '_acl' => ['system.plugin_maintain']])]
 class DataController
 {
@@ -59,7 +64,7 @@ class DataController
     #[Route('/api/_action/extension-store/store-filters', name: 'api.extension.store_filters', methods: ['GET'])]
     public function listingFilters(Request $request, Context $context): JsonResponse
     {
-        /** @var array<string, string> $params */
+        /** @var RequestQueryParameters $params */
         $params = $request->query->all();
 
         return new JsonResponse($this->dataProvider->getListingFilters($params, $context));

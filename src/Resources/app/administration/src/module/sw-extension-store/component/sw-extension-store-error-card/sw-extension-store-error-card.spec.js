@@ -1,5 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
-import 'src/app/component/meteor/sw-meteor-card';
+import { mount } from '@vue/test-utils';
 
 Shopware.Component.register(
     'sw-extension-store-error-card',
@@ -7,51 +6,51 @@ Shopware.Component.register(
 );
 
 async function createWrapper(opts) {
-    return shallowMount(await Shopware.Component.build('sw-extension-store-error-card'), {
-        stubs: {
-            'sw-meteor-card': await Shopware.Component.build('sw-meteor-card'),
-            'sw-label': true,
-            'sw-icon': true,
-            'sw-button': true
-        },
-        ...opts
+    return mount(await Shopware.Component.build('sw-extension-store-error-card'), {
+        ...opts,
+        global: {
+            renderStubDefaultSlot: true,
+            stubs: {
+                'sw-meteor-card': await wrapTestComponent('sw-meteor-card', { sync: true }),
+                'sw-button': await wrapTestComponent('sw-button'),
+                'sw-label': true,
+                'sw-icon': true
+            }
+        }
     });
 }
 
 describe('sw-extension-store-error-card', () => {
-    /** @type Wrapper */
-    let wrapper;
-
     it('should render title', async () => {
-        wrapper = await createWrapper();
-
-        await wrapper.setProps({
-            title: 'Please update your plugin.'
+        const wrapper = await createWrapper({
+            props: {
+                title: 'Please update your plugin.'
+            }
         });
 
-        expect(wrapper.find('.sw-extension-store-error-card__title').text()).toBe('Please update your plugin.');
+        expect(wrapper.get('.sw-extension-store-error-card__title').text()).toBe('Please update your plugin.');
     });
 
     it('should render message in main slot', async () => {
-        wrapper = await createWrapper({
+        const wrapper = await createWrapper({
             slots: {
                 default: 'A new version of the plugin is available.'
             }
         });
 
-        expect(wrapper.find('.sw-extension-store-error-card__message').text())
+        expect(wrapper.get('.sw-extension-store-error-card__message').text())
             .toBe('A new version of the plugin is available.');
     });
 
     it('should render content in actions slot', async () => {
-        wrapper = await createWrapper({
+        const wrapper = await createWrapper({
             slots: {
                 actions: '<sw-button>Check for updates</sw-button>'
             }
         });
 
-        expect(wrapper.find('.sw-extension-store-error-card__actions sw-button-stub').exists()).toBe(true);
-        expect(wrapper.find('.sw-extension-store-error-card__actions sw-button-stub').text()).toBe('Check for updates');
+        expect(wrapper.get('.sw-extension-store-error-card__actions .sw-button').exists()).toBe(true);
+        expect(wrapper.get('.sw-extension-store-error-card__actions .sw-button').text()).toBe('Check for updates');
     });
 
     describe('render correct icons and color variants', () => {
@@ -89,16 +88,17 @@ describe('sw-extension-store-error-card', () => {
         ];
 
         it.each(testCases)('%p', async ({ variant, expectedIcon, expectedLabelVariant, expectedComponentClass }) => {
-            wrapper = await createWrapper();
-
-            // Only set variant prop when defined
-            if (variant) await wrapper.setProps({ variant });
+            const wrapper = await createWrapper({
+                props: {
+                    variant
+                }
+            });
 
             // Ensure correct label variant
-            expect(wrapper.find('.sw-extension-store-error-card__label').attributes().variant).toBe(expectedLabelVariant);
+            expect(wrapper.get('.sw-extension-store-error-card__label').attributes().variant).toBe(expectedLabelVariant);
 
             // Ensure correct icon for variant
-            expect(wrapper.find('.sw-extension-store-error-card__label sw-icon-stub').attributes().name).toBe(expectedIcon);
+            expect(wrapper.get('.sw-extension-store-error-card__label sw-icon-stub').attributes().name).toBe(expectedIcon);
 
             // Ensure correct component class
             expect(wrapper.classes()).toContain(expectedComponentClass);

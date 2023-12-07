@@ -1,6 +1,7 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import ExtensionErrorService from 'src/module/sw-extension/service/extension-error.service';
 import 'src/app/component/meteor/sw-meteor-page';
+import { reactive } from 'vue';
 
 Shopware.Component.register(
     'sw-extension-store-index',
@@ -25,44 +26,42 @@ Shopware.Application.addServiceProvider('extensionErrorService', () => {
 });
 
 async function createWrapper() {
-    const localVue = createLocalVue();
-
-    return shallowMount(await Shopware.Component.build('sw-extension-store-index'), {
-        localVue,
-        propsData: {},
-        mocks: {
-            $tc: v => v,
-            $t: v => v,
-            $route: {
-                name: 'sw.extension.store.listing.app',
-                meta: {
-                    $module: {}
-                }
+    return mount(await Shopware.Component.build('sw-extension-store-index'), {
+        props: {},
+        global: {
+            renderStubDefaultSlot: true,
+            mocks: {
+                $route: reactive({
+                    name: 'sw.extension.store.listing.app',
+                    meta: {
+                        $module: {}
+                    }
+                })
+            },
+            stubs: {
+                'sw-meteor-page': await wrapTestComponent('sw-meteor-page'),
+                'sw-search-bar': {
+                    template: '<div class="sw-search-bar"></div>'
+                },
+                'sw-notification-center': true,
+                'sw-meteor-navigation': true,
+                'sw-loader': true,
+                'sw-tabs': true,
+                'sw-tabs-item': true,
+                'router-view': true,
+                'sw-extension-store-error-card': true,
+                'sw-extension-store-update-warning': true,
+                'sw-help-center': true
+            },
+            provide: {
+                extensionStoreActionService: {
+                    getMyExtensions: myExtensionsMock
+                },
+                shopwareExtensionService: {
+                    updateExtensionData: jest.fn()
+                },
+                extensionErrorService: Shopware.Service('extensionErrorService')
             }
-        },
-        stubs: {
-            'sw-meteor-page': await Shopware.Component.build('sw-meteor-page'),
-            'sw-search-bar': {
-                template: '<div class="sw-search-bar"></div>'
-            },
-            'sw-notification-center': true,
-            'sw-meteor-navigation': true,
-            'sw-loader': true,
-            'sw-tabs': true,
-            'sw-tabs-item': true,
-            'router-view': true,
-            'sw-extension-store-error-card': true,
-            'sw-extension-store-update-warning': true,
-            'sw-help-center': true
-        },
-        provide: {
-            extensionStoreActionService: {
-                getMyExtensions: myExtensionsMock
-            },
-            shopwareExtensionService: {
-                updateExtensionData: jest.fn()
-            },
-            extensionErrorService: Shopware.Service('extensionErrorService')
         }
     });
 }
@@ -97,6 +96,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
 
     it('should commit the search value to the store', async () => {
         const wrapper = await createWrapper();
+        await flushPromises();
 
         expect(setSearchValueMock).toHaveBeenCalledTimes(1);
         expect(setSearchValueMock).toHaveBeenCalledWith(expect.anything(), {
@@ -104,7 +104,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
             value: 1
         });
 
-        const searchBar = wrapper.find('.sw-search-bar');
+        const searchBar = wrapper.getComponent('.sw-search-bar');
         await searchBar.vm.$emit('search', 'Nice theme');
 
         expect(setSearchValueMock).toHaveBeenCalledWith(expect.anything(), {
@@ -127,7 +127,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         const wrapper = await createWrapper();
 
         wrapper.vm.$route.name = 'sw.extension.store.listing.theme';
-        await wrapper.vm.$nextTick();
+        await flushPromises();
 
         const filter = Shopware.State.get('shopwareExtensions').search.filter;
 
@@ -147,18 +147,16 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         const wrapper = await createWrapper();
 
         // Wait for loader to disappear
-        await wrapper.vm.$nextTick();
-        await wrapper.vm.$nextTick();
+        await flushPromises();
 
-        expect(wrapper.find('sw-extension-store-update-warning-stub').exists()).toBe(true);
+        expect(wrapper.get('sw-extension-store-update-warning-stub').exists()).toBe(true);
     });
 
     it('should show listing errors on listing errors event', async () => {
         const wrapper = await createWrapper();
 
         // Wait for loader to disappear
-        await wrapper.vm.$nextTick();
-        await wrapper.vm.$nextTick();
+        await flushPromises();
 
         // Mock listing error response
         const listingError = new Error();
@@ -179,15 +177,15 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         };
 
         // Emit listing error on router view
-        await wrapper.get('router-view-stub').vm.$emit('extension-listing-errors', listingError);
+        await wrapper.getComponent('router-view-stub').vm.$emit('extension-listing-errors', listingError);
 
-        expect(wrapper.find('sw-extension-store-error-card-stub').attributes().title)
+        expect(wrapper.get('sw-extension-store-error-card-stub').attributes().title)
             .toBe('Shopware version is unknown');
 
-        expect(wrapper.find('sw-extension-store-error-card-stub').attributes().variant)
+        expect(wrapper.get('sw-extension-store-error-card-stub').attributes().variant)
             .toBe('danger');
 
-        expect(wrapper.find('sw-extension-store-error-card-stub').text())
+        expect(wrapper.get('sw-extension-store-error-card-stub').text())
             .toBe('The given Shopware version is unknown, please contact our customer service');
     });
 });

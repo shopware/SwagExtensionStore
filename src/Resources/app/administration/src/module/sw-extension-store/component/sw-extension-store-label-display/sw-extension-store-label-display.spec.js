@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 
 Shopware.Component.register(
     'sw-extension-store-label-display',
@@ -11,12 +11,14 @@ Shopware.Component.register(
 
 
 async function createWrapper(labels) {
-    return shallowMount(await Shopware.Component.build('sw-extension-store-label-display'), {
-        propsData: {
+    return mount(await Shopware.Component.build('sw-extension-store-label-display'), {
+        props: {
             labels
         },
-        stubs: {
-            'sw-extension-label': await Shopware.Component.build('sw-extension-label')
+        global: {
+            stubs: {
+                'sw-extension-label': await Shopware.Component.build('sw-extension-label')
+            }
         }
     });
 }

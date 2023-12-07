@@ -3,6 +3,7 @@
 namespace SwagExtensionStore\Services;
 
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use Shopware\Core\Framework\Store\Services\ExtensionLoader;
 use Shopware\Core\Framework\Store\Struct\ExtensionCollection;
@@ -15,6 +16,7 @@ use Shopware\Core\Framework\Store\Struct\ReviewSummaryStruct;
  * @phpstan-import-type ExtensionListingFilter from StoreClient
  * @phpstan-import-type ExtensionListingSorting from StoreClient
  */
+#[Package('services-settings')]
 class StoreDataProvider
 {
     public const HEADER_NAME_TOTAL_COUNT = 'SW-Meta-Total';

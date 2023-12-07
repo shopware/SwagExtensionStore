@@ -10,11 +10,7 @@
                         :options="sortingOptions"
                         valueProperty="orderIdentifier"
                         :value="sortingValue"
-                        {% if VUE3 %}
                         @update:value="setSelectedSorting"
-                        {% else %}
-                        @change="setSelectedSorting"
-                        {% endif %}
                     >
                     </sw-meteor-single-select>
                 {% endblock %}
@@ -28,11 +24,7 @@
                         :label="filter.label"
                         :options="getOptionsForFilter(filter)"
                         :value="getValueForFilter(filter)"
-                        {% if VUE3 %}
                         @update:value="changeValueForFilter(filter, $event)"
-                        {% else %}
-                        @change="changeValueForFilter(filter, $event)"
-                        {% endif %}
                     >
                         <template v-if="filter.type === 'category'"
                                   #result-label-property="{ item, valueProperty }">
