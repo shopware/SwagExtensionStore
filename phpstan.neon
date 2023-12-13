@@ -17,7 +17,7 @@ parameters:
     symfony:
         constantHassers: false
         containerXmlPath: '../../../var/cache/extension_store_phpstan/Shopware_Core_DevOps_StaticAnalyze_StaticAnalyzeKernelExtension_store_phpstanDebugContainer.xml'
-        consoleApplicationLoader: tests/phpstan/console-application.php
+        consoleApplicationLoader: ../../../src/Core/DevOps/StaticAnalyze/console-application.php
 
     type_coverage:
         return_type: 99

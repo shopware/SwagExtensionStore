@@ -2,6 +2,7 @@
 
 use Composer\Autoload\ClassLoader;
 use Shopware\Core\DevOps\StaticAnalyze\StaticAnalyzeKernel;
+use Shopware\Core\Framework\Adapter\Kernel\KernelFactory;
 use Shopware\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
 use SwagExtensionStore\SwagExtensionStore;
 use Symfony\Component\Dotenv\Dotenv;
@@ -45,7 +46,12 @@ $pluginLoader = new StaticKernelPluginLoader($classLoader, null, [
         'path' => dirname(__DIR__, 2),
     ],
 ]);
-$kernel = new StaticAnalyzeKernel('extension_store_phpstan', true, $pluginLoader, 'phpstan-test-cache-id');
+
+KernelFactory::$kernelClass = StaticAnalyzeKernel::class;
+
+/** @var StaticAnalyzeKernel $kernel */
+$kernel = KernelFactory::create('extension_store_phpstan', true, $classLoader, $pluginLoader);
+
 $kernel->boot();
 
 return $classLoader;
