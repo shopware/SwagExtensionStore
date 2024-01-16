@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagExtensionStore\Services;
 
@@ -34,8 +36,7 @@ class StoreClient
         private readonly array $endpoints,
         private readonly AbstractStoreRequestOptionsProvider $storeRequestOptionsProvider,
         private readonly ClientInterface $client,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array{headers: ResponseHeaders, data: list<ExtensionInfo>}
