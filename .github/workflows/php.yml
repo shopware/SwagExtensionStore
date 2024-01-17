@@ -26,5 +26,8 @@ jobs:
     with:
       extensionName: ${{ github.event.repository.name }}
       shopwareVersion: trunk
+      uploadCoverage: true
+    secrets:
+      codecovToken: ${{ secrets.CODECOV_TOKEN }}
 
 
