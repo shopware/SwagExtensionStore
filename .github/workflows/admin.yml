@@ -8,7 +8,7 @@ on:
 jobs:
   unit:
     name: Jest
-    uses: shopware/github-actions/.github/workflows/admin-jest.yml@jest-coverage
+    uses: shopware/github-actions/.github/workflows/admin-jest.yml@main
     with:
       extensionName: ${{ github.event.repository.name }}
       uploadCoverage: true
