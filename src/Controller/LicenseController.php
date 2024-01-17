@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SwagExtensionStore\Controller;
 
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Store\Exception\InvalidExtensionIdException;
 use Shopware\Core\Framework\Store\Exception\InvalidVariantIdException;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
@@ -20,6 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @internal
  */
 #[Route(defaults: ['_routeScope' => ['api'], '_acl' => ['system.plugin_maintain']])]
+#[Package('services-settings')]
 class LicenseController
 {
     private LicenseService $licenseService;
