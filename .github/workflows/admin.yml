@@ -11,6 +11,7 @@ jobs:
     uses: shopware/github-actions/.github/workflows/admin-jest.yml@main
     with:
       extensionName: ${{ github.event.repository.name }}
+      shopwareVersion: 6.5.x
   lint:
     name: ESLint
     uses: shopware/github-actions/.github/workflows/admin-eslint.yml@main
