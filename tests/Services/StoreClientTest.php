@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagExtensionStore\Tests\Services;
 
@@ -81,7 +83,6 @@ class StoreClientTest extends TestCase
 
         $response = $this->storeClient->availablePaymentMeans($this->context);
 
-        static::assertIsArray($response);
         static::assertArrayHasKey('filter', $response);
         static::assertCount(3, $response['filter']);
         static::assertArrayHasKey('sorting', $response);

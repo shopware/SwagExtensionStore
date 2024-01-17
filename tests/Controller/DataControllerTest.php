@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagExtensionStore\Tests\Api;
 
@@ -31,7 +33,7 @@ class DataControllerTest extends TestCase
 
         $response = $this->controller->getExtensionList(new Request(), Context::createDefaultContext());
 
-        $data = json_decode($response->getContent(), true);
+        $data = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         static::assertSame(2, $data['meta']['total']);
         static::assertSame('TestApp', $data['data'][0]['name']);
@@ -45,7 +47,7 @@ class DataControllerTest extends TestCase
         $request->setMethod('POST');
         $response = $this->controller->getExtensionList($request, Context::createDefaultContext());
 
-        $data = json_decode($response->getContent(), true);
+        $data = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         static::assertSame(2, $data['meta']['total']);
         static::assertSame('TestApp', $data['data'][0]['name']);
@@ -61,14 +63,14 @@ class DataControllerTest extends TestCase
         $requestHandler->append(new Response(200, [], $filterJson));
 
         $response = $this->controller->listingFilters(new Request(), Context::createDefaultContext());
-        static::assertJsonStringEqualsJsonFile(__DIR__ . '/../_fixtures/responses/filter.json', $response->getContent());
+        static::assertJsonStringEqualsJsonFile(__DIR__ . '/../_fixtures/responses/filter.json', (string) $response->getContent());
     }
 
     public function testDetail(): void
     {
         $this->setDetailResponse(12161);
         $response = $this->controller->detail(12161, Context::createDefaultContext());
-        $data = json_decode($response->getContent(), true);
+        $data = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         static::assertSame(12161, $data['id']);
         static::assertSame('Tes12SWCloudApp1', $data['name']);
@@ -80,7 +82,7 @@ class DataControllerTest extends TestCase
 
         $this->setReviewsResponse($extensionId);
         $response = $this->controller->reviews($extensionId, new Request(), Context::createDefaultContext());
-        $data = json_decode($response->getContent(), true);
+        $data = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         static::assertArrayHasKey('summary', $data);
         static::assertSame(7, $data['summary']['numberOfRatings']);

@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagExtensionStore\Controller;
 
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use SwagExtensionStore\Services\StoreDataProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @internal
  */
 #[Route(defaults: ['_routeScope' => ['api'], '_acl' => ['system.plugin_maintain']])]
+#[Package('services-settings')]
 class DataController
 {
     private StoreDataProvider $dataProvider;

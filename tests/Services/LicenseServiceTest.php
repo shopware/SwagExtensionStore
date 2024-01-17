@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagExtensionStore\Tests\Services;
 
@@ -39,8 +41,7 @@ class LicenseServiceTest extends TestCase
             ->set(StoreService::CONFIG_KEY_STORE_LICENSE_DOMAIN, 'localhost');
         $this->setResponsesToPurchaseExtension();
 
-        $cart = $this->licenseService->createCart(5, 5, $this->getContextWithStoreToken());
-        static::assertInstanceOf(CartStruct::class, $cart);
+        $this->licenseService->createCart(5, 5, $this->getContextWithStoreToken());
     }
 
     public function testAvailablePaymentMeans(): void

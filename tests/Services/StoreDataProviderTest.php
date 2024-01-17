@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagExtensionStore\Tests\Services;
 
@@ -64,7 +66,6 @@ class StoreDataProviderTest extends TestCase
 
         $listing = $this->extensionDataProvider->getListing($criteria, $this->context);
 
-        static::assertInstanceOf(ExtensionCollection::class, $listing);
         static::assertEquals(2, $listing->count());
     }
 
@@ -75,7 +76,6 @@ class StoreDataProviderTest extends TestCase
         $this->setDetailResponse($extensionId);
         $extensionDetail = $this->extensionDataProvider->getExtensionDetails($extensionId, $this->context);
 
-        static::assertNotNull($extensionDetail);
         static::assertEquals($extensionId, $extensionDetail->getId());
         static::assertEquals('Change your privacy policy!', $extensionDetail->getPrivacyPolicyExtension());
     }

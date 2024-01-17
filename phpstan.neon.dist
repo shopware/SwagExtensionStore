@@ -1,0 +1,81 @@
+includes:
+    - ../../../vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+parameters:
+    phpVersion: 80100
+    level: 8
+    treatPhpDocTypesAsCertain: false
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+    checkUninitializedProperties: true
+    reportUnmatchedIgnoredErrors: true
+    paths:
+        - src
+        - tests
+    symfony:
+        constantHassers: false
+        containerXmlPath: '../../../var/cache/phpstan_dev/Shopware_Core_DevOps_StaticAnalyze_StaticAnalyzeKernelPhpstan_devDebugContainer.xml'
+        consoleApplicationLoader: ../../../src/Core/DevOps/StaticAnalyze/console-application.php
+
+    type_coverage:
+        return_type: 99
+        param_type: 98
+        property_type: 81
+    excludePaths:
+        # would otherwise inspect php test files inside node_modules
+        - src/Resources/app/administration
+    ignoreErrors:
+
+        - # Direct container access
+            message: '#Service ".*" is private#'
+            path: tests
+
+        - '#Call to deprecated method#'
+        - '#Throwing new exceptions within classes are not allowed#'
+
+        - # Ignore namespace for test plugins
+            message: '#Class like namespace .* does not follow PSR-4 configuration in composer.json#'
+            path: tests
+services:
+    -   # register the class, so we can decorate it, but don't tag it as a rule, so only our decorator is used by PHPStan
+        class: Symplify\PHPStanRules\Rules\NoReturnSetterMethodRule
+
+rules:
+    # Shopware core rules
+    - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\DeprecatedMethodsThrowDeprecationRule
+    - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\MockingSimpleObjectsNotAllowedRule
+    - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\FinalClassRule
+    - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\DecorationPatternRule
+    - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\PackageAnnotationRule
+    - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\DomainExceptionRule
+    - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\NoAfterStatementRule
+
+    # rules from https://github.com/symplify/phpstan-rules
+    # domain
+    - Symplify\PHPStanRules\Rules\Enum\RequireUniqueEnumConstantRule
+    - Symplify\PHPStanRules\Rules\ForbiddenParamTypeRemovalRule
+    - Symplify\PHPStanRules\Rules\PreventParentMethodVisibilityOverrideRule
+
+    # paths
+    - Symplify\PHPStanRules\Rules\NoMissingDirPathRule
+    - Symplify\PHPStanRules\Rules\NoArrayAccessOnObjectRule
+
+    # dead-code
+    - Symplify\PHPStanRules\Rules\NoIssetOnObjectRule
+
+    # explicit naming
+    - Symplify\PHPStanRules\Rules\ForbiddenMultipleClassLikeInOneFileRule
+
+    - Symplify\PHPStanRules\Rules\Complexity\ForbiddenArrayMethodCallRule
+
+    # complexity rules
+    - Symplify\PHPStanRules\Rules\Explicit\NoMixedPropertyFetcherRule
+    - Symplify\PHPStanRules\Rules\Explicit\NoMixedMethodCallerRule
+    - Symplify\PHPStanRules\Rules\NoDynamicNameRule
+
+    # naming rules
+    - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\Symplify\NoReturnSetterMethodWithFluentSettersRule
+    - Symplify\PHPStanRules\Rules\NoVoidGetterMethodRule
+    - Symplify\PHPStanRules\Rules\UppercaseConstantRule
+    - Symplify\PHPStanRules\Rules\CheckClassNamespaceFollowPsr4Rule
+

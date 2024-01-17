@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagExtensionStore\Services;
 
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Store\Struct\CartPositionStruct;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Util\FloatComparator;
@@ -10,6 +13,7 @@ use Shopware\Core\Framework\Util\FloatComparator;
 /**
  * @phpstan-import-type PaymentMethod from StoreClient
  */
+#[Package('services-settings')]
 class LicenseService
 {
     private StoreClient $client;

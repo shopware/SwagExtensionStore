@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagExtensionStore\Services;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProvider;
 use Shopware\Core\Framework\Store\Exception\StoreApiException;
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
@@ -13,16 +16,17 @@ use Shopware\Core\Framework\Store\Struct\CartStruct;
 /**
  * @phpstan-type SbpEndpoints array<string, string>
  * @phpstan-type RequestQueryParameters array<string, string>
- * @phpstan-type ResponseHeaders array<string, list<string>>
+ * @phpstan-type ResponseHeaders array<string, array<string>>
  * @phpstan-type ExtensionInfo array<string, mixed>
  * @phpstan-type ExtensionDetail array<string, mixed>
  * @phpstan-type ExtensionListingFilterOption array{name: string, value: string, label: string, position: int, parent: string}
- * @phpstan-type ExtensionListingFilter array{type: string, name: label, position: int, options: list<ExtensionListingFilterOption>}
+ * @phpstan-type ExtensionListingFilter array{type: string, name: string, label: string, position: int, options: list<ExtensionListingFilterOption>}
  * @phpstan-type ExtensionListingSortingOption array{orderBy: string, orderSequence: 'asc'|'desc', label: string, position: int}
  * @phpstan-type ExtensionListingSorting array{default: ExtensionListingSortingOption, options: list<ExtensionListingSortingOption>}
  * @phpstan-type ExtensionReview array<string, mixed>
  * @phpstan-type PaymentMethod array{id: positive-int, type: 'paypal'|'creditCard'|'directDebit', label: string, default: bool}
  */
+#[Package('services-settings')]
 class StoreClient
 {
     public function __construct(
@@ -30,8 +34,7 @@ class StoreClient
         private readonly array $endpoints,
         private readonly AbstractStoreRequestOptionsProvider $storeRequestOptionsProvider,
         private readonly ClientInterface $client,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array{headers: ResponseHeaders, data: list<ExtensionInfo>}
@@ -109,7 +112,7 @@ class StoreClient
      *     reviews: list<ExtensionReview>,
      *     summary: array{
      *         ratingAssignment: list<array{rating: int<1, 5>, count: positive-int}>,
-     *         averageRating: float<0, 5>,
+     *         averageRating: float,
      *         numberOfRatings: positive-int
      *     }}
      */
