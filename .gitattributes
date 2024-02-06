@@ -11,6 +11,8 @@
 /src/Resources/app/administration/jest.config.js export-ignore
 /src/Resources/app/administration/**/*.spec.js export-ignore
 /src/Resources/app/administration/**/*.spec.ts export-ignore
+/src/Resources/app/administration/**/*.spec.vue3.js export-ignore
+/src/Resources/app/administration/**/*.spec.vue3.ts export-ignore
 /.gitlab-ci.yml export-ignore
 /CHANGELOG_de-DE.md export-ignore
 /CHANGELOG_en-GB.md export-ignore
