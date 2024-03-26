@@ -50,6 +50,10 @@
         ],
         "cs-fixer": [
             "@php ../../../vendor/bin/php-cs-fixer fix . --rules=@PER-CS2.0,no_unused_imports"
+        ],
+        "phpstan": [
+            "@php ../../../src/Core/DevOps/StaticAnalyze/phpstan-bootstrap.php",
+            "@php ../../../vendor/bin/phpstan analyze"
         ]
     }
 }
