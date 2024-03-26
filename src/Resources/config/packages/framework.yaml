@@ -1,0 +1,4 @@
+framework:
+    exceptions:
+        Shopware\Core\Framework\Store\Exception\StoreApiException:
+            log_level: notice

@@ -45,19 +45,11 @@
         }
     },
     "scripts": {
-        "ecs-dry": [
-            "@php ../../../vendor/bin/ecs check"
+        "cs-fixer-dry": [
+            "@php ../../../vendor/bin/php-cs-fixer fix . --dry-run --rules=@PER-CS2.0,no_unused_imports"
         ],
-        "ecs-fix": [
-            "@php ../../../vendor/bin/ecs check --fix"
-        ],
-        "phpstan": [
-            "@php tests/phpstan/bootstrap.php",
-            "@php ../../../vendor/bin/phpstan analyze --configuration phpstan.neon"
-        ],
-        "static-analyze": [
-            "@ecs-fix",
-            "@phpstan"
+        "cs-fixer": [
+            "@php ../../../vendor/bin/php-cs-fixer fix . --rules=@PER-CS2.0,no_unused_imports"
         ]
     }
 }
