@@ -2,6 +2,7 @@
 /.psh.yaml.override
 /.php_cs.cache
 /vendor
+/phpstan.neon
 
 ### misc
 .DS_Store
