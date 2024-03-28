@@ -1,0 +1,41 @@
+.sw-dashboard-statistics-promotion-card {
+    margin: 23px auto;
+    container-type: inline-size;
+
+    &__content {
+        max-width: calc(100% - 346px)
+    }
+
+    &__decoration-canvas {
+        position: absolute;
+        display: block;
+        width: 346px;
+        height: 326px;
+        background: #ff0000;
+        top: 50%;
+        right: -24px;
+        transform: translate(0, -50%);
+        border-radius: 8px;
+    }
+
+    .sw-card__content h3 {
+        font-weight: 600;
+    }
+
+    &__promotion-text {
+        margin-bottom: 24px;
+    }
+
+    @container (max-width: 750px) {
+        &__decoration-canvas {
+            position: static;
+            width: calc(100% + 30px);
+            margin: -15px -15px 24px;
+            transform: none;
+        }
+
+        &__content {
+            max-width: 100%;
+        }
+    }
+}

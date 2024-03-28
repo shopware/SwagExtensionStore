@@ -1,0 +1,20 @@
+<sw-card
+    class="sw-dashboard-statistics-promotion-card"
+
+    >
+    <div class="sw-dashboard-statistics-promotion-card__decoration-canvas"></div>
+
+    <div class="sw-dashboard-statistics-promotion-card__content">
+        <h3 class="sw-dashboard-statistics-promotion-card__title">
+            {{ $tc('title') }}
+        </h3>
+
+        <div class="sw-dashboard-statistics-promotion-card__promotion-text">
+            {{ $tc('promotion-text') }}
+        </div>
+
+        <sw-button variant="primary" >
+            {{ $tc('cta') }} <sw-icon name="regular-long-arrow-right" size="14px" />
+        </sw-button>
+    </div>
+</sw-card>
