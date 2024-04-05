@@ -1,6 +1,6 @@
 <sw-card
+    v-if="showBanner"
     class="sw-dashboard-statistics-promotion-card"
-
     >
     <div class="sw-dashboard-statistics-promotion-card__decoration-canvas"></div>
 
@@ -13,7 +13,11 @@
             {{ $tc('promotion-text') }}
         </div>
 
-        <sw-button variant="primary" >
+        <sw-button
+            variant="primary"
+            :disabled="!linkToStatisticsAppExists"
+            @click="goToStatisticsAppDetailPage"
+        >
             {{ $tc('cta') }} <sw-icon name="regular-long-arrow-right" size="14px" />
         </sw-button>
     </div>
