@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * @internal
  */
-#[Package('services-settings')]
+#[Package('checkout')]
 #[Route(defaults: ['_routeScope' => ['api'], '_acl' => ['system.plugin_maintain']])]
 class LicenseController
 {

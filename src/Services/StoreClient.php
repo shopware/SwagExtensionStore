@@ -26,7 +26,7 @@ use SwagExtensionStore\Exception\ExtensionStoreException;
  * @phpstan-type ExtensionReview array<string, mixed>
  * @phpstan-type PaymentMethod array{id: positive-int, type: 'paypal'|'creditCard'|'directDebit', label: string, default: bool}
  */
-#[Package('services-settings')]
+#[Package('checkout')]
 class StoreClient
 {
     /**

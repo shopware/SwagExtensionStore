@@ -18,7 +18,7 @@ use Shopware\Core\Framework\Store\Struct\ReviewSummaryStruct;
  * @phpstan-import-type ExtensionListingFilter from StoreClient
  * @phpstan-import-type ExtensionListingSorting from StoreClient
  */
-#[Package('services-settings')]
+#[Package('checkout')]
 class StoreDataProvider
 {
     public const HEADER_NAME_TOTAL_COUNT = 'SW-Meta-Total';
