@@ -1,3 +1,19 @@
-<sw-card>
-    Hi :D
+<sw-card
+    v-if="showBanner"
+    class="sw-extension-store-statistics-promotion-card"
+>
+    <h3 class="sw-extension-store-statistics-promotion-card__title">
+        {{ $tc('title') }}
+    </h3>
+
+    <sw-button
+        class="sw-extension-store-statistics-promotion-card__cta"
+        variant="primary"
+        ghost="true"
+        size="large"
+        :disabled="!linkToStatisticsAppExists"
+        @click="goToStatisticsAppDetailPage"
+    >
+        {{ $tc('cta') }} <sw-icon name="regular-long-arrow-right" size="12px" />
+    </sw-button>
 </sw-card>
