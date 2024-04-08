@@ -1,5 +1,7 @@
+@import '~scss/variables';
+
 .sw-dashboard-statistics-promotion-card {
-    margin: 23px auto;
+    margin: 70px auto;
     container-type: inline-size;
 
     &__content {
@@ -11,7 +13,7 @@
         display: block;
         width: 346px;
         height: 326px;
-        background: #ff0000;
+        background: #0099ff;
         top: 50%;
         right: -24px;
         transform: translate(0, -50%);
@@ -19,7 +21,7 @@
     }
 
     .sw-card__content h3 {
-        font-weight: 600;
+        font-weight: $font-weight-bold;
     }
 
     &__promotion-text {
