@@ -107,7 +107,7 @@ class StoreDataProviderTest extends TestCase
                 self::assertIsString($extensionReviewsJson);
 
                 return new Response(200, [], $extensionReviewsJson);
-            }
+            },
         );
     }
 
@@ -120,7 +120,7 @@ class StoreDataProviderTest extends TestCase
         $requestHandler->append(new Response(
             200,
             [StoreDataProvider::HEADER_NAME_TOTAL_COUNT => '2'],
-            $extensionListingJson
+            $extensionListingJson,
         ));
     }
 
@@ -139,7 +139,7 @@ class StoreDataProviderTest extends TestCase
                 self::assertIsString($extensionDetailJson);
 
                 return new Response(200, [], $extensionDetailJson);
-            }
+            },
         );
     }
 }

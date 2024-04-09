@@ -50,7 +50,7 @@ class StoreClient
                 [
                     'query' => array_merge($this->storeRequestOptionsProvider->getDefaultQueryParameters($context), $criteria->getQueryParameter()),
                     'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
-                ]
+                ],
             );
         } catch (ClientException $e) {
             throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
@@ -76,7 +76,7 @@ class StoreClient
                 [
                     'query' => array_merge($this->storeRequestOptionsProvider->getDefaultQueryParameters($context), $parameters),
                     'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
-                ]
+                ],
             );
         } catch (ClientException $e) {
             throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
@@ -97,7 +97,7 @@ class StoreClient
                 [
                     'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
                     'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
-                ]
+                ],
             );
         } catch (ClientException $e) {
             throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
@@ -124,7 +124,7 @@ class StoreClient
                 [
                     'query' => array_merge($this->storeRequestOptionsProvider->getDefaultQueryParameters($context), $criteria->getQueryParameter()),
                     'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
-                ]
+                ],
             );
         } catch (ClientException $e) {
             throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
@@ -150,7 +150,7 @@ class StoreClient
                             ],
                         ],
                     ],
-                ]
+                ],
             );
         } catch (ClientException $e) {
             throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
@@ -169,7 +169,7 @@ class StoreClient
                     'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
                     'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
                     'json' => $cartStruct,
-                ]
+                ],
             );
         } catch (ClientException $e) {
             throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
@@ -188,7 +188,7 @@ class StoreClient
                 [
                     'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
                     'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
-                ]
+                ],
             );
 
             return json_decode((string) $response->getBody(), true);
