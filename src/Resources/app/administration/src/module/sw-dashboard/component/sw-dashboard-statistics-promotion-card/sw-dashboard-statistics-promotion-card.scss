@@ -4,8 +4,12 @@
     margin: 70px auto;
     container-type: inline-size;
 
+    .sw-card__content {
+        background: #abd9ff; // TODO: remove and add background image
+    }
+
     &__content {
-        max-width: calc(100% - 346px)
+        max-width: calc(100% - 346px);
     }
 
     &__decoration-canvas {
@@ -13,7 +17,7 @@
         display: block;
         width: 346px;
         height: 326px;
-        background: #0099ff;
+        background: #0a53be; // TODO: remove and add images
         top: 50%;
         right: -24px;
         transform: translate(0, -50%);

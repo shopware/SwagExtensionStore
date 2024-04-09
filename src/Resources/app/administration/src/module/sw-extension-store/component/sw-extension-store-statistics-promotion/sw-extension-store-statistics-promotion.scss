@@ -4,7 +4,7 @@
     container-type: inline-size;
 
     .sw-card__content {
-        background-color: #0a53be; // TODO: add background image
+        background-color: #0a53be; // TODO: remove and add background image
         display: table;
         width: 100%;
         padding: 16px 20px;
@@ -25,6 +25,7 @@
     &__cta {
         float: right;
         display: table-cell;
+        border: 0;
     }
 
     @container (max-width: 750px) {
