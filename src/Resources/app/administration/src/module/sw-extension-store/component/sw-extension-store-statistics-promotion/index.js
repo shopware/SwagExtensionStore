@@ -17,18 +17,21 @@ export default Shopware.Component.wrapComponentConfig({
         }
     },
 
+    data() {
+        return {
+            extension: null,
+            isAppInstalled: false,
+            isLoading: true
+        };
+    },
+
     computed: {
         showBanner() {
-            if (Shopware.State.get('shopwareExtensions').myExtensions.loading) {
+            if (this.isLoading) {
                 return false;
             }
 
-            const isAppInstalled = Shopware.State.get('shopwareExtensions').myExtensions.data.some(
-                // We will show it as long as it is installed. It does not matter if it is active or not.
-                (extension) => (extension.name === STATISTICS_APP_NAME) && extension.installedAt
-            );
-
-            return !isAppInstalled && this.linkToStatisticsAppExists;
+            return !this.isAppInstalled;
         },
 
         linkToStatisticsAppExists() {
@@ -37,13 +40,22 @@ export default Shopware.Component.wrapComponentConfig({
     },
 
     created() {
+        this.isLoading = true;
         this.createdComponent();
     },
 
     methods: {
         async createdComponent() {
-            this.shopwareExtensionService.updateExtensionData();
+            await this.shopwareExtensionService.updateExtensionData().then(() => {
+                this.isAppInstalled = Shopware.State.get('shopwareExtensions').myExtensions.data.some(
+                    // We will show it as long as it is installed. It does not matter if it is active or not.
+                    (extension) => (extension.name === STATISTICS_APP_NAME) && extension.installedAt
+                );
 
+                this.isLoading = false;
+            });
+
+            // Let us not wait extra time just for the link to the detail page
             this.extension = await this.extensionStoreDataService.getExtensionByName(
                 STATISTICS_APP_NAME,
                 Shopware.Context.api
