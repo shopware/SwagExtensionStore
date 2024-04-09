@@ -12,7 +12,8 @@ async function createWrapper(opts) {
             renderStubDefaultSlot: true,
             stubs: {
                 'sw-meteor-card': await wrapTestComponent('sw-meteor-card', { sync: true }),
-                'sw-button': await wrapTestComponent('sw-button'),
+                'sw-button': await wrapTestComponent('sw-button', { sync: true }),
+                'sw-button-deprecated': await wrapTestComponent('sw-button-deprecated', { sync: true }),
                 'sw-label': true,
                 'sw-icon': true
             }
