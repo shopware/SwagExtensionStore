@@ -12,7 +12,7 @@ use Shopware\Core\Framework\Store\Exception\InvalidVariantIdException;
 use Shopware\Core\Framework\Store\Exception\StoreApiException;
 use Symfony\Component\HttpFoundation\Response;
 
-#[Package('services-settings')]
+#[Package('checkout')]
 class ExtensionStoreException extends HttpException
 {
     public static function createStoreApiExceptionFromClientError(ClientException $clientException): StoreApiException

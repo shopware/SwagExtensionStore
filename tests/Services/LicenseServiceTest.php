@@ -76,7 +76,7 @@ class LicenseServiceTest extends TestCase
 
         static::assertSame(
             '/swplatform/pluginlicenses/1/cancel?shopwareVersion=___VERSION___&language=en-GB&domain=localhost',
-            $this->getStoreRequestHandler()->getLastRequest()?->getRequestTarget()
+            $this->getStoreRequestHandler()->getLastRequest()?->getRequestTarget(),
         );
     }
 
@@ -151,8 +151,8 @@ class LicenseServiceTest extends TestCase
             new Response(
                 200,
                 [StoreDataProvider::HEADER_NAME_TOTAL_COUNT => '0'],
-                $licensesJson
-            )
+                $licensesJson,
+            ),
         );
     }
 }

@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
 use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-#[Package('services-settings')]
+#[Package('checkout')]
 class SwagExtensionStore extends Plugin
 {
     public function build(ContainerBuilder $container): void

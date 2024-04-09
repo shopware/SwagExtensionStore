@@ -12,7 +12,7 @@ use Shopware\Core\Framework\Util\FloatComparator;
 /**
  * @phpstan-import-type PaymentMethod from StoreClient
  */
-#[Package('services-settings')]
+#[Package('checkout')]
 class LicenseService
 {
     private StoreClient $client;

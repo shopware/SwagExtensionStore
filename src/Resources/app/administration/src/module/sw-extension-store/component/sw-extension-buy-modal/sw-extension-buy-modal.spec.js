@@ -74,6 +74,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                     },
                     'sw-alert': await wrapTestComponent('sw-alert', { sync: true }),
                     'sw-button': await wrapTestComponent('sw-button'),
+                    'sw-button-deprecated': await wrapTestComponent('sw-button-deprecated'),
                     'sw-base-field': await wrapTestComponent('sw-base-field', { sync: true }),
                     'sw-field-error': await wrapTestComponent('sw-field-error', { sync: true }),
                     'sw-checkbox-field': await wrapTestComponent('sw-checkbox-field', { sync: true }),
@@ -271,9 +272,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         await wrapper.get('.sw-gtc-checkbox input').setChecked(true);
         await flushPromises();
 
-        const buyButton = wrapper.getComponent('button.sw-button--primary');
+        const buyButton = wrapper.findComponent('button.sw-button--primary');
 
-        expect(buyButton.props('disabled')).toBe(false);
+        expect(buyButton.attributes('disabled')).toBeUndefined();
         buyButton.trigger('click');
 
         await flushPromises();
@@ -336,15 +337,14 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 extensions: []
             }]
         }, httpClient);
-
         await flushPromises();
 
         // check gtc checkbox
         await wrapper.get('.sw-gtc-checkbox input').setChecked(true);
 
-        const buyButton = wrapper.getComponent('button.sw-button--primary');
+        const buyButton = wrapper.findComponent('button.sw-button--primary');
 
-        expect(buyButton.props('disabled')).toBe(false);
+        expect(buyButton.attributes('disabled')).toBeUndefined();
         buyButton.trigger('click');
 
         await flushPromises();

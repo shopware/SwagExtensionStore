@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @phpstan-import-type RequestQueryParameters from StoreClient
  */
-#[Package('services-settings')]
+#[Package('checkout')]
 #[Route(defaults: ['_routeScope' => ['api'], '_acl' => ['system.plugin_maintain']])]
 class DataController
 {

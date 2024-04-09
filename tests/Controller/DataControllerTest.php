@@ -118,7 +118,7 @@ class DataControllerTest extends TestCase
                 static::assertIsString($extensionDetailJson);
 
                 return new Response(200, [], $extensionDetailJson);
-            }
+            },
         );
     }
 
@@ -137,7 +137,7 @@ class DataControllerTest extends TestCase
                 static::assertIsString($extensionReviewsJson);
 
                 return new Response(200, [], $extensionReviewsJson);
-            }
+            },
         );
     }
 
