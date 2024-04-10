@@ -14,8 +14,7 @@ export default {
 
     data() {
         return {
-            isLoading: false,
-            loadingPromisesCount: 0
+            isLoading: false
         };
     },
 
@@ -74,7 +73,7 @@ export default {
 
     methods: {
         async getList() {
-            this.addLoadingPromise();
+            this.isLoading = true;
 
             if (this.languageId === '') {
                 return;
@@ -86,7 +85,7 @@ export default {
                 this.showExtensionErrors(e);
                 this.$emit('extension-listing-errors', e);
             } finally {
-                this.removeLoadingPromise();
+                this.isLoading = false;
             }
         },
 
@@ -104,25 +103,6 @@ export default {
         setPage({ limit, page }) {
             Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'limit', value: limit });
             Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'page', value: page });
-        },
-
-        childComponentLoaded(event) {
-            this.addLoadingPromise();
-            event.loadedPromise.then(() => {
-                this.removeLoadingPromise();
-            });
-        },
-
-        addLoadingPromise() {
-            this.loadingPromisesCount += 1;
-            this.isLoading = true;
-        },
-
-        removeLoadingPromise() {
-            this.loadingPromisesCount -= 1;
-            if (this.loadingPromisesCount === 0) {
-                this.isLoading = false;
-            }
         }
     }
 };

@@ -1,12 +1,12 @@
 import template from './sw-extension-store-statistics-promotion.html.twig';
 import './sw-extension-store-statistics-promotion.scss';
 
-const STATISTICS_APP_NAME = 'SwagBraintreeApp'; // TODO: change to statistics app name
+const STATISTICS_APP_NAME = 'StatisticsService';
 
 export default Shopware.Component.wrapComponentConfig({
     template,
 
-    inject: ['shopwareExtensionService', 'extensionStoreDataService'],
+    inject: ['extensionStoreDataService'],
 
     i18n: {
         messages: {
@@ -20,17 +20,13 @@ export default Shopware.Component.wrapComponentConfig({
     data() {
         return {
             extension: null,
-            isAppInstalled: false,
-            isLoading: true
+            isAppInstalled: false
         };
     },
 
     computed: {
         showBanner() {
-            if (this.isLoading) {
-                return false;
-            }
-
+            // If the app is installed and deactivated, we still want to not show the banner
             return !this.isAppInstalled;
         },
 
@@ -40,32 +36,18 @@ export default Shopware.Component.wrapComponentConfig({
     },
 
     created() {
-        this.isLoading = true;
         this.createdComponent();
     },
 
     methods: {
         async createdComponent() {
-            const loaded = this.shopwareExtensionService.updateExtensionData().then(() => {
-                this.isAppInstalled = Shopware.State.get('shopwareExtensions').myExtensions.data.some(
-                    // We will show it as long as it is installed. It does not matter if it is active or not.
-                    (extension) => (extension.name === STATISTICS_APP_NAME) && extension.installedAt
-                );
-
-                this.isLoading = false;
-            });
-            this.$emit('component-loaded', {
-                componentName: 'sw-extension-store-statistics-promotion',
-                loadedPromise: loaded
-            });
+            this.isAppInstalled = !!Shopware.Context.app.config.bundles[STATISTICS_APP_NAME];
 
             // Let us not wait extra time just for the link to the detail page
             this.extension = await this.extensionStoreDataService.getExtensionByName(
                 STATISTICS_APP_NAME,
                 Shopware.Context.api
             );
-
-            await loaded;
         },
 
         goToStatisticsAppDetailPage() {
