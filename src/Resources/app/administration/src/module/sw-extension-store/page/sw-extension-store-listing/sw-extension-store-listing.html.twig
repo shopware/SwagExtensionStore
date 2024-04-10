@@ -4,7 +4,7 @@
             <sw-loader v-if="isLoading"></sw-loader>
         {% endblock %}
 
-        <sw-extension-store-statistics-promotion />
+        <sw-extension-store-statistics-promotion @component-loaded="childComponentLoaded" />
 
         {% block sw_extension_store_listing_filter %}
             <sw-extension-store-listing-filter></sw-extension-store-listing-filter>

@@ -46,7 +46,7 @@ export default Shopware.Component.wrapComponentConfig({
 
     methods: {
         async createdComponent() {
-            await this.shopwareExtensionService.updateExtensionData().then(() => {
+            const loaded = this.shopwareExtensionService.updateExtensionData().then(() => {
                 this.isAppInstalled = Shopware.State.get('shopwareExtensions').myExtensions.data.some(
                     // We will show it as long as it is installed. It does not matter if it is active or not.
                     (extension) => (extension.name === STATISTICS_APP_NAME) && extension.installedAt
@@ -54,12 +54,18 @@ export default Shopware.Component.wrapComponentConfig({
 
                 this.isLoading = false;
             });
+            this.$emit('component-loaded', {
+                componentName: 'sw-extension-store-statistics-promotion',
+                loadedPromise: loaded
+            });
 
             // Let us not wait extra time just for the link to the detail page
             this.extension = await this.extensionStoreDataService.getExtensionByName(
                 STATISTICS_APP_NAME,
                 Shopware.Context.api
             );
+
+            await loaded;
         },
 
         goToStatisticsAppDetailPage() {
