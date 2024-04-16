@@ -13,6 +13,10 @@ export default Shopware.Component.wrapComponentConfig({
             'en-GB': {
                 title: 'Begin your journey to data driven success',
                 cta: 'Get started with analytics'
+            },
+            'de-DE': {
+                title: 'Beginne Deine Reise zum datengesteuerten Erfolg',
+                cta: 'Beginne mit der Analyse'
             }
         }
     },
@@ -43,7 +47,6 @@ export default Shopware.Component.wrapComponentConfig({
         async createdComponent() {
             this.isAppInstalled = !!Shopware.Context.app.config.bundles[STATISTICS_APP_NAME];
 
-            // Let us not wait extra time just for the link to the detail page
             this.extension = await this.extensionStoreDataService.getExtensionByName(
                 STATISTICS_APP_NAME,
                 Shopware.Context.api

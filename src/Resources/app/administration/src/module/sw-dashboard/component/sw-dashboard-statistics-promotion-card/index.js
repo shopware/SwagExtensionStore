@@ -15,6 +15,12 @@ export default Shopware.Component.wrapComponentConfig({
                 // eslint-disable-next-line max-len
                 'promotion-text': 'Ready, set, analyze! Get access to powerful tools to understand customer behavior and enhance your shop\'s performance. Don\'t wait — start collecting essential data now to be ahead of the game.',
                 cta: 'Get started with analytics'
+            },
+            'de-DE': {
+                title: 'Beginne Deine Reise zum datengesteuerten Erfolg',
+                // eslint-disable-next-line max-len
+                'promotion-text': 'Auf die Plätze, fertig, analysieren! Erhalte Zugriff auf leistungsstarke Tools, um das Kundenverhalten zu verstehen und die Leistung Deines Shops zu verbessern. Warte nicht – beginne jetzt mit der Erfassung wichtiger Daten, um der Konkurrenz einen Schritt voraus zu sein.',
+                cta: 'Beginne mit der Analyse'
             }
         }
     },
@@ -45,7 +51,6 @@ export default Shopware.Component.wrapComponentConfig({
         async createdComponent() {
             this.isAppInstalled = !!Shopware.Context.app.config.bundles[STATISTICS_APP_NAME];
 
-            // Let us not wait extra time just for the link to the detail page
             this.extension = await this.extensionStoreDataService.getExtensionByName(
                 STATISTICS_APP_NAME,
                 Shopware.Context.api
