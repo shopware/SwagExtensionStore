@@ -11,12 +11,14 @@ export default Shopware.Component.wrapComponentConfig({
     i18n: {
         messages: {
             'en-GB': {
-                title: 'Begin your journey to data driven success',
-                cta: 'Get started with analytics'
+                'app-name': 'Shopware Analytics',
+                'app-description': 'Get insights into your store.',
+                'go-to-app': 'Try it out now'
             },
             'de-DE': {
-                title: 'Beginne Deine Reise zum datengesteuerten Erfolg',
-                cta: 'Beginne mit der Analyse'
+                'app-name': 'Shopware Analytics',
+                'app-description': 'Get insights into your store.',
+                'go-to-app': 'Try it out now'
             }
         }
     },
@@ -36,6 +38,10 @@ export default Shopware.Component.wrapComponentConfig({
 
         linkToStatisticsAppExists() {
             return !!this.extension;
+        },
+
+        assetFilter() {
+            return Shopware.Filter.getByName('asset');
         }
     },
 

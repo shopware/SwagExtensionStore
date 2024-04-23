@@ -2,17 +2,29 @@
     v-if="showBanner"
     class="sw-extension-store-statistics-promotion"
 >
-    <h3 class="sw-extension-store-statistics-promotion__title">
-        {{ $tc('title') }}
-    </h3>
+    <div class="sw-extension-store-statistics-promotion__app">
+        <sw-extension-icon
+            class="sw-extension-store-statistics-promotion__app__icon"
+            :src="assetFilter('/swagextensionstore/static/img/analytics/extension/icon.svg')"
+        />
+
+        <div class="sw-extension-store-statistics-promotion__app__info">
+            <h3 class="sw-extension-store-statistics-promotion__app__info__name">
+                {{ $tc('app-name') }}
+            </h3>
+
+            <div class="sw-extension-store-statistics-promotion__app__info__description">
+                {{ $tc('app-description') }}
+            </div>
+        </div>
+    </div>
 
     <sw-button
-        class="sw-extension-store-statistics-promotion__cta"
-        variant="ghost"
-        style="background-color: white"
+        class="sw-extension-store-statistics-promotion__go-to-app"
+        variant="primary"
         :disabled="!linkToStatisticsAppExists"
         @click="goToStatisticsAppDetailPage"
     >
-        {{ $tc('cta') }} <sw-icon name="regular-long-arrow-right" size="12px" />
+        {{ $tc('go-to-app') }} <sw-icon name="regular-long-arrow-right" size="12px" />
     </sw-button>
 </sw-card>
