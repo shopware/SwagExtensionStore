@@ -32,6 +32,7 @@
         "jest-environment-jsdom": "29.5.0"
     },
     "dependencies": {
+        "@shopware-ag/meteor-tokens": "^0.1.0",
         "vue": "3.3.4",
         "vue-i18n": "9.2.2",
         "vue-template-compiler": "2.7.14"
