@@ -112,4 +112,43 @@
             }
         }
     }
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: $border-radius-lg + 1px;
+        background:
+            linear-gradient(
+                    -45deg,
+                    transparent 45%,
+                    $color-module-blue-500 48%,
+                    $color-module-green-200 52%,
+                    transparent 55%
+            );
+        background-size: 400%;
+        z-index: -1;
+        opacity: 0;
+        user-select: none;
+        pointer-events: none;
+        animation: glow 25s linear 1;
+        will-change: background-position, opacity;
+    }
+
+    @keyframes glow {
+        0% {
+            background-position: 0 0;
+            opacity: 1;
+        }
+
+        90% {
+            background-position: -360% 0;
+            opacity: 1;
+        }
+
+        100% {
+            background-position: -400% 0;
+            opacity: 0;
+        }
+    }
 }
