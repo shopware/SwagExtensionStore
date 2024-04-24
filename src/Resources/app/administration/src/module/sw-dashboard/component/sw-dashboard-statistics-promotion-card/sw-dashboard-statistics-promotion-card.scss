@@ -6,10 +6,18 @@
 
     .sw-card__content {
         padding: 0;
-    }
 
-    .sw-card__content h3 {
-        font-weight: $font-weight-bold;
+        h3 {
+            font-weight: $font-weight-bold;
+            font-size: 24px;
+            line-height: 140%;
+        }
+
+        h4 {
+            font-size: 16px;
+            line-height: 140%;
+            font-weight: $font-weight-bold;
+        }
     }
 
     &__advertisement {
@@ -29,13 +37,51 @@
                 font-weight: $font-weight-semi-bold;
                 background-color: var(--color-background-positive-default);
                 display: inline-block;
-                padding: 5px 10px;
-                border-radius: $border-radius-md;
-                margin-bottom: 20px;
+                padding: 4px 8px;
+                border-radius: 6px;
+                margin-bottom: 12px;
+
+                @media (prefers-reduced-motion: no-preference) {
+                    opacity: 0;
+                    animation: fadeMoveIn .8s ease forwards;
+                    will-change: opacity, transform;
+                }
             }
 
             &__title {
                 color: white;
+                margin-bottom: 10px;
+
+                @media (prefers-reduced-motion: no-preference) {
+                    opacity: 0;
+                    animation: fadeMoveIn .8s ease forwards;
+                    animation-delay: .2s;
+                    will-change: opacity, transform;
+                }
+            }
+
+            &__description {
+                font-size: 16px;
+                line-height: 160%;
+
+                @media (prefers-reduced-motion: no-preference) {
+                    opacity: 0;
+                    animation: fadeMoveIn .8s ease forwards;
+                    animation-delay: .3s;
+                    will-change: opacity, transform;
+                }
+            }
+
+            @keyframes fadeMoveIn {
+                0% {
+                    opacity: 0;
+                    transform: translateX(8px);
+                }
+
+                100% {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
             }
         }
 
@@ -43,41 +89,40 @@
             grid-column: 2;
             position: relative;
             width: 372px;
+            height: 100%;
+            display: block;
 
             img {
                 position: absolute;
-                bottom: 0;
-                right: 0;
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+                object-position: left;
             }
         }
 
         @container (max-width: 750px) {
-            display: block;
-
             &__details {
                 display: block;
             }
 
             &__graph {
-                display: block;
-                width: 100%;
-                height: 233px;
+                display: none;
             }
         }
-    }
-
-    &__app-card div {
-        display: inline-block;
     }
 
     &__app-card {
         display: inline-block;
         width: 100%;
-        padding: 16px 20px;
+        padding: 16px 24px;
 
         &__app {
             float: left;
             margin-right: 10px;
+            display: grid;
+            grid-template-columns: max-content max-content;
+            align-items: center;
 
             &__icon {
                 height: 64px;
@@ -89,11 +134,15 @@
 
             &__info {
                 float: left;
-                margin-top: 5px;
+                margin-block: auto;
 
                 &__name {
                     color: black;
-                    margin-bottom: 10px;
+                    margin-bottom: 4px;
+                }
+
+                &__description {
+                    font-size: 14px;
                 }
             }
         }
@@ -110,45 +159,6 @@
             &__go-to-app {
                 float: left;
             }
-        }
-    }
-
-    &::after {
-        content: "";
-        position: absolute;
-        inset: -2px;
-        border-radius: $border-radius-lg + 1px;
-        background:
-            linear-gradient(
-                    -45deg,
-                    transparent 45%,
-                    $color-module-blue-500 48%,
-                    $color-module-green-200 52%,
-                    transparent 55%
-            );
-        background-size: 400%;
-        z-index: -1;
-        opacity: 0;
-        user-select: none;
-        pointer-events: none;
-        animation: glow 25s linear 1;
-        will-change: background-position, opacity;
-    }
-
-    @keyframes glow {
-        0% {
-            background-position: 0 0;
-            opacity: 1;
-        }
-
-        90% {
-            background-position: -360% 0;
-            opacity: 1;
-        }
-
-        100% {
-            background-position: -400% 0;
-            opacity: 0;
         }
     }
 }

@@ -8,11 +8,9 @@
         padding: 16px 20px;
     }
 
-    .sw-card__content div {
-        display: inline-block;
-    }
-
-    .sw-card__content h3 {
+    .sw-card__content h4 {
+        font-size: 16px;
+        line-height: 140%;
         font-weight: $font-weight-bold;
     }
 
@@ -20,6 +18,9 @@
         color: white;
         float: left;
         margin-right: 10px;
+        display: grid;
+        grid-template-columns: max-content max-content;
+        align-items: center;
 
         &__icon {
             height: 64px;
@@ -35,7 +36,11 @@
 
             &__name {
                 color: white;
-                margin-bottom: 10px;
+                margin-bottom: 4px;
+            }
+
+            &__description {
+                font-size: 14px;
             }
         }
     }
