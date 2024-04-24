@@ -10,7 +10,7 @@ const BADGE_NEW_REMOVAL_DATE = '2025-01-01';
 export default Shopware.Component.wrapComponentConfig({
     template,
 
-    inject: ['extensionStoreDataService'],
+    inject: ['extensionStoreDataService', 'acl'],
 
     i18n: {
         messages: {
@@ -37,8 +37,8 @@ export default Shopware.Component.wrapComponentConfig({
 
     data() {
         return {
-            extension: null,
-            isAppInstalled: false
+            isAppInstalled: false,
+            routeToApp: null
         };
     },
 
@@ -53,7 +53,7 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         linkToStatisticsAppExists() {
-            return !!this.extension;
+            return !!this.routeToApp;
         },
 
         assetFilter() {
@@ -69,10 +69,16 @@ export default Shopware.Component.wrapComponentConfig({
         async createdComponent() {
             this.isAppInstalled = !!Shopware.Context.app.config.bundles[STATISTICS_APP_NAME];
 
-            this.extension = await this.extensionStoreDataService.getExtensionByName(
-                STATISTICS_APP_NAME,
-                Shopware.Context.api
-            );
+            if (!this.canAccessExtensionStore()) {
+                this.routeToApp = { name: 'sw.extension.store' };
+            } else {
+                const extension = await this.extensionStoreDataService.getExtensionByName(
+                    STATISTICS_APP_NAME,
+                    Shopware.Context.api
+                );
+
+                this.routeToApp = { name: 'sw.extension.store.detail', params: { id: extension.id } };
+            }
         },
 
         goToStatisticsAppDetailPage() {
@@ -80,7 +86,11 @@ export default Shopware.Component.wrapComponentConfig({
                 return;
             }
 
-            this.$router.push({ name: 'sw.extension.store.detail', params: { id: this.extension.id } });
+            this.$router.push(this.routeToApp);
+        },
+
+        canAccessExtensionStore() {
+            return this.acl.can('system.plugin_maintain');
         }
     }
 });
