@@ -1,7 +1,11 @@
 import template from './sw-dashboard-statistics-promotion-card.html.twig';
 import './sw-dashboard-statistics-promotion-card.scss';
 
+import '@shopware-ag/meteor-tokens/administration/light.css';
+import '@shopware-ag/meteor-tokens/administration/dark.css';
+
 const STATISTICS_APP_NAME = 'StatisticsService';
+const BADGE_NEW_REMOVAL_DATE = '2025-01-01';
 
 export default Shopware.Component.wrapComponentConfig({
     template,
@@ -10,18 +14,24 @@ export default Shopware.Component.wrapComponentConfig({
 
     i18n: {
         messages: {
+            /* eslint-disable max-len */
             'en-GB': {
-                title: 'Begin your journey to data driven success',
-                // eslint-disable-next-line max-len
-                'promotion-text': 'Ready, set, analyze! Get access to powerful tools to understand customer behavior and enhance your shop\'s performance. Don\'t wait — start collecting essential data now to be ahead of the game.',
-                cta: 'Get started with analytics'
+                'badge-new': 'Available now',
+                'promotion-title': 'Shopware Analytics',
+                'promotion-text': 'Discover the new growing suite of KPI dashboards in Shopware, providing you with the first essential sales and performance metrics. Look forward to new and continuously expanding insights!',
+                'app-name': 'Shopware Analytics',
+                'app-description': 'Get insights into your store.',
+                'go-to-app': 'Try it out now'
             },
             'de-DE': {
-                title: 'Beginne Deine Reise zum datengesteuerten Erfolg',
-                // eslint-disable-next-line max-len
-                'promotion-text': 'Auf die Plätze, fertig, analysieren! Erhalte Zugriff auf leistungsstarke Tools, um das Kundenverhalten zu verstehen und die Leistung Deines Shops zu verbessern. Warte nicht – beginne jetzt mit der Erfassung wichtiger Daten, um der Konkurrenz einen Schritt voraus zu sein.',
-                cta: 'Beginne mit der Analyse'
+                'badge-new': 'Available now',
+                'promotion-title': 'Shopware Analytics',
+                'promotion-text': 'Discover the new growing suite of KPI dashboards in Shopware, providing you with the first essential sales and performance metrics. Look forward to new and continuously expanding insights!',
+                'app-name': 'Shopware Analytics',
+                'app-description': 'Get insights into your store.',
+                'go-to-app': 'Try it out now'
             }
+            /* eslint-enable max-len */
         }
     },
 
@@ -38,8 +48,16 @@ export default Shopware.Component.wrapComponentConfig({
             return !this.isAppInstalled;
         },
 
+        showBadge() {
+            return (new Date()) < (new Date(BADGE_NEW_REMOVAL_DATE));
+        },
+
         linkToStatisticsAppExists() {
             return !!this.extension;
+        },
+
+        assetFilter() {
+            return Shopware.Filter.getByName('asset');
         }
     },
 
