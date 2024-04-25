@@ -5,7 +5,7 @@ import '@shopware-ag/meteor-tokens/administration/light.css';
 import '@shopware-ag/meteor-tokens/administration/dark.css';
 
 const STATISTICS_APP_NAME = 'StatisticsService';
-const BADGE_NEW_REMOVAL_DATE = '2025-01-01';
+const BADGE_NEW_REMOVAL_DATE = '2025-01-01 00:00:00.000';
 
 export default Shopware.Component.wrapComponentConfig({
     template,
@@ -70,15 +70,20 @@ export default Shopware.Component.wrapComponentConfig({
             this.isAppInstalled = !!Shopware.Context.app.config.bundles[STATISTICS_APP_NAME];
 
             if (!this.canAccessExtensionStore()) {
+                // Take the user to the extension store so that they see an "Access denied" message
                 this.routeToApp = { name: 'sw.extension.store' };
-            } else {
-                const extension = await this.extensionStoreDataService.getExtensionByName(
-                    STATISTICS_APP_NAME,
-                    Shopware.Context.api
-                );
 
-                this.routeToApp = { name: 'sw.extension.store.detail', params: { id: extension.id } };
+                return;
             }
+
+            this.extensionStoreDataService.getExtensionByName(
+                STATISTICS_APP_NAME,
+                Shopware.Context.api
+            ).then((extension) => {
+                if (extension) {
+                    this.routeToApp = { name: 'sw.extension.store.detail', params: { id: extension.id } };
+                }
+            });
         },
 
         goToStatisticsAppDetailPage() {
