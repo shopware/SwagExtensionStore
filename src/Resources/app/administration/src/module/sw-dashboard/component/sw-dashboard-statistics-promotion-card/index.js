@@ -1,9 +1,6 @@
 import template from './sw-dashboard-statistics-promotion-card.html.twig';
 import './sw-dashboard-statistics-promotion-card.scss';
 
-import '@shopware-ag/meteor-tokens/administration/light.css';
-import '@shopware-ag/meteor-tokens/administration/dark.css';
-
 const STATISTICS_APP_NAME = 'StatisticsService';
 const BADGE_NEW_REMOVAL_DATE = '2025-01-01 00:00:00.000';
 
