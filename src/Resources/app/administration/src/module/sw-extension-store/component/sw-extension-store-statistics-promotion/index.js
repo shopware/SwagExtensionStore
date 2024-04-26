@@ -12,13 +12,13 @@ export default Shopware.Component.wrapComponentConfig({
         messages: {
             'en-GB': {
                 'app-name': 'Shopware Analytics',
-                'app-description': 'Get insights into your store.',
+                'app-description': 'Unlock store performance metrics',
                 'go-to-app': 'Try it out now'
             },
             'de-DE': {
                 'app-name': 'Shopware Analytics',
-                'app-description': 'Get insights into your store.',
-                'go-to-app': 'Try it out now'
+                'app-description': 'Erfasse wichtige Shop-Kennzahlen',
+                'go-to-app': 'Jetzt ausprobieren'
             }
         }
     },

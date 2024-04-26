@@ -15,18 +15,18 @@ export default Shopware.Component.wrapComponentConfig({
             'en-GB': {
                 'badge-new': 'Available now',
                 'promotion-title': 'Shopware Analytics',
-                'promotion-text': 'Discover the new growing suite of KPI dashboards in Shopware, providing you with the first essential sales and performance metrics. Look forward to new and continuously expanding insights!',
+                'promotion-text': 'Discover the new suite of KPIs with your sales and performance metrics in Shopware. Get ready to benefit from an ever-expanding range of fresh insights to support your journey toward success!',
                 'app-name': 'Shopware Analytics',
-                'app-description': 'Get insights into your store.',
+                'app-description': 'Unlock store performance metrics',
                 'go-to-app': 'Try it out now'
             },
             'de-DE': {
-                'badge-new': 'Available now',
+                'badge-new': 'Jetzt verfügbar',
                 'promotion-title': 'Shopware Analytics',
-                'promotion-text': 'Discover the new growing suite of KPI dashboards in Shopware, providing you with the first essential sales and performance metrics. Look forward to new and continuously expanding insights!',
+                'promotion-text': 'Entdecke die neue Suite an Kennzahlen mit Deinen Verkaufs- und Leistungsmetriken in Shopware. Mach Dich bereit, von einer ständig wachsenden Auswahl an Auswertungen zu profitieren, die Deine Reise zum Erfolg unterstützen!',
                 'app-name': 'Shopware Analytics',
-                'app-description': 'Get insights into your store.',
-                'go-to-app': 'Try it out now'
+                'app-description': 'Erfasse wichtige Shop-Kennzahlen',
+                'go-to-app': 'Jetzt ausprobieren'
             }
             /* eslint-enable max-len */
         }
