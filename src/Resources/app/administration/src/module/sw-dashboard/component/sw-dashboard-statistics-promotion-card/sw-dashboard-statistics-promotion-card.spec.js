@@ -102,15 +102,18 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
         expect(extensionStoreDataService.getExtensionByName).toHaveBeenCalledTimes(0);
     });
 
-    it('redirects to the extension store even if the user does not have permission to access the extension store', async () => {
-        const wrapper = await createWrapper(true, false);
+    it(
+        'redirects to the extension store even if the user does not have permission to access the extension store',
+        async () => {
+            const wrapper = await createWrapper(true, false);
 
-        expect(wrapper.find('button').exists()).toBe(true);
-        expect(wrapper.find('button[disabled]').exists()).toBe(false);
+            expect(wrapper.find('button').exists()).toBe(true);
+            expect(wrapper.find('button[disabled]').exists()).toBe(false);
 
-        wrapper.vm.goToStatisticsAppDetailPage();
-        expect(wrapper.vm.$router.push).toHaveBeenCalledWith({ name: 'sw.extension.store' });
-    });
+            wrapper.vm.goToStatisticsAppDetailPage();
+            expect(wrapper.vm.$router.push).toHaveBeenCalledWith({ name: 'sw.extension.store' });
+        }
+    );
 
     it('shows the badge if the date is before 2025', async () => {
         jest.useFakeTimers().setSystemTime(new Date('2024-04-25'));
