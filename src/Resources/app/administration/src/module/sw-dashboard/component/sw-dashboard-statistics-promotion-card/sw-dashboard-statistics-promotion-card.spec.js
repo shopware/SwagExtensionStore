@@ -71,21 +71,21 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
     it('shows the banner if the app is not installed', async () => {
         const wrapper = await createWrapper();
 
-        expect(wrapper.find('.sw-dashboard-statistics-promotion-card').exists()).toBe(true);
+        expect(wrapper.find('.sw-dashboard-statistics-promotion-banner').exists()).toBe(true);
     });
 
     it('does not show the banner if the app is installed', async () => {
         installApp();
         const wrapper = await createWrapper();
 
-        expect(wrapper.find('.sw-dashboard-statistics-promotion-card').exists()).toBe(false);
+        expect(wrapper.find('.sw-dashboard-statistics-promotion-banner').exists()).toBe(false);
     });
 
     it('does not show the banner if the app is installed but deactivated', async () => {
         installApp(false);
         const wrapper = await createWrapper();
 
-        expect(wrapper.find('.sw-dashboard-statistics-promotion-card').exists()).toBe(false);
+        expect(wrapper.find('.sw-dashboard-statistics-promotion-banner').exists()).toBe(false);
     });
 
     it('disables the button if the app is not found in the store', async () => {
@@ -119,7 +119,7 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
         jest.useFakeTimers().setSystemTime(new Date('2024-04-25'));
         const wrapper = await createWrapper();
 
-        expect(wrapper.find('.sw-dashboard-statistics-promotion-card__advertisement__details__badge').exists()).toBe(true);
+        expect(wrapper.find('.sw-dashboard-statistics-promotion-banner__advertisement-details-badge').exists()).toBe(true);
         jest.useRealTimers();
     });
 
@@ -127,7 +127,7 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
         jest.useFakeTimers().setSystemTime(new Date('2025-04-25'));
         const wrapper = await createWrapper();
 
-        expect(wrapper.find('.sw-dashboard-statistics-promotion-card__advertisement__details__badge').exists()).toBe(false);
+        expect(wrapper.find('.sw-dashboard-statistics-promotion-banner__advertisement-details-badge').exists()).toBe(false);
         jest.useRealTimers();
     });
 

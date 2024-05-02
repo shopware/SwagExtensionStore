@@ -1,6 +1,6 @@
 @import '~scss/variables';
 
-.sw-dashboard-statistics-promotion-card {
+.sw-dashboard-statistics-promotion-banner {
     display: block;
     container-type: inline-size;
     margin: 32px auto;
@@ -8,20 +8,16 @@
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 10%), 0 2px 1px 0 rgba(0, 0, 0, 6%), 0 1px 1px 0 rgba(0, 0, 0, 8%);
     max-width: $content-width;
 
-    .sw-card__content {
-        padding: 0;
+    h3 {
+        font-size: 24px;
+        line-height: 140%;
+        font-weight: $font-weight-bold;
+    }
 
-        h3 {
-            font-weight: $font-weight-bold;
-            font-size: 24px;
-            line-height: 140%;
-        }
-
-        h4 {
-            font-size: 16px;
-            line-height: 140%;
-            font-weight: $font-weight-bold;
-        }
+    h4 {
+        font-size: 16px;
+        line-height: 140%;
+        font-weight: $font-weight-bold;
     }
 
     &__advertisement {
@@ -29,12 +25,12 @@
         border-radius: $border-radius-lg $border-radius-lg 0 0;
         display: grid;
 
-        &__details {
+        &-details {
             color: white;
             padding: 40px 24px;
             grid-column: 1;
 
-            &__badge {
+            &-badge {
                 color: black;
                 font-size: $font-size-xxs;
                 line-height: $line-height-xs;
@@ -52,7 +48,7 @@
                 }
             }
 
-            &__title {
+            &-title {
                 color: white;
                 margin-bottom: 10px;
 
@@ -64,7 +60,7 @@
                 }
             }
 
-            &__description {
+            &-description {
                 font-size: 16px;
                 line-height: 160%;
 
@@ -89,7 +85,7 @@
             }
         }
 
-        &__graph {
+        &-graph {
             grid-column: 2;
             position: relative;
             width: 372px;
@@ -106,11 +102,11 @@
         }
 
         @container (max-width: 750px) {
-            &__details {
+            &-details {
                 display: block;
             }
 
-            &__graph {
+            &-graph {
                 display: none;
             }
         }
@@ -121,14 +117,14 @@
         width: 100%;
         padding: 16px 24px;
 
-        &__app {
+        &-app {
             float: left;
             margin-right: 10px;
             display: grid;
             grid-template-columns: max-content max-content;
             align-items: center;
 
-            &__icon {
+            &-icon {
                 height: 64px;
                 width: 64px;
                 border-radius: $border-radius-md;
@@ -136,31 +132,31 @@
                 float: left;
             }
 
-            &__info {
+            &-info {
                 float: left;
                 margin-block: auto;
 
-                &__name {
+                &-name {
                     color: black;
                     margin-bottom: 4px;
                 }
 
-                &__description {
+                &-description {
                     font-size: 14px;
                 }
             }
         }
 
-        &__go-to-app {
+        &-go-to-app {
             float: right;
             margin-top: 14px;
         }
 
         @container (max-width: 525px) {
-            &__app {
+            &-app {
             }
 
-            &__go-to-app {
+            &-go-to-app {
                 float: left;
             }
         }

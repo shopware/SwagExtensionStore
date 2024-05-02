@@ -1,48 +1,48 @@
 <div
     v-if="showBanner"
-    class="sw-dashboard-statistics-promotion-card"
+    class="sw-dashboard-statistics-promotion-banner"
 >
-    <div class="sw-dashboard-statistics-promotion-card__advertisement">
-        <div class="sw-dashboard-statistics-promotion-card__advertisement__details">
+    <div class="sw-dashboard-statistics-promotion-banner__advertisement">
+        <div class="sw-dashboard-statistics-promotion-banner__advertisement-details">
             <div
                 v-if="showBadge"
-                class="sw-dashboard-statistics-promotion-card__advertisement__details__badge"
+                class="sw-dashboard-statistics-promotion-banner__advertisement-details-badge"
             >
                 {{ $tc('badge-new') }}
             </div>
-            <h3 class="sw-dashboard-statistics-promotion-card__advertisement__details__title">
+            <h3 class="sw-dashboard-statistics-promotion-banner__advertisement-details-title">
                 {{ $tc('promotion-title') }}
             </h3>
 
-            <div class="sw-dashboard-statistics-promotion-card__advertisement__details__description">
+            <div class="sw-dashboard-statistics-promotion-banner__advertisement-details-description">
                 {{ $tc('promotion-text') }}
             </div>
         </div>
-        <div class="sw-dashboard-statistics-promotion-card__advertisement__graph">
+        <div class="sw-dashboard-statistics-promotion-banner__advertisement-graph">
             <img :src="assetFilter('/swagextensionstore/static/img/analytics/promotion/graphic.svg')" />
         </div>
     </div>
 
-    <div class="sw-dashboard-statistics-promotion-card__app-card">
-        <div class="sw-dashboard-statistics-promotion-card__app-card__app">
+    <div class="sw-dashboard-statistics-promotion-banner__app-card">
+        <div class="sw-dashboard-statistics-promotion-banner__app-card-app">
             <sw-extension-icon
-                class="sw-dashboard-statistics-promotion-card__app-card__app__icon"
+                class="sw-dashboard-statistics-promotion-banner__app-card-app-icon"
                 :src="assetFilter('/swagextensionstore/static/img/analytics/extension/icon.svg')"
             />
 
-            <div class="sw-dashboard-statistics-promotion-card__app-card__app__info">
-                <h4 class="sw-dashboard-statistics-promotion-card__app-card__app__info__name">
+            <div class="sw-dashboard-statistics-promotion-banner__app-card-app-info">
+                <h4 class="sw-dashboard-statistics-promotion-banner__app-card-app-info-name">
                     {{ $tc('app-name') }}
                 </h4>
 
-                <span class="sw-dashboard-statistics-promotion-card__app-card__app__info__description">
+                <span class="sw-dashboard-statistics-promotion-banner__app-card-app-info-description">
                     {{ $tc('app-description') }}
                 </span>
             </div>
         </div>
 
         <sw-button
-            class="sw-dashboard-statistics-promotion-card__app-card__go-to-app"
+            class="sw-dashboard-statistics-promotion-banner__app-card-go-to-app"
             variant="primary"
             :disabled="!linkToStatisticsAppExists"
             @click="goToStatisticsAppDetailPage"

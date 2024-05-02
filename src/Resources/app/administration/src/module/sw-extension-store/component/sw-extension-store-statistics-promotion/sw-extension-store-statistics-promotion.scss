@@ -22,7 +22,7 @@
         grid-template-columns: max-content max-content;
         align-items: center;
 
-        &__icon {
+        &-icon {
             height: 64px;
             width: 64px;
             border-radius: $border-radius-md;
@@ -30,16 +30,16 @@
             float: left;
         }
 
-        &__info {
+        &-info {
             float: left;
             margin-top: 5px;
 
-            &__name {
+            &-name {
                 color: white;
                 margin-bottom: 4px;
             }
 
-            &__description {
+            &-description {
                 font-size: 14px;
             }
         }
