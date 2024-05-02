@@ -7,9 +7,10 @@ Shopware.Component.register(
     () => import('SwagExtensionStore/module/sw-dashboard/component/sw-dashboard-statistics-promotion-card')
 );
 
-const extensionStoreDataService = {};
-
 describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-card', () => {
+    const extensionStoreDataService = {};
+    const router = {};
+
     async function createWrapper(isAppExistingInTheStore = true, hasPermission = true) {
         const app = !isAppExistingInTheStore ? null : {
             id: 99999,
@@ -21,7 +22,9 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
             ? jest.fn(() => Promise.resolve(app))
             : jest.fn(() => Promise.reject(new Error('Request failed with status code 403')));
 
-        const wrapper = await mount(await Shopware.Component.build('sw-dashboard-statistics-promotion-card'), {
+        router.push = jest.fn();
+
+        return mount(await Shopware.Component.build('sw-dashboard-statistics-promotion-card'), {
             global: {
                 provide: {
                     extensionStoreDataService,
@@ -33,15 +36,12 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
                     'sw-button': await wrapTestComponent('sw-button'),
                     'sw-button-deprecated': await wrapTestComponent('sw-button-deprecated', { sync: true }),
                     'sw-icon': true
+                },
+                mocks: {
+                    $router: router
                 }
             }
         });
-
-        wrapper.vm.$router = {
-            push: jest.fn()
-        };
-
-        return wrapper;
     }
 
     function installApp(isActive = true) {
@@ -94,7 +94,7 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
         expect(wrapper.find('button[disabled]').exists()).toBe(true);
 
         wrapper.vm.goToStatisticsAppDetailPage();
-        expect(wrapper.vm.$router.push).toHaveBeenCalledTimes(0);
+        expect(router.push).toHaveBeenCalledTimes(0);
     });
 
     it('does not fetch the extension when the user does not have permission to access the extension store', async () => {
@@ -111,7 +111,7 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
             expect(wrapper.find('button[disabled]').exists()).toBe(false);
 
             wrapper.vm.goToStatisticsAppDetailPage();
-            expect(wrapper.vm.$router.push).toHaveBeenCalledWith({ name: 'sw.extension.store' });
+            expect(router.push).toHaveBeenNthCalledWith(1, { name: 'sw.extension.store' });
         }
     );
 
@@ -138,7 +138,7 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
         expect(wrapper.find('button[disabled]').exists()).toBe(false);
 
         wrapper.vm.goToStatisticsAppDetailPage();
-        expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
+        expect(router.push).toHaveBeenNthCalledWith(1, {
             name: 'sw.extension.store.detail',
             params: { id: 99999 }
         });

@@ -8,6 +8,8 @@ Shopware.Component.register(
 );
 
 describe('src/module/sw-extension-store/component/sw-extension-store-statistics-promotion', () => {
+    const router = {};
+
     async function createWrapper(isAppExistingInTheStore = true) {
         const app = !isAppExistingInTheStore ? null : {
             id: 99999,
@@ -15,28 +17,25 @@ describe('src/module/sw-extension-store/component/sw-extension-store-statistics-
             name: STATISTICS_APP_NAME
         };
 
-        const extensionStoreDataService = {
-            getExtensionByName: jest.fn(() => Promise.resolve(app))
-        };
+        router.push = jest.fn();
 
-        const wrapper = await mount(await Shopware.Component.build('sw-extension-store-statistics-promotion'), {
+        return mount(await Shopware.Component.build('sw-extension-store-statistics-promotion'), {
             global: {
                 provide: {
-                    extensionStoreDataService
+                    extensionStoreDataService: {
+                        getExtensionByName: jest.fn(() => Promise.resolve(app))
+                    }
                 },
                 stubs: {
                     'sw-button': await wrapTestComponent('sw-button'),
                     'sw-button-deprecated': await wrapTestComponent('sw-button-deprecated', { sync: true }),
                     'sw-icon': true
+                },
+                mocks: {
+                    $router: router
                 }
             }
         });
-
-        wrapper.vm.$router = {
-            push: jest.fn()
-        };
-
-        return wrapper;
     }
 
     function installApp(isActive = true) {
@@ -89,7 +88,7 @@ describe('src/module/sw-extension-store/component/sw-extension-store-statistics-
         expect(wrapper.find('button[disabled]').exists()).toBe(true);
 
         wrapper.vm.goToStatisticsAppDetailPage();
-        expect(wrapper.vm.$router.push).toHaveBeenCalledTimes(0);
+        expect(router.push).toHaveBeenCalledTimes(0);
     });
 
     it('enables the button if the app is found in the store', async () => {
@@ -99,6 +98,6 @@ describe('src/module/sw-extension-store/component/sw-extension-store-statistics-
         expect(wrapper.find('button[disabled]').exists()).toBe(false);
 
         wrapper.vm.goToStatisticsAppDetailPage();
-        expect(wrapper.vm.$router.push).toHaveBeenCalled();
+        expect(router.push).toHaveBeenCalled();
     });
 });
