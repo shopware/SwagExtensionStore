@@ -34,15 +34,9 @@ export default class ExtensionStoreDataService extends Shopware.Classes.ApiServi
      * @returns {Promise<Extension|null>}
      */
     async getExtensionByName(name, context) {
-        return this.getExtensionList({ term: name }, context).then((extensions) => {
-            for (let i = 0; i < extensions.length; i += 1) {
-                if (extensions[i].name === name) {
-                    return extensions[i];
-                }
-            }
-
-            return null;
-        });
+        return this.getExtensionList({ term: name }, context).then(
+            (extensions) => extensions.find((extension) => extension.name === name) ?? null
+        );
     }
 
     async getDetail(id, context) {
