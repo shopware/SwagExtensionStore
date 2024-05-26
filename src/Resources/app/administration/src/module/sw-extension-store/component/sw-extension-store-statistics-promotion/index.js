@@ -1,7 +1,7 @@
 import template from './sw-extension-store-statistics-promotion.html.twig';
 import './sw-extension-store-statistics-promotion.scss';
 
-const STATISTICS_APP_NAME = 'StatisticsService';
+const STATISTICS_APP_NAME = 'SwagAnalytics';
 
 export default Shopware.Component.wrapComponentConfig({
     template,

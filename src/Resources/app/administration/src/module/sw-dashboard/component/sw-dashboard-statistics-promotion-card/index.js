@@ -1,7 +1,7 @@
 import template from './sw-dashboard-statistics-promotion-card.html.twig';
 import './sw-dashboard-statistics-promotion-card.scss';
 
-const STATISTICS_APP_NAME = 'StatisticsService';
+const STATISTICS_APP_NAME = 'SwagAnalytics';
 const BADGE_NEW_REMOVAL_DATE = '2025-01-01 00:00:00.000';
 
 export default Shopware.Component.wrapComponentConfig({

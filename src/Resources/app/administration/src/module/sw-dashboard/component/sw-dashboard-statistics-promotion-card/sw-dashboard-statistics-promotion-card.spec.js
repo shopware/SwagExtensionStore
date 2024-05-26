@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 
-const STATISTICS_APP_NAME = 'StatisticsService';
+const STATISTICS_APP_NAME = 'SwagAnalytics';
 
 Shopware.Component.register(
     'sw-dashboard-statistics-promotion-card',
