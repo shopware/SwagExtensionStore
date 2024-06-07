@@ -1,0 +1,58 @@
+@import '~scss/variables';
+
+.sw-extension-store-statistics-promotion {
+    container-type: inline-size;
+
+    .sw-card__content {
+        background: linear-gradient(#003075, #0156D0);
+        padding: 16px 20px;
+    }
+
+    .sw-card__content h4 {
+        font-size: 16px;
+        line-height: 140%;
+        font-weight: $font-weight-bold;
+    }
+
+    &__app {
+        color: white;
+        float: left;
+        margin-right: 10px;
+        display: grid;
+        grid-template-columns: max-content max-content;
+        align-items: center;
+
+        &-icon {
+            height: 64px;
+            width: 64px;
+            border-radius: $border-radius-md;
+            margin-right: 16px;
+            float: left;
+        }
+
+        &-info {
+            float: left;
+            margin-top: 5px;
+
+            &-name {
+                color: white;
+                margin-bottom: 4px;
+            }
+
+            &-description {
+                font-size: 14px;
+            }
+        }
+    }
+
+    &__go-to-app {
+        float: right;
+        margin-top: 14px;
+    }
+
+    @container (max-width: 525px) {
+        &__go-to-app {
+            float: left;
+        }
+    }
+}

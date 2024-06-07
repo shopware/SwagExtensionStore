@@ -78,6 +78,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                     'sw-base-field': await wrapTestComponent('sw-base-field', { sync: true }),
                     'sw-field-error': await wrapTestComponent('sw-field-error', { sync: true }),
                     'sw-checkbox-field': await wrapTestComponent('sw-checkbox-field', { sync: true }),
+                    'sw-checkbox-field-deprecated': await wrapTestComponent('sw-checkbox-field-deprecated', { sync: true }),
                     'sw-gtc-checkbox': await wrapTestComponent('sw-gtc-checkbox', { sync: true }),
                     'sw-extension-adding-failed': true,
                     'sw-extension-adding-success': true,
