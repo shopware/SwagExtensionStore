@@ -36,6 +36,8 @@ module.exports = {
         '^uuid$': require.resolve('uuid'),
         '^\@shopware-ag\/admin-extension-sdk\/es\/(.*)':
             `${process.env.ADMIN_PATH}/node_modules/@shopware-ag/admin-extension-sdk/umd/$1`,
+        '^\@shopware-ag\/meteor-admin-sdk\/es\/(.*)':
+            `${process.env.ADMIN_PATH}/node_modules/@shopware-ag/meteor-admin-sdk/umd/$1`,
         vue$: '<rootDir>/node_modules/@vue/compat/dist/vue.cjs.js',
         '@vue/test-utils': '<rootDir>/node_modules/@vue/test-utils'
     },
