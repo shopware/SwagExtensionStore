@@ -23,7 +23,7 @@
         "@vue/compat": "3.3.4",
         "@vue/compiler-sfc": "3.3.4",
         "@vue/component-compiler-utils": "3.3.0",
-        "@vue/test-utils": "2.3.2",
+        "@vue/test-utils": "2.4.6",
         "babel-jest": "29.5.0",
         "eslint-import-resolver-webpack": "0.13.2",
         "eslint-plugin-internal-rules": "file:internal-rules",
