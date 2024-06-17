@@ -1,0 +1,30 @@
+<sw-card
+    v-if="showBanner"
+    class="sw-extension-store-statistics-promotion"
+>
+    <div class="sw-extension-store-statistics-promotion__app">
+        <sw-extension-icon
+            class="sw-extension-store-statistics-promotion__app-icon"
+            :src="assetFilter('/swagextensionstore/static/img/analytics/extension/icon.svg')"
+        />
+
+        <div class="sw-extension-store-statistics-promotion__app-info">
+            <h4 class="sw-extension-store-statistics-promotion__app-info-name">
+                {{ $tc('app-name') }}
+            </h4>
+
+            <span class="sw-extension-store-statistics-promotion__app-info-description">
+                {{ $tc('app-description') }}
+            </span>
+        </div>
+    </div>
+
+    <sw-button
+        class="sw-extension-store-statistics-promotion__go-to-app"
+        variant="primary"
+        :disabled="!linkToStatisticsAppExists"
+        @click="goToStatisticsAppDetailPage"
+    >
+        {{ $tc('go-to-app') }} <sw-icon name="regular-long-arrow-right" size="12px" />
+    </sw-button>
+</sw-card>
