@@ -2,7 +2,7 @@ name: Administration
 on:
   push:
     branches:
-      - trunk
+      - 6.5.x
   pull_request:
 
 jobs:
