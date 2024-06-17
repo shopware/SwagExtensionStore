@@ -8,7 +8,7 @@ on:
     paths:
       - '**/*.php'
     branches:
-      - trunk
+      - 6.5.x
   workflow_dispatch:
   schedule:
     - cron: '0 3 * * *'

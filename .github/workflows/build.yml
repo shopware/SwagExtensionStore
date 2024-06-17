@@ -3,7 +3,7 @@ on:
   pull_request:
   push:
     branches:
-      - trunk
+      - 6.5.x
 jobs:
   build:
     uses: shopware/github-actions/.github/workflows/build-zip.yml@main
