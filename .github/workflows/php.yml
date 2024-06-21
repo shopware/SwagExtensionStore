@@ -29,5 +29,3 @@ jobs:
       uploadCoverage: true
     secrets:
       codecovToken: ${{ secrets.CODECOV_TOKEN }}
-
-
