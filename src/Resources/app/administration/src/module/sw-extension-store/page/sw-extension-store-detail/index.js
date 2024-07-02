@@ -417,6 +417,6 @@ export default {
 
         closeInstallationFailedModal() {
             this.showInstallationFailedModal = false;
-        },
+        }
     }
 };
