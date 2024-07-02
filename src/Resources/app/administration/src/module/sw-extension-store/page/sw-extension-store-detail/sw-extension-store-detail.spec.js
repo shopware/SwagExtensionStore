@@ -154,7 +154,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
             .toBe('sw-extension-store.detail.enterpriseFeatureAlertText');
     });
 
-    it('should reload the administration when a plugin is installed', async () => {
+    it('should clear cache and reload the administration when a plugin is installed', async () => {
         const wrapper = await createWrapper();
         await flushPromises();
 
@@ -167,7 +167,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
         expect(window.location.reload).toHaveBeenCalledTimes(1);
     });
 
-    it('should not reload the administration when an app is installed', async () => {
+    it('should reload the administration when an app is installed', async () => {
         const wrapper = await createWrapper({ type: 'app' });
         await flushPromises();
 
@@ -177,7 +177,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
         expect(extensionHelperService.downloadAndActivateExtension).toHaveBeenCalledTimes(1);
         expect(cacheApiService.clear).not.toHaveBeenCalled();
-        expect(window.location.reload).not.toHaveBeenCalled();
+        expect(window.location.reload).toHaveBeenCalledTimes(1);
     });
 
     describe('verify smart bar primary action buttons', () => {
