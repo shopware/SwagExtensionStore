@@ -354,10 +354,12 @@ export default {
                 await this.extensionHelperService.downloadAndActivateExtension(this.extension.name, this.extension.type);
 
                 if (this.extension.type === 'plugin') {
-                    await this.clearCacheAndReloadPage();
+                    await this.cacheApiService.clear();
                 }
 
                 this.isInstallSuccessful = true;
+
+                window.location.reload();
             } catch (error) {
                 this.showExtensionErrors(error);
 
@@ -415,12 +417,6 @@ export default {
 
         closeInstallationFailedModal() {
             this.showInstallationFailedModal = false;
-        },
-
-        async clearCacheAndReloadPage() {
-            await this.cacheApiService.clear();
-
-            window.location.reload();
         }
     }
 };
