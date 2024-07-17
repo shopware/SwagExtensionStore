@@ -1,0 +1,33 @@
+.sw-in-app-purchase-price-box {
+    width: 100%;
+    margin: 0;
+
+    .sw-alert {
+        &__body {
+            padding: 24px;
+        }
+
+        &__message {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            color: var(--color-text-primary-default);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-regular);
+        }
+    }
+
+    &__price_text {
+        font-weight: var(--font-weight-bold);
+    }
+
+    &__price {
+        font-weight: var(--font-weight-bold);
+        font-size: var(--font-size-l);
+    }
+
+    &__duration {
+        font-size: var(--font-size-s);
+    }
+}

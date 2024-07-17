@@ -1,0 +1,15 @@
+<sw-button
+    v-if="show"
+    class="sw-in-app-purchase-checkout-button"
+    variant="primary"
+    size="small"
+    :disabled="disabled"
+    @click="onClick"
+>
+    {{ text }}
+
+    <sw-icon
+        v-if="state === 'purchase'"
+        name="regular-long-arrow-right"
+    />
+</sw-button>

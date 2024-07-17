@@ -1,0 +1,46 @@
+{% block sw_in_app_purchase_checkout_modal %}
+<sw-modal
+    v-if="store.entry"
+    class="sw-in-app-purchase-checkout"
+    :title="$tc('sw-in-app-purchase-checkout.modalTitle')"
+    @modal-close="handleStateActions(false)"
+>
+    <template v-if="state === 'purchase'" #modal-title>
+        <sw-extension-icon
+            class="sw-in-app-purchase-checkout__icon"
+            :src="extensionIcon"
+        />
+
+        <div class="sw-in-app-purchase-checkout__titles">
+            <h4 id="modalTitleEl" class="sw-modal__title">
+                {{ $tc('sw-in-app-purchase-checkout.modalTitle') }}
+            </h4>
+
+            <h5 class="sw-modal__subtitle">
+                {{ extension.label }}
+            </h5>
+        </div>
+    </template>
+
+    <sw-in-app-purchase-checkout-overview
+        v-if="state === 'purchase'"
+        v-model:tos-accepted="tosAccepted"
+        :purchase="purchase"
+        :price-model="priceModel"
+    />
+
+    <sw-in-app-purchase-checkout-state
+        v-if="['loading', 'success', 'error'].includes(state)"
+        :state="state"
+        :error-snippet="errorSnippet"
+    />
+
+    <template #modal-footer>
+        <sw-in-app-purchase-checkout-button
+            :state="state"
+            :tos-accepted="tosAccepted"
+            @click="handleStateActions(true)"
+        />
+    </template>
+</sw-modal>
+{% endblock %}
