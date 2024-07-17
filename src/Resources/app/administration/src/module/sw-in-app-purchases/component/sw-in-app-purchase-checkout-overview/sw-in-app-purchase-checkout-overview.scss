@@ -1,0 +1,41 @@
+.sw-in-app-purchase-checkout-purchase {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    color: var(--color-text-primary-default);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-xs);
+
+    .sw-gtc-checkbox {
+        .sw-field__label {
+            color: var(--color-text-primary-default);
+        }
+
+        .sw-field--checkbox {
+            margin-bottom: 0;
+        }
+    }
+
+    &__feature {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        &__name {
+            color: var(--color-black);
+            font-weight: var(--font-weight-semi-bold);
+            font-size: var(--font-size-m);
+        }
+
+        &__description {
+            font-size: var(--font-size-s);
+            color: var(--color-text-secondary-default);
+        }
+    }
+
+    &__subtext {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+}

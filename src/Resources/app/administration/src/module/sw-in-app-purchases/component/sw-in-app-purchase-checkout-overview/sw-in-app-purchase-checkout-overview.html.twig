@@ -1,0 +1,31 @@
+<div class="sw-in-app-purchase-checkout-purchase">
+    <div class="sw-in-app-purchase-checkout-purchase__feature">
+        <p class="sw-in-app-purchase-checkout-purchase__feature__name">
+            {{ purchase.name }}
+        </p>
+
+        <p class="sw-in-app-purchase-checkout-purchase__feature__description">
+            {{ purchase.description }}
+        </p>
+    </div>
+
+    <sw-in-app-purchase-price-box
+        :price-model="priceModel"
+    />
+
+    <div class="sw-in-app-purchase-checkout-purchase__subtext">
+        <p class="sw-in-app-purchase-checkout-purchase__subtext__bill">
+            {{ $tc('sw-in-app-purchase-checkout-overview.billHint') }}
+        </p>
+
+        <p class="sw-in-app-purchase-checkout-purchase__subtext__exclude_vat">
+            {{ $tc('sw-in-app-purchase-checkout-overview.excludeVat') }}
+        </p>
+
+        <sw-gtc-checkbox
+            :value="tosAccepted"
+            class="sw-in-app-purchase-checkout-purchase__subtext__tos"
+            @update:value="onTosAcceptedChange"
+        />
+    </div>
+</div>

@@ -1,0 +1,27 @@
+{
+  "sw-in-app-purchase-checkout": {
+    "modalTitle": "In-App Purchase"
+  },
+  "sw-in-app-purchase-checkout-button": {
+    "purchaseButton": "Complete payment",
+    "closeButton": "Close",
+    "tryAgainButton": "Try again"
+  },
+  "sw-in-app-purchase-checkout-overview": {
+    "billHint": "Costs will be added to your shopware bill. Cancellation at any time in your shopware account.",
+    "excludeVat": "* All prices are exclusive of VAT"
+  },
+  "sw-in-app-purchase-checkout-state": {
+    "errorTitle": "Something went wrong.",
+    "errorSubtitle": "Please try again or contact the manufacturer.",
+    "successTitle": "In-App Purchase was successful!",
+    "successSubtitle": "You can now experience your new feature."
+  },
+  "sw-in-app-purchase-price-box": {
+    "priceText": "Price",
+    "duration": {
+      "monthly": "monthly",
+      "yearly": "yearly"
+    }
+  }
+}
