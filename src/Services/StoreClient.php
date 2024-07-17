@@ -12,6 +12,7 @@ use Shopware\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProv
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use SwagExtensionStore\Exception\ExtensionStoreException;
+use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 
 /**
  * @phpstan-type SbpEndpoints array<string, string>
@@ -195,5 +196,49 @@ class StoreClient
         } catch (ClientException $e) {
             throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
         }
+    }
+
+    public function createInAppPurchaseCart(string $extensionName, string $feature, Context $context): InAppPurchaseCartStruct
+    {
+        try {
+            $response = $this->client->request(
+                'POST',
+                $this->endpoints['iaf_create_basket'],
+                [
+                    'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
+                    'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
+                    'json' => [
+                        'extensionName' => $extensionName,
+                        'inAppFeatureIdentifier' => $feature,
+                    ],
+                ],
+            );
+        } catch (ClientException $e) {
+            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+        }
+
+        return InAppPurchaseCartStruct::fromArray(json_decode((string) $response->getBody(), true));
+    }
+
+    public function orderInAppPurchaseCart(string $extensionName, string $feature, Context $context): InAppPurchaseCartStruct
+    {
+        try {
+            $response = $this->client->request(
+                'POST',
+                $this->endpoints['iaf_order_basket'],
+                [
+                    'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
+                    'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
+                    'json' => [
+                        'extensionName' => $extensionName,
+                        'inAppFeatureIdentifier' => $feature,
+                    ],
+                ],
+            );
+        } catch (ClientException $e) {
+            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+        }
+
+        return InAppPurchaseCartStruct::fromArray(json_decode((string) $response->getBody(), true));
     }
 }
