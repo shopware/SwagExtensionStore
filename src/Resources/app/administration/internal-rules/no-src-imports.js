@@ -9,7 +9,7 @@ module.exports = {
                     return;
                 }
 
-                if (node.source.value.startsWith('src/')) {
+                if (node.source.value.startsWith('src/') && node.source.parent.importKind !== 'type') {
                     context.report({
                         loc: node.source.loc.start,
                         message: 'Do not use imports from the Shopware Core'
