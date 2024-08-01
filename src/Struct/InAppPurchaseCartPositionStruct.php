@@ -17,27 +17,25 @@ use Shopware\Core\Framework\Struct\Struct;
 #[Package('checkout')]
 class InAppPurchaseCartPositionStruct extends Struct
 {
-    protected InAppPurchaseStruct $feature;
-
-    protected InAppPurchasePriceModelStruct $priceModel;
-
-    protected float $netPrice;
-
-    protected float $grossPrice;
-
-    protected float $taxRate;
-
-    protected float $taxValue;
+    private function __construct(
+        protected InAppPurchaseStruct $feature,
+        protected InAppPurchasePriceModelStruct $priceModel,
+        protected float $netPrice = 0.0,
+        protected float $grossPrice = 0.0,
+        protected float $taxRate = 0.0,
+        protected float $taxValue = 0.0,
+    ) {
+    }
 
     /**
      * @param InAppPurchaseCartPosition $data
      */
     public static function fromArray(array $data): self
     {
-        $data['feature'] = InAppPurchaseStruct::fromArray($data['feature']);
-        $data['priceModel'] = InAppPurchasePriceModelStruct::fromArray($data['priceModel']);
-
-        return (new self())->assign($data);
+        return new self(
+            feature: InAppPurchaseStruct::fromArray($data['feature']),
+            priceModel: InAppPurchasePriceModelStruct::fromArray($data['priceModel']),
+        );
     }
 
     public function getFeature(): InAppPurchaseStruct

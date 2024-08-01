@@ -18,33 +18,26 @@ use Shopware\Core\Framework\Struct\Struct;
 class InAppPurchaseCartStruct extends Struct
 {
     /**
-     * @var Shop
+     * @param Shop $bookingShop
+     * @param Shop $licenseShop
      */
-    protected array $bookingShop;
-
-    /**
-     * @var Shop
-     */
-    protected array $licenseShop;
-
-    protected float $netPrice;
-
-    protected float $grossPrice;
-
-    protected float $taxRate;
-
-    protected float $taxValue;
-
-    protected InAppPurchaseCartPositionCollection $positions;
+    private function __construct(
+        protected InAppPurchaseCartPositionCollection $positions,
+        protected array $bookingShop = [],
+        protected array $licenseShop = [],
+        protected float $netPrice = 0.0,
+        protected float $grossPrice = 0.0,
+        protected float $taxRate = 0.0,
+        protected float $taxValue = 0.0,
+    ) {
+    }
 
     /**
      * @param InAppPurchaseCart $data
      */
     public static function fromArray(array $data): self
     {
-        $data['positions'] = InAppPurchaseCartPositionCollection::fromArray($data['positions']);
-
-        return (new self())->assign($data);
+        return new self(InAppPurchaseCartPositionCollection::fromArray($data['positions']));
     }
 
     /**
