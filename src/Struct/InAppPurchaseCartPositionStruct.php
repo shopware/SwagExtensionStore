@@ -24,8 +24,7 @@ class InAppPurchaseCartPositionStruct extends Struct
         protected float $grossPrice = 0.0,
         protected float $taxRate = 0.0,
         protected float $taxValue = 0.0,
-    ) {
-    }
+    ) {}
 
     /**
      * @param InAppPurchaseCartPosition $data

@@ -21,8 +21,7 @@ class InAppPurchaseStruct extends Struct
         protected string $identifier = '',
         protected string $name = '',
         protected ?string $description = null,
-    ) {
-    }
+    ) {}
 
     /**
      * @param InAppPurchase $data
