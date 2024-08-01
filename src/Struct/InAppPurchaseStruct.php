@@ -16,22 +16,20 @@ use Shopware\Core\Framework\Struct\Struct;
 #[Package('checkout')]
 class InAppPurchaseStruct extends Struct
 {
-    protected string $identifier;
-
-    protected string $name;
-
-    protected ?string $description = null;
-
-    protected InAppPurchasePriceModelCollection $priceModels;
+    private function __construct(
+        protected InAppPurchasePriceModelCollection $priceModels,
+        protected string $identifier = '',
+        protected string $name = '',
+        protected ?string $description = null,
+    ) {
+    }
 
     /**
      * @param InAppPurchase $data
      */
     public static function fromArray(array $data): self
     {
-        $data['priceModels'] = InAppPurchasePriceModelCollection::fromArray($data['priceModels']);
-
-        return (new self())->assign($data);
+        return (new self(InAppPurchasePriceModelCollection::fromArray($data['priceModels'])))->assign($data);
     }
 
     public function getIdentifier(): string

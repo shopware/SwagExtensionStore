@@ -15,13 +15,13 @@ use Shopware\Core\Framework\Struct\Struct;
 #[Package('checkout')]
 class InAppPurchasePriceModelStruct extends Struct
 {
-    protected string $type;
-
-    protected float $price;
-
-    protected ?int $duration;
-
-    protected ?bool $oneTimeOnly;
+    private function __construct(
+        protected string $type = '',
+        protected float $price = 0.0,
+        protected ?int $duration = null,
+        protected ?bool $oneTimeOnly = null
+    ) {
+    }
 
     /**
      * @param InAppPurchasePriceModel $data
