@@ -19,4 +19,4 @@ jobs:
     uses: shopware/github-actions/.github/workflows/admin-eslint.yml@main
     with:
       extensionName: ${{ github.event.repository.name }}
-      shopwareVersion: dev-next-36303/feature/in-app-purchases
+      shopwareVersion: next-36303/feature/in-app-purchases
