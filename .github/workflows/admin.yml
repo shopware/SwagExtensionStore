@@ -16,7 +16,7 @@ jobs:
       codecovToken: ${{ secrets.CODECOV_TOKEN }}
   lint:
     name: ESLint
-    uses: shopware/github-actions/.github/workflows/admin-eslint.yml@main
+    uses: shopware/github-actions/.github/workflows/admin-eslint.yml@fix-eslint-action
     with:
       extensionName: ${{ github.event.repository.name }}
       shopwareVersion: next-36303/feature/in-app-purchases
