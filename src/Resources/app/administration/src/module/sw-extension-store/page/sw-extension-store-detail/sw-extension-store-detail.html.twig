@@ -203,6 +203,12 @@
                                         {{ $tc('sw-extension-store.detail.hasTrialPhase') }}
                                     </sw-button>
                                 {% endblock %}
+
+                                {% block sw_extension_store_detail_smart_bar_in_app_purchases_badge %}
+                                    <span v-if="extension.inAppFeaturesAvailable" class="sw-extension-store-detail__in-app-purchases__badge">
+                                        {{ $tc('sw-extension.in-app-purchase.badge-label') }}
+                                    </span>
+                                {% endblock %}
                             {% endblock %}
                         </template>
 
