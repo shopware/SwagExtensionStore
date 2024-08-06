@@ -1,0 +1,13 @@
+{% block sw_extension_card_base_activation_switch %}
+<div class="sw-extension-card-base__info">
+    <section>
+        <span class="sw-extension-card-base__info-name">
+            {{ extension.label }}
+        </span>
+
+        <span v-if="extension.inAppFeaturesAvailable" class="sw-extension-card-base__in-app-purchase__badge">
+            {{ $tc('sw-extension.in-app-purchase.badge-label') }}
+        </span>
+    </section>
+</div>
+{% endblock %}

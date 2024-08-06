@@ -334,10 +334,52 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
             });
             await flushPromises();
 
-            expect(wrapper.find('.sw-extension-store-detail__action-add-extension').exists()).toBe(false);
-            expect(wrapper.find('.sw-extension-store-detail__action-open-extension').exists()).toBe(false);
-            expect(wrapper.find('.sw-extension-store-detail__action-install-extension').exists()).toBe(false);
-            expect(wrapper.find('.sw-extension-store-detail__action-enterprise-contact').exists()).toBe(false);
+            expect(wrapper.find('.sw-extension-store-detail__action-add-extension').exists()).toBeFalsy();
+            expect(wrapper.find('.sw-extension-store-detail__action-open-extension').exists()).toBeFalsy();
+            expect(wrapper.find('.sw-extension-store-detail__action-install-extension').exists()).toBeFalsy();
+            expect(wrapper.find('.sw-extension-store-detail__action-enterprise-contact').exists()).toBeFalsy();
+        });
+
+        it('should render in-app-purchase badge when extension has available in-app-purchase', async () => {
+            Shopware.State.get('shopwareExtensions').myExtensions = {
+                data: [{
+                    active: true,
+                    name: 'TestExtension',
+                    storeLicense: false,
+                    id: 1337
+                }]
+            };
+
+            const wrapper = await createWrapper({
+                inAppFeaturesAvailable: true,
+                variants: [{ foo: 'bar' }]
+            });
+
+            await flushPromises();
+
+            expect(wrapper.find('.sw-extension-store-detail__in-app-purchases__badge').exists()).toBeTruthy();
+            expect(wrapper.get('.sw-extension-store-detail__in-app-purchases__badge').text())
+                .toBe('sw-extension.in-app-purchase.badge-label');
+        });
+
+        it('should not render in-app-purchase badge when extension has available in-app-purchase', async () => {
+            Shopware.State.get('shopwareExtensions').myExtensions = {
+                data: [{
+                    active: true,
+                    name: 'TestExtension',
+                    storeLicense: false,
+                    id: 1337
+                }]
+            };
+
+            const wrapper = await createWrapper({
+                inAppFeaturesAvailable: false,
+                variants: [{ foo: 'bar' }]
+            });
+
+            await flushPromises();
+
+            expect(wrapper.find('.sw-extension-store-detail__in-app-purchases__badge').exists()).toBeFalsy();
         });
     });
 });

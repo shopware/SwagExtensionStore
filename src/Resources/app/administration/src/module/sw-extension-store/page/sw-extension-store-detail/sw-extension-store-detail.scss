@@ -131,6 +131,21 @@
             background: none;
             line-height: inherit;
             text-align: right;
+            margin: 0 0 10px 0;
+        }
+
+        .sw-extension-store-detail__net-price,
+        .sw-extension-store-detail__rent-suffix {
+            font-weight: $font-weight-semi-bold;
+        }
+
+        .sw-extension-store-detail__in-app-purchases__badge {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .sw-extension-store-detail__price-free {
+            margin-bottom: 0;
         }
 
         .is--discounted {
@@ -151,6 +166,7 @@
         .sw-extension-store-detail__discounted-price-info {
             color: $color-gray-500;
             font-size: $font-size-xxs;
+            font-weight: $font-weight-semi-bold;
             margin-top: 0;
             text-align: right;
         }
