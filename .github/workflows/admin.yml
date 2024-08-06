@@ -12,6 +12,7 @@ jobs:
     with:
       extensionName: ${{ github.event.repository.name }}
       uploadCoverage: true
+      shopwareVersion: next-36303/feature/in-app-purchases
     secrets:
       codecovToken: ${{ secrets.CODECOV_TOKEN }}
   lint:
