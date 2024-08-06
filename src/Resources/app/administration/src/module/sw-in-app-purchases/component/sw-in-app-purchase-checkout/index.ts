@@ -30,10 +30,10 @@ export default Shopware.Component.wrapComponentConfig({
 
     computed: {
         priceModel(): IAP.InAppPurchasePriceModel | null {
-            return this.inAppPurchaseCart?.positions[0].priceModel || null;
+            return this.inAppPurchaseCart?.positions?.[0].priceModel || null;
         },
         purchase(): IAP.InAppPurchase | null {
-            return this.inAppPurchaseCart?.positions[0].feature || null;
+            return this.inAppPurchaseCart?.positions?.[0].feature || null;
         },
         assetFilter() {
             return Shopware.Filter.getByName('asset');
@@ -58,7 +58,7 @@ export default Shopware.Component.wrapComponentConfig({
             });
         },
 
-        requestFeature() {
+        async requestFeature() {
             if (!this.store.extension || !this.store.entry) {
                 this.reset();
 
@@ -67,7 +67,7 @@ export default Shopware.Component.wrapComponentConfig({
 
             this.state = 'loading';
 
-            Promise.all([
+            await Promise.all([
                 this.inAppPurchasesService.createCart(
                     this.store.extension.name,
                     this.store.entry.identifier
