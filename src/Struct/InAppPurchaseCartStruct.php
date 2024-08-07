@@ -12,7 +12,7 @@ use Shopware\Core\Framework\Struct\Struct;
  *
  * @phpstan-import-type InAppPurchaseCartPosition from InAppPurchaseCartPositionStruct
  * @phpstan-type Shop array{id: int, domain: string}|array{}
- * @phpstan-type InAppPurchaseCart array{bookingShop: Shop, licenseShop: Shop, netPrice: float, grossPrice: float, taxRate: float, taxValue: float, positions: InAppPurchaseCartPosition[]}
+ * @phpstan-type InAppPurchaseCart array{positions: InAppPurchaseCartPosition[], bookingShop: Shop, licenseShop: Shop, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}
  */
 #[Package('checkout')]
 class InAppPurchaseCartStruct extends Struct
@@ -36,7 +36,7 @@ class InAppPurchaseCartStruct extends Struct
      */
     public static function fromArray(array $data): self
     {
-        return new self(InAppPurchaseCartPositionCollection::fromArray($data['positions']));
+        return (new self(InAppPurchaseCartPositionCollection::fromArray($data['positions'])))->assign($data);
     }
 
     /**
