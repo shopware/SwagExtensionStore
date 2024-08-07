@@ -60,6 +60,9 @@ describe('sw-in-app-purchase-checkout-button', () => {
 
         await wrapper.setProps({ state: 'purchase' });
         expect(wrapper.vm.text).toBe('sw-in-app-purchase-checkout-button.purchaseButton');
+
+        await wrapper.setProps({ state: 'random' });
+        expect(wrapper.vm.text).toBe(null);
     });
 
     it('emits click event on onClick method', async () => {

@@ -77,8 +77,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.inAppPurchaseCart = inAppPurchaseCart;
                 this.extension = extension;
                 this.state = 'purchase';
-            }).catch((error) => {
-                console.error(error);
+            }).catch(() => {
                 // todo: handle error
                 this.state = 'error';
             });
@@ -96,8 +95,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.store.entry.identifier
             ).then(() => {
                 this.state = 'success';
-            }).catch((error) => {
-                console.error(error);
+            }).catch(() => {
                 // todo: handle error
                 this.state = 'error';
             });

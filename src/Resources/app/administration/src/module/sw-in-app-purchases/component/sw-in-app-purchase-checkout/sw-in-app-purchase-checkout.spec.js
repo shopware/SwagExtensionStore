@@ -7,18 +7,18 @@ Shopware.Component.register(
     () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout')
 );
 
-async function createWrapper(overrides) {
+async function createWrapper(error = false) {
     const store = Shopware.Store.get('inAppPurchaseCheckout');
 
     return mount(await Shopware.Component.build('sw-in-app-purchase-checkout'), {
-        props: {
-            ...overrides
-        },
         global: {
             provide: {
                 store,
                 inAppPurchasesService: {
                     getExtension: () => {
+                        if (error) {
+                            return Promise.reject(new Error('Test error'));
+                        }
                         return Promise.resolve({
                             name: 'test-extension',
                             icon: 'test-icon',
@@ -89,6 +89,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         wrapper.vm.store.$reset();
 
         expect(spy).toHaveBeenCalled();
+        wrapper.vm.reset();
     });
 
     it('does not call createCart or getExtension when entry or extension not set', async () => {
@@ -118,6 +119,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         expect(createCartSpy).toHaveBeenCalledTimes(0);
         expect(getExtensionSpy).toHaveBeenCalledTimes(0);
         wrapper.vm.store.$reset();
+        wrapper.vm.reset();
     });
 
     it('handles requestFeature method correctly', async () => {
@@ -138,6 +140,30 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         await flushPromises();
         expect(wrapper.vm.state).toBe('purchase');
         wrapper.vm.store.$reset();
+        wrapper.vm.reset();
+    });
+
+    it('catches requestFeature error correctly', async () => {
+        wrapper = await createWrapper(true);
+        wrapper.vm.store.request({
+            featureId: 'your-feature-id'
+        }, {
+            name: 'jestapp',
+            baseUrl: '',
+            permissions: [],
+            version: '1.0.0',
+            type: 'app',
+            integrationId: '123',
+            active: true
+        });
+
+        wrapper.vm.requestFeature();
+        expect(wrapper.vm.state).toBe('loading');
+
+        await flushPromises();
+        expect(wrapper.vm.state).toBe('error');
+        wrapper.vm.store.$reset();
+        wrapper.vm.reset();
     });
 
     it('does not call orderCart when entry or extension not set', async () => {
@@ -165,6 +191,56 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         wrapper.vm.onPurchaseFeature();
         expect(spy).toHaveBeenCalledTimes(0);
         wrapper.vm.store.$reset();
+        wrapper.vm.reset();
+    });
+
+    it('handles onPurchaseFeature method correctly', async () => {
+        const spy = jest.spyOn(wrapper.vm.inAppPurchasesService, 'orderCart');
+
+        wrapper.vm.store.request({
+            featureId: 'your-feature-id'
+        }, {
+            name: 'jestapp',
+            baseUrl: '',
+            permissions: [],
+            version: '1.0.0',
+            type: 'app',
+            integrationId: '123',
+            active: true
+        });
+        await flushPromises();
+
+        wrapper.vm.onPurchaseFeature();
+        expect(wrapper.vm.state).toBe('purchase');
+
+        await flushPromises();
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(wrapper.vm.state).toBe('success');
+        wrapper.vm.store.$reset();
+        wrapper.vm.reset();
+    });
+
+    it('catches onPurchaseFeature error correctly', async () => {
+        wrapper = await createWrapper(true);
+        wrapper.vm.store.request({
+            featureId: 'your-feature-id'
+        }, {
+            name: 'jestapp',
+            baseUrl: '',
+            permissions: [],
+            version: '1.0.0',
+            type: 'app',
+            integrationId: '123',
+            active: true
+        });
+
+        wrapper.vm.onPurchaseFeature();
+        expect(wrapper.vm.state).toBe('loading');
+
+        await flushPromises();
+        expect(wrapper.vm.state).toBe('error');
+        wrapper.vm.store.$reset();
+        wrapper.vm.reset();
     });
 
     it('handles handleStateActions method correctly', async () => {
@@ -209,6 +285,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         wrapper.vm.handleStateActions(true);
         expect(spyReset).toHaveBeenCalledTimes(1);
         spyReset.mockReset();
+        wrapper.vm.reset();
     });
 
     it('resets the component state correctly', async () => {
@@ -220,5 +297,39 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         expect(wrapper.vm.extension).toBeNull();
         expect(wrapper.vm.errorSnippet).toBeNull();
         expect(wrapper.vm.state).toBe('loading');
+    });
+
+    it('returns the correct asset filter', () => {
+        const assetFilter = wrapper.vm.assetFilter;
+        expect(assetFilter).toBeDefined();
+        expect(typeof assetFilter).toBe('function');
+    });
+
+    it('returns the extension icon correctly', async () => {
+        // Test when extension has an icon
+        wrapper.setData({
+            extension: {
+                icon: 'icon-url'
+            }
+        });
+        expect(wrapper.vm.extensionIcon).toBe('icon-url');
+
+        // Test when extension has a raw icon
+        wrapper.setData({
+            extension: {
+                icon: '',
+                iconRaw: 'base64data'
+            }
+        });
+        expect(wrapper.vm.extensionIcon).toBe('data:image/png;base64, base64data');
+
+        // Test when extension has no icon
+        wrapper.setData({
+            extension: {
+                icon: '',
+                iconRaw: ''
+            }
+        });
+        expect(wrapper.vm.extensionIcon).toBe('administration/static/img/theme/default_theme_preview.jpg');
     });
 });
