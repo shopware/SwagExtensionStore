@@ -13,6 +13,7 @@ use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use SwagExtensionStore\Exception\ExtensionStoreException;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
+use SwagExtensionStore\Struct\InAppPurchaseCollection;
 
 /**
  * @phpstan-type SbpEndpoints array<string, string>
@@ -240,5 +241,26 @@ class StoreClient
         }
 
         return InAppPurchaseCartStruct::fromArray(json_decode((string) $response->getBody(), true));
+    }
+
+    public function listInAppPurchases(string $extensionName, Context $context): InAppPurchaseCollection
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                $this->endpoints['iaf_list'],
+                [
+                    'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
+                    'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
+                    'json' => [
+                        'extensionName' => $extensionName,
+                    ],
+                ],
+            );
+        } catch (ClientException $e) {
+            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+        }
+
+        return InAppPurchaseCollection::fromArray(json_decode((string) $response->getBody(), true));
     }
 }
