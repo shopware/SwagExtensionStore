@@ -13,6 +13,7 @@ use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use SwagExtensionStore\Controller\InAppPurchasesController;
 use SwagExtensionStore\Services\InAppPurchasesService;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
+use SwagExtensionStore\Struct\InAppPurchaseCollection;
 use Symfony\Component\HttpFoundation\Response;
 
 class InAppPurchasesControllerTest extends TestCase
@@ -94,10 +95,24 @@ class InAppPurchasesControllerTest extends TestCase
         static::assertSame(59.5, $content['positions'][0]['priceModel']['price']);
     }
 
-    /**
-     * @return InAppPurchaseCartStruct
-     */
-    public function getInAppPurchaseCartStruct(): InAppPurchaseCartStruct
+    public function testListPurchases(): void
+    {
+        $context = Context::createDefaultContext();
+        $service = $this->createMock(InAppPurchasesService::class);
+        $service->expects(static::once())
+            ->method('listPurchases')
+            ->with('technical-name', $context)
+            ->willReturn($this->getInAppPurchaseCollection());
+
+        $controller = new InAppPurchasesController($service, $this->createMock(AbstractExtensionDataProvider::class));
+        $content = $this->validateResponse(
+            $controller->listPurchases('technical-name', $context),
+        );
+
+        static::assertCount(2, $content);
+    }
+
+    private function getInAppPurchaseCartStruct(): InAppPurchaseCartStruct
     {
         $cartStruct = InAppPurchaseCartStruct::fromArray([
             'netPrice' => 50.0,
@@ -148,5 +163,47 @@ class InAppPurchasesControllerTest extends TestCase
         $response = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
         static::assertIsArray($response);
         return $response;
+    }
+
+    private function getInAppPurchaseCollection(): InAppPurchaseCollection
+    {
+        return new InAppPurchaseCollection([
+            [
+                'identifier' => 'testFeature',
+                'name' => 'testFeature',
+                'description' => null,
+                'priceModels' => [
+                    [
+                        'type' => 'random-type',
+                        'price' => 59.5,
+                        'duration' => 'yearly',
+                        'oneTimeOnly' => false,
+                    ],
+                ],
+            ],
+            [
+                'identifier' => 'testFeature2',
+                'name' => 'testFeature2',
+                'description' => null,
+                'priceModels' => [
+                    [
+                        'type' => 'monthly-type',
+                        'price' => 1.5,
+                        'duration' => 'monthly',
+                        'oneTimeOnly' => false,
+                    ], [
+                        'type' => 'yearly-type',
+                        'price' => 12.0,
+                        'duration' => 'yearly',
+                        'oneTimeOnly' => false,
+                    ], [
+                        'type' => 'one-time-type',
+                        'price' => 50.0,
+                        'duration' => 'lifetime',
+                        'oneTimeOnly' => true,
+                    ],
+                ],
+            ],
+        ]);
     }
 }
