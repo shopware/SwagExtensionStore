@@ -28,12 +28,14 @@ export default {
     data() {
         return {
             extension: null,
+            inAppPurchases: [],
             isLoading: false,
             showBuyModal: false,
             showPermissionsModal: false,
             showAcceptPermissionsModal: false,
             showAccountModal: false,
             showInstallationFailedModal: false,
+            showInAppPurchasesListingModal: false,
             isInstalling: false,
             isInstallSuccessful: false,
             permissionsAccepted: false,
@@ -216,6 +218,7 @@ export default {
     async created() {
         await this.shopwareExtensionService.updateExtensionData();
         this.canBeOpened = !!this.shopwareExtensionService.getOpenLink(this.extension);
+        this.setInAppPurchases();
     },
 
     methods: {
@@ -330,6 +333,14 @@ export default {
             this.showAcceptPermissionsModal = false;
         },
 
+        openInAppPurchasesListingModal() {
+            this.showInAppPurchasesListingModal = true;
+        },
+
+        closeInAppPurchasesListingModal() {
+            this.showInAppPurchasesListingModal = false;
+        },
+
         async closePermissionsModalAndInstallExtension() {
             this.permissionsAccepted = true;
             this.closeAcceptPermissionsModal();
@@ -417,6 +428,14 @@ export default {
 
         closeInstallationFailedModal() {
             this.showInstallationFailedModal = false;
+        },
+
+        setInAppPurchases() {
+            this.inAppPurchases = null
+        },
+
+        formatCurrency(price, currency) {
+            return Utils.format.currency(price, currency);
         }
     }
 };

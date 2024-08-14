@@ -329,3 +329,55 @@
         margin: 0;
     }
 }
+
+.sw-extension-store-detail-in-app-purchases-listing-modal {
+    > .sw-modal__dialog {
+        max-height: 550px;
+
+        > .sw-modal__body {
+            padding: 0;
+        }
+    }
+
+    &-content {
+        &__collapse {
+            border-bottom: 1px solid $color-gray-300;
+
+            > .sw-collapse__content {
+                padding: 20px 30px;
+            }
+        }
+
+        &__description {
+            display: flex;
+            font-size: 16px;
+            line-height: 23px;
+            font-weight: 400;
+            padding-bottom: 12px;
+        }
+
+        &__payment-options {
+            font-size: 16px;
+            line-height: 23px;
+            font-weight: 400;
+            padding-bottom: 12px;
+            margin-left: 20px;
+        }
+
+        &__tax-notice {
+            display: flex;
+            padding: 20px 30px;
+            color: $color-darkgray-200;
+            font-size: $font-size-xxs;
+        }
+
+        &__title {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+        }
+    }
+}
