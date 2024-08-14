@@ -1,7 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagExtensionStore\Struct;
 
+use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Struct\Collection;
 
 /**
@@ -11,6 +14,7 @@ use Shopware\Core\Framework\Struct\Collection;
  *
  * @phpstan-import-type InAppPurchase from InAppPurchaseStruct
  */
+#[Package('checkout')]
 class InAppPurchaseCollection extends Collection
 {
     /**

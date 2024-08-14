@@ -167,7 +167,7 @@ class InAppPurchasesControllerTest extends TestCase
 
     private function getInAppPurchaseCollection(): InAppPurchaseCollection
     {
-        return new InAppPurchaseCollection([
+        return InAppPurchaseCollection::fromArray([
             [
                 'identifier' => 'testFeature',
                 'name' => 'testFeature',
