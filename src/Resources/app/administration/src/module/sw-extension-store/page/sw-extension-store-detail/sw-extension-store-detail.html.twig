@@ -353,7 +353,7 @@
                                 v-if="showInAppPurchasesListingModal"
                                 :title="$tc('sw-extension-store.detail.inAppPurchases.label')"
                                 :subtitle="extension.name"
-                                variant="small"
+                                variant="default"
                                 class="sw-extension-store-detail-in-app-purchases-listing-modal"
                                 @modal-close="closeInAppPurchasesListingModal"
                             >
@@ -511,7 +511,6 @@
                                     <dt>{{ $tc('sw-extension-store.detail.inAppPurchases.label') }}</dt>
                                     <dd>{{ inAppPurchases.length }}
                                         <a
-                                            :href="here"
                                             :title="$tc('sw-extension-store.component.sw-extension-card-base.contextMenu.seeDetailsLabel')"
                                             class="sw-admin-menu__navigation-link"
                                             role="button"
