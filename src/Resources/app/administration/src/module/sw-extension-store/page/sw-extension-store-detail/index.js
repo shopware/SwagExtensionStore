@@ -13,7 +13,8 @@ export default {
         'extensionStoreDataService',
         'shopwareExtensionService',
         'extensionHelperService',
-        'cacheApiService'
+        'cacheApiService',
+        'inAppPurchasesService'
     ],
 
     mixins: ['sw-extension-error'],
@@ -431,7 +432,11 @@ export default {
         },
 
         setInAppPurchases() {
-            this.inAppPurchases = null
+            try {
+                this.inAppPurchases = this.inAppPurchasesService.getAvailablePurchases(this.extension.name);
+            } catch (error) {
+                this.inAppPurchases = [];
+            }
         },
 
         formatCurrency(price, currency) {

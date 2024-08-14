@@ -456,31 +456,31 @@
                 ></sw-extension-store-slider>
             {% endblock %}
 
-{#            {% block sw_extension_store_detail_card_info %}#}
-{#                <sw-meteor-card#}
-{#                    :title="$tc('sw-extension-store.detail.cardTitleInformation')"#}
-{#                    class="sw-extension-store-detail--user-provided-data"#}
-{#                >#}
-{#                    {% block sw_extension_store_detail_card_info_content %}#}
-{#                        <div#}
-{#                            v-html="description"#}
-{#                            :class="{ 'sw-extension-store-detail__description--collapsed': isDescriptionCollapsed }"#}
-{#                            class="sw-extension-store-detail__description"#}
-{#                        ></div>#}
-{#                    {% endblock %}#}
+            {% block sw_extension_store_detail_card_info %}
+                <sw-meteor-card
+                    :title="$tc('sw-extension-store.detail.cardTitleInformation')"
+                    class="sw-extension-store-detail--user-provided-data"
+                >
+                    {% block sw_extension_store_detail_card_info_content %}
+                        <div
+                            v-html="description"
+                            :class="{ 'sw-extension-store-detail__description--collapsed': isDescriptionCollapsed }"
+                            class="sw-extension-store-detail__description"
+                        ></div>
+                    {% endblock %}
 
-{#                    {% block sw_extension_store_details_expand_description %}#}
-{#                        <sw-button#}
-{#                            v-if="isDescriptionCollapsed"#}
-{#                            @click="expandDescription"#}
-{#                            size="small"#}
-{#                            class="sw-extension-store-detail__button-extend-description"#}
-{#                        >#}
-{#                            {{ $tc('sw-extension-store.detail.labelButtonReadMore') }}#}
-{#                        </sw-button>#}
-{#                    {% endblock %}#}
-{#                </sw-meteor-card>#}
-{#            {% endblock %}#}
+                    {% block sw_extension_store_details_expand_description %}
+                        <sw-button
+                            v-if="isDescriptionCollapsed"
+                            @click="expandDescription"
+                            size="small"
+                            class="sw-extension-store-detail__button-extend-description"
+                        >
+                            {{ $tc('sw-extension-store.detail.labelButtonReadMore') }}
+                        </sw-button>
+                    {% endblock %}
+                </sw-meteor-card>
+            {% endblock %}
 
             {% block sw_extension_store_detail_card_details %}
                 <sw-meteor-card :title="$tc('sw-extension-store.detail.cardTitleDetails')">
@@ -509,7 +509,7 @@
                             {% block sw_extension_store_detail_card_details_in_app_purchases %}
                                 <template v-if="inAppPurchases.length">
                                     <dt>{{ $tc('sw-extension-store.detail.inAppPurchases.label') }}</dt>
-                                    <dd>20
+                                    <dd>{{ inAppPurchases.length }}
                                         <a
                                             :href="here"
                                             :title="$tc('sw-extension-store.component.sw-extension-card-base.contextMenu.seeDetailsLabel')"
