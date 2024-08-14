@@ -30,3 +30,5 @@ export type InAppPurchaseCart = {
     taxValue: number;
     positions: Array<InAppPurchaseCartPositions>;
 }
+
+export type InAppPurchaseCollection = Array<InAppPurchase>;
