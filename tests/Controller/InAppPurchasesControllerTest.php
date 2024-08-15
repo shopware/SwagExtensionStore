@@ -101,12 +101,12 @@ class InAppPurchasesControllerTest extends TestCase
         $service = $this->createMock(InAppPurchasesService::class);
         $service->expects(static::once())
             ->method('listPurchases')
-            ->with('technical-name', $context)
+            ->with(555, $context)
             ->willReturn($this->getInAppPurchaseCollection());
 
         $controller = new InAppPurchasesController($service, $this->createMock(AbstractExtensionDataProvider::class));
         $content = $this->validateResponse(
-            $controller->listPurchases('technical-name', $context),
+            $controller->listPurchases(555, $context),
         );
 
         static::assertCount(2, $content);

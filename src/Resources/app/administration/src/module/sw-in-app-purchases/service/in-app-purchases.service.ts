@@ -33,9 +33,9 @@ export default class InAppPurchasesService extends ApiService {
         ).then(ApiService.handleResponse.bind(this));
     }
 
-    async getAvailablePurchases(name: string) {
+    async getAvailablePurchases(extensionId: bigint) {
         return this.httpClient.get<IAP.InAppPurchaseCollection>(
-            `_action/${this.apiEndpoint}/${name}/list`,
+            `_action/${this.apiEndpoint}/${extensionId}/list`,
             { headers: this.getBasicHeaders() }
         ).then(ApiService.handleResponse.bind(this));
     }

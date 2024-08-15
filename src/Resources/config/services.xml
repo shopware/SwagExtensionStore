@@ -13,10 +13,10 @@
             <parameter key="create_basket">/swplatform/extensionstore/baskets</parameter>
             <parameter key="order_basket">/swplatform/extensionstore/orders</parameter>
             <parameter key="payment_means">/swplatform/extensionstore/paymentmeans</parameter>
-            <parameter key="iaf_details">/swcloudadmin/store/extensions/%%d/inappfeatures/%%s</parameter>
-            <parameter key="iaf_create_basket">/swcloudadmin/inappfeatures/baskets</parameter>
-            <parameter key="iaf_order_basket">/swcloudadmin/inappfeatures/orders</parameter>
-            <parameter key="iaf_list">/swcloudadmin/inappfeatures/list</parameter>
+            <parameter key="iap_details">/swcloudadmin/store/extensions/%%d/inappfeatures/%%s</parameter>
+            <parameter key="iap_create_basket">/swcloudadmin/inappfeatures/baskets</parameter>
+            <parameter key="iap_order_basket">/swcloudadmin/inappfeatures/orders</parameter>
+            <parameter key="iap_list">/swcloudadmin/store/extensions/%d/inappfeatures</parameter>
         </parameter>
     </parameters>
     <services>

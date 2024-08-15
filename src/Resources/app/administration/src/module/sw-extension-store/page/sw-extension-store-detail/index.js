@@ -432,7 +432,7 @@ export default {
         },
 
         setInAppPurchases() {
-            this.inAppPurchases = this.inAppPurchasesService.getAvailablePurchases(this.extension.name);
+            this.inAppPurchases = this.inAppPurchasesService.getAvailablePurchases(this.extension.id);
         },
 
         formatCurrency(price, currency) {
