@@ -118,7 +118,7 @@ class StoreClientTest extends TestCase
         $this->setUpIapRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
-        $this->storeClient->listInAppPurchases('testExtension', $this->context);
+        $this->storeClient->listInAppPurchases(555, $this->context);
 
     }
 
