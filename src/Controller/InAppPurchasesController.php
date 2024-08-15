@@ -62,10 +62,10 @@ class InAppPurchasesController
         return new JsonResponse($feature);
     }
 
-    #[Route('/api/_action/in-app-purchase/{technicalName}/list', name: 'api.in-app-purchase.list', methods: ['GET'])]
-    public function listPurchases(string $technicalName, Context $context): Response
+    #[Route('/api/_action/in-app-purchase/{extensionId}/list', name: 'api.in-app-purchase.list', methods: ['GET'])]
+    public function listPurchases(int $extensionId, Context $context): Response
     {
-        $purchases = $this->inAppPurchasesService->listPurchases($technicalName, $context);
+        $purchases = $this->inAppPurchasesService->listPurchases($extensionId, $context);
 
         return new JsonResponse($purchases);
     }
