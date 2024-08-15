@@ -10,7 +10,7 @@ use Shopware\Core\Framework\Struct\Collection;
 /**
  * @codeCoverageIgnore
  *
- * @template-extends Collection<InAppPurchaseCollection>
+ * @template-extends Collection<InAppPurchaseStruct>
  *
  * @phpstan-import-type InAppPurchase from InAppPurchaseStruct
  */
