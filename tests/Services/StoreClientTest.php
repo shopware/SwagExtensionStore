@@ -115,11 +115,19 @@ class StoreClientTest extends TestCase
 
     public function testListInAppPurchasesException(): void
     {
-        $this->setUpIapRequestHandler(400);
+        $this->setUpIapListingRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
         $this->storeClient->listInAppPurchases(555, $this->context);
+    }
 
+    public function testListInAppPurchasesBuildsStruct(): void
+    {
+        $this->setUpIapListingRequestHandler();
+
+        $iap = $this->storeClient->listInAppPurchases(555, $this->context);
+
+        static::assertCount(2, $iap);
     }
 
     private function setUpFilterRequestHandler(int $statusCode = 200): void
@@ -133,6 +141,18 @@ class StoreClientTest extends TestCase
     private function setUpIapRequestHandler(int $statusCode = 200): void
     {
         $requestHandler = $this->getStoreRequestHandler();
+        $requestHandler->append(new Response($statusCode, []));
+    }
+
+    private function setUpIapListingRequestHandler(int $statusCode = 200): void
+    {
+        $requestHandler = $this->getStoreRequestHandler();
+        if ($statusCode === 200) {
+            $iapJson = file_get_contents(__DIR__ . '/../_fixtures/responses/extension-iap.json');
+            static::assertIsString($iapJson);
+            $requestHandler->append(new Response($statusCode, [], $iapJson));
+            return;
+        }
         $requestHandler->append(new Response($statusCode, []));
     }
 }
