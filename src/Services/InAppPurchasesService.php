@@ -29,8 +29,8 @@ class InAppPurchasesService
         return $this->client->orderInAppPurchaseCart($extensionName, $feature, $context);
     }
 
-    public function listPurchases(string $extensionName, Context $context): InAppPurchaseCollection
+    public function listPurchases(int $extensionId, Context $context): InAppPurchaseCollection
     {
-        return $this->client->listInAppPurchases($extensionName, $context);
+        return $this->client->listInAppPurchases($extensionId, $context);
     }
 }
