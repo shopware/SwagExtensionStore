@@ -113,6 +113,15 @@ class StoreClientTest extends TestCase
         $this->storeClient->orderInAppPurchaseCart('testExtension', 'testFeature', $this->context);
     }
 
+    public function testListInAppPurchasesException(): void
+    {
+        $this->setUpIapRequestHandler(400);
+
+        $this->expectException(StoreApiException::class);
+        $this->storeClient->listInAppPurchases('testExtension', $this->context);
+
+    }
+
     private function setUpFilterRequestHandler(int $statusCode = 200): void
     {
         $requestHandler = $this->getStoreRequestHandler();
