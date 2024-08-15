@@ -509,10 +509,13 @@
                             {% block sw_extension_store_detail_card_details_in_app_purchases %}
                                 <template v-if="inAppPurchases.length">
                                     <dt>{{ $tc('sw-extension-store.detail.inAppPurchases.label') }}</dt>
-                                    <dd>{{ inAppPurchases.length }}
+                                    <dd>
+                                        <span class="sw-extension-store-detail-card-details-in-app-purchases__count">
+                                            {{ inAppPurchases.length }}
+                                        </span>
                                         <a
                                             :title="$tc('sw-extension-store.component.sw-extension-card-base.contextMenu.seeDetailsLabel')"
-                                            class="sw-admin-menu__navigation-link"
+                                            class="sw-extension-store-detail-card-details-in-app-purchases__modal-link"
                                             role="button"
                                             @click="openInAppPurchasesListingModal"
                                         >
