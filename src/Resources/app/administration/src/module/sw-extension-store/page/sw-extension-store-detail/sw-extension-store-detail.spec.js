@@ -22,6 +22,7 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAp
             { details: { name: 'Storefront' } }
         ],
         description: '<p>This is a really cool extension.</p>',
+        inAppFeaturesAvailable: inAppPurchases,
         label: 'B2B Suite',
         name: 'SwagB2BPlatform',
         producerName: 'shopware AG',
