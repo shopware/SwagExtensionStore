@@ -354,6 +354,7 @@
             line-height: 23px;
             font-weight: 400;
             padding-bottom: 12px;
+            color: var(--color-text-secondary-default);
         }
 
         &__payment-options {
@@ -362,6 +363,7 @@
             font-weight: 400;
             padding-bottom: 12px;
             margin-left: 20px;
+            color: var(--color-text-secondary-default);
         }
 
         &__tax-notice {
@@ -378,6 +380,9 @@
             align-items: center;
             cursor: pointer;
             font-weight: 500;
+            font-size: 16px;
+            line-height: 23px;
+            color: var(--color-text-primary-default);
         }
     }
 }
