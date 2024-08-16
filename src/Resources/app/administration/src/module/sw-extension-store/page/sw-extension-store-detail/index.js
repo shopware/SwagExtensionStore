@@ -219,7 +219,9 @@ export default {
     async created() {
         await this.shopwareExtensionService.updateExtensionData();
         this.canBeOpened = !!this.shopwareExtensionService.getOpenLink(this.extension);
-        this.setInAppPurchases();
+        if (this.extension.inAppFeaturesAvailable) {
+            this.setInAppPurchases();
+        }
     },
 
     methods: {
