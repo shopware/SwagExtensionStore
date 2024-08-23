@@ -106,7 +106,7 @@ class InAppPurchasesControllerTest extends TestCase
 
         $controller = new InAppPurchasesController($service, $this->createMock(AbstractExtensionDataProvider::class));
         $content = $this->validateResponse(
-            $controller->listPurchases(555, $context),
+            $controller->listPurchases('TestApp', $context),
         );
 
         static::assertCount(2, $content);
