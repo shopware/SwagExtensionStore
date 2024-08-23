@@ -16,7 +16,7 @@
             <parameter key="iap_details">/swplatform/store/extensions/%%d/inappfeatures/%%s</parameter>
             <parameter key="iap_create_basket">/swplatform/inappfeatures/baskets</parameter>
             <parameter key="iap_order_basket">/swplatform/inappfeatures/orders</parameter>
-            <parameter key="iap_list">/swplatform/store/extensions/%d/inappfeatures</parameter>
+            <parameter key="iap_list">/swplatform/store/extensions/%s/inappfeatures</parameter>
         </parameter>
     </parameters>
     <services>
