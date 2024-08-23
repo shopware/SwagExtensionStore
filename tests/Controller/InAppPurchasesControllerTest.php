@@ -12,6 +12,8 @@ use Shopware\Core\Framework\Store\Struct\ExtensionStruct;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use SwagExtensionStore\Controller\InAppPurchasesController;
 use SwagExtensionStore\Services\InAppPurchasesService;
+use SwagExtensionStore\Struct\InAppPurchaseCartPositionCollection;
+use SwagExtensionStore\Struct\InAppPurchaseCartPositionStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,9 +78,24 @@ class InAppPurchasesControllerTest extends TestCase
 
         $controller = new InAppPurchasesController($service, $this->createMock(AbstractExtensionDataProvider::class));
 
+        $inAppCartPosition = InAppPurchaseCartPositionStruct::fromArray([
+            'feature' => [
+                'identifier' => 'testFeature',
+                'name' => 'testFeature',
+            ],
+            'priceModel' => [
+                'type' => 'random-type',
+                'price' => 59.5,
+            ],
+            'netPrice' => 50.0,
+            'grossPrice' => 59.5,
+            'taxRate' => 19.0,
+            'taxValue' => 9.5,
+        ]);
+
         $requestDataBag = new RequestDataBag([
-            'name' => 'testExtension',
-            'feature' => 'testFeature',
+            'taxRate' => '19.0',
+            'positions' => InAppPurchaseCartPositionCollection::createFrom($inAppCartPosition)->jsonSerialize(),
         ]);
 
         $content = $this->validateResponse(
@@ -101,7 +118,7 @@ class InAppPurchasesControllerTest extends TestCase
         $service = $this->createMock(InAppPurchasesService::class);
         $service->expects(static::once())
             ->method('listPurchases')
-            ->with(555, $context)
+            ->with('TestApp', $context)
             ->willReturn($this->getInAppPurchaseCollection());
 
         $controller = new InAppPurchasesController($service, $this->createMock(AbstractExtensionDataProvider::class));
