@@ -101,6 +101,7 @@ class StoreDataProviderTest extends TestCase
                 $matches = [];
                 preg_match('/\/swplatform\/extensionstore\/extensions\/(.*)\/reviews/', $request->getUri()->getPath(), $matches);
 
+                static::assertArrayHasKey(1, $matches);
                 static::assertSame($extensionId, (int) $matches[1]);
 
                 $extensionReviewsJson = \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-reviews.json');
@@ -133,6 +134,7 @@ class StoreDataProviderTest extends TestCase
                 $matches = [];
                 preg_match('/\/swplatform\/extensionstore\/extensions\/(.*)/', $request->getUri()->getPath(), $matches);
 
+                static::assertArrayHasKey(1, $matches);
                 static::assertSame($extensionId, (int) $matches[1]);
 
                 $extensionDetailJson = \file_get_contents(__DIR__ . '/../_fixtures/responses/extension-detail.json');
