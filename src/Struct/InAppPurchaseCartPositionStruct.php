@@ -12,14 +12,13 @@ use Shopware\Core\Framework\Struct\Struct;
  *
  * @phpstan-import-type InAppPurchase from InAppPurchaseStruct
  * @phpstan-import-type InAppPurchasePriceModel from InAppPurchasePriceModelStruct
- * @phpstan-type InAppPurchaseCartPosition array{feature: InAppPurchase, priceModel: InAppPurchasePriceModel, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}
+ * @phpstan-type InAppPurchaseCartPosition array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}
  */
 #[Package('checkout')]
 class InAppPurchaseCartPositionStruct extends Struct
 {
     private function __construct(
-        protected InAppPurchaseStruct $feature,
-        protected InAppPurchasePriceModelStruct $priceModel,
+        protected string $inAppFeatureIdentifier = '',
         protected float $netPrice = 0.0,
         protected float $grossPrice = 0.0,
         protected float $taxRate = 0.0,
@@ -31,30 +30,12 @@ class InAppPurchaseCartPositionStruct extends Struct
      */
     public static function fromArray(array $data): self
     {
-        return new self(
-            feature: InAppPurchaseStruct::fromArray($data['feature']),
-            priceModel: InAppPurchasePriceModelStruct::fromArray($data['priceModel']),
-        );
+        return (new self())->assign($data);
     }
 
-    public function getFeature(): InAppPurchaseStruct
+    public function getInAppFeatureIdentifier(): string
     {
-        return $this->feature;
-    }
-
-    public function setFeature(InAppPurchaseStruct $feature): void
-    {
-        $this->feature = $feature;
-    }
-
-    public function getPriceModel(): InAppPurchasePriceModelStruct
-    {
-        return $this->priceModel;
-    }
-
-    public function setPriceModel(InAppPurchasePriceModelStruct $priceModel): void
-    {
-        $this->priceModel = $priceModel;
+        return $this->inAppFeatureIdentifier;
     }
 
     public function getNetPrice(): float

@@ -79,23 +79,18 @@ class InAppPurchasesControllerTest extends TestCase
         $controller = new InAppPurchasesController($service, $this->createMock(AbstractExtensionDataProvider::class));
 
         $inAppCartPosition = InAppPurchaseCartPositionStruct::fromArray([
-            'feature' => [
-                'identifier' => 'testFeature',
-                'name' => 'testFeature',
-            ],
-            'priceModel' => [
-                'type' => 'random-type',
-                'price' => 59.5,
-            ],
+            'inAppFeatureIdentifier' => 'some-app-and-feature-name',
             'netPrice' => 50.0,
             'grossPrice' => 59.5,
             'taxRate' => 19.0,
             'taxValue' => 9.5,
         ]);
 
+        $positions = InAppPurchaseCartPositionCollection::createFrom($inAppCartPosition);
+
         $requestDataBag = new RequestDataBag([
             'taxRate' => '19.0',
-            'positions' => InAppPurchaseCartPositionCollection::createFrom($inAppCartPosition)->jsonSerialize(),
+            'positions' => \json_encode(InAppPurchaseCartPositionCollection::createFrom($inAppCartPosition)->jsonSerialize()),
         ]);
 
         $content = $this->validateResponse(
@@ -138,6 +133,7 @@ class InAppPurchasesControllerTest extends TestCase
             'taxValue' => 9.5,
             'positions' => [
                 [
+                    'inAppFeatureIdentifier' => 'some-app-and-feature-name',
                     'priceModel' => [
                         'type' => 'random-type',
                         'price' => 59.5,
