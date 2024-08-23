@@ -11,6 +11,7 @@ use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use SwagExtensionStore\Services\InAppPurchasesService;
+use SwagExtensionStore\Struct\InAppPurchaseCartPositionCollection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -54,18 +55,20 @@ class InAppPurchasesController
     #[Route('/api/_action/in-app-purchases/cart/order', name: 'api.in-app-purchases.cart.order', methods: ['POST'])]
     public function orderCart(RequestDataBag $data, Context $context): Response
     {
-        $name = $data->getString('name');
-        $feature = $data->getString('feature');
+        $taxRate = \floatval($data->getString('taxRate'));
+        $positions = \json_decode($data->getString('positions'), true, 512, \JSON_THROW_ON_ERROR);
 
-        $feature = $this->inAppPurchasesService->orderCart($name, $feature, $context);
+        $positionCollection = InAppPurchaseCartPositionCollection::fromArray($positions);
 
-        return new JsonResponse($feature);
+        $positions = $this->inAppPurchasesService->orderCart($taxRate, $positionCollection, $context);
+
+        return new JsonResponse($positions);
     }
 
-    #[Route('/api/_action/in-app-purchase/{extensionId}/list', name: 'api.in-app-purchase.list', methods: ['GET'])]
-    public function listPurchases(int $extensionId, Context $context): Response
+    #[Route('/api/_action/in-app-purchase/{name}/list', name: 'api.in-app-purchase.list', methods: ['GET'])]
+    public function listPurchases(string $extensionName, Context $context): Response
     {
-        $purchases = $this->inAppPurchasesService->listPurchases($extensionId, $context);
+        $purchases = $this->inAppPurchasesService->listPurchases($extensionName, $context);
 
         return new JsonResponse($purchases);
     }

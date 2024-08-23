@@ -12,6 +12,7 @@ use Shopware\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProv
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use SwagExtensionStore\Exception\ExtensionStoreException;
+use SwagExtensionStore\Struct\InAppPurchaseCartPositionCollection;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
 
@@ -221,7 +222,7 @@ class StoreClient
         return InAppPurchaseCartStruct::fromArray(json_decode((string) $response->getBody(), true));
     }
 
-    public function orderInAppPurchaseCart(string $extensionName, string $feature, Context $context): InAppPurchaseCartStruct
+    public function orderInAppPurchaseCart(float $taxRate, InAppPurchaseCartPositionCollection $positions, Context $context): InAppPurchaseCartStruct
     {
         try {
             $response = $this->client->request(
@@ -231,8 +232,8 @@ class StoreClient
                     'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
                     'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
                     'json' => [
-                        'extensionName' => $extensionName,
-                        'inAppFeatureIdentifier' => $feature,
+                        'taxRate' => $taxRate,
+                        'positions' => $positions,
                     ],
                 ],
             );
@@ -243,12 +244,12 @@ class StoreClient
         return InAppPurchaseCartStruct::fromArray(json_decode((string) $response->getBody(), true));
     }
 
-    public function listInAppPurchases(int $extensionId, Context $context): InAppPurchaseCollection
+    public function listInAppPurchases(string $extensionName, Context $context): InAppPurchaseCollection
     {
         try {
             $response = $this->client->request(
                 'GET',
-                \sprintf($this->endpoints['iap_list'], $extensionId),
+                \sprintf($this->endpoints['iap_list'], $extensionName),
                 [
                     'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
                     'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
