@@ -162,23 +162,17 @@ class StoreClientTest extends TestCase
     {
         return InAppPurchaseCartPositionCollection::fromArray([
             [
-                'feature' => [
-                    'identifier' => 'testFeature',
-                    'name' => 'testFeature',
-                ],
-                'priceModel' => [
-                    'type' => 'random-type',
-                    'price' => 59.5,
-                ],
+                'inAppFeatureIdentifier' => 'some-app-and-feature-name',
+                'netPrice' => 9.99,
+                'taxValue' => 1.90,
+                'grossPrice' => 11.89,
+                'taxRate' => 19.0,
             ], [
-                'feature' => [
-                    'identifier' => 'testFeature2',
-                    'name' => 'testFeature2',
-                ],
-                'priceModel' => [
-                    'type' => 'random-type',
-                    'price' => 154.88,
-                ],
+                'inAppFeatureIdentifier' => 'some-app-and-feature-name-2',
+                'netPrice' => 20,
+                'taxValue' => 3.80,
+                'grossPrice' => 23.80,
+                'taxRate' => 19.0,
             ],
         ]);
     }
