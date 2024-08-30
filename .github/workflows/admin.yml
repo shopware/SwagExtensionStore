@@ -5,6 +5,10 @@ on:
       - trunk
   pull_request:
 
+env:
+  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+  COMPOSER_ROOT_VERSION: 6.6.9999999.9999999-dev
+
 jobs:
   unit:
     name: Jest
