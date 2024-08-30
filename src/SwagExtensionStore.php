@@ -19,6 +19,7 @@ class SwagExtensionStore extends Plugin
 {
     public function build(ContainerBuilder $container): void
     {
+        // test
         parent::build($container);
 
         $locator = new FileLocator('Resources/config');
