@@ -8,13 +8,29 @@ on:
 jobs:
   unit:
     name: Jest
-    uses: shopware/github-actions/.github/workflows/admin-jest.yml@main
-    with:
-      extensionName: ${{ github.event.repository.name }}
-      uploadCoverage: true
-      shopwareVersion: next-36303/feature/in-app-purchases
-    secrets:
-      codecovToken: ${{ secrets.CODECOV_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup extension
+        uses: shopware/github-actions/setup-extension@main
+        env:
+          COMPOSER_ROOT_VERSION: 6.6.99999.99999-dev
+        with:
+          extensionName: SwagExtensionStore
+          installAdmin: true
+
+      - name: Jest Unit Tests
+        shell: bash
+        working-directory: custom/plugins/SwagExtensionStore/src/Resources/app/administration
+        run: npm run unit -- --coverage
+  
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v4
+        env: 
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          root_dir: ${{ github.workspace }}/custom/plugins/SwagExtensionStore
+          working-directory: ${{ github.workspace }}/custom/plugins/SwagExtensionStore
+          directory: ${{ github.workspace }}/custom/plugins/SwagExtensionStore/src/Resources/app/administration
   lint:
     name: ESLint
     uses: shopware/github-actions/.github/workflows/admin-eslint.yml@main
