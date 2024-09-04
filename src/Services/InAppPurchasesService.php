@@ -6,6 +6,7 @@ namespace SwagExtensionStore\Services;
 
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Log\Package;
+use SwagExtensionStore\Struct\InAppPurchaseCartPositionCollection;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
 
@@ -24,13 +25,13 @@ class InAppPurchasesService
         return $this->client->createInAppPurchaseCart($extensionName, $feature, $context);
     }
 
-    public function orderCart(string $extensionName, string $feature, Context $context): InAppPurchaseCartStruct
+    public function orderCart(float $taxRate, InAppPurchaseCartPositionCollection $positions, Context $context): InAppPurchaseCartStruct
     {
-        return $this->client->orderInAppPurchaseCart($extensionName, $feature, $context);
+        return $this->client->orderInAppPurchaseCart($taxRate, $positions, $context);
     }
 
-    public function listPurchases(int $extensionId, Context $context): InAppPurchaseCollection
+    public function listPurchases(string $extensionName, Context $context): InAppPurchaseCollection
     {
-        return $this->client->listInAppPurchases($extensionId, $context);
+        return $this->client->listInAppPurchases($extensionName, $context);
     }
 }

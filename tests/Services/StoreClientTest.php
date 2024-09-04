@@ -13,6 +13,7 @@ use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use SwagExtensionStore\Services\StoreClient;
+use SwagExtensionStore\Struct\InAppPurchaseCartPositionCollection;
 
 class StoreClientTest extends TestCase
 {
@@ -110,7 +111,8 @@ class StoreClientTest extends TestCase
         $this->setUpIapRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
-        $this->storeClient->orderInAppPurchaseCart('testExtension', 'testFeature', $this->context);
+
+        $this->storeClient->orderInAppPurchaseCart(19, $this->buildPositions(), $this->context);
     }
 
     public function testListInAppPurchasesException(): void
@@ -118,14 +120,14 @@ class StoreClientTest extends TestCase
         $this->setUpIapListingRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
-        $this->storeClient->listInAppPurchases(555, $this->context);
+        $this->storeClient->listInAppPurchases('TestApp', $this->context);
     }
 
     public function testListInAppPurchasesBuildsStruct(): void
     {
         $this->setUpIapListingRequestHandler();
 
-        $iap = $this->storeClient->listInAppPurchases(555, $this->context);
+        $iap = $this->storeClient->listInAppPurchases('TestApp', $this->context);
 
         static::assertCount(2, $iap);
     }
@@ -154,5 +156,24 @@ class StoreClientTest extends TestCase
             return;
         }
         $requestHandler->append(new Response($statusCode, []));
+    }
+
+    private function buildPositions(): InAppPurchaseCartPositionCollection
+    {
+        return InAppPurchaseCartPositionCollection::fromArray([
+            [
+                'inAppFeatureIdentifier' => 'some-app-and-feature-name',
+                'netPrice' => 9.99,
+                'taxValue' => 1.90,
+                'grossPrice' => 11.89,
+                'taxRate' => 19.0,
+            ], [
+                'inAppFeatureIdentifier' => 'some-app-and-feature-name-2',
+                'netPrice' => 20,
+                'taxValue' => 3.80,
+                'grossPrice' => 23.80,
+                'taxRate' => 19.0,
+            ],
+        ]);
     }
 }
