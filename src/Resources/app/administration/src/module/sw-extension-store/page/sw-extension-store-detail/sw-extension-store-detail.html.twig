@@ -393,9 +393,7 @@
                                             </span>
 
                                             <ul class="sw-extension-store-detail-in-app-purchases-listing-modal-content__payment-options">
-                                                <li v-for="paymentOption in inAppPurchase.priceModels">
-                                                    {{ formatCurrency(paymentOption.price, paymentOption.currency) }}* {{ paymentOption.duration }}
-                                                </li>
+                                                {{ formatCurrency(inAppPurchase.priceModel.price, inAppPurchase.priceModel.currency) }}* {{ inAppPurchase.priceModel.duration }}
                                             </ul>
                                         </template>
                                     </sw-collapse>

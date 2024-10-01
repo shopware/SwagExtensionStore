@@ -68,7 +68,7 @@ export default Shopware.Component.wrapComponentConfig({
             this.state = 'loading';
 
             await Promise.all([
-                this.inAppPurchasesService.createCart(
+                this.cart = this.inAppPurchasesService.createCart(
                     this.store.extension.name,
                     this.store.entry.identifier
                 ),
@@ -89,10 +89,10 @@ export default Shopware.Component.wrapComponentConfig({
 
                 return;
             }
-
+            console.log(this.inAppPurchaseCart);
             this.inAppPurchasesService.orderCart(
-                this.store.extension.name,
-                this.store.entry.identifier
+                this.inAppPurchaseCart?.taxRate,
+                this.inAppPurchaseCart?.positions
             ).then(() => {
                 this.state = 'success';
             }).catch(() => {

@@ -433,8 +433,8 @@ export default {
             this.showInstallationFailedModal = false;
         },
 
-        setInAppPurchases() {
-            this.inAppPurchases = this.inAppPurchasesService.getAvailablePurchases(this.extension.id);
+        async setInAppPurchases() {
+            this.inAppPurchases = await this.inAppPurchasesService.getAvailablePurchases(this.extension.name);
         },
 
         formatCurrency(price, currency) {

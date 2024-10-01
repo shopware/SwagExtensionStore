@@ -56,16 +56,16 @@ class InAppPurchasesController
     public function orderCart(RequestDataBag $data, Context $context): Response
     {
         $taxRate = \floatval($data->getString('taxRate'));
-        $positions = \json_decode($data->getString('positions'), true, 512, \JSON_THROW_ON_ERROR);
+        $positions = $data->get('positions');
 
-        $positionCollection = InAppPurchaseCartPositionCollection::fromArray($positions);
+        $positionCollection = InAppPurchaseCartPositionCollection::fromArray($positions->all());
 
-        $positions = $this->inAppPurchasesService->orderCart($taxRate, $positionCollection, $context);
+        $positions = $this->inAppPurchasesService->orderCart($taxRate, $positionCollection->toCart(), $context);
 
         return new JsonResponse($positions);
     }
 
-    #[Route('/api/_action/in-app-purchase/{name}/list', name: 'api.in-app-purchase.list', methods: ['GET'])]
+    #[Route('/api/_action/in-app-purchases/{extensionName}/list', name: 'api.in-app-purchase.list', methods: ['GET'])]
     public function listPurchases(string $extensionName, Context $context): Response
     {
         $purchases = $this->inAppPurchasesService->listPurchases($extensionName, $context);

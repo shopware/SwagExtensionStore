@@ -30,12 +30,34 @@ class InAppPurchaseCartPositionStruct extends Struct
      */
     public static function fromArray(array $data): self
     {
-        return (new self())->assign($data);
+        $inAppPurchaseCartPosition = (new self())->assign($data);
+        $inAppPurchaseCartPosition->setInAppFeatureIdentifier($data['feature']['identifier'] ?? '');
+
+        return $inAppPurchaseCartPosition;
+    }
+
+    /**
+     * @return array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}
+     */
+    public function toCart(): array
+    {
+        return [
+            'inAppFeatureIdentifier' => $this->getInAppFeatureIdentifier(),
+            'netPrice' => $this->getNetPrice(),
+            'taxValue' => $this->getTaxValue(),
+            'grossPrice' => $this->getGrossPrice(),
+            'taxRate' => $this->getTaxRate(),
+        ];
     }
 
     public function getInAppFeatureIdentifier(): string
     {
         return $this->inAppFeatureIdentifier;
+    }
+
+    public function setInAppFeatureIdentifier(string $inAppFeatureIdentifier): void
+    {
+        $this->inAppFeatureIdentifier = $inAppFeatureIdentifier;
     }
 
     public function getNetPrice(): float

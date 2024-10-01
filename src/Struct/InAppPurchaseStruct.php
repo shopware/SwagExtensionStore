@@ -11,13 +11,13 @@ use Shopware\Core\Framework\Struct\Struct;
  * @codeCoverageIgnore
  *
  * @phpstan-import-type InAppPurchasePriceModel from InAppPurchasePriceModelStruct
- * @phpstan-type InAppPurchase array{identifier: string, name: string, description: string|null, priceModels: InAppPurchasePriceModel[]}
+ * @phpstan-type InAppPurchase array{identifier: string, name: string, description: string|null, priceModel: InAppPurchasePriceModel}
  */
 #[Package('checkout')]
 class InAppPurchaseStruct extends Struct
 {
     private function __construct(
-        protected InAppPurchasePriceModelCollection $priceModels,
+        protected InAppPurchasePriceModelStruct $priceModel,
         protected string $identifier = '',
         protected string $name = '',
         protected ?string $description = null,
@@ -28,7 +28,7 @@ class InAppPurchaseStruct extends Struct
      */
     public static function fromArray(array $data): self
     {
-        return (new self(InAppPurchasePriceModelCollection::fromArray($data['priceModels'])))->assign($data);
+        return (new self(InAppPurchasePriceModelStruct::fromArray($data['priceModel'])))->assign($data);
     }
 
     public function getIdentifier(): string
@@ -61,13 +61,13 @@ class InAppPurchaseStruct extends Struct
         $this->description = $description;
     }
 
-    public function getPriceModels(): InAppPurchasePriceModelCollection
+    public function getPriceModel(): InAppPurchasePriceModelStruct
     {
-        return $this->priceModels;
+        return $this->priceModel;
     }
 
-    public function setPriceModals(InAppPurchasePriceModelCollection $priceModels): void
+    public function setPriceModals(InAppPurchasePriceModelStruct $priceModel): void
     {
-        $this->priceModels = $priceModels;
+        $this->priceModel = $priceModel;
     }
 }
