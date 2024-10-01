@@ -86,11 +86,9 @@ class InAppPurchasesControllerTest extends TestCase
             'taxValue' => 9.5,
         ]);
 
-        $positions = InAppPurchaseCartPositionCollection::createFrom($inAppCartPosition);
-
         $requestDataBag = new RequestDataBag([
             'taxRate' => '19.0',
-            'positions' => \json_encode(InAppPurchaseCartPositionCollection::createFrom($inAppCartPosition)->jsonSerialize()),
+            'positions' => InAppPurchaseCartPositionCollection::createFrom($inAppCartPosition),
         ]);
 
         $content = $this->validateResponse(
@@ -145,12 +143,10 @@ class InAppPurchasesControllerTest extends TestCase
                         'identifier' => 'testFeature',
                         'description' => null,
                         'priceModels' => [
-                            [
-                                'type' => 'random-type',
-                                'price' => 59.5,
-                                'duration' => null,
-                                'oneTimeOnly' => false,
-                            ],
+                            'type' => 'random-type',
+                            'price' => 59.5,
+                            'duration' => null,
+                            'oneTimeOnly' => false,
                         ],
                     ],
                     'netPrice' => 50.0,
@@ -185,36 +181,22 @@ class InAppPurchasesControllerTest extends TestCase
                 'identifier' => 'testFeature',
                 'name' => 'testFeature',
                 'description' => null,
-                'priceModels' => [
-                    [
-                        'type' => 'random-type',
-                        'price' => 59.5,
-                        'duration' => 'yearly',
-                        'oneTimeOnly' => false,
-                    ],
+                'priceModel' => [
+                    'type' => 'random-type',
+                    'price' => 59.5,
+                    'duration' => 'yearly',
+                    'oneTimeOnly' => false,
                 ],
             ],
             [
                 'identifier' => 'testFeature2',
                 'name' => 'testFeature2',
                 'description' => null,
-                'priceModels' => [
-                    [
-                        'type' => 'monthly-type',
-                        'price' => 1.5,
-                        'duration' => 'monthly',
-                        'oneTimeOnly' => false,
-                    ], [
-                        'type' => 'yearly-type',
-                        'price' => 12.0,
-                        'duration' => 'yearly',
-                        'oneTimeOnly' => false,
-                    ], [
-                        'type' => 'one-time-type',
-                        'price' => 50.0,
-                        'duration' => 'lifetime',
-                        'oneTimeOnly' => true,
-                    ],
+                'priceModel' => [
+                    'type' => 'monthly-type',
+                    'price' => 1.5,
+                    'duration' => 'monthly',
+                    'oneTimeOnly' => false,
                 ],
             ],
         ]);

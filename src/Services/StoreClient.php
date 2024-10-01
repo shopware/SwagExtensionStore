@@ -12,7 +12,6 @@ use Shopware\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProv
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use SwagExtensionStore\Exception\ExtensionStoreException;
-use SwagExtensionStore\Struct\InAppPurchaseCartPositionCollection;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
 
@@ -222,7 +221,10 @@ class StoreClient
         return InAppPurchaseCartStruct::fromArray(json_decode((string) $response->getBody(), true));
     }
 
-    public function orderInAppPurchaseCart(float $taxRate, InAppPurchaseCartPositionCollection $positions, Context $context): InAppPurchaseCartStruct
+    /**
+     * @param array<int, array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}> $positions
+     */
+    public function orderInAppPurchaseCart(float $taxRate, array $positions, Context $context): InAppPurchaseCartStruct
     {
         try {
             $response = $this->client->request(

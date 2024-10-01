@@ -27,6 +27,16 @@ class InAppPurchaseCartPositionCollection extends Collection
         return new self($elements);
     }
 
+    /**
+     * @return array<int, array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}>
+     */
+    public function toCart(): array
+    {
+        return array_map(static function (InAppPurchaseCartPositionStruct $position) {
+            return $position->toCart();
+        }, $this->elements);
+    }
+
     protected function getExpectedClass(): ?string
     {
         return InAppPurchaseCartPositionStruct::class;

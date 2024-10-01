@@ -3,34 +3,20 @@
     "identifier": "feature1",
     "name": "Feature One",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam at magna commodo, sodales mauris ut, aliquam dolor. Proin tellus nunc, tempor eget blandit vel, elementum quis velit. Curabitur bibendum consequat odio, sed aliquam lacus vestibulum in. Nam eleifend sollicitudin lorem, gravida fringilla urna consectetur id. Nullam lacus nunc, fringilla at odio id, luctus porta dolor. Ut varius pretium ex, non porta mi vulputate id. Suspendisse vel maximus turpis, nec lacinia dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut vel quam placerat, ultricies nunc ac, dapibus urna. Sed tincidunt ullamcorper arcu nec tempus. Aenean elementum augue eget cursus cursus. Donec vitae elementum elit. Nunc ac sem in ante hendrerit vulputate vel id tortor. Curabitur mollis vulputate urna, vel viverra lorem. Nunc sed neque at libero ornare commodo.\n\nEtiam fringilla ornare mauris in fermentum. Aliquam dapibus facilisis nisi at porta. Quisque dignissim sem ipsum, in efficitur metus blandit non. Donec sodales eleifend ipsum nec viverra. Etiam vitae ipsum magna. Nam mi ante, dignissim eget malesuada nec, feugiat vel ipsum. Phasellus augue erat, imperdiet non odio a, luctus lacinia est. Nunc blandit purus sit amet ante vehicula accumsan. Duis neque metus, consequat non enim at, porta maximus risus. Duis euismod odio sapien, in feugiat magna ultricies vel. Curabitur dictum condimentum ligula dapibus faucibus.\n\nDonec augue risus, vulputate in ipsum nec, gravida eleifend ante. Quisque maximus sapien dui, eget mollis dolor gravida ac. Proin a enim tincidunt, maximus erat ac, fermentum nisi. Nullam molestie eros vel ipsum viverra, sit amet congue nunc feugiat. Nullam elementum lorem libero, in scelerisque nunc congue in. Aliquam in dolor suscipit, pellentesque leo vel, malesuada velit. Ut felis mauris, lacinia ut efficitur ut, consectetur at ipsum. Nam dui magna, fringilla id semper sed, vulputate vel nunc. Duis quis metus ante.\n\nSed at enim eu velit vestibulum efficitur ac non nunc. Vestibulum in maximus ligula, ac condimentum erat. Proin mauris nunc, ullamcorper quis lorem vitae, porta convallis orci. Maecenas vitae lectus mauris. Cras leo nisl, finibus vitae varius vitae, maximus eget erat. In vitae tristique libero. Nam eget eleifend leo.",
-    "priceModels": [
-      {
-        "price": 9.99,
-        "currency": "USD",
-        "duration": "monthly"
-      },
-      {
-        "price": 99.99,
-        "currency": "USD",
-        "duration": "yearly"
-      }
-    ]
+    "priceModels": {
+      "price": 99.99,
+      "currency": "USD",
+      "duration": "yearly"
+    }
   },
   {
     "identifier": "feature2",
     "name": "Feature Two",
     "description": "Description for Feature Two",
-    "priceModels": [
-      {
-        "price": 4.99,
-        "currency": "USD",
-        "duration": "monthly"
-      },
-      {
-        "price": 49.99,
-        "currency": "USD",
-        "duration": "yearly"
-      }
-    ]
+    "priceModels": {
+      "price": 4.99,
+      "currency": "USD",
+      "duration": "monthly"
+    }
   }
 ]
