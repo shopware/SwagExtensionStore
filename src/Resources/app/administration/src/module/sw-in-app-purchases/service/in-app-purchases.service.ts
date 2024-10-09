@@ -39,4 +39,11 @@ export default class InAppPurchasesService extends ApiService {
             { headers: this.getBasicHeaders() }
         ).then(ApiService.handleResponse.bind(this));
     }
+
+    async refreshInAppPurchases() {
+        return this.httpClient.get(
+            `_action/${this.apiEndpoint}/refresh`,
+            { headers: this.getBasicHeaders() }
+        ).then(ApiService.handleResponse.bind(this));
+    }
 }

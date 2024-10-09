@@ -8,6 +8,7 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Log\Package;
+use Shopware\Core\Framework\Store\InAppPurchase\Services\InAppPurchasesSyncService;
 use Shopware\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use SwagExtensionStore\Services\InAppPurchasesService;
@@ -25,6 +26,7 @@ class InAppPurchasesController
 {
     public function __construct(
         private readonly InAppPurchasesService $inAppPurchasesService,
+        private readonly InAppPurchasesSyncService $inAppPurchasesSyncService,
         private readonly AbstractExtensionDataProvider $extensionDataProvider,
     ) {}
 
@@ -71,5 +73,14 @@ class InAppPurchasesController
         $purchases = $this->inAppPurchasesService->listPurchases($extensionName, $context);
 
         return new JsonResponse($purchases);
+    }
+
+    #[Route('/api/_action/in-app-purchases/refresh', name: 'api.in-app-purchase.refresh', methods: ['GET'])]
+    public function refreshInAppPurchases(Context $context): Response
+    {
+        $this->inAppPurchasesSyncService->disableExpiredInAppPurchases();
+        $this->inAppPurchasesSyncService->updateActiveInAppPurchases($context);
+
+        return new JsonResponse(['success' => true]);
     }
 }

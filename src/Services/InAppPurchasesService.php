@@ -12,12 +12,9 @@ use SwagExtensionStore\Struct\InAppPurchaseCollection;
 #[Package('checkout')]
 class InAppPurchasesService
 {
-    private StoreClient $client;
-
-    public function __construct(StoreClient $client)
-    {
-        $this->client = $client;
-    }
+    public function __construct(
+        private StoreClient $client,
+    ) {}
 
     public function createCart(string $extensionName, string $feature, Context $context): InAppPurchaseCartStruct
     {
