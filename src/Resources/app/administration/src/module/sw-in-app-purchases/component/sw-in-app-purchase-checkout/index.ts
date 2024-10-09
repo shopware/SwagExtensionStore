@@ -89,7 +89,7 @@ export default Shopware.Component.wrapComponentConfig({
 
                 return;
             }
-            console.log(this.inAppPurchaseCart);
+
             this.inAppPurchasesService.orderCart(
                 this.inAppPurchaseCart?.taxRate,
                 this.inAppPurchaseCart?.positions
@@ -119,7 +119,10 @@ export default Shopware.Component.wrapComponentConfig({
                     break;
                 case 'success':
                     this.reset();
-                    window.location.reload();
+                    this.inAppPurchasesService.refreshInAppPurchases()
+                        .then(() => {
+                            window.location.reload();
+                        });
                     break;
                 default:
                     this.reset();

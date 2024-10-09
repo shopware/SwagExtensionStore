@@ -6,6 +6,7 @@ namespace SwagExtensionStore\Tests\Controller;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\Store\InAppPurchase\Services\InAppPurchasesSyncService;
 use Shopware\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Shopware\Core\Framework\Store\Struct\ExtensionCollection;
 use Shopware\Core\Framework\Store\Struct\ExtensionStruct;
@@ -30,7 +31,7 @@ class InAppPurchasesControllerTest extends TestCase
             ->method('getInstalledExtensions')
             ->willReturn(new ExtensionCollection([$extension]));
 
-        $controller = new InAppPurchasesController($service, $dataProvider);
+        $controller = new InAppPurchasesController($service, $this->createMock(InAppPurchasesSyncService::class), $dataProvider);
 
         $content = $this->validateResponse(
             $controller->getInAppFeature('testExtension', Context::createDefaultContext()),
@@ -47,7 +48,7 @@ class InAppPurchasesControllerTest extends TestCase
             ->method('createCart')
             ->willReturn($cartStruct);
 
-        $controller = new InAppPurchasesController($service, $this->createMock(AbstractExtensionDataProvider::class));
+        $controller = new InAppPurchasesController($service, $this->createMock(InAppPurchasesSyncService::class), $this->createMock(AbstractExtensionDataProvider::class));
 
         $requestDataBag = new RequestDataBag([
             'name' => 'testExtension',
@@ -76,7 +77,7 @@ class InAppPurchasesControllerTest extends TestCase
             ->method('orderCart')
             ->willReturn($this->getInAppPurchaseCartStruct());
 
-        $controller = new InAppPurchasesController($service, $this->createMock(AbstractExtensionDataProvider::class));
+        $controller = new InAppPurchasesController($service, $this->createMock(InAppPurchasesSyncService::class), $this->createMock(AbstractExtensionDataProvider::class));
 
         $inAppCartPosition = InAppPurchaseCartPositionStruct::fromArray([
             'inAppFeatureIdentifier' => 'some-app-and-feature-name',
@@ -114,12 +115,30 @@ class InAppPurchasesControllerTest extends TestCase
             ->with('TestApp', $context)
             ->willReturn($this->getInAppPurchaseCollection());
 
-        $controller = new InAppPurchasesController($service, $this->createMock(AbstractExtensionDataProvider::class));
+        $controller = new InAppPurchasesController($service, $this->createMock(InAppPurchasesSyncService::class), $this->createMock(AbstractExtensionDataProvider::class));
         $content = $this->validateResponse(
             $controller->listPurchases('TestApp', $context),
         );
 
         static::assertCount(2, $content);
+    }
+
+    public function testRefreshInAppPurchases(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $inAppPurchaseSyncService = $this->createMock(InAppPurchasesSyncService::class);
+        $inAppPurchaseSyncService->expects(static::once())
+            ->method('updateActiveInAppPurchases')
+            ->with($context);
+        $inAppPurchaseSyncService->expects(static::once())
+            ->method('disableExpiredInAppPurchases');
+
+        $controller = new InAppPurchasesController($this->createMock(InAppPurchasesService::class), $inAppPurchaseSyncService, $this->createMock(AbstractExtensionDataProvider::class));
+
+        $content = $this->validateResponse($controller->refreshInAppPurchases($context));
+
+        static::assertSame(['success' => true], $content);
     }
 
     private function getInAppPurchaseCartStruct(): InAppPurchaseCartStruct

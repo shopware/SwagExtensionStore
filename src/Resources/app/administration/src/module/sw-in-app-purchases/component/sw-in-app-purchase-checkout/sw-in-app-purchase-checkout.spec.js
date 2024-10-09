@@ -44,6 +44,9 @@ async function createWrapper(error = false) {
                             description: null,
                             price: 59.5
                         });
+                    },
+                    refreshInAppPurchases: () => {
+                        return Promise.resolve();
                     }
                 }
             },
@@ -331,5 +334,13 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
             }
         });
         expect(wrapper.vm.extensionIcon).toBe('administration/static/img/theme/default_theme_preview.jpg');
+    });
+
+    it('refreshes after a successful purchase', async () => {
+        const spyRefresh = jest.spyOn(wrapper.vm.inAppPurchasesService, 'refreshInAppPurchases');
+
+        wrapper.vm.state = 'success';
+        wrapper.vm.handleStateActions(true);
+        expect(spyRefresh).toHaveBeenCalledTimes(1);
     });
 });
