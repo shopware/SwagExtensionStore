@@ -203,6 +203,12 @@
                                         {{ $tc('sw-extension-store.detail.hasTrialPhase') }}
                                     </sw-button>
                                 {% endblock %}
+
+                                {% block sw_extension_store_detail_smart_bar_in_app_purchases_badge %}
+                                    <span v-if="extension.inAppFeaturesAvailable" class="sw-extension-store-detail__in-app-purchases__badge">
+                                        {{ $tc('sw-extension.in-app-purchase.badge-label') }}
+                                    </span>
+                                {% endblock %}
                             {% endblock %}
                         </template>
 
@@ -341,6 +347,73 @@
                                 {% endblock %}
                             </sw-modal>
                         {% endblock %}
+
+                        {% block sw_extension_store_detail_in_app_purchases_listing_modal %}
+                            <sw-modal
+                                v-if="showInAppPurchasesListingModal"
+                                :title="$tc('sw-extension-store.detail.inAppPurchases.label')"
+                                :subtitle="extension.name"
+                                variant="default"
+                                class="sw-extension-store-detail-in-app-purchases-listing-modal"
+                                @modal-close="closeInAppPurchasesListingModal"
+                            >
+                                {% block sw_extension_store_detail_in_app_purchases_listing_modal_content %}
+                                    <sw-collapse v-for="inAppPurchase in inAppPurchases" class="sw-extension-store-detail-in-app-purchases-listing-modal-content__collapse">
+                                        <template #header="{ expanded }">
+                                            <div class="sw-extension-store-detail-in-app-purchases-listing-modal-content__title">
+                                                {{ inAppPurchase.name }}
+                                                {% block sw_extension_store_detail_in_app_purchases_listing_modal_header_icon %}
+                                                    {% block sw_extension_store_detail_in_app_purchases_listing_modal_header_icon_expanded %}
+                                                        <sw-icon
+                                                            v-if="expanded"
+                                                            class="sw-extension-store-detail-in-app-purchases-listing-modal-content__button"
+                                                            name="regular-chevron-down-xs"
+                                                            size="12px"
+                                                        ></sw-icon>
+                                                    {% endblock %}
+
+                                                    {% block sw_extension_store_detail_in_app_purchases_listing_modal_header_icon_not_expanded %}
+                                                        <sw-icon
+                                                            v-else
+                                                            class="sw-extension-store-detail-in-app-purchases-listing-modal-content__button"
+                                                            name="regular-chevron-right-xs"
+                                                            size="12px"
+                                                        ></sw-icon>
+                                                    {% endblock %}
+                                                {% endblock %}
+                                            </div>
+                                        </template>
+                                        <template #content>
+                                            <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__description">
+                                                {{ inAppPurchase.description }}
+                                            </span>
+
+                                            <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__description">
+                                            {{ $tc('sw-extension-store.detail.inAppPurchases.paymentOptions') }}
+                                            </span>
+
+                                            <ul class="sw-extension-store-detail-in-app-purchases-listing-modal-content__payment-options">
+                                                <li v-for="paymentOption in inAppPurchase.priceModels">
+                                                    {{ formatCurrency(paymentOption.price, paymentOption.currency) }}* {{ paymentOption.duration }}
+                                                </li>
+                                            </ul>
+                                        </template>
+                                    </sw-collapse>
+                                {% endblock %}
+                                <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__tax-notice">
+                                    {{ $tc('sw-extension-store.general.taxNotice') }}
+                                </span>
+
+                                <template #modal-footer>
+                                    <mt-button
+                                        variant="context"
+                                        size="small"
+                                        @click="closeInAppPurchasesListingModal">
+                                        {{ $tc('global.default.close') }}
+                                    </mt-button>
+                                </template>
+                            </sw-modal>
+                        {% endblock %}
                     {% endblock %}
                 </template>
             {% endblock %}
@@ -431,6 +504,25 @@
                             {% block sw_extension_store_detail_card_details_languages %}
                                 <dt v-if="extensionLanguages.length">{{ $tc('sw-extension-store.detail.details.labelLanguages') }}</dt>
                                 <dd>{{ extensionLanguages }}</dd>
+                            {% endblock %}
+
+                            {% block sw_extension_store_detail_card_details_in_app_purchases %}
+                                <template v-if="inAppPurchases.length">
+                                    <dt>{{ $tc('sw-extension-store.detail.inAppPurchases.label') }}</dt>
+                                    <dd>
+                                        <span class="sw-extension-store-detail-card-details-in-app-purchases__count">
+                                            {{ inAppPurchases.length }}
+                                        </span>
+                                        <a
+                                            :title="$tc('sw-extension-store.component.sw-extension-card-base.contextMenu.seeDetailsLabel')"
+                                            class="sw-extension-store-detail-card-details-in-app-purchases__modal-link"
+                                            role="button"
+                                            @click="openInAppPurchasesListingModal"
+                                        >
+                                            {{ $tc('sw-extension-store.component.sw-extension-card-base.contextMenu.seeDetailsLabel') }}
+                                        </a>
+                                    </dd>
+                                </template>
                             {% endblock %}
 
                             {% block sw_extension_store_detail_card_details_producer_website %}

@@ -1,0 +1,27 @@
+{
+  "sw-in-app-purchase-checkout": {
+    "modalTitle": "In-App Kauf"
+  },
+  "sw-in-app-purchase-checkout-button": {
+    "purchaseButton": "Zahlung abschließen",
+    "closeButton": "Schließen",
+    "tryAgainButton": "Erneut versuchen"
+  },
+  "sw-in-app-purchase-checkout-overview": {
+    "billHint": "Die Kosten werden auf Ihrer Shopware-Rechnung ausgewiesen. Stornierung jederzeit in Ihrem Shopware-Konto.",
+    "excludeVat": "* Alle Preise exklusive Mehrwertsteuer"
+  },
+  "sw-in-app-purchase-checkout-state": {
+    "errorTitle": "Etwas ist schiefgelaufen.",
+    "errorSubtitle": "Bitte versuche es erneut oder kontaktiere den Hersteller.",
+    "successTitle": "In-App Kauf war erfolgreich!",
+    "successSubtitle": "Du kannst jetzt dein neues Feature erleben."
+  },
+  "sw-in-app-purchase-price-box": {
+    "priceText": "Preis",
+    "duration": {
+      "monthly": "monatlich",
+      "yearly": "jährlich"
+    }
+  }
+}

@@ -12,6 +12,7 @@ jobs:
     with:
       extensionName: ${{ github.event.repository.name }}
       uploadCoverage: true
+      shopwareVersion: next-36303/feature/in-app-purchases
     secrets:
       codecovToken: ${{ secrets.CODECOV_TOKEN }}
   lint:
@@ -19,3 +20,4 @@ jobs:
     uses: shopware/github-actions/.github/workflows/admin-eslint.yml@main
     with:
       extensionName: ${{ github.event.repository.name }}
+      shopwareVersion: next-36303/feature/in-app-purchases
