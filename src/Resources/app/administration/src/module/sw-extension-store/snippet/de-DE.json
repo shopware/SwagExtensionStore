@@ -5,7 +5,8 @@
             "labelFree": "Kostenlos",
             "labelRentSuffix": "/ Monat*",
             "labelDiscountedPrice": "Kostenlos | <s>{price}</s> <strong>{discountedPrice}</strong>/Monat | <s>{price}</s> <strong>{discountedPrice}</strong>",
-            "title": "Store"
+            "title": "Store",
+            "taxNotice": "* Alle Preise verstehen sich zzgl. Mehrwertsteuer"
         },
         "tabs": {
             "apps": "Apps",
@@ -31,7 +32,11 @@
             "hasTrialPhase": "Probemonat inbegriffen",
             "openConfiguration": "Konfiguration",
             "themeIsAlreadyInstalled": "Theme ist bereits installiert",
-            "extensionIsAlreadyInstalled": "Erweiterung ist bereits installiert"
+            "extensionIsAlreadyInstalled": "Erweiterung ist bereits installiert",
+            "inAppPurchases": {
+              "label": "In-App Einkäufe",
+              "paymentOptions": "Zahlungsoptionen"
+            }
         },
         "typeLabels": {
             "self-hosted": "Selbst-gehosted",
