@@ -13,8 +13,6 @@ use Shopware\Core\Framework\Store\Struct\ExtensionStruct;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use SwagExtensionStore\Controller\InAppPurchasesController;
 use SwagExtensionStore\Services\InAppPurchasesService;
-use SwagExtensionStore\Struct\InAppPurchaseCartPositionCollection;
-use SwagExtensionStore\Struct\InAppPurchaseCartPositionStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,7 +53,6 @@ class InAppPurchasesControllerTest extends TestCase
             'feature' => 'testFeature',
         ]);
 
-
         $content = $this->validateResponse(
             $controller->createCart($requestDataBag, Context::createDefaultContext()),
         );
@@ -79,17 +76,15 @@ class InAppPurchasesControllerTest extends TestCase
 
         $controller = new InAppPurchasesController($service, $this->createMock(InAppPurchasesSyncService::class), $this->createMock(AbstractExtensionDataProvider::class));
 
-        $inAppCartPosition = InAppPurchaseCartPositionStruct::fromArray([
-            'inAppFeatureIdentifier' => 'some-app-and-feature-name',
-            'netPrice' => 50.0,
-            'grossPrice' => 59.5,
-            'taxRate' => 19.0,
-            'taxValue' => 9.5,
-        ]);
-
         $requestDataBag = new RequestDataBag([
             'taxRate' => '19.0',
-            'positions' => InAppPurchaseCartPositionCollection::createFrom($inAppCartPosition),
+            'positions' => [[
+                'inAppFeatureIdentifier' => 'some-app-and-feature-name',
+                'netPrice' => 50.0,
+                'grossPrice' => 59.5,
+                'taxRate' => 19.0,
+                'taxValue' => 9.5,
+            ]],
         ]);
 
         $content = $this->validateResponse(
@@ -177,6 +172,7 @@ class InAppPurchasesControllerTest extends TestCase
             'bookingShop' => [],
             'licenseShop' => [],
         ]);
+
         return $cartStruct;
     }
 
@@ -190,6 +186,7 @@ class InAppPurchasesControllerTest extends TestCase
         static::assertNotFalse($content);
         $response = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
         static::assertIsArray($response);
+
         return $response;
     }
 
