@@ -1,0 +1,17 @@
+<div class="sw-in-app-purchase-checkout-state" :class="classes">
+    <sw-loader v-if="state === 'loading'" size="50px" />
+
+    <div v-if="icon" class="sw-in-app-purchase-checkout-state__icon">
+        <sw-icon :size="24" :name="icon" />
+    </div>
+
+    <div v-if="title || subtitle" class="sw-in-app-purchase-checkout-state__titles">
+        <p v-if="title" class="sw-in-app-purchase-checkout-state__title">
+            {{ title }}
+        </p>
+
+        <p v-if="subtitle" class="sw-in-app-purchase-checkout-state__sub-title">
+            {{ subtitle }}
+        </p>
+    </div>
+</div>

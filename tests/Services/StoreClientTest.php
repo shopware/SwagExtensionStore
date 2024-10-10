@@ -31,7 +31,7 @@ class StoreClientTest extends TestCase
 
     public function testListExtensionsException(): void
     {
-        $this->setUpRequestHandler(400);
+        $this->setUpFilterRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
         $this->storeClient->listExtensions(new ExtensionCriteria(), $this->context);
@@ -39,7 +39,7 @@ class StoreClientTest extends TestCase
 
     public function testListListingFiltersException(): void
     {
-        $this->setUpRequestHandler(400);
+        $this->setUpFilterRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
         $this->storeClient->listListingFilters([], $this->context);
@@ -47,7 +47,7 @@ class StoreClientTest extends TestCase
 
     public function testExtensionDetailException(): void
     {
-        $this->setUpRequestHandler(400);
+        $this->setUpFilterRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
         $this->storeClient->extensionDetail(1337, $this->context);
@@ -55,7 +55,7 @@ class StoreClientTest extends TestCase
 
     public function testExtensionDetailReviewsException(): void
     {
-        $this->setUpRequestHandler(400);
+        $this->setUpFilterRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
         $this->storeClient->extensionDetailReviews(1337, new ExtensionCriteria(), $this->context);
@@ -63,7 +63,7 @@ class StoreClientTest extends TestCase
 
     public function testCreateCartException(): void
     {
-        $this->setUpRequestHandler(400);
+        $this->setUpFilterRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
         $this->storeClient->createCart(69, 1337, $this->context);
@@ -71,7 +71,7 @@ class StoreClientTest extends TestCase
 
     public function testOrderCartException(): void
     {
-        $this->setUpRequestHandler(400);
+        $this->setUpFilterRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
         $this->storeClient->orderCart(new CartStruct(), $this->context);
@@ -79,7 +79,7 @@ class StoreClientTest extends TestCase
 
     public function testAvailablePaymentMeans(): void
     {
-        $this->setUpRequestHandler();
+        $this->setUpFilterRequestHandler();
 
         $response = $this->storeClient->availablePaymentMeans($this->context);
 
@@ -91,17 +91,85 @@ class StoreClientTest extends TestCase
 
     public function testAvailablePaymentMeansException(): void
     {
-        $this->setUpRequestHandler(400);
+        $this->setUpFilterRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
         $this->storeClient->availablePaymentMeans($this->context);
     }
 
-    private function setUpRequestHandler(int $statusCode = 200): void
+    public function testCreateInAppPurchaseCartException(): void
+    {
+        $this->setUpIapRequestHandler(400);
+
+        $this->expectException(StoreApiException::class);
+        $this->storeClient->createInAppPurchaseCart('testExtension', 'testFeature', $this->context);
+    }
+
+    public function testOrderInAppPurchaseCartException(): void
+    {
+        $this->setUpIapRequestHandler(400);
+
+        $this->expectException(StoreApiException::class);
+
+        $this->storeClient->orderInAppPurchaseCart(19, $this->buildPositions(), $this->context);
+    }
+
+    public function testListInAppPurchasesException(): void
+    {
+        $this->setUpIapListingRequestHandler(400);
+
+        $this->expectException(StoreApiException::class);
+        $this->storeClient->listInAppPurchases('TestApp', $this->context);
+    }
+
+    public function testListInAppPurchasesBuildsStruct(): void
+    {
+        $this->setUpIapListingRequestHandler();
+
+        $iap = $this->storeClient->listInAppPurchases('TestApp', $this->context);
+
+        static::assertCount(2, $iap);
+    }
+
+    private function setUpFilterRequestHandler(int $statusCode = 200): void
     {
         $requestHandler = $this->getStoreRequestHandler();
         $filterJson = file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json');
         static::assertIsString($filterJson);
         $requestHandler->append(new Response($statusCode, [], $filterJson));
+    }
+
+    private function setUpIapRequestHandler(int $statusCode = 200): void
+    {
+        $requestHandler = $this->getStoreRequestHandler();
+        $requestHandler->append(new Response($statusCode, []));
+    }
+
+    private function setUpIapListingRequestHandler(int $statusCode = 200): void
+    {
+        $requestHandler = $this->getStoreRequestHandler();
+        if ($statusCode === 200) {
+            $iapJson = file_get_contents(__DIR__ . '/../_fixtures/responses/extension-iap.json');
+            static::assertIsString($iapJson);
+            $requestHandler->append(new Response($statusCode, [], $iapJson));
+            return;
+        }
+        $requestHandler->append(new Response($statusCode, []));
+    }
+
+    /**
+     * @return array<int, array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}> $positions
+     */
+    private function buildPositions(): array
+    {
+        return [
+            [
+                'inAppFeatureIdentifier' => 'some-app-and-feature-name',
+                'netPrice' => 9.99,
+                'taxValue' => 1.90,
+                'grossPrice' => 11.89,
+                'taxRate' => 19.0,
+            ],
+        ];
     }
 }

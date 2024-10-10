@@ -12,6 +12,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 3 * * *'
+
 jobs:
   cs:
     if: github.event_name != 'schedule'
@@ -20,12 +21,12 @@ jobs:
     uses: shopware/github-actions/.github/workflows/phpstan.yml@main
     with:
       extensionName: ${{ github.event.repository.name }}
-      shopwareVersion: trunk
+      shopwareVersion: next-36303/feature/in-app-purchases
   phpunit:
     uses: shopware/github-actions/.github/workflows/phpunit.yml@main
     with:
       extensionName: ${{ github.event.repository.name }}
-      shopwareVersion: trunk
+      shopwareVersion: next-36303/feature/in-app-purchases
       uploadCoverage: true
     secrets:
       codecovToken: ${{ secrets.CODECOV_TOKEN }}

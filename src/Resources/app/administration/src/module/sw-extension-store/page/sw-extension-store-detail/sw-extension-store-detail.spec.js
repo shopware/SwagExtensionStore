@@ -13,7 +13,7 @@ const extensionHelperService = {
     downloadAndActivateExtension: jest.fn(() => Promise.resolve())
 };
 
-async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
+async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAppPurchases = true) {
     const testExtension = {
         id: 1337,
         categories: [
@@ -22,6 +22,7 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
             { details: { name: 'Storefront' } }
         ],
         description: '<p>This is a really cool extension.</p>',
+        inAppFeaturesAvailable: inAppPurchases,
         label: 'B2B Suite',
         name: 'SwagB2BPlatform',
         producerName: 'shopware AG',
@@ -38,6 +39,8 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
         addons: [],
         ...extensionCustomProps
     };
+
+    const inAppPurchasesService = getInAppPurchasesMockService(inAppPurchases);
 
     return mount(await Shopware.Component.build('sw-extension-store-detail'), {
         props: {
@@ -79,7 +82,8 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true) {
                     }
                 },
                 extensionHelperService,
-                cacheApiService
+                cacheApiService,
+                inAppPurchasesService
             }
         }
     });
@@ -334,10 +338,127 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
             });
             await flushPromises();
 
-            expect(wrapper.find('.sw-extension-store-detail__action-add-extension').exists()).toBe(false);
-            expect(wrapper.find('.sw-extension-store-detail__action-open-extension').exists()).toBe(false);
-            expect(wrapper.find('.sw-extension-store-detail__action-install-extension').exists()).toBe(false);
-            expect(wrapper.find('.sw-extension-store-detail__action-enterprise-contact').exists()).toBe(false);
+            expect(wrapper.find('.sw-extension-store-detail__action-add-extension').exists()).toBeFalsy();
+            expect(wrapper.find('.sw-extension-store-detail__action-open-extension').exists()).toBeFalsy();
+            expect(wrapper.find('.sw-extension-store-detail__action-install-extension').exists()).toBeFalsy();
+            expect(wrapper.find('.sw-extension-store-detail__action-enterprise-contact').exists()).toBeFalsy();
+        });
+
+        it('should render in-app-purchase badge when extension has available in-app-purchase', async () => {
+            Shopware.State.get('shopwareExtensions').myExtensions = {
+                data: [{
+                    active: true,
+                    name: 'TestExtension',
+                    storeLicense: false,
+                    id: 1337
+                }]
+            };
+
+            const wrapper = await createWrapper({
+                inAppFeaturesAvailable: true,
+                variants: [{ foo: 'bar' }]
+            });
+
+            await flushPromises();
+
+            expect(wrapper.find('.sw-extension-store-detail__in-app-purchases__badge').exists()).toBeTruthy();
+            expect(wrapper.get('.sw-extension-store-detail__in-app-purchases__badge').text())
+                .toBe('sw-extension.in-app-purchase.badge-label');
+        });
+
+        it('should not render in-app-purchase badge when extension has available in-app-purchase', async () => {
+            Shopware.State.get('shopwareExtensions').myExtensions = {
+                data: [{
+                    active: true,
+                    name: 'TestExtension',
+                    storeLicense: false,
+                    id: 1337
+                }]
+            };
+
+            const wrapper = await createWrapper({
+                inAppFeaturesAvailable: false,
+                variants: [{ foo: 'bar' }]
+            });
+
+            await flushPromises();
+
+            expect(wrapper.find('.sw-extension-store-detail__in-app-purchases__badge').exists()).toBeFalsy();
+        });
+
+        it('should not render in-app purchases section when not available', async () => {
+            const wrapper = await createWrapper({}, true, false);
+            await flushPromises();
+
+            expect(wrapper.find('.sw-extension-store-detail-card-details-in-app-purchases__count').exists()).toBe(false);
+        });
+
+        it('should render in-app purchases section when available', async () => {
+            const wrapper = await createWrapper();
+            await flushPromises();
+
+            expect(wrapper.find('.sw-extension-store-detail-card-details-in-app-purchases__count').exists()).toBe(true);
+            expect(wrapper.get('.sw-extension-store-detail-card-details-in-app-purchases__count').text()).toBe('2');
+
+            wrapper.get('.sw-extension-store-detail-card-details-in-app-purchases__modal-link').trigger('click');
+
+            await wrapper.vm.$nextTick();
+
+            expect(wrapper.get('.sw-extension-store-detail-in-app-purchases-listing-modal').isVisible()).toBe(true);
         });
     });
 });
+
+function getInAppPurchasesMockService(inAppPurchases) {
+    return {
+        getAvailablePurchases: jest.fn(() => getInAppPurchaseMockResponse(inAppPurchases))
+    };
+}
+
+function getInAppPurchaseMockResponse(inAppPurchases) {
+    if (!inAppPurchases) {
+        return [];
+    }
+    return [
+        {
+            identifier: 'feature1',
+            name: 'Feature One',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam at magna commodo, sodales mauris ut, aliquam dolor. Proin tellus nunc, tempor eget blandit vel, elementum quis velit. Curabitur bibendum consequat odio, sed aliquam lacus vestibulum in. Nam eleifend sollicitudin lorem, gravida fringilla urna consectetur id. Nullam lacus nunc, fringilla at odio id, luctus porta dolor. Ut varius pretium ex, non porta mi vulputate id. Suspendisse vel maximus turpis, nec lacinia dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut vel quam placerat, ultricies nunc ac, dapibus urna. Sed tincidunt ullamcorper arcu nec tempus. Aenean elementum augue eget cursus cursus. Donec vitae elementum elit. Nunc ac sem in ante hendrerit vulputate vel id tortor. Curabitur mollis vulputate urna, vel viverra lorem. Nunc sed neque at libero ornare commodo.\n' +
+                '\n' +
+                'Etiam fringilla ornare mauris in fermentum. Aliquam dapibus facilisis nisi at porta. Quisque dignissim sem ipsum, in efficitur metus blandit non. Donec sodales eleifend ipsum nec viverra. Etiam vitae ipsum magna. Nam mi ante, dignissim eget malesuada nec, feugiat vel ipsum. Phasellus augue erat, imperdiet non odio a, luctus lacinia est. Nunc blandit purus sit amet ante vehicula accumsan. Duis neque metus, consequat non enim at, porta maximus risus. Duis euismod odio sapien, in feugiat magna ultricies vel. Curabitur dictum condimentum ligula dapibus faucibus.\n' +
+                '\n' +
+                'Donec augue risus, vulputate in ipsum nec, gravida eleifend ante. Quisque maximus sapien dui, eget mollis dolor gravida ac. Proin a enim tincidunt, maximus erat ac, fermentum nisi. Nullam molestie eros vel ipsum viverra, sit amet congue nunc feugiat. Nullam elementum lorem libero, in scelerisque nunc congue in. Aliquam in dolor suscipit, pellentesque leo vel, malesuada velit. Ut felis mauris, lacinia ut efficitur ut, consectetur at ipsum. Nam dui magna, fringilla id semper sed, vulputate vel nunc. Duis quis metus ante.\n' +
+                '\n' +
+                'Sed at enim eu velit vestibulum efficitur ac non nunc. Vestibulum in maximus ligula, ac condimentum erat. Proin mauris nunc, ullamcorper quis lorem vitae, porta convallis orci. Maecenas vitae lectus mauris. Cras leo nisl, finibus vitae varius vitae, maximus eget erat. In vitae tristique libero. Nam eget eleifend leo.',
+            priceModels: [
+                {
+                    price: 9.99,
+                    currency: 'USD',
+                    duration: 'monthly'
+                },
+                {
+                    price: 99.99,
+                    currency: 'USD',
+                    duration: 'yearly'
+                }
+            ]
+        },
+        {
+            identifier: 'feature2',
+            name: 'Feature Two',
+            description: 'Description for Feature Two',
+            priceModels: [
+                {
+                    price: 4.99,
+                    currency: 'USD',
+                    duration: 'monthly'
+                },
+                {
+                    price: 49.99,
+                    currency: 'USD',
+                    duration: 'yearly'
+                }
+            ]
+        }
+    ];
+}
