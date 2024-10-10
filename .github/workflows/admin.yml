@@ -7,7 +7,7 @@ on:
 
 env:
   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
-  COMPOSER_ROOT_VERSION: 6.6.9999999.9999999-dev
+  COMPOSER_ROOT_VERSION: 6.6.9999999-dev
 
 jobs:
   unit:
@@ -16,8 +16,6 @@ jobs:
     steps:
       - name: Setup extension
         uses: shopware/github-actions/setup-extension@main
-        env:
-          COMPOSER_ROOT_VERSION: 6.6.99999.99999-dev
         with:
           extensionName: SwagExtensionStore
           installAdmin: true
