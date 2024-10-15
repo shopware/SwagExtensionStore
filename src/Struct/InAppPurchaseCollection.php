@@ -26,4 +26,12 @@ class InAppPurchaseCollection extends Collection
 
         return new self($elements);
     }
+
+    /**
+     * @return array<int, string>
+     */
+    public function toArray(): array
+    {
+        return array_map(static fn(InAppPurchaseStruct $element) => $element->getIdentifier(), $this->elements);
+    }
 }
