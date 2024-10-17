@@ -15,7 +15,7 @@ use Shopware\Core\Framework\Struct\Struct;
  * @phpstan-type InAppPurchaseCartPosition array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}
  */
 #[Package('checkout')]
-class InAppPurchaseCartPositionStruct extends Struct
+class InAppPurchaseCartPositionStruct extends Struct implements InAppPurchaseIdentifiableStruct
 {
     private function __construct(
         protected string $inAppFeatureIdentifier = '',
@@ -98,5 +98,10 @@ class InAppPurchaseCartPositionStruct extends Struct
     public function setTaxValue(float $taxValue): void
     {
         $this->taxValue = $taxValue;
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->getInAppFeatureIdentifier();
     }
 }

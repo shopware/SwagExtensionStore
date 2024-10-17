@@ -14,7 +14,7 @@ use Shopware\Core\Framework\Struct\Struct;
  * @phpstan-type InAppPurchase array{identifier: string, name: string, description: string|null, priceModel: InAppPurchasePriceModel}
  */
 #[Package('checkout')]
-class InAppPurchaseStruct extends Struct
+class InAppPurchaseStruct extends Struct implements InAppPurchaseIdentifiableStruct
 {
     private function __construct(
         protected InAppPurchasePriceModelStruct $priceModel,

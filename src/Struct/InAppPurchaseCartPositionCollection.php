@@ -41,4 +41,12 @@ class InAppPurchaseCartPositionCollection extends Collection
     {
         return InAppPurchaseCartPositionStruct::class;
     }
+
+    /**
+     * @return array<int, string>
+     */
+    public function toArray(): array
+    {
+        return array_map(static fn(InAppPurchaseCartPositionStruct $element) => $element->getInAppFeatureIdentifier(), $this->elements);
+    }
 }

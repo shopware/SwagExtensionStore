@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SwagExtensionStore\Controller;
 
+use Shopware\Core\Framework\App\InAppPurchases\Gateway\InAppPurchasesGateway;
+use Shopware\Core\Framework\App\InAppPurchases\Payload\InAppPurchasesPayload;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -11,6 +13,7 @@ use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Store\InAppPurchase\Services\InAppPurchasesSyncService;
 use Shopware\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
+use SwagExtensionStore\Exception\ExtensionStoreException;
 use SwagExtensionStore\Services\InAppPurchasesService;
 use SwagExtensionStore\Struct\InAppPurchaseCartPositionCollection;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,6 +31,7 @@ class InAppPurchasesController
         private readonly InAppPurchasesService $inAppPurchasesService,
         private readonly InAppPurchasesSyncService $inAppPurchasesSyncService,
         private readonly AbstractExtensionDataProvider $extensionDataProvider,
+        private readonly InAppPurchasesGateway $appPurchasesGateway,
     ) {}
 
     #[Route('/api/_action/in-app-purchases/{technicalName}/details', name: 'api.in-app-purchases.detail', methods: ['GET'])]
@@ -62,6 +66,15 @@ class InAppPurchasesController
 
         $positionCollection = InAppPurchaseCartPositionCollection::fromArray($positions->all());
 
+        $validCartItems = $this->appPurchasesGateway->process(new InAppPurchasesPayload($positionCollection->toArray()));
+
+        $positionCollection = $this->inAppPurchasesService->filterValidInAppPurchases($positionCollection, $validCartItems->getPurchases());
+        \assert($positionCollection instanceof InAppPurchaseCartPositionCollection);
+
+        if ($positionCollection->count() === 0) {
+            throw ExtensionStoreException::invalidInAppPurchase();
+        }
+
         $positions = $this->inAppPurchasesService->orderCart($taxRate, $positionCollection->toCart(), $context);
 
         return new JsonResponse($positions);
@@ -71,6 +84,10 @@ class InAppPurchasesController
     public function listPurchases(string $extensionName, Context $context): Response
     {
         $purchases = $this->inAppPurchasesService->listPurchases($extensionName, $context);
+
+        $validPurchases = $this->appPurchasesGateway->process(new InAppPurchasesPayload($purchases->toArray()));
+
+        $purchases = $this->inAppPurchasesService->filterValidInAppPurchases($purchases, $validPurchases->getPurchases());
 
         return new JsonResponse($purchases);
     }

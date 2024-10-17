@@ -6,8 +6,10 @@ namespace SwagExtensionStore\Services;
 
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Log\Package;
+use Shopware\Core\Framework\Struct\Collection;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
+use SwagExtensionStore\Struct\InAppPurchaseIdentifiableStruct;
 
 #[Package('checkout')]
 class InAppPurchasesService
@@ -32,5 +34,32 @@ class InAppPurchasesService
     public function listPurchases(string $extensionName, Context $context): InAppPurchaseCollection
     {
         return $this->client->listInAppPurchases($extensionName, $context);
+    }
+
+    /**
+     * @param Collection<InAppPurchaseIdentifiableStruct> $allPurchases
+     * @param array<int, string> $validPurchases
+     *
+     * @return Collection<InAppPurchaseIdentifiableStruct>
+     */
+    public function filterValidInAppPurchases(
+        Collection $allPurchases,
+        array $validPurchases,
+    ): Collection {
+        if (empty($validPurchases)) {
+            $allPurchases->clear();
+
+            return $allPurchases;
+        }
+
+        foreach ($allPurchases as $key => $purchase) {
+            if (\in_array($purchase->getIdentifier(), $validPurchases)) {
+                continue;
+            }
+
+            $allPurchases->remove($key);
+        }
+
+        return $allPurchases;
     }
 }

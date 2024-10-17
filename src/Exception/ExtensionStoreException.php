@@ -39,4 +39,13 @@ class ExtensionStoreException extends HttpException
             ['errorMessage' => $errorMessage],
         );
     }
+
+    public static function invalidInAppPurchase(): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            'FRAMEWORK__INVALID_IN_APP_PURCHASE',
+            'The in-app purchase could not be completed. Please contact the extension provider.',
+        );
+    }
 }
