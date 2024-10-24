@@ -26,4 +26,24 @@ class InAppPurchaseCollection extends Collection
 
         return new self($elements);
     }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getIdentifiers(): array
+    {
+        return $this->map(static fn(InAppPurchaseStruct $element) => $element->getIdentifier());
+    }
+
+    /**
+     * @param array<int, string> $validPurchases
+     */
+    public function filterValidInAppPurchases(
+        InAppPurchaseCollection $allPurchases,
+        array $validPurchases,
+    ): InAppPurchaseCollection {
+        return $allPurchases->filter(function (InAppPurchaseStruct $purchase) use ($validPurchases) {
+            return \in_array($purchase->getIdentifier(), $validPurchases);
+        });
+    }
 }
