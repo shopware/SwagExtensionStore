@@ -8,6 +8,7 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Log\Package;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Package('checkout')]
 class InAppPurchasesService
@@ -24,7 +25,7 @@ class InAppPurchasesService
     /**
      * @param array<int, array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}> $positions
      */
-    public function orderCart(float $taxRate, array $positions, Context $context): InAppPurchaseCartStruct
+    public function orderCart(float $taxRate, array $positions, Context $context): JsonResponse
     {
         return $this->client->orderInAppPurchaseCart($taxRate, $positions, $context);
     }

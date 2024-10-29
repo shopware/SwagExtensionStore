@@ -15,6 +15,7 @@ use SwagExtensionStore\Controller\InAppPurchasesController;
 use SwagExtensionStore\Services\InAppPurchasesService;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class InAppPurchasesControllerTest extends TestCase
@@ -72,7 +73,7 @@ class InAppPurchasesControllerTest extends TestCase
         $service = $this->createMock(InAppPurchasesService::class);
         $service->expects(static::once())
             ->method('orderCart')
-            ->willReturn($this->getInAppPurchaseCartStruct());
+            ->willReturn(new JsonResponse(null, Response::HTTP_CREATED));
 
         $controller = new InAppPurchasesController($service, $this->createMock(InAppPurchasesSyncService::class), $this->createMock(AbstractExtensionDataProvider::class));
 
@@ -89,16 +90,10 @@ class InAppPurchasesControllerTest extends TestCase
 
         $content = $this->validateResponse(
             $controller->orderCart($requestDataBag, Context::createDefaultContext()),
+            Response::HTTP_CREATED,
         );
 
-        static::assertSame(50, $content['netPrice']);
-        static::assertSame(59.5, $content['grossPrice']);
-        static::assertSame(9.5, $content['taxValue']);
-        static::assertSame(19, $content['taxRate']);
-        static::assertSame('testFeature', $content['positions'][0]['feature']['identifier']);
-        static::assertSame('testFeature', $content['positions'][0]['feature']['name']);
-        static::assertSame('random-type', $content['positions'][0]['priceModel']['type']);
-        static::assertSame(59.5, $content['positions'][0]['priceModel']['price']);
+        static::assertEmpty($content);
     }
 
     public function testListPurchases(): void
@@ -138,7 +133,7 @@ class InAppPurchasesControllerTest extends TestCase
 
     private function getInAppPurchaseCartStruct(): InAppPurchaseCartStruct
     {
-        $cartStruct = InAppPurchaseCartStruct::fromArray([
+        return InAppPurchaseCartStruct::fromArray([
             'netPrice' => 50.0,
             'grossPrice' => 59.5,
             'taxRate' => 19.0,
@@ -172,16 +167,14 @@ class InAppPurchasesControllerTest extends TestCase
             'bookingShop' => [],
             'licenseShop' => [],
         ]);
-
-        return $cartStruct;
     }
 
     /**
      * @return array<mixed> $response
      */
-    private function validateResponse(Response $response): array
+    private function validateResponse(Response $response, int $statusCode = Response::HTTP_OK): array
     {
-        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        static::assertSame($statusCode, $response->getStatusCode());
         $content = $response->getContent();
         static::assertNotFalse($content);
         $response = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);

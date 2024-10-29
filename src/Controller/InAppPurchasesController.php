@@ -62,9 +62,7 @@ class InAppPurchasesController
 
         $positionCollection = InAppPurchaseCartPositionCollection::fromArray($positions->all());
 
-        $positions = $this->inAppPurchasesService->orderCart($taxRate, $positionCollection->toCart(), $context);
-
-        return new JsonResponse($positions);
+        return $this->inAppPurchasesService->orderCart($taxRate, $positionCollection->toCart(), $context);
     }
 
     #[Route('/api/_action/in-app-purchases/{extensionName}/list', name: 'api.in-app-purchase.list', methods: ['GET'])]

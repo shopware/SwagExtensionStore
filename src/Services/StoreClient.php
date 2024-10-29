@@ -14,6 +14,7 @@ use Shopware\Core\Framework\Store\Struct\CartStruct;
 use SwagExtensionStore\Exception\ExtensionStoreException;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @phpstan-type SbpEndpoints array<string, string>
@@ -224,7 +225,7 @@ class StoreClient
     /**
      * @param array<int, array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}> $positions
      */
-    public function orderInAppPurchaseCart(float $taxRate, array $positions, Context $context): InAppPurchaseCartStruct
+    public function orderInAppPurchaseCart(float $taxRate, array $positions, Context $context): JsonResponse
     {
         try {
             $response = $this->client->request(
@@ -243,7 +244,7 @@ class StoreClient
             throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
         }
 
-        return InAppPurchaseCartStruct::fromArray(json_decode((string) $response->getBody(), true));
+        return new JsonResponse(null, 201);
     }
 
     public function listInAppPurchases(string $extensionName, Context $context): InAppPurchaseCollection
