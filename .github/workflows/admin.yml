@@ -18,7 +18,7 @@ jobs:
         uses: shopware/github-actions/setup-extension@main
         with:
           extensionName: SwagExtensionStore
-          installAdmin: true
+          install-admin: true
 
       - name: Jest Unit Tests
         shell: bash
