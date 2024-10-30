@@ -41,4 +41,24 @@ class InAppPurchaseCartPositionCollection extends Collection
     {
         return InAppPurchaseCartPositionStruct::class;
     }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getIdentifiers(): array
+    {
+        return $this->map(static fn(InAppPurchaseCartPositionStruct $element) => $element->getInAppFeatureIdentifier());
+    }
+
+    /**
+     * @param array<int, string> $validPurchases
+     */
+    public function filterValidInAppPurchases(
+        InAppPurchaseCartPositionCollection $allPurchases,
+        array $validPurchases,
+    ): self {
+        return $allPurchases->filter(function (InAppPurchaseCartPositionStruct $purchase) use ($validPurchases) {
+            return \in_array($purchase->getInAppFeatureIdentifier(), $validPurchases);
+        });
+    }
 }

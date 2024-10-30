@@ -228,7 +228,7 @@ class StoreClient
     public function orderInAppPurchaseCart(float $taxRate, array $positions, Context $context): JsonResponse
     {
         try {
-            $response = $this->client->request(
+            $this->client->request(
                 'POST',
                 $this->endpoints['iap_order_basket'],
                 [

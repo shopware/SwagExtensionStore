@@ -6,7 +6,7 @@ includes:
 parameters:
     phpVersion: 80200
     level: 8
-    tmpDir: var/cache/phpstan
+    tmpDir: ../../../var/cache/phpstan
     treatPhpDocTypesAsCertain: false
     checkFunctionNameCase: true
     checkInternalClassCaseSensitivity: true

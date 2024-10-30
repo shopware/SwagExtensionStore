@@ -31,7 +31,9 @@ class InAppPurchaseCartPositionStruct extends Struct
     public static function fromArray(array $data): self
     {
         $inAppPurchaseCartPosition = (new self())->assign($data);
-        $inAppPurchaseCartPosition->setInAppFeatureIdentifier($data['feature']['identifier'] ?? '');
+        if ($inAppPurchaseCartPosition->getInAppFeatureIdentifier() === '') {
+            $inAppPurchaseCartPosition->setInAppFeatureIdentifier($data['feature']['identifier'] ?? '');
+        }
 
         return $inAppPurchaseCartPosition;
     }
