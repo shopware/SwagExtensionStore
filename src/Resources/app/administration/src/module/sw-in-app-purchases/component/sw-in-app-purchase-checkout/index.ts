@@ -30,7 +30,7 @@ export default Shopware.Component.wrapComponentConfig({
 
     computed: {
         priceModel(): IAP.InAppPurchasePriceModel | null {
-            return this.inAppPurchaseCart?.positions?.[0].priceModel || null;
+            return this.inAppPurchaseCart?.positions?.[0].feature.priceModel || null;
         },
         purchase(): IAP.InAppPurchase | null {
             return this.inAppPurchaseCart?.positions?.[0].feature || null;

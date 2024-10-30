@@ -77,7 +77,10 @@ class InAppPurchasesController
     public function refreshInAppPurchases(Context $context): Response
     {
         $this->inAppPurchasesSyncService->disableExpiredInAppPurchases();
-        $this->inAppPurchasesSyncService->updateActiveInAppPurchases($context);
+
+        $context->scope(Context::SYSTEM_SCOPE, function (Context $context) {
+            $this->inAppPurchasesSyncService->updateActiveInAppPurchases($context);
+        });
 
         return new JsonResponse(['success' => true]);
     }
