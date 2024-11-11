@@ -5,13 +5,19 @@ declare(strict_types=1);
 namespace SwagExtensionStore\Tests\Controller;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Core\Framework\App\AppEntity;
 use Shopware\Core\Framework\App\InAppPurchases\Gateway\InAppPurchasesGateway;
 use Shopware\Core\Framework\App\InAppPurchases\Response\InAppPurchasesResponse;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Shopware\Core\Framework\Store\InAppPurchase\Services\InAppPurchasesSyncService;
 use Shopware\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Shopware\Core\Framework\Store\Struct\ExtensionCollection;
 use Shopware\Core\Framework\Store\Struct\ExtensionStruct;
+use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use SwagExtensionStore\Controller\InAppPurchasesController;
 use SwagExtensionStore\Exception\ExtensionStoreException;
@@ -33,7 +39,13 @@ class InAppPurchasesControllerTest extends TestCase
             ->method('getInstalledExtensions')
             ->willReturn(new ExtensionCollection([$extension]));
 
-        $controller = new InAppPurchasesController($service, $this->createMock(InAppPurchasesSyncService::class), $dataProvider, $this->createMock(InAppPurchasesGateway::class));
+        $controller = new InAppPurchasesController(
+            $service,
+            $this->createMock(InAppPurchasesSyncService::class),
+            $dataProvider,
+            $this->createMock(InAppPurchasesGateway::class),
+            $this->createMock(EntityRepository::class),
+        );
 
         $content = $this->validateResponse(
             $controller->getInAppFeature('testExtension', Context::createDefaultContext()),
@@ -50,7 +62,13 @@ class InAppPurchasesControllerTest extends TestCase
             ->method('createCart')
             ->willReturn($cartStruct);
 
-        $controller = new InAppPurchasesController($service, $this->createMock(InAppPurchasesSyncService::class), $this->createMock(AbstractExtensionDataProvider::class), $this->createMock(InAppPurchasesGateway::class));
+        $controller = new InAppPurchasesController(
+            $service,
+            $this->createMock(InAppPurchasesSyncService::class),
+            $this->createMock(AbstractExtensionDataProvider::class),
+            $this->createMock(InAppPurchasesGateway::class),
+            $this->createMock(EntityRepository::class),
+        );
 
         $requestDataBag = new RequestDataBag([
             'name' => 'testExtension',
@@ -86,7 +104,19 @@ class InAppPurchasesControllerTest extends TestCase
             ->method('process')
             ->willReturn($response);
 
-        $controller = new InAppPurchasesController($service, $this->createMock(InAppPurchasesSyncService::class), $this->createMock(AbstractExtensionDataProvider::class), $gateway);
+        $appRepository = $this->createMock(EntityRepository::class);
+        $appRepository->expects(static::once())
+            ->method('search')
+            ->with(static::isInstanceOf(Criteria::class))
+            ->willReturn($this->getSearchResult());
+
+        $controller = new InAppPurchasesController(
+            $service,
+            $this->createMock(InAppPurchasesSyncService::class),
+            $this->createMock(AbstractExtensionDataProvider::class),
+            $gateway,
+            $appRepository,
+        );
 
         $requestDataBag = new RequestDataBag([
             'taxRate' => '19.0',
@@ -97,6 +127,7 @@ class InAppPurchasesControllerTest extends TestCase
                 'taxRate' => 19.0,
                 'taxValue' => 9.5,
             ]],
+            'name' => 'TestApp',
         ]);
 
         $content = $this->validateResponse(
@@ -123,7 +154,19 @@ class InAppPurchasesControllerTest extends TestCase
             ->method('process')
             ->willReturn($response);
 
-        $controller = new InAppPurchasesController($service, $this->createMock(InAppPurchasesSyncService::class), $this->createMock(AbstractExtensionDataProvider::class), $gateway);
+        $appRepository = $this->createMock(EntityRepository::class);
+        $appRepository->expects(static::once())
+            ->method('search')
+            ->with(static::isInstanceOf(Criteria::class))
+            ->willReturn($this->getSearchResult());
+
+        $controller = new InAppPurchasesController(
+            $service,
+            $this->createMock(InAppPurchasesSyncService::class),
+            $this->createMock(AbstractExtensionDataProvider::class),
+            $gateway,
+            $appRepository,
+        );
 
         $requestDataBag = new RequestDataBag([
             'taxRate' => '19.0',
@@ -134,6 +177,7 @@ class InAppPurchasesControllerTest extends TestCase
                 'taxRate' => 19.0,
                 'taxValue' => 9.5,
             ]],
+            'name' => 'TestApp',
         ]);
 
         $controller->orderCart($requestDataBag, Context::createDefaultContext());
@@ -156,7 +200,19 @@ class InAppPurchasesControllerTest extends TestCase
             ->method('process')
             ->willReturn($response);
 
-        $controller = new InAppPurchasesController($service, $this->createMock(InAppPurchasesSyncService::class), $this->createMock(AbstractExtensionDataProvider::class), $gateway);
+        $appRepository = $this->createMock(EntityRepository::class);
+        $appRepository->expects(static::once())
+            ->method('search')
+            ->with(static::isInstanceOf(Criteria::class))
+            ->willReturn($this->getSearchResult());
+
+        $controller = new InAppPurchasesController(
+            $service,
+            $this->createMock(InAppPurchasesSyncService::class),
+            $this->createMock(AbstractExtensionDataProvider::class),
+            $gateway,
+            $appRepository,
+        );
         $content = $this->validateResponse(
             $controller->listPurchases('TestApp', $context),
         );
@@ -181,7 +237,19 @@ class InAppPurchasesControllerTest extends TestCase
             ->method('process')
             ->willReturn($response);
 
-        $controller = new InAppPurchasesController($service, $this->createMock(InAppPurchasesSyncService::class), $this->createMock(AbstractExtensionDataProvider::class), $gateway);
+        $appRepository = $this->createMock(EntityRepository::class);
+        $appRepository->expects(static::once())
+            ->method('search')
+            ->with(static::isInstanceOf(Criteria::class))
+            ->willReturn($this->getSearchResult());
+
+        $controller = new InAppPurchasesController(
+            $service,
+            $this->createMock(InAppPurchasesSyncService::class),
+            $this->createMock(AbstractExtensionDataProvider::class),
+            $gateway,
+            $appRepository,
+        );
         $content = $this->validateResponse(
             $controller->listPurchases('TestApp', $context),
         );
@@ -200,7 +268,13 @@ class InAppPurchasesControllerTest extends TestCase
         $inAppPurchaseSyncService->expects(static::once())
             ->method('disableExpiredInAppPurchases');
 
-        $controller = new InAppPurchasesController($this->createMock(InAppPurchasesService::class), $inAppPurchaseSyncService, $this->createMock(AbstractExtensionDataProvider::class), $this->createMock(InAppPurchasesGateway::class));
+        $controller = new InAppPurchasesController(
+            $this->createMock(InAppPurchasesService::class),
+            $inAppPurchaseSyncService,
+            $this->createMock(AbstractExtensionDataProvider::class),
+            $this->createMock(InAppPurchasesGateway::class),
+            $this->createMock(EntityRepository::class),
+        );
 
         $content = $this->validateResponse($controller->refreshInAppPurchases($context));
 
@@ -296,5 +370,24 @@ class InAppPurchasesControllerTest extends TestCase
                 ],
             ],
         ]));
+    }
+
+    /**
+     * @return EntitySearchResult<EntityCollection<AppEntity>>
+     */
+    private function getSearchResult(): EntitySearchResult
+    {
+        $app = new AppEntity();
+        $app->setName('TestName');
+        $app->setUniqueIdentifier(Uuid::randomHex());
+
+        return new EntitySearchResult(
+            'aoo',
+            1,
+            new EntityCollection([$app]),
+            null,
+            new Criteria(),
+            Context::createDefaultContext(),
+        );
     }
 }

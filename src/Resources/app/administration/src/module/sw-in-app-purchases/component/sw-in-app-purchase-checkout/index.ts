@@ -92,7 +92,8 @@ export default Shopware.Component.wrapComponentConfig({
 
             this.inAppPurchasesService.orderCart(
                 this.inAppPurchaseCart?.taxRate,
-                this.inAppPurchaseCart?.positions
+                this.inAppPurchaseCart?.positions,
+                this.extension?.name
             ).then(() => {
                 this.state = 'success';
             }).catch(() => {
