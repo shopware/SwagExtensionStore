@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace SwagExtensionStore\Controller;
 
+use Shopware\Core\Framework\App\AppCollection;
+use Shopware\Core\Framework\App\AppEntity;
 use Shopware\Core\Framework\App\InAppPurchases\Gateway\InAppPurchasesGateway;
 use Shopware\Core\Framework\App\InAppPurchases\Payload\InAppPurchasesPayload;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Log\Package;
@@ -27,11 +30,15 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(defaults: ['_routeScope' => ['api']])]
 class InAppPurchasesController
 {
+    /**
+     * @param EntityRepository<AppCollection> $appRepository
+     */
     public function __construct(
         private readonly InAppPurchasesService $inAppPurchasesService,
         private readonly InAppPurchasesSyncService $inAppPurchasesSyncService,
         private readonly AbstractExtensionDataProvider $extensionDataProvider,
         private readonly InAppPurchasesGateway $appPurchasesGateway,
+        private readonly EntityRepository $appRepository,
     ) {}
 
     #[Route('/api/_action/in-app-purchases/{technicalName}/details', name: 'api.in-app-purchases.detail', methods: ['GET'])]
@@ -63,18 +70,27 @@ class InAppPurchasesController
     {
         $taxRate = \floatval($data->getString('taxRate'));
         $positions = $data->get('positions');
+        $extensionName = $data->get('name');
 
         $positionCollection = InAppPurchaseCartPositionCollection::fromArray($positions->all());
 
-        $validCartItems = $this->appPurchasesGateway->process(new InAppPurchasesPayload($positionCollection->getIdentifiers()));
+        $app = $this->getAppByName($extensionName, $context);
+        if (!$app) {
+            return $this->inAppPurchasesService->orderCart($taxRate, $positionCollection->toCart(), $context);
+        }
 
-        $filteredPositions = $positionCollection->filterValidInAppPurchases($positionCollection, $validCartItems->getPurchases());
+        $payload = new InAppPurchasesPayload($positionCollection->getIdentifiers());
+        $validCartItems = $this->appPurchasesGateway->process($payload, $context, $app);
+        if (!$validCartItems) {
+            return $this->inAppPurchasesService->orderCart($taxRate, $positionCollection->toCart(), $context);
+        }
 
-        if ($filteredPositions->count() === 0) {
+        $positionCollection = $positionCollection->filterValidInAppPurchases($positionCollection, $validCartItems->getPurchases());
+        if ($positionCollection->count() === 0) {
             throw ExtensionStoreException::invalidInAppPurchase();
         }
 
-        return $this->inAppPurchasesService->orderCart($taxRate, $filteredPositions->toCart(), $context);
+        return $this->inAppPurchasesService->orderCart($taxRate, $positionCollection->toCart(), $context);
     }
 
     #[Route('/api/_action/in-app-purchases/{extensionName}/list', name: 'api.in-app-purchase.list', methods: ['GET'])]
@@ -82,11 +98,23 @@ class InAppPurchasesController
     {
         $purchases = $this->inAppPurchasesService->listPurchases($extensionName, $context);
 
-        $validPurchases = $this->appPurchasesGateway->process(new InAppPurchasesPayload($purchases->getIdentifiers()));
+        $app = $this->getAppByName($extensionName, $context);
+        if (!$app) {
+            return new JsonResponse($purchases);
+        }
 
-        $filteredPurchases = $purchases->filterValidInAppPurchases($purchases, $validPurchases->getPurchases());
+        $payload = new InAppPurchasesPayload($purchases->getIdentifiers());
+        $validCartItems = $this->appPurchasesGateway->process($payload, $context, $app);
+        if (!$validCartItems) {
+            return new JsonResponse($purchases);
+        }
 
-        return new JsonResponse($filteredPurchases);
+        $purchases = $purchases->filterValidInAppPurchases($purchases, $validCartItems->getPurchases());
+        if ($purchases->count() === 0) {
+            throw ExtensionStoreException::invalidInAppPurchase();
+        }
+
+        return new JsonResponse($purchases);
     }
 
     #[Route('/api/_action/in-app-purchases/refresh', name: 'api.in-app-purchase.refresh', methods: ['GET'])]
@@ -99,5 +127,13 @@ class InAppPurchasesController
         });
 
         return new JsonResponse(['success' => true]);
+    }
+
+    private function getAppByName(string $appName, Context $context): ?AppEntity
+    {
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('name', $appName));
+
+        return $this->appRepository->search($criteria, $context)->getEntities()->first();
     }
 }

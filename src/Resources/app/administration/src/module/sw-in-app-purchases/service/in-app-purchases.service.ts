@@ -25,10 +25,10 @@ export default class InAppPurchasesService extends ApiService {
         ).then(ApiService.handleResponse.bind(this));
     }
 
-    async orderCart(taxRate: number, positions: IAP.InAppPurchaseCartPositions) {
+    async orderCart(taxRate: number, positions: IAP.InAppPurchaseCartPositions, name: string) {
         return this.httpClient.post<IAP.InAppPurchase>(
             `_action/${this.apiEndpoint}/cart/order`,
-            { taxRate, positions },
+            { taxRate, positions, name },
             { headers: this.getBasicHeaders() }
         ).then(ApiService.handleResponse.bind(this));
     }
