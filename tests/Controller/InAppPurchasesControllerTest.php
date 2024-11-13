@@ -13,7 +13,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Shopware\Core\Framework\Store\InAppPurchase\Services\InAppPurchasesSyncService;
+use Shopware\Core\Framework\Store\InAppPurchase\Services\InAppPurchaseUpdater;
 use Shopware\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Shopware\Core\Framework\Store\Struct\ExtensionCollection;
 use Shopware\Core\Framework\Store\Struct\ExtensionStruct;
@@ -41,7 +41,7 @@ class InAppPurchasesControllerTest extends TestCase
 
         $controller = new InAppPurchasesController(
             $service,
-            $this->createMock(InAppPurchasesSyncService::class),
+            $this->createMock(InAppPurchaseUpdater::class),
             $dataProvider,
             $this->createMock(InAppPurchasesGateway::class),
             $this->createMock(EntityRepository::class),
@@ -64,7 +64,7 @@ class InAppPurchasesControllerTest extends TestCase
 
         $controller = new InAppPurchasesController(
             $service,
-            $this->createMock(InAppPurchasesSyncService::class),
+            $this->createMock(InAppPurchaseUpdater::class),
             $this->createMock(AbstractExtensionDataProvider::class),
             $this->createMock(InAppPurchasesGateway::class),
             $this->createMock(EntityRepository::class),
@@ -97,7 +97,7 @@ class InAppPurchasesControllerTest extends TestCase
             ->willReturn(new JsonResponse(null, Response::HTTP_CREATED));
 
         $response = new InAppPurchasesResponse();
-        $response->setPurchases(['some-app-and-feature-name']);
+        $response->purchases = ['some-app-and-feature-name'];
 
         $gateway = $this->createMock(InAppPurchasesGateway::class);
         $gateway->expects(static::once())
@@ -112,7 +112,7 @@ class InAppPurchasesControllerTest extends TestCase
 
         $controller = new InAppPurchasesController(
             $service,
-            $this->createMock(InAppPurchasesSyncService::class),
+            $this->createMock(InAppPurchaseUpdater::class),
             $this->createMock(AbstractExtensionDataProvider::class),
             $gateway,
             $appRepository,
@@ -162,7 +162,7 @@ class InAppPurchasesControllerTest extends TestCase
 
         $controller = new InAppPurchasesController(
             $service,
-            $this->createMock(InAppPurchasesSyncService::class),
+            $this->createMock(InAppPurchaseUpdater::class),
             $this->createMock(AbstractExtensionDataProvider::class),
             $gateway,
             $appRepository,
@@ -193,7 +193,7 @@ class InAppPurchasesControllerTest extends TestCase
             ->willReturn($this->getInAppPurchaseCollection());
 
         $response = new InAppPurchasesResponse();
-        $response->setPurchases(['testFeature2', 'testFeature', 'testFeature3']);
+        $response->purchases = ['testFeature2', 'testFeature', 'testFeature3'];
 
         $gateway = $this->createMock(InAppPurchasesGateway::class);
         $gateway->expects(static::once())
@@ -208,7 +208,7 @@ class InAppPurchasesControllerTest extends TestCase
 
         $controller = new InAppPurchasesController(
             $service,
-            $this->createMock(InAppPurchasesSyncService::class),
+            $this->createMock(InAppPurchaseUpdater::class),
             $this->createMock(AbstractExtensionDataProvider::class),
             $gateway,
             $appRepository,
@@ -230,7 +230,7 @@ class InAppPurchasesControllerTest extends TestCase
             ->willReturn($this->getInAppPurchaseCollection());
 
         $response = new InAppPurchasesResponse();
-        $response->setPurchases(['testFeature2', 'testFeature']);
+        $response->purchases = ['testFeature2', 'testFeature'];
 
         $gateway = $this->createMock(InAppPurchasesGateway::class);
         $gateway->expects(static::once())
@@ -245,7 +245,7 @@ class InAppPurchasesControllerTest extends TestCase
 
         $controller = new InAppPurchasesController(
             $service,
-            $this->createMock(InAppPurchasesSyncService::class),
+            $this->createMock(InAppPurchaseUpdater::class),
             $this->createMock(AbstractExtensionDataProvider::class),
             $gateway,
             $appRepository,
@@ -261,12 +261,10 @@ class InAppPurchasesControllerTest extends TestCase
     {
         $context = Context::createDefaultContext();
 
-        $inAppPurchaseSyncService = $this->createMock(InAppPurchasesSyncService::class);
+        $inAppPurchaseSyncService = $this->createMock(InAppPurchaseUpdater::class);
         $inAppPurchaseSyncService->expects(static::once())
-            ->method('updateActiveInAppPurchases')
+            ->method('update')
             ->with($context);
-        $inAppPurchaseSyncService->expects(static::once())
-            ->method('disableExpiredInAppPurchases');
 
         $controller = new InAppPurchasesController(
             $this->createMock(InAppPurchasesService::class),

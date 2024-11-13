@@ -13,7 +13,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Log\Package;
-use Shopware\Core\Framework\Store\InAppPurchase\Services\InAppPurchasesSyncService;
+use Shopware\Core\Framework\Store\InAppPurchase\Services\InAppPurchaseUpdater;
 use Shopware\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use SwagExtensionStore\Exception\ExtensionStoreException;
@@ -35,7 +35,7 @@ class InAppPurchasesController
      */
     public function __construct(
         private readonly InAppPurchasesService $inAppPurchasesService,
-        private readonly InAppPurchasesSyncService $inAppPurchasesSyncService,
+        private readonly InAppPurchaseUpdater $inAppPurchaseUpdater,
         private readonly AbstractExtensionDataProvider $extensionDataProvider,
         private readonly InAppPurchasesGateway $appPurchasesGateway,
         private readonly EntityRepository $appRepository,
@@ -85,7 +85,7 @@ class InAppPurchasesController
             return $this->inAppPurchasesService->orderCart($taxRate, $positionCollection->toCart(), $context);
         }
 
-        $positionCollection = $positionCollection->filterValidInAppPurchases($positionCollection, $validCartItems->getPurchases());
+        $positionCollection = $positionCollection->filterValidInAppPurchases($positionCollection, $validCartItems->purchases);
         if ($positionCollection->count() === 0) {
             throw ExtensionStoreException::invalidInAppPurchase();
         }
@@ -109,7 +109,7 @@ class InAppPurchasesController
             return new JsonResponse($purchases);
         }
 
-        $purchases = $purchases->filterValidInAppPurchases($purchases, $validCartItems->getPurchases());
+        $purchases = $purchases->filterValidInAppPurchases($purchases, $validCartItems->purchases);
         if ($purchases->count() === 0) {
             throw ExtensionStoreException::invalidInAppPurchase();
         }
@@ -120,10 +120,8 @@ class InAppPurchasesController
     #[Route('/api/_action/in-app-purchases/refresh', name: 'api.in-app-purchase.refresh', methods: ['GET'])]
     public function refreshInAppPurchases(Context $context): Response
     {
-        $this->inAppPurchasesSyncService->disableExpiredInAppPurchases();
-
         $context->scope(Context::SYSTEM_SCOPE, function (Context $context) {
-            $this->inAppPurchasesSyncService->updateActiveInAppPurchases($context);
+            $this->inAppPurchaseUpdater->update($context);
         });
 
         return new JsonResponse(['success' => true]);
@@ -132,6 +130,7 @@ class InAppPurchasesController
     private function getAppByName(string $appName, Context $context): ?AppEntity
     {
         $criteria = new Criteria();
+        $criteria->setLimit(1);
         $criteria->addFilter(new EqualsFilter('name', $appName));
 
         return $this->appRepository->search($criteria, $context)->getEntities()->first();
