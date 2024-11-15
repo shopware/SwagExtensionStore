@@ -12,12 +12,13 @@ use Shopware\Core\Framework\Struct\Struct;
  *
  * @phpstan-import-type InAppPurchase from InAppPurchaseStruct
  * @phpstan-import-type InAppPurchasePriceModel from InAppPurchasePriceModelStruct
- * @phpstan-type InAppPurchaseCartPosition array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}
+ * @phpstan-type InAppPurchaseCartPosition array{extensionName: string, inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}
  */
 #[Package('checkout')]
 class InAppPurchaseCartPositionStruct extends Struct
 {
     private function __construct(
+        protected string $extensionName = '',
         protected string $inAppFeatureIdentifier = '',
         protected float $netPrice = 0.0,
         protected float $grossPrice = 0.0,
@@ -39,11 +40,12 @@ class InAppPurchaseCartPositionStruct extends Struct
     }
 
     /**
-     * @return array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}
+     * @return InAppPurchaseCartPosition
      */
     public function toCart(): array
     {
         return [
+            'extensionName' => $this->getExtensionName(),
             'inAppFeatureIdentifier' => $this->getInAppFeatureIdentifier(),
             'netPrice' => $this->getNetPrice(),
             'taxValue' => $this->getTaxValue(),
@@ -100,5 +102,15 @@ class InAppPurchaseCartPositionStruct extends Struct
     public function setTaxValue(float $taxValue): void
     {
         $this->taxValue = $taxValue;
+    }
+
+    public function getExtensionName(): string
+    {
+        return $this->extensionName;
+    }
+
+    public function setExtensionName(string $name): void
+    {
+        $this->extensionName = $name;
     }
 }

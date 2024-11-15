@@ -52,8 +52,8 @@ class InAppPurchaseCartPositionCollectionTest extends TestCase
     public function getAppPurchaseCartPositionCollection(): InAppPurchaseCartPositionCollection
     {
         $data = [
-            ['inAppFeatureIdentifier' => 'feature_1', 'netPrice' => 10.0, 'grossPrice' => 12.0, 'taxRate' => 20.0, 'taxValue' => 2.0],
-            ['inAppFeatureIdentifier' => 'feature_2', 'netPrice' => 20.0, 'grossPrice' => 24.0, 'taxRate' => 20.0, 'taxValue' => 4.0],
+            ['extensionName' => 'testExtension', 'inAppFeatureIdentifier' => 'feature_1', 'netPrice' => 10.0, 'grossPrice' => 12.0, 'taxRate' => 20.0, 'taxValue' => 2.0],
+            ['extensionName' => 'testExtension', 'inAppFeatureIdentifier' => 'feature_2', 'netPrice' => 20.0, 'grossPrice' => 24.0, 'taxRate' => 20.0, 'taxValue' => 4.0],
         ];
 
         return InAppPurchaseCartPositionCollection::fromArray($data);

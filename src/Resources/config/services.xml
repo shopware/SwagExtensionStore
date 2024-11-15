@@ -33,6 +33,8 @@
             <argument type="service" id="SwagExtensionStore\Services\InAppPurchasesService"/>
             <argument type="service" id="Shopware\Core\Framework\Store\InAppPurchase\Services\InAppPurchaseUpdater"/>
             <argument type="service" id="Shopware\Core\Framework\Store\Services\AbstractExtensionDataProvider"/>
+            <argument type="service" id="Shopware\Core\Framework\App\InAppPurchases\Gateway\InAppPurchasesGateway"/>
+            <argument type="service" id="app.repository"/>
         </service>
 
         <!-- Services -->

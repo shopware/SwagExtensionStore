@@ -288,6 +288,7 @@ class InAppPurchasesControllerTest extends TestCase
             'taxValue' => 9.5,
             'positions' => [
                 [
+                    'extensionName' => 'testExtension',
                     'inAppFeatureIdentifier' => 'some-app-and-feature-name',
                     'priceModel' => [
                         'type' => 'random-type',
@@ -335,6 +336,7 @@ class InAppPurchasesControllerTest extends TestCase
     {
         return InAppPurchaseCollection::fromArray(array_filter([
             [
+                'extensionName' => 'testExtension',
                 'identifier' => 'testFeature',
                 'name' => 'Test Feature',
                 'description' => null,
@@ -346,6 +348,7 @@ class InAppPurchasesControllerTest extends TestCase
                 ],
             ],
             $valid ? [
+                'extensionName' => 'testExtension',
                 'identifier' => 'testFeature2',
                 'name' => 'Test Feature 2',
                 'description' => null,
@@ -357,6 +360,7 @@ class InAppPurchasesControllerTest extends TestCase
                 ],
             ] : null,
             [
+                'extensionName' => 'testExtension',
                 'identifier' => 'testFeature3',
                 'name' => 'Test Feature 3',
                 'description' => null,

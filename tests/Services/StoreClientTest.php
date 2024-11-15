@@ -13,7 +13,11 @@ use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use SwagExtensionStore\Services\StoreClient;
+use SwagExtensionStore\Struct\InAppPurchaseCartPositionStruct;
 
+/**
+ * @phpstan-import-type InAppPurchaseCartPosition from InAppPurchaseCartPositionStruct
+ */
 class StoreClientTest extends TestCase
 {
     use IntegrationTestBehaviour;
@@ -158,12 +162,13 @@ class StoreClientTest extends TestCase
     }
 
     /**
-     * @return array<int, array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}> $positions
+     * @return array<int, InAppPurchaseCartPosition> $positions
      */
     private function buildPositions(): array
     {
         return [
             [
+                'extensionName' => 'testExtension',
                 'inAppFeatureIdentifier' => 'some-app-and-feature-name',
                 'netPrice' => 9.99,
                 'taxValue' => 1.90,
