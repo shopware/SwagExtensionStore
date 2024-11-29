@@ -33,13 +33,13 @@
                 </div>
             </template>
             <template #content>
-                                            <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__description">
-                                                {{ inAppPurchase.description }}
-                                            </span>
+                <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__description">
+                    {{ inAppPurchase.description }}
+                </span>
 
                 <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__description">
-                                            {{ $tc('sw-extension-store.detail.inAppPurchases.paymentOptions') }}
-                                            </span>
+                    {{ $tc('sw-extension-store.detail.inAppPurchases.paymentOptions') }}
+                </span>
 
                 <ul class="sw-extension-store-detail-in-app-purchases-listing-modal-content__payment-options">
                     {{ formatCurrency(inAppPurchase.priceModel.price, inAppPurchase.priceModel.currency) }}* {{ inAppPurchase.priceModel.duration }}
@@ -48,8 +48,8 @@
         </sw-collapse>
     {% endblock %}
     <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__tax-notice">
-                                    {{ $tc('sw-extension-store.general.taxNotice') }}
-                                </span>
+        {{ $tc('sw-extension-store.general.taxNotice') }}
+    </span>
 
     <template #modal-footer>
         <mt-button

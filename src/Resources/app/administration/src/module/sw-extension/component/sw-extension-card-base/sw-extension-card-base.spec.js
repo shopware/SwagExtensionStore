@@ -12,7 +12,7 @@ Shopware.Component.override(
 
 Shopware.State.get('context').app = { config: { settings: {} } };
 
-async function createWrapper(extensionCustomProps = {}) {
+async function createWrapper(extensionCustomProps = {}, activeInAppFeatures = false) {
     const testExtension = {
         id: 1337,
         categories: [
@@ -56,7 +56,7 @@ async function createWrapper(extensionCustomProps = {}) {
                     getOpenLink: () => { }
                 }
             }
-        }
+        },
     });
 }
 describe('SwagExtensionStore/module/sw-extension/component/sw-extension', () => {

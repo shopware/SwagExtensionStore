@@ -100,7 +100,7 @@ export default Shopware.Component.wrapComponentConfig({
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error('InAppPurchases', errorResponse);
                 this.state = 'error';
-                this.errorSnippet = errorResponse.errors[0].detail;
+                this.errorSnippet = errorResponse?.errors[0]?.detail;
             });
         },
 
@@ -120,7 +120,7 @@ export default Shopware.Component.wrapComponentConfig({
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error('InAppPurchases', errorResponse);
                 this.state = 'error';
-                this.errorSnippet = errorResponse.errors[0].detail;
+                this.errorSnippet = errorResponse?.errors[0]?.detail;
             });
         },
 

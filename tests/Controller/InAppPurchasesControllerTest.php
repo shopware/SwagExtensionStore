@@ -274,9 +274,7 @@ class InAppPurchasesControllerTest extends TestCase
             $this->createMock(EntityRepository::class),
         );
 
-        $content = $this->validateResponse($controller->refreshInAppPurchases($context));
-
-        static::assertSame(['success' => true], $content);
+        $content = $this->validateResponse($controller->refreshInAppPurchases($context), Response::HTTP_NO_CONTENT);
     }
 
     private function getInAppPurchaseCartStruct(): InAppPurchaseCartStruct

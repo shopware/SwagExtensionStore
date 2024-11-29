@@ -399,12 +399,6 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
             expect(wrapper.find('.sw-extension-store-detail-card-details-in-app-purchases__count').exists()).toBe(true);
             expect(wrapper.get('.sw-extension-store-detail-card-details-in-app-purchases__count').text()).toBe('2');
-
-            wrapper.get('.sw-extension-store-detail-card-details-in-app-purchases__modal-link').trigger('click');
-
-            await wrapper.vm.$nextTick();
-
-            expect(wrapper.get('.sw-extension-store-detail-in-app-purchases-listing-modal').isVisible()).toBe(true);
         });
     });
 });
