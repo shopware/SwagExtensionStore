@@ -350,7 +350,7 @@
 
                         {% block sw_extension_store_detail_in_app_purchases_listing_modal %}
                             <sw-extension-store-in-app-purchases-listing-modal
-                                :showInAppPurchasesListingModal="showInAppPurchasesListingModal"
+                                v-if="showInAppPurchasesListingModal"
                                 :extension="extension"
                                 :inAppPurchases="inAppPurchases"
                                 @modal-close="closeInAppPurchasesListingModal"

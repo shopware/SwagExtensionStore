@@ -10,9 +10,9 @@ Shopware.Component.override(
     () => import('SwagExtensionStore/module/sw-extension/component/sw-extension-card-base')
 );
 
-Shopware.State.get('context').app = { config: { settings: {} } };
+Shopware.State.get('context').app = { config: { settings: {}, inAppPurchases: { SwagB2BPlatform: ['purchase1', 'purchase2'] } } };
 
-async function createWrapper(extensionCustomProps = {}, activeInAppFeatures = false) {
+async function createWrapper(extensionCustomProps = {}) {
     const testExtension = {
         id: 1337,
         categories: [
@@ -38,6 +38,7 @@ async function createWrapper(extensionCustomProps = {}, activeInAppFeatures = fa
         addons: [],
         ...extensionCustomProps
     };
+
 
     return mount(await Shopware.Component.build('sw-extension-card-base'), {
         props: {
@@ -78,5 +79,13 @@ describe('SwagExtensionStore/module/sw-extension/component/sw-extension', () => 
         expect(wrapper.find('.sw-extension-card-base__in-app-purchase__badge').exists()).toBe(true);
         expect(wrapper.get('.sw-extension-card-base__in-app-purchase__badge').text())
             .toBe('sw-extension.in-app-purchase.badge-label');
+    });
+
+    it('should show shop account link', async () => {
+        const wrapper = await createWrapper({ inAppFeaturesAvailable: true });
+
+        expect(wrapper.find('.sw-extension-card-base__in-app-purchase__store_link').exists()).toBe(true);
+        expect(wrapper.get('.sw-extension-card-base__in-app-purchase__store_link').text())
+            .toBe('sw-extension.in-app-purchase.context-menu.account-link-label');
     });
 });

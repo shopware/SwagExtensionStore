@@ -2,26 +2,6 @@ import type * as IAP from 'src/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout.html.twig';
 import './sw-in-app-purchase-checkout.scss';
 
-interface ErrorResponse {
-    errors: Array<{
-        status: string;
-        code: string;
-        title: string;
-        detail: string;
-        meta: {
-            parameters: string[];
-        };
-        trace: Array<{
-            file: string;
-            line: number;
-            function: string;
-            class: string;
-            type: string;
-            args?: string[];
-        }>;
-    }>;
-}
-
 export default Shopware.Component.wrapComponentConfig({
     template,
 
@@ -100,7 +80,6 @@ export default Shopware.Component.wrapComponentConfig({
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error('InAppPurchases', errorResponse);
                 this.state = 'error';
-                this.errorSnippet = errorResponse?.errors[0]?.detail;
             });
         },
 
@@ -120,7 +99,6 @@ export default Shopware.Component.wrapComponentConfig({
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error('InAppPurchases', errorResponse);
                 this.state = 'error';
-                this.errorSnippet = errorResponse?.errors[0]?.detail;
             });
         },
 

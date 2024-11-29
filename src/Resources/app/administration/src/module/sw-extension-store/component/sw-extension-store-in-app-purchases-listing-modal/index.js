@@ -9,10 +9,6 @@ export default {
     template,
 
     props: {
-        showInAppPurchasesListingModal: {
-            type: Boolean,
-            required: true
-        },
         extension: {
             type: Object,
             required: true
