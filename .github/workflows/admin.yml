@@ -18,6 +18,7 @@ jobs:
         uses: shopware/github-actions/setup-extension@main
         with:
           extensionName: SwagExtensionStore
+          shopwareVersion: trunk
           install-admin: true
 
       - name: Jest Unit Tests
@@ -38,4 +39,4 @@ jobs:
     uses: shopware/github-actions/.github/workflows/admin-eslint.yml@main
     with:
       extensionName: ${{ github.event.repository.name }}
-      shopwareVersion: next-36303/feature/in-app-purchases
+      shopwareVersion: trunk
