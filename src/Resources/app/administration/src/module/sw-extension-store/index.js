@@ -15,6 +15,7 @@ Shopware.Component.register('sw-extension-type-label', () => import('./component
 Shopware.Component.register('sw-extension-store-label-display', () => import('./component/sw-extension-store-label-display'));
 Shopware.Component.register('sw-extension-store-error-card', () => import('./component/sw-extension-store-error-card'));
 Shopware.Component.register('sw-extension-store-statistics-promotion', () => import('./component/sw-extension-store-statistics-promotion'));
+Shopware.Component.register('sw-extension-store-in-app-purchases-listing-modal', () => import('./component/sw-extension-store-in-app-purchases-listing-modal'));
 /* eslint-enable max-len */
 
 Shopware.Application.addServiceProvider('extensionStoreDataService', () => {

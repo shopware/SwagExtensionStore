@@ -15,10 +15,9 @@
 {% block sw_extension_card_base_context_menu_actions_additional %}
     {% parent %}
 
-    <sw-context-menu-item v-if="extension.inAppPurchasesActive" @click="openAccountPage">
-        <span class="sw-extension-card-base__context-menu-in-app-purchases-account-link">
-            {{ $tc('sw-extension.in-app-purchase.context-menu.account-link-label') }}
-            <sw-icon name="regular-external-link-s" size="10px" />
-        </span>
+    <sw-context-menu-item v-if="hasActiveInAppPurchases(extension.name)" @click="openAccountPage">
+        <sw-external-link>
+            {{ $tc('sw-extension.in-app-purchase.badge-label') }}
+        </sw-external-link>
     </sw-context-menu-item>
 {% endblock %}

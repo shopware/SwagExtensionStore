@@ -12,6 +12,10 @@ export default Shopware.Component.wrapComponentConfig({
     methods: {
         openAccountPage() {
             window.open(`${accountUrl}/shops/shops`, '_blank');
+        },
+
+        hasActiveInAppPurchases(extensionName: string) {
+            return Shopware.InAppPurchase.getByExtension(extensionName).length > 0;
         }
     }
 });

@@ -76,16 +76,18 @@ class InAppPurchasesController
 
         $app = $this->getAppByName($extensionName, $context);
         if (!$app) {
+            // if no app is found, it's a plugin, and no filtering will happen
             return $this->inAppPurchasesService->orderCart($taxRate, $positionCollection->toCart(), $context);
         }
 
         $payload = new InAppPurchasesPayload($positionCollection->getIdentifiers());
-        $validCartItems = $this->appPurchasesGateway->process($payload, $context, $app);
-        if (!$validCartItems) {
+        $iapGatewayResponse = $this->appPurchasesGateway->process($payload, $context, $app);
+        if (!$iapGatewayResponse) {
+            // if $iapGatewayResponse is null, the app does not have a gateway url, and no filtering will happen
             return $this->inAppPurchasesService->orderCart($taxRate, $positionCollection->toCart(), $context);
         }
 
-        $positionCollection = $positionCollection->filterValidInAppPurchases($positionCollection, $validCartItems->purchases);
+        $positionCollection = $positionCollection->filterValidInAppPurchases($positionCollection, $iapGatewayResponse->purchases);
         if ($positionCollection->count() === 0) {
             throw ExtensionStoreException::invalidInAppPurchase();
         }
@@ -124,7 +126,7 @@ class InAppPurchasesController
             $this->inAppPurchaseUpdater->update($context);
         });
 
-        return new JsonResponse(['success' => true]);
+        return new JsonResponse(status: Response::HTTP_NO_CONTENT);
     }
 
     private function getAppByName(string $appName, Context $context): ?AppEntity

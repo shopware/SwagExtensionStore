@@ -220,7 +220,7 @@ export default {
         await this.shopwareExtensionService.updateExtensionData();
         this.canBeOpened = !!this.shopwareExtensionService.getOpenLink(this.extension);
         if (this.extension.inAppFeaturesAvailable) {
-            this.setInAppPurchases();
+            this.fetchInAppPurchases();
         }
     },
 
@@ -433,12 +433,8 @@ export default {
             this.showInstallationFailedModal = false;
         },
 
-        async setInAppPurchases() {
+        async fetchInAppPurchases() {
             this.inAppPurchases = await this.inAppPurchasesService.getAvailablePurchases(this.extension.name);
-        },
-
-        formatCurrency(price, currency) {
-            return Utils.format.currency(price, currency);
         }
     }
 };
