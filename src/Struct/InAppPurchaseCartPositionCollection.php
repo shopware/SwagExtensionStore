@@ -28,7 +28,7 @@ class InAppPurchaseCartPositionCollection extends Collection
     }
 
     /**
-     * @return array<int, array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}>
+     * @return array<int, InAppPurchaseCartPosition>
      */
     public function toCart(): array
     {

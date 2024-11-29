@@ -12,6 +12,7 @@ use Shopware\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProv
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use SwagExtensionStore\Exception\ExtensionStoreException;
+use SwagExtensionStore\Struct\InAppPurchaseCartPositionStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,6 +29,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @phpstan-type ExtensionListingSorting array{default: ExtensionListingSortingOption, options: list<ExtensionListingSortingOption>}
  * @phpstan-type ExtensionReview array<string, mixed>
  * @phpstan-type PaymentMethod array{id: positive-int, type: 'paypal'|'creditCard'|'directDebit', label: string, default: bool}
+ *
+ * @phpstan-import-type InAppPurchaseCartPosition from InAppPurchaseCartPositionStruct
  */
 #[Package('checkout')]
 class StoreClient
@@ -219,11 +222,16 @@ class StoreClient
             throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
         }
 
-        return InAppPurchaseCartStruct::fromArray(json_decode((string) $response->getBody(), true));
+        $inAppPurchaseCart = InAppPurchaseCartStruct::fromArray(json_decode((string) $response->getBody(), true));
+        $inAppPurchaseCart->getPositions()->map(function (InAppPurchaseCartPositionStruct $position) use ($extensionName): void {
+            $position->setExtensionName($position->getExtensionName() ?: $extensionName);
+        });
+
+        return $inAppPurchaseCart;
     }
 
     /**
-     * @param array<int, array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}> $positions
+     * @param array<int, InAppPurchaseCartPosition> $positions
      */
     public function orderInAppPurchaseCart(float $taxRate, array $positions, Context $context): JsonResponse
     {

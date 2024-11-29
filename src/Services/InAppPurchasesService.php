@@ -6,10 +6,14 @@ namespace SwagExtensionStore\Services;
 
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Log\Package;
+use SwagExtensionStore\Struct\InAppPurchaseCartPositionStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * @phpstan-import-type InAppPurchaseCartPosition from InAppPurchaseCartPositionStruct
+ */
 #[Package('checkout')]
 class InAppPurchasesService
 {
@@ -23,7 +27,7 @@ class InAppPurchasesService
     }
 
     /**
-     * @param array<int, array{inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}> $positions
+     * @param array<int, InAppPurchaseCartPosition> $positions
      */
     public function orderCart(float $taxRate, array $positions, Context $context): JsonResponse
     {
