@@ -57,7 +57,7 @@ async function createWrapper(extensionCustomProps = {}) {
                     getOpenLink: () => { }
                 }
             }
-        },
+        }
     });
 }
 describe('SwagExtensionStore/module/sw-extension/component/sw-extension', () => {
