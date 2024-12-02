@@ -12,6 +12,10 @@ use Shopware\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProv
 use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use SwagExtensionStore\Exception\ExtensionStoreException;
+use SwagExtensionStore\Struct\InAppPurchaseCartPositionStruct;
+use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
+use SwagExtensionStore\Struct\InAppPurchaseCollection;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @phpstan-type SbpEndpoints array<string, string>
@@ -25,6 +29,8 @@ use SwagExtensionStore\Exception\ExtensionStoreException;
  * @phpstan-type ExtensionListingSorting array{default: ExtensionListingSortingOption, options: list<ExtensionListingSortingOption>}
  * @phpstan-type ExtensionReview array<string, mixed>
  * @phpstan-type PaymentMethod array{id: positive-int, type: 'paypal'|'creditCard'|'directDebit', label: string, default: bool}
+ *
+ * @phpstan-import-type InAppPurchaseCartPosition from InAppPurchaseCartPositionStruct
  */
 #[Package('checkout')]
 class StoreClient
@@ -195,5 +201,75 @@ class StoreClient
         } catch (ClientException $e) {
             throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
         }
+    }
+
+    public function createInAppPurchaseCart(string $extensionName, string $feature, Context $context): InAppPurchaseCartStruct
+    {
+        try {
+            $response = $this->client->request(
+                'POST',
+                $this->endpoints['iap_create_basket'],
+                [
+                    'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
+                    'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
+                    'json' => [
+                        'extensionName' => $extensionName,
+                        'inAppFeatureIdentifier' => $feature,
+                    ],
+                ],
+            );
+        } catch (ClientException $e) {
+            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+        }
+
+        $inAppPurchaseCart = InAppPurchaseCartStruct::fromArray(json_decode((string) $response->getBody(), true));
+        $inAppPurchaseCart->getPositions()->map(function (InAppPurchaseCartPositionStruct $position) use ($extensionName): void {
+            $position->setExtensionName($position->getExtensionName() ?: $extensionName);
+        });
+
+        return $inAppPurchaseCart;
+    }
+
+    /**
+     * @param array<int, InAppPurchaseCartPosition> $positions
+     */
+    public function orderInAppPurchaseCart(float $taxRate, array $positions, Context $context): JsonResponse
+    {
+        try {
+            $this->client->request(
+                'POST',
+                $this->endpoints['iap_order_basket'],
+                [
+                    'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
+                    'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
+                    'json' => [
+                        'taxRate' => $taxRate,
+                        'positions' => $positions,
+                    ],
+                ],
+            );
+        } catch (ClientException $e) {
+            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+        }
+
+        return new JsonResponse(null, 201);
+    }
+
+    public function listInAppPurchases(string $extensionName, Context $context): InAppPurchaseCollection
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                \sprintf($this->endpoints['iap_list'], $extensionName),
+                [
+                    'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
+                    'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
+                ],
+            );
+        } catch (ClientException $e) {
+            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+        }
+
+        return InAppPurchaseCollection::fromArray(json_decode((string) $response->getBody(), true));
     }
 }

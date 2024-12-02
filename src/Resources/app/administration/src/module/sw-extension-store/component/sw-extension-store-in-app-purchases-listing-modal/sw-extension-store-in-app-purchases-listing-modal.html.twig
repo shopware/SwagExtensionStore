@@ -1,0 +1,61 @@
+<sw-modal
+    :title="$tc('sw-extension-store.detail.inAppPurchases.label')"
+    :subtitle="extension.name"
+    variant="default"
+    class="sw-extension-store-detail-in-app-purchases-listing-modal"
+    @modal-close="closeInAppPurchasesListingModal"
+>
+    {% block sw_extension_store_detail_in_app_purchases_listing_modal_content %}
+        <sw-collapse v-for="inAppPurchase in inAppPurchases" class="sw-extension-store-detail-in-app-purchases-listing-modal-content__collapse">
+            <template #header="{ expanded }">
+                <div class="sw-extension-store-detail-in-app-purchases-listing-modal-content__title">
+                    {{ inAppPurchase.name }}
+                    {% block sw_extension_store_detail_in_app_purchases_listing_modal_header_icon %}
+                        {% block sw_extension_store_detail_in_app_purchases_listing_modal_header_icon_expanded %}
+                            <sw-icon
+                                v-if="expanded"
+                                class="sw-extension-store-detail-in-app-purchases-listing-modal-content__button"
+                                name="regular-chevron-down-xs"
+                                size="12px"
+                            ></sw-icon>
+                        {% endblock %}
+
+                        {% block sw_extension_store_detail_in_app_purchases_listing_modal_header_icon_not_expanded %}
+                            <sw-icon
+                                v-else
+                                class="sw-extension-store-detail-in-app-purchases-listing-modal-content__button"
+                                name="regular-chevron-right-xs"
+                                size="12px"
+                            ></sw-icon>
+                        {% endblock %}
+                    {% endblock %}
+                </div>
+            </template>
+            <template #content>
+                <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__description">
+                    {{ inAppPurchase.description }}
+                </span>
+
+                <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__description">
+                    {{ $tc('sw-extension-store.detail.inAppPurchases.paymentOptions') }}
+                </span>
+
+                <ul class="sw-extension-store-detail-in-app-purchases-listing-modal-content__payment-options">
+                    {{ formatCurrency(inAppPurchase.priceModel.price, inAppPurchase.priceModel.currency) }}* {{ inAppPurchase.priceModel.duration }}
+                </ul>
+            </template>
+        </sw-collapse>
+    {% endblock %}
+    <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__tax-notice">
+        {{ $tc('sw-extension-store.general.taxNotice') }}
+    </span>
+
+    <template #modal-footer>
+        <mt-button
+            variant="context"
+            size="small"
+            @click="closeInAppPurchasesListingModal">
+            {{ $tc('global.default.close') }}
+        </mt-button>
+    </template>
+</sw-modal>

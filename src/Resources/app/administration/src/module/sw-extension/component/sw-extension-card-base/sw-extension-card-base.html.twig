@@ -1,0 +1,23 @@
+{% block sw_extension_card_base_activation_switch %}
+<div class="sw-extension-card-base__info">
+    <section>
+        <span class="sw-extension-card-base__info-name">
+            {{ extension.label }}
+        </span>
+
+        <span v-if="extension.inAppFeaturesAvailable" class="sw-extension-card-base__in-app-purchase__badge">
+            {{ $tc('sw-extension.in-app-purchase.badge-label') }}
+        </span>
+    </section>
+</div>
+{% endblock %}
+
+{% block sw_extension_card_base_context_menu_actions_additional %}
+    {% parent %}
+
+    <sw-context-menu-item v-if="hasActiveInAppPurchases(extension.name)" @click="openAccountPage" class="sw-extension-card-base__in-app-purchase__store_link">
+        <sw-external-link>
+            {{ $tc('sw-extension.in-app-purchase.context-menu.account-link-label') }}
+        </sw-external-link>
+    </sw-context-menu-item>
+{% endblock %}

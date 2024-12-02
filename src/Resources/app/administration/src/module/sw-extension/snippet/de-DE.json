@@ -1,0 +1,10 @@
+{
+    "sw-extension": {
+        "in-app-purchase": {
+            "badge-label": "In-App Einkäufe",
+            "context-menu": {
+                "account-link-label": "Einkäufe verwalten"
+            }
+        }
+    }
+}

@@ -1,0 +1,15 @@
+<sw-alert class="sw-in-app-purchase-price-box" :show-icon="false">
+    <span class="sw-in-app-purchase-price-box__price_text">
+        {{ $tc('sw-in-app-purchase-price-box.priceText') }}
+    </span>
+
+    <span class="sw-in-app-purchase-price-box__price_container">
+        <span class="sw-in-app-purchase-price-box__price">
+            € {{ String(priceModel?.price) }}*
+        </span>
+
+        <span v-if="rentDuration" class="sw-in-app-purchase-price-box__duration">
+            /{{ $tc('sw-in-app-purchase-price-box.duration.' + rentDuration) }}
+        </span>
+    </span>
+</sw-alert>
