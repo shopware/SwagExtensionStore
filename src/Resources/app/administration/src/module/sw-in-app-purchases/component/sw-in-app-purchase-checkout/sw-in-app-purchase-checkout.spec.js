@@ -147,6 +147,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
     });
 
     it('catches requestFeature error correctly', async () => {
+        Shopware.Utils.debug.error = jest.fn();
+
         wrapper = await createWrapper(true);
         wrapper.vm.store.request({
             featureId: 'your-feature-id'
@@ -224,6 +226,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
     });
 
     it('catches onPurchaseFeature error correctly', async () => {
+        Shopware.Utils.debug.error = jest.fn();
+
         wrapper = await createWrapper(true);
         wrapper.vm.store.request({
             featureId: 'your-feature-id'

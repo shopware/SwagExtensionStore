@@ -2,6 +2,10 @@ import type * as IAP from 'src/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout.html.twig';
 import './sw-in-app-purchase-checkout.scss';
 
+interface ErrorResponse {
+    errors: Array<ShopwareHttpError>;
+}
+
 export default Shopware.Component.wrapComponentConfig({
     template,
 
@@ -78,7 +82,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.extension = extension;
                 this.state = 'purchase';
             }).catch((errorResponse: ErrorResponse) => {
-                Shopware.Utils.debug.error('InAppPurchases', errorResponse);
+                Shopware.Utils.debug.error(errorResponse);
                 this.state = 'error';
             });
         },
@@ -97,7 +101,7 @@ export default Shopware.Component.wrapComponentConfig({
             ).then(() => {
                 this.state = 'success';
             }).catch((errorResponse: ErrorResponse) => {
-                Shopware.Utils.debug.error('InAppPurchases', errorResponse);
+                Shopware.Utils.debug.error(errorResponse);
                 this.state = 'error';
             });
         },
