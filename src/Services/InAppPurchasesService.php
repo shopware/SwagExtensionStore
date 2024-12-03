@@ -18,8 +18,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class InAppPurchasesService
 {
     public function __construct(
-        private StoreClient $client,
-    ) {}
+        private readonly StoreClient $client,
+    ) {
+    }
 
     public function createCart(string $extensionName, string $feature, Context $context): InAppPurchaseCartStruct
     {

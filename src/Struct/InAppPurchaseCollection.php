@@ -22,7 +22,7 @@ class InAppPurchaseCollection extends Collection
      */
     public static function fromArray(array $data): self
     {
-        $elements = \array_map(static fn(array $element) => InAppPurchaseStruct::fromArray($element), $data);
+        $elements = \array_map(static fn (array $element) => InAppPurchaseStruct::fromArray($element), $data);
 
         return new self($elements);
     }
@@ -32,7 +32,7 @@ class InAppPurchaseCollection extends Collection
      */
     public function getIdentifiers(): array
     {
-        return $this->map(static fn(InAppPurchaseStruct $element) => $element->getIdentifier());
+        return $this->map(static fn (InAppPurchaseStruct $element) => $element->getIdentifier());
     }
 
     /**
@@ -43,7 +43,7 @@ class InAppPurchaseCollection extends Collection
         array $validPurchases,
     ): InAppPurchaseCollection {
         return $allPurchases->filter(function (InAppPurchaseStruct $purchase) use ($validPurchases) {
-            return \in_array($purchase->getIdentifier(), $validPurchases);
+            return \in_array($purchase->getIdentifier(), $validPurchases, true);
         });
     }
 }

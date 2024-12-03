@@ -22,7 +22,7 @@ class InAppPurchasePriceModelCollection extends Collection
      */
     public static function fromArray(array $data): self
     {
-        $elements = \array_map(static fn(array $element) => InAppPurchasePriceModelStruct::fromArray($element), $data);
+        $elements = \array_map(static fn (array $element) => InAppPurchasePriceModelStruct::fromArray($element), $data);
 
         return new self($elements);
     }

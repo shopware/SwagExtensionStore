@@ -42,7 +42,8 @@ class StoreClient
         private readonly array $endpoints,
         private readonly AbstractStoreRequestOptionsProvider $storeRequestOptionsProvider,
         private readonly ClientInterface $client,
-    ) {}
+    ) {
+    }
 
     /**
      * @return array{headers: ResponseHeaders, data: list<ExtensionInfo>}
@@ -99,7 +100,7 @@ class StoreClient
         try {
             $response = $this->client->request(
                 'GET',
-                sprintf($this->endpoints['extension_detail'], $id),
+                \sprintf($this->endpoints['extension_detail'], $id),
                 [
                     'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
                     'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
@@ -126,7 +127,7 @@ class StoreClient
         try {
             $response = $this->client->request(
                 'GET',
-                sprintf($this->endpoints['reviews'], $id),
+                \sprintf($this->endpoints['reviews'], $id),
                 [
                     'query' => array_merge($this->storeRequestOptionsProvider->getDefaultQueryParameters($context), $criteria->getQueryParameter()),
                     'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),

@@ -16,23 +16,21 @@ class InAppPurchaseCartPositionCollectionTest extends TestCase
     {
         $collection = $this->getAppPurchaseCartPositionCollection();
 
-        self::assertCount(2, $collection);
+        static::assertCount(2, $collection);
     }
 
     public function testToCartReturnsCorrectCartArray(): void
     {
-        $collection = $this->getAppPurchaseCartPositionCollection();
+        $cart = $this->getAppPurchaseCartPositionCollection()->toCart();
 
-        $cart = $collection->toCart();
-
-        self::assertCount(2, $cart);
-        self::assertSame('feature_1', $cart[0]['inAppFeatureIdentifier']);
-        self::assertSame('feature_2', $cart[1]['inAppFeatureIdentifier']);
+        static::assertCount(2, $cart);
+        static::assertSame('feature_1', $cart[0]['inAppFeatureIdentifier']);
+        static::assertSame('feature_2', $cart[1]['inAppFeatureIdentifier']);
     }
 
     public function testGetIdentifiersReturnsCorrectIdentifiers(): void
     {
-        self::assertSame(['feature_1', 'feature_2'], $this->getAppPurchaseCartPositionCollection()->getIdentifiers());
+        static::assertSame(['feature_1', 'feature_2'], $this->getAppPurchaseCartPositionCollection()->getIdentifiers());
     }
 
     public function testFilterValidInAppPurchasesReturnsValidPurchases(): void
@@ -43,10 +41,10 @@ class InAppPurchaseCartPositionCollectionTest extends TestCase
 
         $filteredCollection = $allPurchases->filterValidInAppPurchases($allPurchases, $validPurchases);
 
-        self::assertCount(1, $filteredCollection);
+        static::assertCount(1, $filteredCollection);
         $first = $filteredCollection->first();
-        self::assertInstanceOf(InAppPurchaseCartPositionStruct::class, $first);
-        self::assertSame('feature_1', $first->getInAppFeatureIdentifier());
+        static::assertInstanceOf(InAppPurchaseCartPositionStruct::class, $first);
+        static::assertSame('feature_1', $first->getInAppFeatureIdentifier());
     }
 
     public function getAppPurchaseCartPositionCollection(): InAppPurchaseCartPositionCollection

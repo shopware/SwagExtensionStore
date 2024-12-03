@@ -45,11 +45,11 @@
         }
     },
     "scripts": {
-        "cs-fixer-dry": [
-            "@php ../../../vendor/bin/php-cs-fixer fix . --dry-run --rules=@PER-CS2.0,no_unused_imports"
+        "cs": [
+            "@php ../../../vendor/bin/php-cs-fixer fix --dry-run"
         ],
-        "cs-fixer": [
-            "@php ../../../vendor/bin/php-cs-fixer fix . --rules=@PER-CS2.0,no_unused_imports"
+        "cs-fix": [
+            "@php ../../../vendor/bin/php-cs-fixer fix"
         ],
         "phpstan": [
             "@php ../../../src/Core/DevOps/StaticAnalyze/phpstan-bootstrap.php",

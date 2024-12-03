@@ -140,8 +140,8 @@ class InAppPurchasesControllerTest extends TestCase
 
     public function testOrderCartWithInvalidItem(): void
     {
-        static::expectException(ExtensionStoreException::class);
-        static::expectExceptionMessage('The in-app purchase could not be completed. Please contact the extension provider.');
+        $this->expectException(ExtensionStoreException::class);
+        $this->expectExceptionMessage('The in-app purchase could not be completed. Please contact the extension provider.');
 
         $service = $this->createMock(InAppPurchasesService::class);
         $service->expects(static::never())
@@ -274,7 +274,7 @@ class InAppPurchasesControllerTest extends TestCase
             $this->createMock(EntityRepository::class),
         );
 
-        $content = $this->validateResponse($controller->refreshInAppPurchases($context), Response::HTTP_NO_CONTENT);
+        $this->validateResponse($controller->refreshInAppPurchases($context), Response::HTTP_NO_CONTENT);
     }
 
     private function getInAppPurchaseCartStruct(): InAppPurchaseCartStruct
@@ -317,7 +317,7 @@ class InAppPurchasesControllerTest extends TestCase
     }
 
     /**
-     * @return array<mixed> $response
+     * @return array<string, mixed> $response
      */
     private function validateResponse(Response $response, int $statusCode = Response::HTTP_OK): array
     {

@@ -12,6 +12,7 @@ use Shopware\Core\Framework\Struct\Struct;
  *
  * @phpstan-import-type InAppPurchase from InAppPurchaseStruct
  * @phpstan-import-type InAppPurchasePriceModel from InAppPurchasePriceModelStruct
+ *
  * @phpstan-type InAppPurchaseCartPosition array{extensionName: string, inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}
  */
 #[Package('checkout')]
@@ -24,7 +25,8 @@ class InAppPurchaseCartPositionStruct extends Struct
         protected float $grossPrice = 0.0,
         protected float $taxRate = 0.0,
         protected float $taxValue = 0.0,
-    ) {}
+    ) {
+    }
 
     /**
      * @param InAppPurchaseCartPosition $data
