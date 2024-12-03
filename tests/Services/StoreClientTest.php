@@ -156,6 +156,7 @@ class StoreClientTest extends TestCase
             $iapJson = file_get_contents(__DIR__ . '/../_fixtures/responses/extension-iap.json');
             static::assertIsString($iapJson);
             $requestHandler->append(new Response($statusCode, [], $iapJson));
+
             return;
         }
         $requestHandler->append(new Response($statusCode, []));

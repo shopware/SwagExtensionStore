@@ -39,7 +39,8 @@ class InAppPurchasesController
         private readonly AbstractExtensionDataProvider $extensionDataProvider,
         private readonly InAppPurchasesGateway $appPurchasesGateway,
         private readonly EntityRepository $appRepository,
-    ) {}
+    ) {
+    }
 
     #[Route('/api/_action/in-app-purchases/{technicalName}/details', name: 'api.in-app-purchases.detail', methods: ['GET'])]
     public function getInAppFeature(string $technicalName, Context $context): Response
@@ -68,8 +69,9 @@ class InAppPurchasesController
     #[Route('/api/_action/in-app-purchases/cart/order', name: 'api.in-app-purchases.cart.order', methods: ['POST'])]
     public function orderCart(RequestDataBag $data, Context $context): Response
     {
-        $taxRate = \floatval($data->getString('taxRate'));
+        $taxRate = (float) $data->getString('taxRate');
         $positions = $data->get('positions');
+        \assert($positions instanceof RequestDataBag);
         $extensionName = $data->get('name');
 
         $positionCollection = InAppPurchaseCartPositionCollection::fromArray($positions->all());
@@ -122,7 +124,7 @@ class InAppPurchasesController
     #[Route('/api/_action/in-app-purchases/refresh', name: 'api.in-app-purchase.refresh', methods: ['GET'])]
     public function refreshInAppPurchases(Context $context): Response
     {
-        $context->scope(Context::SYSTEM_SCOPE, function (Context $context) {
+        $context->scope(Context::SYSTEM_SCOPE, function (Context $context): void {
             $this->inAppPurchaseUpdater->update($context);
         });
 

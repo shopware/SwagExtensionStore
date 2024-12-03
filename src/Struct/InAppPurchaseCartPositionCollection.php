@@ -22,7 +22,7 @@ class InAppPurchaseCartPositionCollection extends Collection
      */
     public static function fromArray(array $data): self
     {
-        $elements = \array_map(static fn(array $element) => InAppPurchaseCartPositionStruct::fromArray($element), $data);
+        $elements = \array_map(static fn (array $element) => InAppPurchaseCartPositionStruct::fromArray($element), $data);
 
         return new self($elements);
     }
@@ -37,17 +37,12 @@ class InAppPurchaseCartPositionCollection extends Collection
         }, $this->elements); // @phpstan-ignore-line property.deprecated will be strictly typed. Remove this ignore for shopware v6.7.0
     }
 
-    protected function getExpectedClass(): ?string
-    {
-        return InAppPurchaseCartPositionStruct::class;
-    }
-
     /**
      * @return array<int, string>
      */
     public function getIdentifiers(): array
     {
-        return $this->map(static fn(InAppPurchaseCartPositionStruct $element) => $element->getInAppFeatureIdentifier());
+        return $this->map(static fn (InAppPurchaseCartPositionStruct $element) => $element->getInAppFeatureIdentifier());
     }
 
     /**
@@ -58,7 +53,12 @@ class InAppPurchaseCartPositionCollection extends Collection
         array $validPurchases,
     ): self {
         return $allPurchases->filter(function (InAppPurchaseCartPositionStruct $purchase) use ($validPurchases) {
-            return \in_array($purchase->getInAppFeatureIdentifier(), $validPurchases);
+            return \in_array($purchase->getInAppFeatureIdentifier(), $validPurchases, true);
         });
+    }
+
+    protected function getExpectedClass(): string
+    {
+        return InAppPurchaseCartPositionStruct::class;
     }
 }

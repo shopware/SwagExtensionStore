@@ -16,16 +16,14 @@ class InAppPurchaseCollectionTest extends TestCase
     {
         $collection = $this->getInAppPurchaseCollection();
 
-        self::assertCount(2, $collection);
+        static::assertCount(2, $collection);
     }
 
     public function testGetIdentifiers(): void
     {
-        $collection = $this->getInAppPurchaseCollection();
+        $identifiers = $this->getInAppPurchaseCollection()->getIdentifiers();
 
-        $identifiers = $collection->getIdentifiers();
-
-        self::assertSame(['purchase_1', 'purchase_2'], $identifiers);
+        static::assertSame(['purchase_1', 'purchase_2'], $identifiers);
     }
 
     public function testFilterValidInAppPurchases(): void
@@ -36,40 +34,40 @@ class InAppPurchaseCollectionTest extends TestCase
 
         $filteredCollection = $allPurchases->filterValidInAppPurchases($allPurchases, $validPurchases);
 
-        self::assertCount(1, $filteredCollection);
+        static::assertCount(1, $filteredCollection);
         $first = $filteredCollection->first();
-        self::assertInstanceOf(InAppPurchaseStruct::class, $first);
-        self::assertSame('purchase_1', $first->getIdentifier());
+        static::assertInstanceOf(InAppPurchaseStruct::class, $first);
+        static::assertSame('purchase_1', $first->getIdentifier());
 
         $validPurchases = ['non_existent_purchase'];
 
         $filteredCollection = $allPurchases->filterValidInAppPurchases($allPurchases, $validPurchases);
 
-        self::assertCount(0, $filteredCollection);
+        static::assertCount(0, $filteredCollection);
 
         $validPurchases = ['purchase_1', 'purchase_2'];
 
         $filteredCollection = $allPurchases->filterValidInAppPurchases($allPurchases, $validPurchases);
 
-        self::assertCount(2, $filteredCollection);
+        static::assertCount(2, $filteredCollection);
         $first = $filteredCollection->first();
-        self::assertInstanceOf(InAppPurchaseStruct::class, $first);
-        self::assertSame('purchase_1', $first->getIdentifier());
+        static::assertInstanceOf(InAppPurchaseStruct::class, $first);
+        static::assertSame('purchase_1', $first->getIdentifier());
         $last = $filteredCollection->last();
-        self::assertInstanceOf(InAppPurchaseStruct::class, $last);
-        self::assertSame('purchase_2', $last->getIdentifier());
+        static::assertInstanceOf(InAppPurchaseStruct::class, $last);
+        static::assertSame('purchase_2', $last->getIdentifier());
 
         $validPurchases = ['purchase_1', 'purchase_2', 'purchase_3'];
 
         $filteredCollection = $allPurchases->filterValidInAppPurchases($allPurchases, $validPurchases);
 
-        self::assertCount(2, $filteredCollection);
+        static::assertCount(2, $filteredCollection);
         $first = $filteredCollection->first();
-        self::assertInstanceOf(InAppPurchaseStruct::class, $first);
-        self::assertSame('purchase_1', $first->getIdentifier());
+        static::assertInstanceOf(InAppPurchaseStruct::class, $first);
+        static::assertSame('purchase_1', $first->getIdentifier());
         $last = $filteredCollection->last();
-        self::assertInstanceOf(InAppPurchaseStruct::class, $last);
-        self::assertSame('purchase_2', $last->getIdentifier());
+        static::assertInstanceOf(InAppPurchaseStruct::class, $last);
+        static::assertSame('purchase_2', $last->getIdentifier());
     }
 
     public function getInAppPurchaseCollection(): InAppPurchaseCollection

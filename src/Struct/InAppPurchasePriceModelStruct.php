@@ -20,7 +20,8 @@ class InAppPurchasePriceModelStruct extends Struct
         protected float $price = 0.0,
         protected ?string $duration = null,
         protected ?bool $oneTimeOnly = null,
-    ) {}
+    ) {
+    }
 
     /**
      * @param InAppPurchasePriceModel $data

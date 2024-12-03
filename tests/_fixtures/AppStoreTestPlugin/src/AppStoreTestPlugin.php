@@ -6,4 +6,6 @@ namespace AppStoreTestPlugin;
 
 use Shopware\Core\Framework\Plugin;
 
-class AppStoreTestPlugin extends Plugin {}
+class AppStoreTestPlugin extends Plugin
+{
+}
