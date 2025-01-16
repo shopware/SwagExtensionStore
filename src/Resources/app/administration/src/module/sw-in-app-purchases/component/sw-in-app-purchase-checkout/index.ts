@@ -6,6 +6,10 @@ interface ErrorResponse {
     errors: Array<ShopwareHttpError>;
 }
 
+interface StoreExtension {
+    name: string;
+}
+
 export default Shopware.Component.wrapComponentConfig({
     template,
 
@@ -24,11 +28,17 @@ export default Shopware.Component.wrapComponentConfig({
             inAppPurchaseCart: null as IAP.InAppPurchaseCart | null,
             extension: null as IAP.Extension | null,
             tosAccepted: false,
-            errorSnippet: null as string | null
+            errorSnippet: null as string | null,
+            storeExtension: '' as string
         };
     },
 
     created() {
+        // @deprecated tag:v4.0.0 - Will be removed as this.store.extension will be only a string in shopware 6.7
+        const extension = this.store.extension as StoreExtension | string;
+        this.storeExtension = Shopware.Utils.types.isObject(extension)
+            ? extension.name
+            : extension;
         this.createdComponent();
     },
 
@@ -73,10 +83,10 @@ export default Shopware.Component.wrapComponentConfig({
 
             await Promise.all([
                 this.cart = this.inAppPurchasesService.createCart(
-                    this.store.extension.name,
+                    this.storeExtension,
                     this.store.entry.identifier
                 ),
-                this.inAppPurchasesService.getExtension(this.store.extension.name)
+                this.inAppPurchasesService.getExtension(this.storeExtension)
             ]).then(([inAppPurchaseCart, extension]) => {
                 this.inAppPurchaseCart = inAppPurchaseCart;
                 this.extension = extension;

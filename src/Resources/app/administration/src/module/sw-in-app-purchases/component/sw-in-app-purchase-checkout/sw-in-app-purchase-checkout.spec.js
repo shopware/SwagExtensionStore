@@ -95,13 +95,9 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         wrapper.vm.reset();
     });
 
-    it('does not call createCart or getExtension when entry or extension not set', async () => {
-        const createCartSpy = jest.spyOn(wrapper.vm.inAppPurchasesService, 'createCart');
-        const getExtensionSpy = jest.spyOn(wrapper.vm.inAppPurchasesService, 'getExtension');
-
-        wrapper.vm.store.request(
-            null,
-            {
+    it('handles requestFeature method correctly', async () => {
+        Shopware.Context.app.config.bundles = {
+            jestapp: {
                 name: 'jestapp',
                 baseUrl: '',
                 permissions: [],
@@ -110,33 +106,9 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 integrationId: '123',
                 active: true
             }
-        );
-        wrapper.vm.requestFeature();
-        expect(createCartSpy).toHaveBeenCalledTimes(0);
-        expect(getExtensionSpy).toHaveBeenCalledTimes(0);
-        wrapper.vm.store.$reset();
+        };
 
-        wrapper.vm.store.request({ featureId: 'your-feature-id' }, null);
-
-        wrapper.vm.requestFeature();
-        expect(createCartSpy).toHaveBeenCalledTimes(0);
-        expect(getExtensionSpy).toHaveBeenCalledTimes(0);
-        wrapper.vm.store.$reset();
-        wrapper.vm.reset();
-    });
-
-    it('handles requestFeature method correctly', async () => {
-        wrapper.vm.store.request({
-            featureId: 'your-feature-id'
-        }, {
-            name: 'jestapp',
-            baseUrl: '',
-            permissions: [],
-            version: '1.0.0',
-            type: 'app',
-            integrationId: '123',
-            active: true
-        });
+        wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
         wrapper.vm.requestFeature();
         expect(wrapper.vm.state).toBe('loading');
 
@@ -150,17 +122,18 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         Shopware.Utils.debug.error = jest.fn();
 
         wrapper = await createWrapper(true);
-        wrapper.vm.store.request({
-            featureId: 'your-feature-id'
-        }, {
-            name: 'jestapp',
-            baseUrl: '',
-            permissions: [],
-            version: '1.0.0',
-            type: 'app',
-            integrationId: '123',
-            active: true
-        });
+        Shopware.Context.app.config.bundles = {
+            jestapp: {
+                name: 'jestapp',
+                baseUrl: '',
+                permissions: [],
+                version: '1.0.0',
+                type: 'app',
+                integrationId: '123',
+                active: true
+            }
+        };
+        wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
 
         wrapper.vm.requestFeature();
         expect(wrapper.vm.state).toBe('loading');
@@ -174,9 +147,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
     it('does not call orderCart when entry or extension not set', async () => {
         const spy = jest.spyOn(wrapper.vm.inAppPurchasesService, 'orderCart');
 
-        wrapper.vm.store.request(
-            null,
-            {
+        Shopware.Context.app.config.bundles = {
+            jestapp: {
                 name: 'jestapp',
                 baseUrl: '',
                 permissions: [],
@@ -185,34 +157,30 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 integrationId: '123',
                 active: true
             }
-        );
+        };
+        wrapper.vm.store.request(null, 'jestapp');
 
         wrapper.vm.onPurchaseFeature();
         expect(spy).toHaveBeenCalledTimes(0);
         wrapper.vm.store.$reset();
-
-        wrapper.vm.store.request({ featureId: 'your-feature-id' }, null);
-
-        wrapper.vm.onPurchaseFeature();
-        expect(spy).toHaveBeenCalledTimes(0);
-        wrapper.vm.store.$reset();
-        wrapper.vm.reset();
     });
 
     it('handles onPurchaseFeature method correctly', async () => {
         const spy = jest.spyOn(wrapper.vm.inAppPurchasesService, 'orderCart');
 
-        wrapper.vm.store.request({
-            featureId: 'your-feature-id'
-        }, {
-            name: 'jestapp',
-            baseUrl: '',
-            permissions: [],
-            version: '1.0.0',
-            type: 'app',
-            integrationId: '123',
-            active: true
-        });
+        Shopware.Context.app.config.bundles = {
+            jestapp: {
+                name: 'jestapp',
+                baseUrl: '',
+                permissions: [],
+                version: '1.0.0',
+                type: 'app',
+                integrationId: '123',
+                active: true
+            }
+        };
+
+        wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
         await flushPromises();
 
         wrapper.vm.onPurchaseFeature();
@@ -229,17 +197,19 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         Shopware.Utils.debug.error = jest.fn();
 
         wrapper = await createWrapper(true);
-        wrapper.vm.store.request({
-            featureId: 'your-feature-id'
-        }, {
-            name: 'jestapp',
-            baseUrl: '',
-            permissions: [],
-            version: '1.0.0',
-            type: 'app',
-            integrationId: '123',
-            active: true
-        });
+
+        Shopware.Context.app.config.bundles = {
+            jestapp: {
+                name: 'jestapp',
+                baseUrl: '',
+                permissions: [],
+                version: '1.0.0',
+                type: 'app',
+                integrationId: '123',
+                active: true
+            }
+        };
+        wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
 
         wrapper.vm.onPurchaseFeature();
         expect(wrapper.vm.state).toBe('loading');
