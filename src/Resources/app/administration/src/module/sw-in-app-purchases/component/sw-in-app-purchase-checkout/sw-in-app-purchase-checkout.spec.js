@@ -278,12 +278,6 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         expect(wrapper.vm.state).toBe('loading');
     });
 
-    it('returns the correct asset filter', () => {
-        const assetFilter = wrapper.vm.assetFilter;
-        expect(assetFilter).toBeDefined();
-        expect(typeof assetFilter).toBe('function');
-    });
-
     it('returns the extension icon correctly', async () => {
         // Test when extension has an icon
         wrapper.setData({

@@ -47,10 +47,6 @@ export default {
             return Shopware.Store.get('session').languageId;
         },
 
-        assetFilter() {
-            return Shopware.Filter.getByName('asset');
-        },
-
         currentLocale() {
             return Shopware.Store.get('session').currentLocale === 'de-DE' ? 'de' : 'en';
         }
