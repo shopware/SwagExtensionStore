@@ -69,21 +69,21 @@ async function createWrapper() {
 const setSearchValueMock = jest.fn();
 describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-index', () => {
     beforeAll(async () => {
-        Shopware.State.registerModule('shopwareExtensions', {
-            namespaced: true,
-            state: {
+        Shopware.Store.register({
+            id: 'shopwareExtensions',
+            state: () => ({
                 search: {
                     filter: {}
                 }
-            },
-            mutations: {
+            }),
+            actions: {
                 setSearchValue: setSearchValueMock
             }
         });
     });
 
     beforeEach(async () => {
-        Shopware.State.get('shopwareExtensions').search.filter = {};
+        Shopware.Store.get('shopwareExtensions').search.filter = {};
         setSearchValueMock.mockClear();
         myExtensionsMock.mockClear();
     });
@@ -99,15 +99,16 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         await flushPromises();
 
         expect(setSearchValueMock).toHaveBeenCalledTimes(1);
-        expect(setSearchValueMock).toHaveBeenCalledWith(expect.anything(), {
+        expect(setSearchValueMock).toHaveBeenCalledWith({
             key: 'page',
             value: 1
         });
+        setSearchValueMock.mockClear();
 
         const searchBar = wrapper.getComponent('.sw-search-bar');
         await searchBar.vm.$emit('search', 'Nice theme');
 
-        expect(setSearchValueMock).toHaveBeenCalledWith(expect.anything(), {
+        expect(setSearchValueMock).toHaveBeenCalledWith({
             key: 'term',
             value: 'Nice theme'
         });
@@ -116,7 +117,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
     it('should filter to only app extensions', async () => {
         await createWrapper();
 
-        const filter = Shopware.State.get('shopwareExtensions').search.filter;
+        const filter = Shopware.Store.get('shopwareExtensions').search.filter;
 
         expect(filter).toEqual({
             group: 'apps'
@@ -129,7 +130,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         wrapper.vm.$route.name = 'sw.extension.store.listing.theme';
         await flushPromises();
 
-        const filter = Shopware.State.get('shopwareExtensions').search.filter;
+        const filter = Shopware.Store.get('shopwareExtensions').search.filter;
 
         expect(filter).toEqual({
             group: 'themes'

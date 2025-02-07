@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
 import ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
 import ShopwareDiscountCampaignService from 'src/app/service/discount-campaign.service';
+import 'src/module/sw-extension/store/extensions.store';
 
 Shopware.Component.register(
     'sw-extension-listing-card',
@@ -53,32 +54,11 @@ describe('sw-extension-listing-card', () => {
     /** @type Wrapper */
     let wrapper;
 
-    beforeAll(() => {
-        Shopware.State.registerModule('shopwareExtensions', {
-            namespaced: true,
-            state: {
-                myExtensions: {
-                    data: [
-                        {
-                            name: 'Test',
-                            installedAt: null
-                        }
-                    ]
-                }
-            },
-            mutations: {
-                setExtension(state, extension) {
-                    state.myExtensions.data = [extension];
-                }
-            }
-        });
-    });
-
     beforeEach(() => {
-        Shopware.State.commit('shopwareExtensions/setExtension', {
+        Shopware.Store.get('shopwareExtensions').setMyExtensions([{
             name: 'Test',
             installedAt: null
-        });
+        }]);
     });
 
     it('should be a Vue.JS component', async () => {
@@ -120,10 +100,10 @@ describe('sw-extension-listing-card', () => {
     });
 
     it('isInstalled should be true when extension is in store', async () => {
-        Shopware.State.commit('shopwareExtensions/setExtension', {
+        Shopware.Store.get('shopwareExtensions').setMyExtensions([{
             name: 'Test',
             installedAt: 'some date'
-        });
+        }]);
 
         wrapper = await createWrapper({
             id: 1,

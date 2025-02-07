@@ -136,7 +136,7 @@ export default {
             // eslint-disable-next-line no-unused-vars
             const trigger = this.tocAccepted;
 
-            return Shopware.State.get('shopwareExtensions').userInfo !== null;
+            return Shopware.Store.get('shopwareExtensions').userInfo !== null;
         },
 
         showPaymentWarning() {

@@ -342,9 +342,9 @@ describe('SwagExtensionStore/module/sw-extension-store/component/sw-extension-st
     let wrapper;
 
     beforeAll(() => {
-        Shopware.State.registerModule('shopwareExtensions', {
-            namespaced: true,
-            state: {
+        Shopware.Store.register({
+            id: 'shopwareExtensions',
+            state: () => ({
                 search: {
                     page: 1,
                     limit: 12,
@@ -353,7 +353,7 @@ describe('SwagExtensionStore/module/sw-extension-store/component/sw-extension-st
                     term: null,
                     filter: {}
                 }
-            }
+            })
         });
     });
 

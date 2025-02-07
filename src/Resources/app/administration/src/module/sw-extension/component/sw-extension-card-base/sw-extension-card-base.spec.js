@@ -10,7 +10,7 @@ Shopware.Component.override(
     () => import('SwagExtensionStore/module/sw-extension/component/sw-extension-card-base')
 );
 
-Shopware.State.get('context').app = { config: { settings: {}, inAppPurchases: { SwagB2BPlatform: ['purchase1', 'purchase2'] } } };
+Shopware.Store.get('context').app = { config: { settings: {}, inAppPurchases: { SwagB2BPlatform: ['purchase1', 'purchase2'] } } };
 
 async function createWrapper(extensionCustomProps = {}) {
     const testExtension = {

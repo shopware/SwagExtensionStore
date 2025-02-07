@@ -69,13 +69,13 @@ export default {
         },
 
         isInstalled() {
-            return !!Shopware.State.get('shopwareExtensions').myExtensions.data.some((installedExtension) => {
+            return !!Shopware.Store.get('shopwareExtensions').myExtensions.data.some((installedExtension) => {
                 return installedExtension.installedAt && installedExtension.name === this.extension.name;
             });
         },
 
         isLicensed() {
-            const extension = Shopware.State.get('shopwareExtensions').myExtensions.data
+            const extension = Shopware.Store.get('shopwareExtensions').myExtensions.data
                 .find((installedExtension) => installedExtension.name === this.extension.name);
 
             if (extension === undefined) {

@@ -10,7 +10,7 @@ import ExtensionStoreLicensesService from
     'SwagExtensionStore/module/sw-extension-store/service/extension-store-licenses.service';
 
 /* stores */
-import extensionStore from 'src/module/sw-extension/store/extensions.store';
+import 'src/module/sw-extension/store/extensions.store';
 
 /* mixin */
 import 'src/module/sw-extension/mixin/sw-extension-error.mixin';
@@ -19,8 +19,6 @@ Shopware.Component.register(
     'sw-extension-buy-modal',
     () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-buy-modal')
 );
-
-Shopware.State.registerModule('shopwareExtensions', extensionStore);
 
 describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
     function provideTestExtension(overrides) {

@@ -80,7 +80,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         wrapper.vm.createdComponent();
 
         // Simulate a state change in the store
-        Shopware.State.commit('extensions/addExtension', {
+        Shopware.Store.get('extensions').addExtension({
             name: 'jestapp',
             baseUrl: '',
             permissions: [],
