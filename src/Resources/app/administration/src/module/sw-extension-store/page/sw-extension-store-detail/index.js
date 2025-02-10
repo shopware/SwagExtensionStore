@@ -57,7 +57,7 @@ export default {
                 return null;
             }
 
-            return Shopware.State.get('shopwareExtensions').myExtensions.data.find((extension) => {
+            return Shopware.Store.get('shopwareExtensions').myExtensions.data.find((extension) => {
                 return extension.id === this.extension.id;
             });
         },
@@ -117,7 +117,7 @@ export default {
         },
 
         languageId() {
-            return Shopware.State.get('session').languageId;
+            return Shopware.Store.get('session').languageId;
         },
 
         recommendedVariant() {
@@ -287,7 +287,7 @@ export default {
         async onClickAddExtension() {
             await this.shopwareExtensionService.checkLogin();
 
-            if (!Shopware.State.get('shopwareExtensions').userInfo) {
+            if (!Shopware.Store.get('shopwareExtensions').userInfo) {
                 this.openAccountModal();
                 return;
             }

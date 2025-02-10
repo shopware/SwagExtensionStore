@@ -22,15 +22,15 @@ export default {
 
     computed: {
         search() {
-            return Shopware.State.get('shopwareExtensions').search;
+            return Shopware.Store.get('shopwareExtensions').search;
         },
 
         activeFilters: {
             get() {
-                return Shopware.State.get('shopwareExtensions').search.filter;
+                return Shopware.Store.get('shopwareExtensions').search.filter;
             },
             set(newFilter) {
-                Shopware.State.get('shopwareExtensions').search.filter = newFilter;
+                Shopware.Store.get('shopwareExtensions').search.filter = newFilter;
             }
         },
 
@@ -143,8 +143,7 @@ export default {
             //  Here we extract both values
             const [field, order] = orderIdentifier.split('##');
 
-            Shopware.State.commit(
-                'shopwareExtensions/setSearchValue',
+            Shopware.Store.get('shopwareExtensions').setSearchValue(
                 { key: 'sorting', value: Criteria.sort(field, order) }
             );
         },

@@ -20,11 +20,11 @@ export default {
 
     computed: {
         extensions() {
-            return Shopware.State.get('shopwareExtensions').extensionListing;
+            return Shopware.Store.get('shopwareExtensions').extensionListing;
         },
 
         currentSearch() {
-            return Shopware.State.get('shopwareExtensions').search;
+            return Shopware.Store.get('shopwareExtensions').search;
         },
 
         page() {
@@ -44,7 +44,7 @@ export default {
         },
 
         languageId() {
-            return Shopware.State.get('session').languageId;
+            return Shopware.Store.get('session').languageId;
         },
 
         assetFilter() {
@@ -52,7 +52,7 @@ export default {
         },
 
         currentLocale() {
-            return Shopware.State.get('session').currentLocale === 'de-DE' ? 'de' : 'en';
+            return Shopware.Store.get('session').currentLocale === 'de-DE' ? 'de' : 'en';
         }
     },
 
@@ -93,16 +93,16 @@ export default {
             const extensionDataService = Shopware.Service('extensionStoreDataService');
 
             const page = await extensionDataService.getExtensionList(
-                Shopware.State.get('shopwareExtensions').search,
-                { ...Shopware.Context.api, languageId: Shopware.State.get('session').languageId }
+                Shopware.Store.get('shopwareExtensions').search,
+                { ...Shopware.Context.api, languageId: Shopware.Store.get('session').languageId }
             );
 
-            Shopware.State.commit('shopwareExtensions/setExtensionListing', page);
+            Shopware.Store.get('shopwareExtensions').extensionListing = page;
         },
 
         setPage({ limit, page }) {
-            Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'limit', value: limit });
-            Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'page', value: page });
+            Shopware.Store.get('shopwareExtensions').setSearchValue({ key: 'limit', value: limit });
+            Shopware.Store.get('shopwareExtensions').setSearchValue({ key: 'page', value: page });
         }
     }
 };

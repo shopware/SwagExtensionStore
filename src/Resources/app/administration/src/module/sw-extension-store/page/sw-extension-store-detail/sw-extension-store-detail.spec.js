@@ -94,9 +94,9 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
     const originalWindowLocation = window.location;
 
     beforeAll(async () => {
-        Shopware.State.registerModule('shopwareExtensions', {
-            namespaced: true,
-            mutations: {
+        Shopware.Store.register({
+            id: 'shopwareExtensions',
+            actions: {
                 setSearchValue: setSearchValueMock
             }
         });
@@ -112,8 +112,8 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
     });
 
     beforeEach(() => {
-        Shopware.State.get('session').languageId = 'b2c3d4';
-        Shopware.State.get('shopwareExtensions').myExtensions = {
+        Shopware.Store.get('session').languageId = 'b2c3d4';
+        Shopware.Store.get('shopwareExtensions').myExtensions = {
             loading: false,
             data: [{
                 active: true,
@@ -127,8 +127,8 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
     });
 
     afterEach(() => {
-        Shopware.State.get('session').languageId = '';
-        Shopware.State.get('shopwareExtensions').myExtensions = { data: [], loading: false };
+        Shopware.Store.get('session').languageId = '';
+        Shopware.Store.get('shopwareExtensions').myExtensions = { data: [], loading: false };
     });
 
     it('should show all extension category names', async () => {
@@ -138,7 +138,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
     });
 
     it('should render alert box when extension is an enterprise feature', async () => {
-        Shopware.State.get('shopwareExtensions').myExtensions = {
+        Shopware.Store.get('shopwareExtensions').myExtensions = {
             data: [{
                 active: true,
                 name: 'SwagB2BPlatform',
@@ -186,7 +186,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
     describe('verify smart bar primary action buttons', () => {
         it('should render "add extension" button when extension is purchasable', async () => {
-            Shopware.State.get('shopwareExtensions').myExtensions = {
+            Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
                     active: true,
                     name: 'TestExtension',
@@ -213,7 +213,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
         });
 
         it('should render "open" button when extension is installed and licensed', async () => {
-            Shopware.State.get('shopwareExtensions').myExtensions = {
+            Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
                     active: true,
                     name: 'SwagB2BPlatform',
@@ -242,7 +242,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
         /* eslint-disable-next-line max-len */
         it('should render "configuration" context menu when extension is installed, licensed and configurable', async () => {
-            Shopware.State.get('shopwareExtensions').myExtensions = {
+            Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
                     active: true,
                     name: 'SwagB2BPlatform',
@@ -272,7 +272,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
         /* eslint-disable-next-line max-len */
         it('should render "configuration" button when extension is installed, licensed and configurable but can\'t be opened', async () => {
-            Shopware.State.get('shopwareExtensions').myExtensions = {
+            Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
                     active: true,
                     name: 'SwagB2BPlatform',
@@ -301,7 +301,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
         });
 
         it('should render "contact us" button when extension is not licensed and has enterprise flag', async () => {
-            Shopware.State.get('shopwareExtensions').myExtensions = {
+            Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
                     active: true,
                     name: 'SwagB2BPlatform',
@@ -323,7 +323,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
         /* eslint-disable-next-line max-len */
         it('should not render any button when extension is not licensed, not purchasable and has no enterprise flag', async () => {
-            Shopware.State.get('shopwareExtensions').myExtensions = {
+            Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
                     active: true,
                     name: 'SomeOtherExtension',
@@ -345,7 +345,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
         });
 
         it('should render in-app-purchase badge when extension has available in-app-purchase', async () => {
-            Shopware.State.get('shopwareExtensions').myExtensions = {
+            Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
                     active: true,
                     name: 'TestExtension',
@@ -367,7 +367,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
         });
 
         it('should not render in-app-purchase badge when extension has available in-app-purchase', async () => {
-            Shopware.State.get('shopwareExtensions').myExtensions = {
+            Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
                     active: true,
                     name: 'TestExtension',

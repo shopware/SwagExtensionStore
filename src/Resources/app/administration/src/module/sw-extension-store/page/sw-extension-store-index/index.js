@@ -32,11 +32,11 @@ export default {
         },
 
         activeFilters() {
-            return Shopware.State.get('shopwareExtensions').search.filter;
+            return Shopware.Store.get('shopwareExtensions').search.filter;
         },
 
         searchValue() {
-            return Shopware.State.get('shopwareExtensions').search.term;
+            return Shopware.Store.get('shopwareExtensions').search.term;
         },
 
         isTheme() {
@@ -50,7 +50,7 @@ export default {
         isTheme: {
             immediate: true,
             handler(newValue) {
-                Shopware.State.commit('shopwareExtensions/setSearchValue', {
+                Shopware.Store.get('shopwareExtensions').setSearchValue({
                     key: 'page',
                     value: 1
                 });
@@ -114,7 +114,7 @@ export default {
         },
 
         updateSearch(term) {
-            Shopware.State.commit('shopwareExtensions/setSearchValue', {
+            Shopware.Store.get('shopwareExtensions').setSearchValue({
                 key: 'term',
                 value: term
             });
