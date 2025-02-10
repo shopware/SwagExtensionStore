@@ -28,17 +28,11 @@ export default Shopware.Component.wrapComponentConfig({
             inAppPurchaseCart: null as IAP.InAppPurchaseCart | null,
             extension: null as IAP.Extension | null,
             tosAccepted: false,
-            errorSnippet: null as string | null,
-            storeExtension: '' as string
+            errorSnippet: null as string | null
         };
     },
 
     created() {
-        // @deprecated tag:v4.0.0 - Will be removed as this.store.extension will be only a string in shopware 6.7
-        const extension = this.store.extension as StoreExtension | string;
-        this.storeExtension = Shopware.Utils.types.isObject(extension)
-            ? extension.name
-            : extension;
         this.createdComponent();
     },
 
@@ -62,6 +56,15 @@ export default Shopware.Component.wrapComponentConfig({
             }
 
             return this.assetFilter('administration/static/img/theme/default_theme_preview.jpg');
+        },
+        storeExtension() {
+            // @deprecated tag:v4.0.0 - Will be removed as this.store.extension will be only a string in shopware 6.7
+            const extension = this.store.extension as StoreExtension | string | null;
+            const name = Shopware.Utils.types.isObject(extension)
+                ? extension?.name
+                : extension;
+
+            return name ?? '';
         }
     },
 
