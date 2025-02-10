@@ -2,7 +2,7 @@ name: Administration
 on:
   push:
     branches:
-      - trunk
+      - 6.6.x
   pull_request:
   workflow_dispatch:
 
@@ -19,7 +19,7 @@ jobs:
         uses: shopware/github-actions/setup-extension@main
         with:
           extensionName: SwagExtensionStore
-          shopwareVersion: trunk
+          shopwareVersion: 6.6.x
           install-admin: true
 
       - name: Jest Unit Tests
@@ -40,4 +40,4 @@ jobs:
     uses: shopware/github-actions/.github/workflows/admin-eslint.yml@main
     with:
       extensionName: ${{ github.event.repository.name }}
-      shopwareVersion: trunk
+      shopwareVersion: 6.6.x
