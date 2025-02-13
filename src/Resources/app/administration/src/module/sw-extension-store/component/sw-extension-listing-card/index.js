@@ -1,7 +1,8 @@
+import defaultThemePreview from 'SwagExtensionStore/../static/img/theme/default_theme_preview.jpg?url';
 import template from './sw-extension-listing-card.html.twig';
 import './sw-extension-listing-card.scss';
 
-const { Utils, Filter } = Shopware;
+const { Utils } = Shopware;
 
 /**
  * @private
@@ -25,9 +26,8 @@ export default {
             const image = Utils.get(this.extension, 'images[0]', null);
 
             if (!image) {
-                const previewImage = this.assetFilter('/administration/static/img/theme/default_theme_preview.jpg');
                 return {
-                    'background-image': `url('${previewImage}')`
+                    'background-image': `url('${defaultThemePreview}')`
                 };
             }
 
@@ -83,10 +83,6 @@ export default {
             }
 
             return !!extension.storeLicense;
-        },
-
-        assetFilter() {
-            return Filter.getByName('asset');
         }
     },
 

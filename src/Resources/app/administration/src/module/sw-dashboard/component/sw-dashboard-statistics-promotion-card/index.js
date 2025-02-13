@@ -1,3 +1,5 @@
+import analyticsPromotionIcon from 'SwagExtensionStore/../static/img/analytics/extension/icon.svg?url';
+import analyticsPromotionGraphic from 'SwagExtensionStore/../static/img/analytics/promotion/graphic.svg?url';
 import template from './sw-dashboard-statistics-promotion-card.html.twig';
 import './sw-dashboard-statistics-promotion-card.scss';
 
@@ -34,6 +36,8 @@ export default Shopware.Component.wrapComponentConfig({
 
     data() {
         return {
+            analyticsPromotionIcon,
+            analyticsPromotionGraphic,
             isAppInstalled: false,
             routeToApp: null
         };
@@ -51,10 +55,6 @@ export default Shopware.Component.wrapComponentConfig({
 
         linkToStatisticsAppExists() {
             return !!this.routeToApp;
-        },
-
-        assetFilter() {
-            return Shopware.Filter.getByName('asset');
         }
     },
 
