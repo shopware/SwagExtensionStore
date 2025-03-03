@@ -16,7 +16,8 @@ async function createWrapper(overrides) {
         },
         global: {
             stubs: {
-                'sw-icon': true
+                'sw-icon': true,
+                'sw-alert': true
             }
         }
     });

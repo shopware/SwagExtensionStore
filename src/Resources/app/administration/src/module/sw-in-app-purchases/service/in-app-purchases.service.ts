@@ -1,4 +1,4 @@
-import type * as IAP from 'src/module/sw-in-app-purchases/types';
+import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import type { LoginService } from 'src/core/service/login.service';
 import type { AxiosInstance } from 'axios';
 
@@ -41,7 +41,7 @@ export default class InAppPurchasesService extends ApiService {
     }
 
     async refreshInAppPurchases() {
-        return this.httpClient.get(
+        return this.httpClient.get<never>(
             `_action/${this.apiEndpoint}/refresh`,
             { headers: this.getBasicHeaders() }
         ).then(ApiService.handleResponse.bind(this));

@@ -67,7 +67,7 @@ module.exports = {
             '@shopware-ag/eslint-config-base',
             'plugin:@typescript-eslint/eslint-recommended',
             'plugin:@typescript-eslint/recommended',
-            'plugin:@typescript-eslint/recommended-requiring-type-checking',
+            'plugin:@typescript-eslint/recommended-requiring-type-checking'
         ],
         parser: '@typescript-eslint/parser',
         parserOptions: {
@@ -82,7 +82,6 @@ module.exports = {
             'no-unused-vars': 'off',
             'no-shadow': 'off',
 
-            '@typescript-eslint/indent': ['error', 4, { SwitchCase: 1 }],
             '@typescript-eslint/ban-ts-comment': 0,
             '@typescript-eslint/no-unsafe-member-access': 'error',
             '@typescript-eslint/no-unsafe-call': 'error',
@@ -99,8 +98,7 @@ module.exports = {
                 caughtErrorsIgnorePattern: '^_'
             }],
             '@typescript-eslint/no-namespace': 'off',
-            '@typescript-eslint/restrict-template-expressions': 'off',
-            '@typescript-eslint/member-delimiter-style': 'error'
+            '@typescript-eslint/restrict-template-expressions': 'off'
         }
     }]
 };

@@ -15,7 +15,8 @@ async function createWrapper() {
             stubs: {
                 'sw-icon': {
                     template: '<div class="sw-icon"></div>'
-                }
+                },
+                'sw-loader': true
             },
             provide: {}
         }
@@ -23,7 +24,6 @@ async function createWrapper() {
 }
 
 describe('src/module/sw-extension-store/component/sw-extension-store-slider', () => {
-    /** @type Wrapper */
     let wrapper;
 
     beforeEach(async () => {

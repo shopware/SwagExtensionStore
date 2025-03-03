@@ -49,25 +49,45 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAp
         global: {
             renderStubDefaultSlot: true,
             stubs: {
+                /* sw-meteor-page */
                 'sw-meteor-page': await wrapTestComponent('sw-meteor-page'),
+                'sw-notification-center': true,
+                'sw-help-center-v2': true,
+                'sw-meteor-page-context': true,
+                'sw-meteor-navigation': true,
+                'sw-tabs': true,
+                'sw-extension-component-section': true,
+                'sw-app-topbar-button': true,
                 'sw-search-bar': {
                     template: '<div class="sw-search-bar"></div>'
                 },
+                /* sw-meteor-page */
+
                 'sw-loader': true,
                 'sw-extension-type-label': true,
                 'sw-extension-store-slider': true,
                 'sw-icon': true,
                 'sw-meteor-card': true,
                 'sw-button': await wrapTestComponent('sw-button'),
+                'sw-label': await wrapTestComponent('sw-label'),
                 'sw-button-group': true,
                 'sw-context-button': true,
                 'sw-context-menu-item': true,
                 'sw-extension-ratings-card': true,
                 'sw-button-process': await wrapTestComponent('sw-button-process'),
                 'sw-alert': true,
-                'sw-notification-center': true,
-                'sw-meteor-navigation': true,
-                'sw-help-center': true
+                'sw-extension-rating-stars': true,
+                'router-link': {
+                    template: '<div class="router-link"><slot></slot></div>'
+                },
+                'sw-extension-store-label-display': true,
+                'sw-extension-buy-modal': true,
+                'sw-extension-permissions-modal': true,
+                'sw-extension-my-extensions-account': true,
+                'sw-extension-adding-failed': true,
+                'sw-extension-store-in-app-purchases-listing-modal': true,
+                'sw-extension-icon': true,
+                'sw-external-link': true
             },
             provide: {
                 shopwareExtensionService: {

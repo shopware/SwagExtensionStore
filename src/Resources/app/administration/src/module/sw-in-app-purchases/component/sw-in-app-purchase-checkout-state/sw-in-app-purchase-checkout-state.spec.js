@@ -5,9 +5,16 @@ Shopware.Component.register(
     () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-state')
 );
 
-async function createWrapper(propsData) {
+async function createWrapper(props) {
     return mount(await Shopware.Component.build('sw-in-app-purchase-checkout-state'), {
-        propsData
+        props,
+        global: {
+            stubs: {
+                'sw-button': true,
+                'sw-loader': true,
+                'sw-icon': true
+            }
+        }
     });
 }
 
