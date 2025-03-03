@@ -8,14 +8,14 @@
                 v-if="showBadge"
                 class="sw-dashboard-statistics-promotion-banner__advertisement-details-badge"
             >
-                {{ $tc('badge-new') }}
+                {{ $t('sw-dashboard-statistics-promotion-card.badge-new') }}
             </div>
             <h3 class="sw-dashboard-statistics-promotion-banner__advertisement-details-title">
-                {{ $tc('promotion-title') }}
+                {{ $t('sw-dashboard-statistics-promotion-card.promotion-title') }}
             </h3>
 
             <div class="sw-dashboard-statistics-promotion-banner__advertisement-details-description">
-                {{ $tc('promotion-text') }}
+                {{ $t('sw-dashboard-statistics-promotion-card.promotion-text') }}
             </div>
         </div>
         <div class="sw-dashboard-statistics-promotion-banner__advertisement-graph">
@@ -32,11 +32,11 @@
 
             <div class="sw-dashboard-statistics-promotion-banner__app-card-app-info">
                 <h4 class="sw-dashboard-statistics-promotion-banner__app-card-app-info-name">
-                    {{ $tc('app-name') }}
+                    {{ $t('sw-dashboard-statistics-promotion-card.app-name') }}
                 </h4>
 
                 <span class="sw-dashboard-statistics-promotion-banner__app-card-app-info-description">
-                    {{ $tc('app-description') }}
+                    {{ $t('sw-dashboard-statistics-promotion-card.app-description') }}
                 </span>
             </div>
         </div>
@@ -47,7 +47,7 @@
             :disabled="!linkToStatisticsAppExists"
             @click="goToStatisticsAppDetailPage"
         >
-            {{ $tc('go-to-app') }} <sw-icon name="regular-long-arrow-right" size="12px" />
+            {{ $t('sw-dashboard-statistics-promotion-card.go-to-app') }} <sw-icon name="regular-long-arrow-right" size="12px" />
         </sw-button>
     </div>
 </div>

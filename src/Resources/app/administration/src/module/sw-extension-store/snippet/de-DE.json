@@ -67,5 +67,10 @@
                 "paymentMeansRequiredLinkText": "eine Zahlungsmethode hinzufügen"
             }
         }
+    },
+    "sw-extension-store-statistics-promotion": {
+        "app-name": "Shopware Analytics",
+        "app-description": "Erfasse wichtige Shop-Kennzahlen",
+        "go-to-app": "Jetzt ausprobieren"
     }
 }

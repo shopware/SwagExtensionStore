@@ -6,7 +6,7 @@
         </span>
 
         <span v-if="extension.inAppFeaturesAvailable" class="sw-extension-card-base__in-app-purchase__badge">
-            {{ $tc('sw-extension.in-app-purchase.badge-label') }}
+            {{ $t('sw-extension.in-app-purchase.badge-label') }}
         </span>
     </section>
 </div>
@@ -17,7 +17,7 @@
 
     <sw-context-menu-item v-if="hasActiveInAppPurchases(extension.name)" @click="openAccountPage" class="sw-extension-card-base__in-app-purchase__store_link">
         <sw-external-link>
-            {{ $tc('sw-extension.in-app-purchase.context-menu.account-link-label') }}
+            {{ $t('sw-extension.in-app-purchase.context-menu.account-link-label') }}
         </sw-external-link>
     </sw-context-menu-item>
 {% endblock %}

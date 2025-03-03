@@ -245,7 +245,7 @@ export default {
                     this.fetchError = errorData;
 
                     // eslint-disable-next-line max-len
-                    const docLink = this.$tc('sw-extension.errors.messageToTheShopwareDocumentation', 0, errorData.meta);
+                    const docLink = this.$t('sw-extension.errors.messageToTheShopwareDocumentation', errorData.meta);
 
                     this.createNotificationError({
                         title: errorData.title,

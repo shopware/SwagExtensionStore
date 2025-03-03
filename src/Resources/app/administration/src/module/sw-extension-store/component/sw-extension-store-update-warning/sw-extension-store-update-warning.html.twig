@@ -2,15 +2,15 @@
     <sw-extension-store-error-card
         variant="info"
         class="sw-extension-store-update-warning"
-        :title="$tc('sw-extension-store.updateWarning.headline')"
+        :title="$t('sw-extension-store.updateWarning.headline')"
     >
         <template #default>
             {% block sw_extension_store_update_warning_description %}
                 <p>
-                    {{ $tc('sw-extension-store.updateWarning.description') }}
+                    {{ $t('sw-extension-store.updateWarning.description') }}
                 </p>
                 <p class="sw-extension-store-update-warning__strong-text">
-                    {{ $tc('sw-extension-store.updateWarning.requestDescription') }}
+                    {{ $t('sw-extension-store.updateWarning.requestDescription') }}
                 </p>
             {% endblock %}
         </template>
@@ -22,7 +22,7 @@
                     @click="updateExtension"
                     :isLoading="isUpdating"
                 >
-                    {{ $tc('sw-extension-store.updateWarning.update') }}
+                    {{ $t('sw-extension-store.updateWarning.update') }}
                 </sw-button>
             {% endblock %}
         </template>

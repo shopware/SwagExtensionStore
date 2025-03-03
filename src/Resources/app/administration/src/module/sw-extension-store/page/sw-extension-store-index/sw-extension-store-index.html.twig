@@ -9,7 +9,7 @@
                             @search="updateSearch"
                             :initialSearch="searchValue"
                             initialSearchType="extension"
-                            :placeholder="$tc('sw-extension-store.listing.placeholderSearchBar')"
+                            :placeholder="$t('sw-extension-store.listing.placeholderSearchBar')"
                         />
                     {% endblock %}
                 </template>
@@ -20,13 +20,13 @@
                     {% block sw_extension_store_index_tabs %}
                         {% block sw_extension_store_index_tabs_extensions_app %}
                             <sw-tabs-item :route="{ name: 'sw.extension.store.listing.app' }" :disabled="!isAvailable">
-                                {{ $tc('sw-extension-store.tabs.apps') }}
+                                {{ $t('sw-extension-store.tabs.apps') }}
                             </sw-tabs-item>
                         {% endblock %}
 
                         {% block sw_extension_store_index_tabs_extensions_theme %}
                             <sw-tabs-item :route="{ name: 'sw.extension.store.listing.theme' }" :disabled="!isAvailable">
-                                {{ $tc('sw-extension-store.tabs.themes') }}
+                                {{ $t('sw-extension-store.tabs.themes') }}
                             </sw-tabs-item>
                         {% endblock %}
                     {% endblock %}
@@ -52,10 +52,10 @@
                             {% block sw_extension_store_index_content_offline_warning %}
                                 <sw-extension-store-error-card
                                     v-else-if="failReason === 'offline'"
-                                    :title="$tc('sw-extension-store.offline.headline')"
+                                    :title="$t('sw-extension-store.offline.headline')"
                                     variant="danger"
                                 >
-                                    {{ $tc('sw-extension-store.offline.description') }}
+                                    {{ $t('sw-extension-store.offline.description') }}
                                 </sw-extension-store-error-card>
                             {% endblock %}
 

@@ -6,10 +6,13 @@
     :disabled="disabled"
     @click="onClick"
 >
-    {{ text }}
+    <div class="sw-in-app-purchase-checkout-button__content">
+        {{ text }}
 
-    <sw-icon
-        v-if="state === 'purchase'"
-        name="regular-long-arrow-right"
-    />
+        <sw-icon
+            v-if="state === 'purchase'"
+            name="regular-long-arrow-right"
+            size="16px"
+        />
+    </div>
 </sw-button>

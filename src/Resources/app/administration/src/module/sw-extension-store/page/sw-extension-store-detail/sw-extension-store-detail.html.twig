@@ -56,7 +56,7 @@
                 <template #smart-bar-header-meta>
                     {% block sw_extension_store_detail_smart_bar_producer_name %}
                         <span v-if="extension.producerWebsite && extension.producerName">
-                            {{ $tc('sw-extension-store.detail.labelBy') }}
+                            {{ $t('sw-extension-store.detail.labelBy') }}
 
                             <sw-external-link
                                 small
@@ -68,7 +68,7 @@
                         </span>
 
                         <span v-else-if="extension.producerName">
-                            {{ $tc('sw-extension-store.detail.labelBy') }} {{ extension.producerName }}
+                            {{ $t('sw-extension-store.detail.labelBy') }} {{ extension.producerName }}
                         </span>
                     {% endblock %}
 
@@ -101,7 +101,7 @@
                                                         class="sw-extension-store-detail__number-of-reviews"
                                                         :to="{ name: 'sw.extension.store.detail', params: { id: id }, hash: '#ratings-card'}"
                                                     >
-                                                        {{ $tc('sw-extension-store.detail.numberOfRatings', extension.numberOfRatings)}}
+                                                        {{ $t('sw-extension-store.detail.numberOfRatings', extension.numberOfRatings)}}
                                                     </router-link>
                                                 {% endblock %}
 
@@ -121,7 +121,7 @@
                                                         size="12px"
                                                     ></sw-icon>
 
-                                                    <span class="sw-extension-store-detail__no-ratings-text">{{ $tc('sw-extension-store.detail.noRatings') }}</span>
+                                                    <span class="sw-extension-store-detail__no-ratings-text">{{ $t('sw-extension-store.detail.noRatings') }}</span>
                                                 {% endblock %}
                                             </template>
                                         {% endblock %}
@@ -145,10 +145,10 @@
                                         class="sw-extension-store-detail__action-add-extension"
                                     >
                                         <template v-if="extension && extension.isTheme">
-                                            {{ $tc('sw-extension-store.detail.labelButtonAddTheme') }}
+                                            {{ $t('sw-extension-store.detail.labelButtonAddTheme') }}
                                         </template>
                                         <template v-else>
-                                            {{ $tc('sw-extension-store.detail.labelButtonAddExtension') }}
+                                            {{ $t('sw-extension-store.detail.labelButtonAddExtension') }}
                                         </template>
                                     </sw-button>
                                 {% endblock %}
@@ -156,7 +156,7 @@
                                 {% block sw_extension_store_detail_smart_bar_price %}
                                     <template v-if="recommendedVariant && recommendedVariant.netPrice == 0">
                                         <span class="sw-extension-store-detail__price-free">
-                                            {{ $tc('sw-extension-store.general.labelFree') }}
+                                            {{ $t('sw-extension-store.general.labelFree') }}
                                         </span>
                                     </template>
                                     <span
@@ -176,7 +176,7 @@
                                             v-if="shopwareExtensionService.mapVariantToRecommendation(recommendedVariant) === 1"
                                             class="sw-extension-store-detail__rent-suffix"
                                         >
-                                            {{ $tc('sw-extension-store.general.labelRentSuffix') }}
+                                            {{ $t('sw-extension-store.general.labelRentSuffix') }}
                                         </span>
                                     </span>
                                 {% endblock %}
@@ -187,10 +187,10 @@
                                         class="sw-extension-store-detail__discounted-price-info"
                                     >
                                         <template v-if="!!discountAppliesForMonths">
-                                            {{ $tc('sw-extension-store.detail.labelDiscountPeriod', discountAppliesForMonths, { months: discountAppliesForMonths }) }}
+                                            {{ $t('sw-extension-store.detail.labelDiscountPeriod', { months: discountAppliesForMonths }, discountAppliesForMonths) }}
                                         </template>
 
-                                        {{ $tc('sw-extension-store.detail.labelDiscountInfo', 0, { endDate: dateFilter(recommendedVariant.discountCampaign.endDate) }) }}
+                                        {{ $t('sw-extension-store.detail.labelDiscountInfo', { endDate: dateFilter(recommendedVariant.discountCampaign.endDate) }) }}
                                     </small>
                                 {% endblock %}
 
@@ -200,13 +200,13 @@
                                         @click="onClickAddExtension"
                                         class="sw-extension-store-detail__trial-info"
                                     >
-                                        {{ $tc('sw-extension-store.detail.hasTrialPhase') }}
+                                        {{ $t('sw-extension-store.detail.hasTrialPhase') }}
                                     </sw-button>
                                 {% endblock %}
 
                                 {% block sw_extension_store_detail_smart_bar_in_app_purchases_badge %}
                                     <span v-if="extension.inAppFeaturesAvailable" class="sw-extension-store-detail__in-app-purchases__badge">
-                                        {{ $tc('sw-extension.in-app-purchase.badge-label') }}
+                                        {{ $t('sw-extension.in-app-purchase.badge-label') }}
                                     </span>
                                 {% endblock %}
                             {% endblock %}
@@ -224,10 +224,10 @@
                                     class="sw-extension-store-detail__action-install-extension"
                                 >
                                     <template v-if="extension && extension.isTheme">
-                                        {{ $tc('sw-extension-store.detail.labelButtonInstallTheme') }}
+                                        {{ $t('sw-extension-store.detail.labelButtonInstallTheme') }}
                                     </template>
                                     <template v-else>
-                                        {{ $tc('sw-extension-store.detail.labelButtonInstallExtension') }}
+                                        {{ $t('sw-extension-store.detail.labelButtonInstallExtension') }}
                                     </template>
                                 </sw-button-process>
                             {% endblock %}
@@ -240,10 +240,10 @@
                                     class="sw-extension-store-detail__action-open-listing"
                                 >
                                     <template v-if="extension && extension.isTheme">
-                                        {{ $tc('sw-extension-store.detail.themeIsAlreadyInstalled') }}
+                                        {{ $t('sw-extension-store.detail.themeIsAlreadyInstalled') }}
                                     </template>
                                     <template v-else>
-                                        {{ $tc('sw-extension-store.detail.extensionIsAlreadyInstalled') }}
+                                        {{ $t('sw-extension-store.detail.extensionIsAlreadyInstalled') }}
                                     </template>
                                 </sw-button>
                             {% endblock %}
@@ -260,10 +260,10 @@
                                             class="sw-extension-store-detail__action-open-extension"
                                         >
                                             <template v-if="extension && extension.isTheme">
-                                                {{ $tc('sw-extension-store.detail.labelButtonOpenTheme') }}
+                                                {{ $t('sw-extension-store.detail.labelButtonOpenTheme') }}
                                             </template>
                                             <template v-else>
-                                                {{ $tc('sw-extension-store.detail.labelButtonOpenExtension') }}
+                                                {{ $t('sw-extension-store.detail.labelButtonOpenExtension') }}
                                             </template>
                                         </sw-button>
                                     {% endblock %}
@@ -286,7 +286,7 @@
                                             </template>
 
                                             <sw-context-menu-item @click="openConfiguration">
-                                                {{ $tc('sw-extension-store.detail.openConfiguration') }}
+                                                {{ $t('sw-extension-store.detail.openConfiguration') }}
                                             </sw-context-menu-item>
                                         </sw-context-button>
                                     {% endblock %}
@@ -300,7 +300,7 @@
                                     variant="primary"
                                     class="sw-extension-store-detail__action-open-configuration"
                                 >
-                                    {{ $tc('sw-extension-store.detail.openConfiguration') }}
+                                    {{ $t('sw-extension-store.detail.openConfiguration') }}
                                 </sw-button>
                             {% endblock %}
                         </template>
@@ -309,10 +309,10 @@
                             {% block sw_extension_store_detail_smart_bar_actions_enterprise_contact %}
                                 <sw-button
                                     variant="primary"
-                                    :link="$tc('sw-extension-store.detail.enterpriseContactUrl')"
+                                    :link="$t('sw-extension-store.detail.enterpriseContactUrl')"
                                     class="sw-extension-store-detail__action-enterprise-contact"
                                 >
-                                    {{ $tc('sw-extension-store.detail.enterpriseContactLinkText') }}
+                                    {{ $t('sw-extension-store.detail.enterpriseContactLinkText') }}
                                     <sw-icon
                                         name="regular-external-link"
                                         size="12"
@@ -373,7 +373,7 @@
                                 name="solid-shield"
                                 size="16px"
                             ></sw-icon>
-                            {{ $tc('sw-extension-store.detail.labelButtonShowPermissions') }}
+                            {{ $t('sw-extension-store.detail.labelButtonShowPermissions') }}
                         </sw-button>
                     {% endblock %}
                 </template>
@@ -387,7 +387,7 @@
                     variant="info"
                     class="sw-extension-store-detail__alert"
                 >
-                    {{ $tc('sw-extension-store.detail.enterpriseFeatureAlertText') }}
+                    {{ $t('sw-extension-store.detail.enterpriseFeatureAlertText') }}
                 </sw-alert>
             {% endblock %}
 
@@ -400,7 +400,7 @@
 
             {% block sw_extension_store_detail_card_info %}
                 <sw-meteor-card
-                    :title="$tc('sw-extension-store.detail.cardTitleInformation')"
+                    :title="$t('sw-extension-store.detail.cardTitleInformation')"
                     class="sw-extension-store-detail--user-provided-data"
                 >
                     {% block sw_extension_store_detail_card_info_content %}
@@ -418,50 +418,50 @@
                             size="small"
                             class="sw-extension-store-detail__button-extend-description"
                         >
-                            {{ $tc('sw-extension-store.detail.labelButtonReadMore') }}
+                            {{ $t('sw-extension-store.detail.labelButtonReadMore') }}
                         </sw-button>
                     {% endblock %}
                 </sw-meteor-card>
             {% endblock %}
 
             {% block sw_extension_store_detail_card_details %}
-                <sw-meteor-card :title="$tc('sw-extension-store.detail.cardTitleDetails')">
+                <sw-meteor-card :title="$t('sw-extension-store.detail.cardTitleDetails')">
                     {% block sw_extension_store_detail_card_details_content %}
                         <dl class="sw-extension-store-detail__details-list">
                             {% block sw_extension_store_detail_card_details_category %}
-                                <dt>{{ $tc('sw-extension-store.detail.details.labelCategory', extension.categories.length ) }}</dt>
+                                <dt>{{ $t('sw-extension-store.detail.details.labelCategory', extension.categories.length) }}</dt>
                                 <dd>{{ extensionCategoryNames }}</dd>
                             {% endblock %}
 
                             {% block sw_extension_store_detail_card_details_version %}
-                                <dt>{{ $tc('sw-extension-store.detail.details.labelVersion') }}</dt>
+                                <dt>{{ $t('sw-extension-store.detail.details.labelVersion') }}</dt>
                                 <dd>{{ extension.latestVersion }}</dd>
                             {% endblock %}
 
                             {% block sw_extension_store_detail_card_details_updated_at %}
-                                <dt>{{ $tc('sw-extension-store.detail.details.labelUpdatedAt') }}</dt>
+                                <dt>{{ $t('sw-extension-store.detail.details.labelUpdatedAt') }}</dt>
                                 <dd>{{ dateFilter(extension.lastUpdateDate, { month: 'numeric', year: 'numeric', hour: undefined, minute: undefined }) }}</dd>
                             {% endblock %}
 
                             {% block sw_extension_store_detail_card_details_languages %}
-                                <dt v-if="extensionLanguages.length">{{ $tc('sw-extension-store.detail.details.labelLanguages') }}</dt>
+                                <dt v-if="extensionLanguages.length">{{ $t('sw-extension-store.detail.details.labelLanguages') }}</dt>
                                 <dd>{{ extensionLanguages }}</dd>
                             {% endblock %}
 
                             {% block sw_extension_store_detail_card_details_in_app_purchases %}
                                 <template v-if="inAppPurchases.length">
-                                    <dt>{{ $tc('sw-extension-store.detail.inAppPurchases.label') }}</dt>
+                                    <dt>{{ $t('sw-extension-store.detail.inAppPurchases.label') }}</dt>
                                     <dd>
                                         <span class="sw-extension-store-detail-card-details-in-app-purchases__count">
                                             {{ inAppPurchases.length }}
                                         </span>
                                         <a
-                                            :title="$tc('sw-extension-store.component.sw-extension-card-base.contextMenu.seeDetailsLabel')"
+                                            :title="$t('sw-extension-store.component.sw-extension-card-base.contextMenu.seeDetailsLabel')"
                                             class="sw-extension-store-detail-card-details-in-app-purchases__modal-link"
                                             role="button"
                                             @click="openInAppPurchasesListingModal"
                                         >
-                                            {{ $tc('sw-extension-store.component.sw-extension-card-base.contextMenu.seeDetailsLabel') }}
+                                            {{ $t('sw-extension-store.component.sw-extension-card-base.contextMenu.seeDetailsLabel') }}
                                         </a>
                                     </dd>
                                 </template>
@@ -471,7 +471,7 @@
                                 <template v-if="extension.producerWebsite">
                                     <dt>
                                         <sw-external-link :href="extension.producerWebsite">
-                                            {{ $tc('sw-extension-store.detail.details.labelWebsite') }}
+                                            {{ $t('sw-extension-store.detail.details.labelWebsite') }}
                                         </sw-external-link>
                                     </dt>
                                     <dd></dd>
@@ -482,7 +482,7 @@
                                 <template v-if="extension.privacyPolicyLink">
                                     <dt>
                                         <sw-external-link :href="extension.privacyPolicyLink">
-                                            {{ $tc('sw-extension-store.detail.details.labelPrivacy') }}
+                                            {{ $t('sw-extension-store.detail.details.labelPrivacy') }}
                                         </sw-external-link>
                                     </dt>
                                     <dd></dd>
@@ -508,7 +508,7 @@
             {% block sw_extension_store_detail_card_faq %}
                 <sw-meteor-card
                     v-if="extension.faq.length > 0"
-                    :title="$tc('sw-extension-store.detail.cardTitleFAQ')"
+                    :title="$t('sw-extension-store.detail.cardTitleFAQ')"
                 >
                     {% block sw_extension_store_detail_card_faq_questions %}
                         <section
@@ -531,7 +531,7 @@
             {% block sw_extension_store_detail_card_changelog %}
                 <sw-meteor-card
                     v-if="orderedBinaries.length > 0"
-                    :title="$tc('sw-extension-store.detail.cardTitleChangelog')"
+                    :title="$t('sw-extension-store.detail.cardTitleChangelog')"
                 >
                     {% block sw_extension_store_detail_card_changelog_entries %}
                         <section
@@ -575,7 +575,7 @@
                     :extensionLabel="extension.label"
                     :domains="extension.domains"
                     :permissions="extension.permissions"
-                    :actionLabel="$tc('sw-extension-store.component.sw-extension-card-base.labelAcceptAndInstall')"
+                    :actionLabel="$t('sw-extension-store.component.sw-extension-card-base.labelAcceptAndInstall')"
                     @modal-close="closeAcceptPermissionsModal"
                     @close-with-action="closePermissionsModalAndInstallExtension"
                 ></sw-extension-permissions-modal>

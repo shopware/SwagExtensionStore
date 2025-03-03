@@ -1,5 +1,5 @@
 <sw-modal
-    :title="$tc('sw-extension-store.detail.inAppPurchases.label')"
+    :title="$t('sw-extension-store.detail.inAppPurchases.label')"
     :subtitle="extension.name"
     variant="default"
     class="sw-extension-store-detail-in-app-purchases-listing-modal"
@@ -37,7 +37,7 @@
                 </span>
 
                 <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__description">
-                    {{ $tc('sw-extension-store.detail.inAppPurchases.paymentOptions') }}
+                    {{ $t('sw-extension-store.detail.inAppPurchases.paymentOptions') }}
                 </span>
 
                 <ul class="sw-extension-store-detail-in-app-purchases-listing-modal-content__payment-options">
@@ -47,7 +47,7 @@
         </sw-collapse>
     {% endblock %}
     <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__tax-notice">
-        {{ $tc('sw-extension-store.general.taxNotice') }}
+        {{ $t('sw-extension-store.general.taxNotice') }}
     </span>
 
     <template #modal-footer>
@@ -55,7 +55,7 @@
             variant="context"
             size="small"
             @click="closeInAppPurchasesListingModal">
-            {{ $tc('global.default.close') }}
+            {{ $t('global.default.close') }}
         </mt-button>
     </template>
 </sw-modal>

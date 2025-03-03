@@ -1,5 +1,4 @@
 import template from './sw-in-app-purchase-checkout-button.html.twig';
-import './sw-in-app-purchase-checkout-button.scss';
 
 export default Shopware.Component.wrapComponentConfig({
     template,
@@ -27,11 +26,11 @@ export default Shopware.Component.wrapComponentConfig({
         text() {
             switch (this.state) {
                 case 'error':
-                    return this.$tc('sw-in-app-purchase-checkout-button.tryAgainButton');
+                    return this.$t('sw-in-app-purchase-checkout-button.tryAgainButton');
                 case 'success':
-                    return this.$tc('sw-in-app-purchase-checkout-button.closeButton');
+                    return this.$t('sw-in-app-purchase-checkout-button.closeButton');
                 case 'purchase':
-                    return this.$tc('sw-in-app-purchase-checkout-button.purchaseButton');
+                    return this.$t('sw-in-app-purchase-checkout-button.purchaseButton');
                 default:
                     return null;
             }
@@ -40,6 +39,7 @@ export default Shopware.Component.wrapComponentConfig({
 
     methods: {
         onClick() {
+            console.log('click');
             this.$emit('click');
         }
     }

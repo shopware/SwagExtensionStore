@@ -2,11 +2,6 @@
     .sw-modal {
         &__footer {
             grid-template-columns: 1fr;
-
-            .sw-button .sw-button__content {
-                display: flex;
-                justify-content: center;
-            }
         }
 
         &__titles {
@@ -17,6 +12,11 @@
         &__title {
             line-height: var(--line-height-lg);
         }
+    }
+
+    &__content {
+        display: flex;
+        justify-content: center;
     }
 
     &__icon {

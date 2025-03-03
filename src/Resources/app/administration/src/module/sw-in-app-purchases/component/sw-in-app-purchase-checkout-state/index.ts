@@ -39,9 +39,9 @@ export default Shopware.Component.wrapComponentConfig({
         title(): string | null {
             switch (this.state) {
                 case 'error':
-                    return this.$tc('sw-in-app-purchase-checkout-state.errorTitle');
+                    return this.$t('sw-in-app-purchase-checkout-state.errorTitle');
                 case 'success':
-                    return this.$tc('sw-in-app-purchase-checkout-state.successTitle');
+                    return this.$t('sw-in-app-purchase-checkout-state.successTitle');
                 default:
                     return null;
             }
@@ -50,9 +50,9 @@ export default Shopware.Component.wrapComponentConfig({
         subtitle(): string | null {
             switch (this.state) {
                 case 'error':
-                    return this.$tc(`sw-in-app-purchase-checkout-state.${this.errorSnippet || 'errorSubtitle'}`);
+                    return this.$t(`sw-in-app-purchase-checkout-state.${this.errorSnippet || 'errorSubtitle'}`);
                 case 'success':
-                    return this.$tc('sw-in-app-purchase-checkout-state.successSubtitle');
+                    return this.$t('sw-in-app-purchase-checkout-state.successSubtitle');
                 default:
                     return null;
             }

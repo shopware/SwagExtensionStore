@@ -2,13 +2,11 @@
 
 .sw-extension-store-statistics-promotion {
     container-type: inline-size;
+    background: linear-gradient(#003075, #0156D0);
+    padding: 16px 20px;
+    border-radius: $border-radius-lg;
 
-    .sw-card__content {
-        background: linear-gradient(#003075, #0156D0);
-        padding: 16px 20px;
-    }
-
-    .sw-card__content h4 {
+    h4 {
         font-size: 16px;
         line-height: 140%;
         font-weight: $font-weight-bold;

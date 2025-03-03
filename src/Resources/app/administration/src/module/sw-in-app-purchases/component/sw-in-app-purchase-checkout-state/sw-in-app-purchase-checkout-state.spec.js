@@ -47,11 +47,11 @@ describe('sw-in-app-purchase-checkout-state', () => {
 
     it('should compute title correctly', async () => {
         wrapper = await createWrapper({ state: 'error' });
-        expect(wrapper.vm.title).toBe(wrapper.vm.$tc('sw-in-app-purchase-checkout-state.errorTitle'));
+        expect(wrapper.vm.title).toBe(wrapper.vm.$t('sw-in-app-purchase-checkout-state.errorTitle'));
 
         wrapper.setProps({ state: 'success' });
         await wrapper.vm.$nextTick();
-        expect(wrapper.vm.title).toBe(wrapper.vm.$tc('sw-in-app-purchase-checkout-state.successTitle'));
+        expect(wrapper.vm.title).toBe(wrapper.vm.$t('sw-in-app-purchase-checkout-state.successTitle'));
 
         wrapper.setProps({ state: 'loading' });
         await wrapper.vm.$nextTick();
@@ -60,11 +60,11 @@ describe('sw-in-app-purchase-checkout-state', () => {
 
     it('should compute subtitle correctly', async () => {
         wrapper = await createWrapper({ state: 'error' });
-        expect(wrapper.vm.subtitle).toBe(wrapper.vm.$tc('sw-in-app-purchase-checkout-state.errorSubtitle'));
+        expect(wrapper.vm.subtitle).toBe(wrapper.vm.$t('sw-in-app-purchase-checkout-state.errorSubtitle'));
 
         wrapper.setProps({ state: 'success' });
         await wrapper.vm.$nextTick();
-        expect(wrapper.vm.subtitle).toBe(wrapper.vm.$tc('sw-in-app-purchase-checkout-state.successSubtitle'));
+        expect(wrapper.vm.subtitle).toBe(wrapper.vm.$t('sw-in-app-purchase-checkout-state.successSubtitle'));
 
         wrapper.setProps({ state: 'loading' });
         await wrapper.vm.$nextTick();
@@ -73,6 +73,6 @@ describe('sw-in-app-purchase-checkout-state', () => {
 
     it('should handle custom errorSnippet correctly', async () => {
         wrapper = await createWrapper({ state: 'error', errorSnippet: 'customError' });
-        expect(wrapper.vm.subtitle).toBe(wrapper.vm.$tc('sw-in-app-purchase-checkout-state.customError'));
+        expect(wrapper.vm.subtitle).toBe(wrapper.vm.$t('sw-in-app-purchase-checkout-state.customError'));
     });
 });

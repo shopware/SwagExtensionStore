@@ -40,7 +40,7 @@ export default {
 
                 Shopware.Utils.debug.error(e);
                 this.createNotificationError({
-                    message: this.$tc(
+                    message: this.$t(
                         'global.notification.unspecifiedSaveErrorMessage'
                     )
                 });

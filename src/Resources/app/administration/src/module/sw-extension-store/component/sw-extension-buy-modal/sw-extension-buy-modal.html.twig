@@ -1,7 +1,7 @@
 {% block sw_extension_buy_modal %}
     <sw-modal
         class="sw-extension-buy-modal"
-        :title="$tc('sw-extension-store.component.sw-extension-buy-modal.title')"
+        :title="$t('sw-extension-store.component.sw-extension-buy-modal.title')"
         size="450px"
         :isLoading="isLoading"
         @modal-close="emitClose">
@@ -98,11 +98,11 @@
                                                             {% endblock %}
 
                                                             {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent_trial %}
-                                                                <div v-if="variant.trialPhaseIncluded && firstMonthFree">{{ $tc('sw-extension-store.buy-modal.rent.freeTrial') }}</div>
+                                                                <div v-if="variant.trialPhaseIncluded && firstMonthFree">{{ $t('sw-extension-store.buy-modal.rent.freeTrial') }}</div>
                                                             {% endblock %}
 
                                                             {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent_disclaimer %}
-                                                                <div>{{ $tc('sw-extension-store.buy-modal.rent.disclaimer') }}</div>
+                                                                <div>{{ $t('sw-extension-store.buy-modal.rent.disclaimer') }}</div>
                                                             {% endblock %}
                                                         </div>
                                                     {% endblock %}
@@ -148,14 +148,14 @@
                                         {% block sw_extension_buy_modal_summary_price_content %}
                                             {% block sw_extension_buy_modal_summary_label_price %}
                                                 <span>
-                                                    {{ $tc('sw-extension-store.component.sw-extension-buy-modal.variantSummary.labelPrice') }}
+                                                    {{ $t('sw-extension-store.component.sw-extension-buy-modal.variantSummary.labelPrice') }}
                                                 </span>
                                             {% endblock %}
 
                                             {% block sw_extension_buy_modal_summary_actual_price %}
                                                 <span v-if="!isLoading"
                                                       class="sw-extension-buy-modal__variant-summary-actual-price">
-                                                    {{ $tc('sw-extension-store.general.labelPrice', variantRecommendation(selectedVariant), { price: formattedPrice }) }}
+                                                    {{ $t('sw-extension-store.general.labelPrice', { price: formattedPrice }, variantRecommendation(selectedVariant)) }}
                                                 </span>
                                             {% endblock %}
                                         {% endblock %}
@@ -165,14 +165,14 @@
                                 {% block sw_extension_buy_modal_summary_label_plus_vat %}
                                     <p class="sw-extension-buy-modal__variant-summary-price-subline"
                                        :class="vatIncludedClasses">
-                                        {{ $tc('sw-extension-store.component.sw-extension-buy-modal.variantSummary.labelVat') }}
+                                        {{ $t('sw-extension-store.component.sw-extension-buy-modal.variantSummary.labelVat') }}
                                     </p>
                                 {% endblock %}
 
                                 {% block sw_extension_buy_modal_summary_renewal_date %}
                                     <p class="sw-extension-buy-modal__variant-summary-price-subline"
                                        :class="renewalDateClasses">
-                                        {{ $tc('sw-extension-store.component.sw-extension-buy-modal.variantSummary.renewal', 0, { renewalDate: dateFilter(todayPlusOneMonth) }) }}
+                                        {{ $t('sw-extension-store.component.sw-extension-buy-modal.variantSummary.renewal', { renewalDate: dateFilter(todayPlusOneMonth) }, 0) }}
                                     </p>
                                 {% endblock %}
                             {% endblock %}
@@ -183,7 +183,7 @@
                         <sw-single-select
                             v-if="showPaymentSelection"
                             :options="paymentMeans"
-                            :placeholder="$tc('sw-extension-store.buy-modal.paymentSelectionPlaceholder')"
+                            :placeholder="$t('sw-extension-store.buy-modal.paymentSelectionPlaceholder')"
                             valueProperty="id"
                             v-model:value="selectedPaymentMean"
                         >
@@ -233,13 +233,13 @@
                                 </span>
 
                                 <span v-else>
-                                    {{ $tc('sw-extension-store.component.sw-extension-buy-modal.labelAcceptPermissions') }}
+                                    {{ $t('sw-extension-store.component.sw-extension-buy-modal.labelAcceptPermissions') }}
                                     <a
                                         href="#"
                                         class="link permissions-modal-trigger"
                                         @click="openPermissionsModal"
                                     >
-                                        {{ $tc('sw-extension-store.detail.labelButtonShowPermissions') }}
+                                        {{ $t('sw-extension-store.detail.labelButtonShowPermissions') }}
                                     </a>
                                 </span>
                             </template>
@@ -276,14 +276,14 @@
                         >
                             <template #label>
                                 <span class="is--required">
-                                    {{ $tc('sw-extension-store.component.sw-extension-buy-modal.labelAcceptPrivacyExtensions') }}
+                                    {{ $t('sw-extension-store.component.sw-extension-buy-modal.labelAcceptPrivacyExtensions') }}
                                 </span>
                                 <a
                                     href="#"
                                     class="link privacy-policy-modal-trigger"
                                     @click.prevent="openPrivacyModal"
                                 >
-                                    {{ $tc('sw-extension-store.component.sw-extension-buy-modal.buttonShowPrivacyExtensions') }}
+                                    {{ $t('sw-extension-store.component.sw-extension-buy-modal.buttonShowPrivacyExtensions') }}
                                 </a>
                             </template>
                         </sw-checkbox-field>
@@ -292,7 +292,7 @@
                     {% block sw_extension_buy_modal_alert_can_not_buy %}
                         <sw-alert v-if="!userCanBuyFromStore" variant="info">
                             {% block sw_extension_buy_modal_alert_can_not_buy_content %}
-                                {{ $tc('sw-extension-store.component.sw-extension-buy-modal.alertCanNotBuy.text') }}
+                                {{ $t('sw-extension-store.component.sw-extension-buy-modal.alertCanNotBuy.text') }}
                             {% endblock %}
                         </sw-alert>
                     {% endblock %}
@@ -354,7 +354,7 @@
                                 variant="primary"
                                 size="small"
                                 @click="closeLegalTextModal">
-                                {{ $tc('global.default.close') }}
+                                {{ $t('global.default.close') }}
                             </sw-button>
                         </template>
                     </sw-modal>

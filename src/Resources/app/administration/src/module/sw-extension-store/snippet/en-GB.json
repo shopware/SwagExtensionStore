@@ -67,5 +67,10 @@
                 "paymentMeansRequiredLinkText": "add a payment method"
             }
         }
+    },
+    "sw-extension-store-statistics-promotion": {
+        "app-name": "Shopware Analytics",
+        "app-description": "Unlock store performance metrics",
+        "go-to-app": "Try it out now"
     }
 }

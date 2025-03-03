@@ -128,7 +128,7 @@ export default {
 
         getOptionsForFilter(filter) {
             const anyOption = {
-                label: this.$tc('sw-extension.store.listing.anyOption'),
+                label: this.$t('sw-extension.store.listing.anyOption'),
                 value: null
             };
 
