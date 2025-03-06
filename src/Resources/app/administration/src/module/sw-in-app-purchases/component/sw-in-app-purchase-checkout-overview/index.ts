@@ -5,6 +5,8 @@ import './sw-in-app-purchase-checkout-overview.scss';
 export default Shopware.Component.wrapComponentConfig({
     template,
 
+    emits: ['update:tos-accepted'],
+
     props: {
         purchase: {
             type: Object as PropType<IAP.InAppPurchase>,

@@ -45,7 +45,7 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         });
 
         const singleImage = wrapper.findAll('img');
-        expect(singleImage.length).toBe(1);
+        expect(singleImage).toHaveLength(1);
         expect(singleImage.at(0).attributes()).toHaveProperty('src');
         expect(singleImage.at(0).attributes().src).toEqual(images[0]);
     });
@@ -103,7 +103,7 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
             });
 
             const activeItems = wrapper.findAll('.sw-extension-store-slider__slide-item.is--active');
-            expect(activeItems.length).toBe(slideCount);
+            expect(activeItems).toHaveLength(slideCount);
         });
     });
 
@@ -124,7 +124,7 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         });
 
         const activeItems = wrapper.findAll('.sw-extension-store-slider__slide-item.is--active');
-        expect(activeItems.length).toBe(3);
+        expect(activeItems).toHaveLength(3);
     });
 
     it('should show multiple images at the same time', async () => {
@@ -144,7 +144,7 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         });
 
         const activeItems = wrapper.findAll('.sw-extension-store-slider__slide-item.is--active');
-        expect(activeItems.length).toBe(3);
+        expect(activeItems).toHaveLength(3);
 
         // check if image sources are set correctly
         activeItems.forEach(activeItem => {
@@ -310,7 +310,7 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         expect(thirdItem.classes()).not.toContain('is--active');
 
         // back button should not be disabled
-        expect(buttonBack.attributes().disabled).toBe(undefined);
+        expect(buttonBack.attributes().disabled).toBeUndefined();
 
         // go to image before
         await buttonBack.trigger('click');
@@ -399,7 +399,7 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         expect(thirdItem.classes()).toContain('is--active');
 
         // next button should not be disabled
-        expect(buttonNext.attributes().disabled).toBe(undefined);
+        expect(buttonNext.attributes().disabled).toBeUndefined();
 
         // a click on this should trigger next image
         await buttonNext.trigger('click');

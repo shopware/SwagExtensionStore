@@ -205,11 +205,11 @@
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_accept_extension_permissions %}
-                        <sw-checkbox-field
+                        <mt-checkbox
                             v-if="extensionHasPermissions"
                             class="sw-extension-buy-modal__checkbox sw-extension-buy-modal__checkbox-permissions"
                             :class="`sw-extension-buy-modal__checkbox-permissions--${extension.name}`"
-                            v-model:value="permissionsAccepted"
+                            v-model:checked="permissionsAccepted"
                         >
                             <template #label>
                                 <span v-if="legalText">
@@ -247,9 +247,9 @@
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_accept_extension_app_provider %}
-                        <sw-checkbox-field
+                        <mt-checkbox
                             v-if="!extensionHasPermissions && legalText"
-                            v-model="legalTextAccepted"
+                            v-model:checked="legalTextAccepted"
                             class="sw-extension-buy-modal__checkbox sw-extension-buy-modal__checkbox-app-provider"
                             :class="`sw-extension-buy-modal__checkbox-app-provider--${extension.name}`"
                         >
@@ -268,9 +268,9 @@
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_accept_extension_privacy_policy_extensions %}
-                        <sw-checkbox-field
+                        <mt-checkbox
                             v-if="extension.privacyPolicyExtension"
-                            v-model="privacyExtensionsAccepted"
+                            v-model:checked="privacyExtensionsAccepted"
                             class="sw-extension-buy-modal__checkbox-privacy-policy"
                             :class="`sw-extension-buy-modal__checkbox-privacy-policy--${extension.name}`"
                         >
@@ -290,15 +290,15 @@
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_alert_can_not_buy %}
-                        <sw-alert v-if="!userCanBuyFromStore" variant="info">
+                        <mt-banner v-if="!userCanBuyFromStore" variant="info">
                             {% block sw_extension_buy_modal_alert_can_not_buy_content %}
                                 {{ $t('sw-extension-store.component.sw-extension-buy-modal.alertCanNotBuy.text') }}
                             {% endblock %}
-                        </sw-alert>
+                        </mt-banner>
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_alert_payment_means_required %}
-                        <sw-alert v-if="showPaymentWarning" variant="warning">
+                        <mt-banner v-if="showPaymentWarning" variant="attention">
                             {% block sw_extension_buy_modal_alert_payment_means_required_content %}
                                 {{ $t('sw-extension-store.buy-modal.warnings.paymentMeansRequiredText') }}
                                 <sw-external-link
@@ -306,19 +306,19 @@
                                     class="sw-extension-buy-modal__external-link"
                                 >
                                     {{ $t('sw-extension-store.buy-modal.warnings.paymentMeansRequiredLinkText') }}
-                                    <sw-icon name="regular-long-arrow-right"></sw-icon>
+                                    <mt-icon name="regular-long-arrow-right"></mt-icon>
                                 </sw-external-link>
                             {% endblock %}
-                        </sw-alert>
+                        </mt-banner>
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_button_purchase %}
-                        <sw-button variant="primary"
+                        <mt-button variant="primary"
                                    block
                                    :disabled="!canPurchaseExtension"
                                    @click="purchaseExtension">
                             {{ purchaseButtonLabel }}
-                        </sw-button>
+                        </mt-button>
                     {% endblock %}
                 {% endblock %}
 
@@ -350,12 +350,12 @@
                         <div v-html="legalText"></div>
 
                         <template #modal-footer>
-                            <sw-button
+                            <mt-button
                                 variant="primary"
                                 size="small"
                                 @click="closeLegalTextModal">
                                 {{ $t('global.default.close') }}
-                            </sw-button>
+                            </mt-button>
                         </template>
                     </sw-modal>
                 {% endblock %}

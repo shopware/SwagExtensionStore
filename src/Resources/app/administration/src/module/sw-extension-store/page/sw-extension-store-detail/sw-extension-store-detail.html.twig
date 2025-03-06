@@ -9,10 +9,10 @@
                 appearance="pill"
                 variant="danger"
             >
-                <sw-icon
+                <mt-icon
                     name="regular-times-circle"
                     size="30px"
-                ></sw-icon>
+                ></mt-icon>
             </sw-label>
             <h2>{{ fetchError.title }}</h2>
             <p>{{ fetchError.detail }}</p>
@@ -116,10 +116,10 @@
 
                                             <template v-else>
                                                 {% block sw_extension_store_detail_rating_overview_no_ratings %}
-                                                    <sw-icon
+                                                    <mt-icon
                                                         name="solid-star"
                                                         size="12px"
-                                                    ></sw-icon>
+                                                    ></mt-icon>
 
                                                     <span class="sw-extension-store-detail__no-ratings-text">{{ $t('sw-extension-store.detail.noRatings') }}</span>
                                                 {% endblock %}
@@ -139,7 +139,7 @@
                         <template v-if="isPurchasable">
                             {% block sw_extension_store_detail_smart_bar_actions_add %}
                                 {% block sw_extension_store_detail_smart_bar_actions_add_button %}
-                                    <sw-button
+                                    <mt-button
                                         variant="primary"
                                         @click="onClickAddExtension"
                                         class="sw-extension-store-detail__action-add-extension"
@@ -150,7 +150,7 @@
                                         <template v-else>
                                             {{ $t('sw-extension-store.detail.labelButtonAddExtension') }}
                                         </template>
-                                    </sw-button>
+                                    </mt-button>
                                 {% endblock %}
 
                                 {% block sw_extension_store_detail_smart_bar_price %}
@@ -195,13 +195,14 @@
                                 {% endblock %}
 
                                 {% block sw_extension_store_detail_smart_bar_actions_trial_info %}
-                                    <sw-button
+                                    <mt-button
                                         v-if="recommendedVariant && recommendedVariant.trialPhaseIncluded"
                                         @click="onClickAddExtension"
                                         class="sw-extension-store-detail__trial-info"
+                                        variant="secondary"
                                     >
                                         {{ $t('sw-extension-store.detail.hasTrialPhase') }}
-                                    </sw-button>
+                                    </mt-button>
                                 {% endblock %}
 
                                 {% block sw_extension_store_detail_smart_bar_in_app_purchases_badge %}
@@ -233,7 +234,7 @@
                             {% endblock %}
 
                             {% block sw_extension_store_detail_smart_bar_actions_already_installed %}
-                                <sw-button
+                                <mt-button
                                     v-else-if="!canBeOpened && !isConfigurable"
                                     variant="primary"
                                     @click="openListingPage"
@@ -245,7 +246,7 @@
                                     <template v-else>
                                         {{ $t('sw-extension-store.detail.extensionIsAlreadyInstalled') }}
                                     </template>
-                                </sw-button>
+                                </mt-button>
                             {% endblock %}
 
                             {% block sw_extension_store_detail_smart_bar_actions %}
@@ -254,7 +255,7 @@
                                     splitButton
                                 >
                                     {% block sw_extension_store_detail_smart_bar_actions_open_extension %}
-                                        <sw-button
+                                        <mt-button
                                             @click="openExtension"
                                             variant="primary"
                                             class="sw-extension-store-detail__action-open-extension"
@@ -265,7 +266,7 @@
                                             <template v-else>
                                                 {{ $t('sw-extension-store.detail.labelButtonOpenExtension') }}
                                             </template>
-                                        </sw-button>
+                                        </mt-button>
                                     {% endblock %}
 
                                     {% block sw_extension_store_detail_smart_bar_actions_open_extension_context %}
@@ -274,15 +275,15 @@
                                             class="sw-extension-store-detail__action-context"
                                         >
                                             <template #button>
-                                                <sw-button
+                                                <mt-button
                                                     variant="primary"
                                                     square
                                                 >
-                                                    <sw-icon
+                                                    <mt-icon
                                                         name="regular-chevron-down-xs"
                                                         size="16"
-                                                    ></sw-icon>
-                                                </sw-button>
+                                                    ></mt-icon>
+                                                </mt-button>
                                             </template>
 
                                             <sw-context-menu-item @click="openConfiguration">
@@ -294,30 +295,30 @@
                             {% endblock %}
 
                             {% block sw_extension_store_detail_smart_bar_actions_open_configuration %}
-                                <sw-button
+                                <mt-button
                                     v-else
                                     @click="openConfiguration"
                                     variant="primary"
                                     class="sw-extension-store-detail__action-open-configuration"
                                 >
                                     {{ $t('sw-extension-store.detail.openConfiguration') }}
-                                </sw-button>
+                                </mt-button>
                             {% endblock %}
                         </template>
 
                         <template v-else-if="isEnterpriseFeature">
                             {% block sw_extension_store_detail_smart_bar_actions_enterprise_contact %}
-                                <sw-button
+                                <mt-button
                                     variant="primary"
                                     :link="$t('sw-extension-store.detail.enterpriseContactUrl')"
                                     class="sw-extension-store-detail__action-enterprise-contact"
                                 >
                                     {{ $t('sw-extension-store.detail.enterpriseContactLinkText') }}
-                                    <sw-icon
+                                    <mt-icon
                                         name="regular-external-link"
                                         size="12"
-                                    ></sw-icon>
-                                </sw-button>
+                                    ></mt-icon>
+                                </mt-button>
                             {% endblock %}
                         </template>
 
@@ -363,18 +364,18 @@
             {% block sw_extension_store_detail_slot_smart_bar_context_buttons %}
                 <template #smart-bar-context-buttons>
                     {% block sw_extension_store_detail_show_permissions %}
-                        <sw-button
+                        <mt-button
                             v-if="hasPermissions"
-                            variant="context"
+                            variant="secondary"
                             @click="openPermissionsModal"
                             size="small"
                         >
-                            <sw-icon
+                            <mt-icon
                                 name="solid-shield"
                                 size="16px"
-                            ></sw-icon>
+                            ></mt-icon>
                             {{ $t('sw-extension-store.detail.labelButtonShowPermissions') }}
-                        </sw-button>
+                        </mt-button>
                     {% endblock %}
                 </template>
             {% endblock %}
@@ -382,13 +383,13 @@
 
         {% block sw_extension_store_detail_page_content %}
             {% block sw_extension_sote_detail_page_info_alerts %}
-                <sw-alert
+                <mt-banner
                     v-if="isEnterpriseFeature"
                     variant="info"
                     class="sw-extension-store-detail__alert"
                 >
                     {{ $t('sw-extension-store.detail.enterpriseFeatureAlertText') }}
-                </sw-alert>
+                </mt-banner>
             {% endblock %}
 
             {% block sw_extension_store_detail_images %}
@@ -412,14 +413,15 @@
                     {% endblock %}
 
                     {% block sw_extension_store_details_expand_description %}
-                        <sw-button
+                        <mt-button
                             v-if="isDescriptionCollapsed"
                             @click="expandDescription"
                             size="small"
                             class="sw-extension-store-detail__button-extend-description"
+                            variant="secondary"
                         >
                             {{ $t('sw-extension-store.detail.labelButtonReadMore') }}
-                        </sw-button>
+                        </mt-button>
                     {% endblock %}
                 </sw-meteor-card>
             {% endblock %}

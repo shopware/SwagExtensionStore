@@ -12,21 +12,21 @@
                     {{ inAppPurchase.name }}
                     {% block sw_extension_store_detail_in_app_purchases_listing_modal_header_icon %}
                         {% block sw_extension_store_detail_in_app_purchases_listing_modal_header_icon_expanded %}
-                            <sw-icon
+                            <mt-icon
                                 v-if="expanded"
                                 class="sw-extension-store-detail-in-app-purchases-listing-modal-content__button"
                                 name="regular-chevron-down-xs"
                                 size="12px"
-                            ></sw-icon>
+                            ></mt-icon>
                         {% endblock %}
 
                         {% block sw_extension_store_detail_in_app_purchases_listing_modal_header_icon_not_expanded %}
-                            <sw-icon
+                            <mt-icon
                                 v-else
                                 class="sw-extension-store-detail-in-app-purchases-listing-modal-content__button"
                                 name="regular-chevron-right-xs"
                                 size="12px"
-                            ></sw-icon>
+                            ></mt-icon>
                         {% endblock %}
                     {% endblock %}
                 </div>
@@ -52,7 +52,7 @@
 
     <template #modal-footer>
         <mt-button
-            variant="context"
+            variant="secondary"
             size="small"
             @click="closeInAppPurchasesListingModal">
             {{ $t('global.default.close') }}

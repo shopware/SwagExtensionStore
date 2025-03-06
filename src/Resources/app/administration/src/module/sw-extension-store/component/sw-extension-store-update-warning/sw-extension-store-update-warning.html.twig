@@ -17,13 +17,13 @@
 
         <template #actions>
             {% block sw_extension_store_update_warning_actions %}
-                <sw-button
+                <mt-button
                     variant="primary"
                     @click="updateExtension"
                     :isLoading="isUpdating"
                 >
                     {{ $t('sw-extension-store.updateWarning.update') }}
-                </sw-button>
+                </mt-button>
             {% endblock %}
         </template>
     </sw-extension-store-error-card>

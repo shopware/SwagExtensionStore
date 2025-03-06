@@ -178,7 +178,7 @@ describe('sw-extension-listing-card', () => {
             variants: []
         });
 
-        expect(wrapper.vm.calculatedPrice).toBe(null);
+        expect(wrapper.vm.calculatedPrice).toBeNull();
     });
 
     it('isLicense should be undefined when not found', async () => {
@@ -213,7 +213,7 @@ describe('sw-extension-listing-card', () => {
 
         wrapper.vm.openDetailPage();
 
-        expect(wrapper.vm.$router.push).toBeCalled();
+        expect(wrapper.vm.$router.push).toHaveBeenCalled();
     });
 
     it('should display normal prices for renting', async () => {

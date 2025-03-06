@@ -1,4 +1,4 @@
-<sw-button
+<mt-button
     v-if="show"
     class="sw-in-app-purchase-checkout-button"
     variant="primary"
@@ -9,10 +9,10 @@
     <div class="sw-in-app-purchase-checkout-button__content">
         {{ text }}
 
-        <sw-icon
+        <mt-icon
             v-if="state === 'purchase'"
             name="regular-long-arrow-right"
             size="16px"
         />
     </div>
-</sw-button>
+</mt-button>

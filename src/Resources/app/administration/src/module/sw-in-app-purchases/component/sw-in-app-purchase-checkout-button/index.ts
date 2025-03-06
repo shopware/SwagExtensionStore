@@ -3,6 +3,8 @@ import template from './sw-in-app-purchase-checkout-button.html.twig';
 export default Shopware.Component.wrapComponentConfig({
     template,
 
+    emits: ['click'],
+
     props: {
         state: {
             type: String as PropType<'error' | 'success' | 'purchase'>,
@@ -39,7 +41,6 @@ export default Shopware.Component.wrapComponentConfig({
 
     methods: {
         onClick() {
-            console.log('click');
             this.$emit('click');
         }
     }

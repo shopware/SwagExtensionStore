@@ -274,11 +274,11 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         const buyButton = wrapper.findComponent('button.sw-button--primary');
 
         expect(buyButton.attributes('disabled')).toBeUndefined();
-        buyButton.trigger('click');
+        await buyButton.trigger('click');
 
         await flushPromises();
 
-        expect(httpClient.get).toBeCalledWith('/_action/extension/installed', {
+        expect(httpClient.get).toHaveBeenCalledWith('/_action/extension/installed', {
             headers: expect.objectContaining({
                 Accept: expect.anything(),
                 Authorization: expect.anything(),
@@ -344,11 +344,11 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         const buyButton = wrapper.findComponent('button.sw-button--primary');
 
         expect(buyButton.attributes('disabled')).toBeUndefined();
-        buyButton.trigger('click');
+        await buyButton.trigger('click');
 
         await flushPromises();
 
-        expect(httpClient.get).toBeCalledWith('/_action/extension/installed', {
+        expect(httpClient.get).toHaveBeenCalledWith('/_action/extension/installed', {
             headers: expect.objectContaining({
                 Accept: expect.anything(),
                 Authorization: expect.anything(),
