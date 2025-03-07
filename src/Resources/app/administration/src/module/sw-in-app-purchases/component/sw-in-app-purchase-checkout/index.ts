@@ -1,5 +1,5 @@
 import defaultThemePreview from 'SwagExtensionStore/../static/img/theme/default_theme_preview.jpg?url';
-import type * as IAP from 'src/module/sw-in-app-purchases/types';
+import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout.html.twig';
 import './sw-in-app-purchase-checkout.scss';
 
