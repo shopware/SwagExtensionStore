@@ -58,7 +58,11 @@ async function createWrapper(error = false) {
                 },
                 'sw-alert': true,
                 'sw-button': true,
-                'sw-loader': true
+                'sw-loader': true,
+                'sw-extension-icon': true,
+                'sw-in-app-purchase-checkout-overview': true,
+                'sw-in-app-purchase-checkout-state': true,
+                'sw-in-app-purchase-checkout-button': true
             }
         }
     });
@@ -303,7 +307,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 iconRaw: ''
             }
         });
-        expect(wrapper.vm.extensionIcon).toBe('administration/static/img/theme/default_theme_preview.jpg');
+        expect(wrapper.vm.extensionIcon).toBe('default_theme_preview.jpg');
     });
 
     it('refreshes after a successful purchase', async () => {

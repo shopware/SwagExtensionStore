@@ -164,20 +164,20 @@ $padding-summary-card: 22px;
         }
     }
 
-    .sw-field--checkbox {
+    .mt-field--checkbox {
         margin-bottom: 16px;
     }
 
     .sw-extension-buy-modal__checkbox {
         font-size: $font-size-xs;
 
-        .sw-field--checkbox__content {
+        .mt-field--checkbox__content {
             align-items: inherit;
 
-            .sw-field__label {
+            .mt-field__label {
                 display: block;
 
-                .sw-button {
+                .mt-button {
                     background: none;
                     border: none;
                     padding: 0;

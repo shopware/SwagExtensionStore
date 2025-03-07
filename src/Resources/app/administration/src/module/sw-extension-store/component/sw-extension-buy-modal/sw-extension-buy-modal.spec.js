@@ -71,8 +71,8 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                                </div>`
                     },
                     'sw-alert': await wrapTestComponent('sw-alert', { sync: true }),
-                    'sw-button': await wrapTestComponent('sw-button'),
-                    'sw-button-deprecated': await wrapTestComponent('sw-button-deprecated'),
+                    'sw-alert-deprecated': await wrapTestComponent('sw-alert-deprecated', { sync: true }),
+                    'sw-button': await wrapTestComponent('sw-button', { sync: true }),
                     'sw-base-field': await wrapTestComponent('sw-base-field', { sync: true }),
                     'sw-field-error': await wrapTestComponent('sw-field-error', { sync: true }),
                     'sw-checkbox-field': await wrapTestComponent('sw-checkbox-field', { sync: true }),
@@ -84,7 +84,14 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                     'sw-loader': true,
                     'sw-extension-permissions-modal': true,
                     'sw-extension-privacy-policy-extensions-modal': true,
-                    'sw-external-link': true
+                    'sw-external-link': true,
+                    'sw-app-topbar-button': true,
+                    'sw-help-center-v2': true,
+                    'sw-extension-icon': true,
+                    'sw-single-select': true,
+                    'sw-ai-copilot-badge': true,
+                    'sw-help-text': true,
+                    'sw-inheritance-switch': true
                 }
             }
         });
@@ -271,7 +278,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         await wrapper.get('.sw-gtc-checkbox input').setChecked(true);
         await flushPromises();
 
-        const buyButton = wrapper.findComponent('button.sw-button--primary');
+        const buyButton = wrapper.findComponent('button.mt-button--primary');
 
         expect(buyButton.attributes('disabled')).toBeUndefined();
         await buyButton.trigger('click');
@@ -341,7 +348,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         // check gtc checkbox
         await wrapper.get('.sw-gtc-checkbox input').setChecked(true);
 
-        const buyButton = wrapper.findComponent('button.sw-button--primary');
+        const buyButton = wrapper.findComponent('button.mt-button--primary');
 
         expect(buyButton.attributes('disabled')).toBeUndefined();
         await buyButton.trigger('click');

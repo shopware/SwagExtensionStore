@@ -4,12 +4,16 @@ Shopware.Component.register(
     'sw-in-app-purchase-checkout-button',
     () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-button')
 );
-async function createWrapper(propsData) {
+async function createWrapper(props) {
     return mount(await Shopware.Component.build('sw-in-app-purchase-checkout-button'), {
-        props: propsData,
+        props,
         global: {
             mocks: {
                 $tc: (key) => key
+            },
+            stubs: {
+                'sw-button': true,
+                'sw-icon': true
             }
         }
     });

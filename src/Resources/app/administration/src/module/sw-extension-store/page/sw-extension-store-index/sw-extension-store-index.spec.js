@@ -39,14 +39,21 @@ async function createWrapper() {
                 })
             },
             stubs: {
+                /* sw-meteor-page */
                 'sw-meteor-page': await wrapTestComponent('sw-meteor-page'),
+                'sw-notification-center': true,
+                'sw-help-center-v2': true,
+                'sw-meteor-page-context': true,
+                'sw-meteor-navigation': true,
+                'sw-tabs': true,
+                'sw-extension-component-section': true,
+                'sw-app-topbar-button': true,
                 'sw-search-bar': {
                     template: '<div class="sw-search-bar"></div>'
                 },
-                'sw-notification-center': true,
-                'sw-meteor-navigation': true,
+                /* sw-meteor-page */
+
                 'sw-loader': true,
-                'sw-tabs': true,
                 'sw-tabs-item': true,
                 'router-view': true,
                 'sw-extension-store-error-card': true,

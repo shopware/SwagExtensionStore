@@ -47,7 +47,17 @@ async function createWrapper(extensionCustomProps = {}) {
         global: {
             renderStubDefaultSlot: true,
             stubs: {
-                'sw-meteor-card': true
+                'sw-meteor-card': true,
+                'sw-loader': true,
+                'sw-extension-icon': true,
+                'router-link': true,
+                'sw-context-menu-item': true,
+                'sw-external-link': true,
+                'sw-context-button': true,
+                'sw-extension-uninstall-modal': true,
+                'sw-extension-removal-modal': true,
+                'sw-extension-permissions-modal': true,
+                'sw-extension-privacy-policy-extensions-modal': true
             },
             provide: {
                 shopwareExtensionService: {
@@ -55,11 +65,14 @@ async function createWrapper(extensionCustomProps = {}) {
                     isVariantDiscounted: jest.fn(),
                     orderVariantsByRecommendation: () => [],
                     getOpenLink: () => { }
-                }
+                },
+                cacheApiService: {},
+                extensionStoreActionService: {}
             }
         }
     });
 }
+
 describe('SwagExtensionStore/module/sw-extension/component/sw-extension', () => {
     it('should be a Vue.js component', async () => {
         const wrapper = await createWrapper({ inAppFeaturesAvailable: true });

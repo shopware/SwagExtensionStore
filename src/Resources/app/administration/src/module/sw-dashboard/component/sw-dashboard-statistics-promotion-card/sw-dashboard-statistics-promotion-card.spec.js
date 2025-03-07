@@ -33,9 +33,9 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
                     }
                 },
                 stubs: {
-                    'sw-button': await wrapTestComponent('sw-button'),
-                    'sw-button-deprecated': await wrapTestComponent('sw-button-deprecated', { sync: true }),
-                    'sw-icon': true
+                    'sw-button': await wrapTestComponent('sw-button', { sync: true }),
+                    'sw-icon': true,
+                    'sw-extension-icon': true
                 },
                 mocks: {
                     $router: router

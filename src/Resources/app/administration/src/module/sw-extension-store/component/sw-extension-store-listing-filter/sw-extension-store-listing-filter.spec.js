@@ -338,7 +338,6 @@ async function createWrapper() {
 }
 
 describe('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-listing-filter', () => {
-    /** @type Wrapper */
     let wrapper;
 
     beforeAll(() => {

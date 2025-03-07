@@ -10,7 +10,7 @@ export default {
         'notification'
     ],
 
-    inject: ['extensionStoreDataService', 'feature'],
+    inject: ['extensionStoreDataService'],
 
     data() {
         return {
@@ -67,7 +67,8 @@ export default {
         },
 
         listingFiltersSorted() {
-            const listingFiltersCopy = [...this.listingFilters];
+            // avoid any manipulations to references
+            const listingFiltersCopy = Shopware.Utils.object.cloneDeep(this.listingFilters);
 
             // sort filters
             listingFiltersCopy.sort((a, b) => a.position - b.position);

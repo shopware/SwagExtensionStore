@@ -16,6 +16,12 @@ async function createWrapper() {
             purchase: {},
             priceModel: {},
             tosAccepted: false
+        },
+        global: {
+            stubs: {
+                'sw-in-app-purchase-price-box': true,
+                'sw-gtc-checkbox': true
+            }
         }
     });
 }
