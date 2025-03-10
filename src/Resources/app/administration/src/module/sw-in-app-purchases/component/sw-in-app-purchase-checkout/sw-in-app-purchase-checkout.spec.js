@@ -56,8 +56,6 @@ async function createWrapper(error = false) {
                                <slot name="default"></slot>
                            </div>`
                 },
-                'sw-alert': true,
-                'sw-button': true,
                 'sw-loader': true,
                 'sw-extension-icon': true,
                 'sw-in-app-purchase-checkout-overview': true,
@@ -284,7 +282,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
 
     it('returns the extension icon correctly', async () => {
         // Test when extension has an icon
-        wrapper.setData({
+        await wrapper.setData({
             extension: {
                 icon: 'icon-url'
             }
@@ -292,7 +290,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         expect(wrapper.vm.extensionIcon).toBe('icon-url');
 
         // Test when extension has a raw icon
-        wrapper.setData({
+        await wrapper.setData({
             extension: {
                 icon: '',
                 iconRaw: 'base64data'
@@ -301,7 +299,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         expect(wrapper.vm.extensionIcon).toBe('data:image/png;base64, base64data');
 
         // Test when extension has no icon
-        wrapper.setData({
+        await wrapper.setData({
             extension: {
                 icon: '',
                 iconRaw: ''

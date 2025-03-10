@@ -8,6 +8,8 @@ const { Utils } = Shopware;
 export default {
     template,
 
+    emits: ['modal-close'],
+
     props: {
         extension: {
             type: Object,

@@ -15,7 +15,6 @@ async function createWrapper(extension) {
         },
         global: {
             stubs: {
-                'sw-icon': true,
                 'sw-extension-rating-stars': true,
                 'router-link': true,
                 'sw-extension-type-label': true,
@@ -44,7 +43,7 @@ async function createWrapper(extension) {
                 )
             },
             mocks: {
-                $tc: (key, recommendation, price) => JSON.stringify({ key, recommendation, price })
+                $t: (key, price, recommendation) => JSON.stringify({ key, recommendation, price })
             }
         }
     });
@@ -178,7 +177,7 @@ describe('sw-extension-listing-card', () => {
             variants: []
         });
 
-        expect(wrapper.vm.calculatedPrice).toBe(null);
+        expect(wrapper.vm.calculatedPrice).toBeNull();
     });
 
     it('isLicense should be undefined when not found', async () => {
@@ -213,7 +212,7 @@ describe('sw-extension-listing-card', () => {
 
         wrapper.vm.openDetailPage();
 
-        expect(wrapper.vm.$router.push).toBeCalled();
+        expect(wrapper.vm.$router.push).toHaveBeenCalled();
     });
 
     it('should display normal prices for renting', async () => {

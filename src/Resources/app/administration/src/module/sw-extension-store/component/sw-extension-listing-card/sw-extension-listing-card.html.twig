@@ -36,11 +36,11 @@
                     {% block sw_extension_listing_card_info_price %}
                         <div class="sw-extension-listing-card__info-price">
                             <template v-if="isInstalled">
-                                {{ $tc('sw-extension-store.component.sw-extension-listing-card.labelInstalled') }}
+                                {{ $t('sw-extension-store.component.sw-extension-listing-card.labelInstalled') }}
                             </template>
 
                             <template v-else-if="isLicensed">
-                                {{ $tc('sw-extension-store.component.sw-extension-listing-card.labelLicensed') }}
+                                {{ $t('sw-extension-store.component.sw-extension-listing-card.labelLicensed') }}
                             </template>
 
                             <span v-else :class="discountClass">{{ calculatedPrice }}</span>

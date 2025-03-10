@@ -94,14 +94,14 @@ export default {
         purchaseButtonLabel() {
             switch (this.selectedVariant.type) {
                 case this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.FREE:
-                    return this.$tc('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.free');
+                    return this.$t('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.free');
 
                 case this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.RENT:
-                    return this.$tc('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.rent');
+                    return this.$t('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.rent');
 
                 case this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.BUY:
                 default:
-                    return this.$tc('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.buy');
+                    return this.$t('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.buy');
             }
         },
 

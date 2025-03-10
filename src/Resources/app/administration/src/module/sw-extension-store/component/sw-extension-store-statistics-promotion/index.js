@@ -9,21 +9,6 @@ export default Shopware.Component.wrapComponentConfig({
 
     inject: ['extensionStoreDataService'],
 
-    i18n: {
-        messages: {
-            'en-GB': {
-                'app-name': 'Shopware Analytics',
-                'app-description': 'Unlock store performance metrics',
-                'go-to-app': 'Try it out now'
-            },
-            'de-DE': {
-                'app-name': 'Shopware Analytics',
-                'app-description': 'Erfasse wichtige Shop-Kennzahlen',
-                'go-to-app': 'Jetzt ausprobieren'
-            }
-        }
-    },
-
     data() {
         return {
             analyticsPromotionIcon,

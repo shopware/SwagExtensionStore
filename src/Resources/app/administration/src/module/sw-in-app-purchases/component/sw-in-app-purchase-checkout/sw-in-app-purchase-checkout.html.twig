@@ -2,7 +2,7 @@
 <sw-modal
     v-if="store.entry"
     class="sw-in-app-purchase-checkout"
-    :title="$tc('sw-in-app-purchase-checkout.modalTitle')"
+    :title="$t('sw-in-app-purchase-checkout.modalTitle')"
     @modal-close="handleStateActions(false)"
 >
     <template v-if="state === 'purchase'" #modal-title>
@@ -13,7 +13,7 @@
 
         <div class="sw-in-app-purchase-checkout__titles">
             <h4 id="modalTitleEl" class="sw-modal__title">
-                {{ $tc('sw-in-app-purchase-checkout.modalTitle') }}
+                {{ $t('sw-in-app-purchase-checkout.modalTitle') }}
             </h4>
 
             <h5 class="sw-modal__subtitle">

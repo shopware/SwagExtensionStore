@@ -10,6 +10,8 @@ export default {
 
     inject: ['feature'],
 
+    emits: ['extension-listing-errors'],
+
     mixins: ['sw-extension-error'],
 
     data() {

@@ -27,9 +27,6 @@ describe('src/module/sw-extension-store/component/sw-extension-store-statistics-
                     }
                 },
                 stubs: {
-                    'sw-button': await wrapTestComponent('sw-button', { sync: true }),
-                    'sw-card': await wrapTestComponent('sw-card', { sync: true }),
-                    'sw-icon': true,
                     'sw-extension-icon': true
                 },
                 mocks: {

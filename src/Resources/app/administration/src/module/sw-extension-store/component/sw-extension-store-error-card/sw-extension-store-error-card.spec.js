@@ -14,10 +14,8 @@ async function createWrapper(opts) {
                 'sw-meteor-card': {
                     template: '<div class="sw-meteor-card__content"><slot></slot></div>'
                 },
-                'sw-button': await wrapTestComponent('sw-button', { sync: true }),
                 'sw-label': true,
-                'sw-color-badge': true,
-                'sw-icon': true
+                'sw-color-badge': true
             }
         }
     });
@@ -48,7 +46,7 @@ describe('sw-extension-store-error-card', () => {
     it('should render content in actions slot', async () => {
         const wrapper = await createWrapper({
             slots: {
-                actions: '<sw-button>Check for updates</sw-button>'
+                actions: '<mt-button>Check for updates</mt-button>'
             }
         });
 
@@ -101,7 +99,8 @@ describe('sw-extension-store-error-card', () => {
             expect(wrapper.get('.sw-extension-store-error-card__label').attributes().variant).toBe(expectedLabelVariant);
 
             // Ensure correct icon for variant
-            expect(wrapper.get('.sw-extension-store-error-card__label sw-icon-stub').attributes().name).toBe(expectedIcon);
+            expect(wrapper.get('.sw-extension-store-error-card__label .mt-icon').classes())
+                .toContain(`icon--${expectedIcon}`);
 
             // Ensure correct component class
             expect(wrapper.classes()).toContain(expectedComponentClass);

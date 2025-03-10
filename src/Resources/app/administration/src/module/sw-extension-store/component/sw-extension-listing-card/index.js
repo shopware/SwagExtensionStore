@@ -56,15 +56,15 @@ export default {
                 return null;
             }
 
-            return this.$tc(
+            return this.$t(
                 'sw-extension-store.general.labelPrice',
-                this.shopwareExtensionService.mapVariantToRecommendation(this.recommendedVariant),
                 {
                     price: Utils.format.currency(
                         this.shopwareExtensionService.getPriceFromVariant(this.recommendedVariant),
                         'EUR'
                     )
-                }
+                },
+                this.shopwareExtensionService.mapVariantToRecommendation(this.recommendedVariant)
             );
         },
 

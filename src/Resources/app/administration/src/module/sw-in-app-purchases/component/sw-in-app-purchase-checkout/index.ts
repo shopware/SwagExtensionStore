@@ -70,7 +70,7 @@ export default Shopware.Component.wrapComponentConfig({
             this.state = 'loading';
 
             await Promise.all([
-                this.cart = this.inAppPurchasesService.createCart(
+                this.inAppPurchasesService.createCart(
                     this.store.extension,
                     this.store.entry.identifier
                 ),

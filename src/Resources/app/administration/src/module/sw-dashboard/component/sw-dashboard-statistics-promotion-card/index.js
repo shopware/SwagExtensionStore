@@ -11,29 +11,6 @@ export default Shopware.Component.wrapComponentConfig({
 
     inject: ['extensionStoreDataService', 'acl'],
 
-    i18n: {
-        messages: {
-            /* eslint-disable max-len */
-            'en-GB': {
-                'badge-new': 'Available now',
-                'promotion-title': 'Shopware Analytics',
-                'promotion-text': 'Discover the new suite of KPIs with your sales and performance metrics in Shopware. Get ready to benefit from an ever-expanding range of fresh insights to support your journey toward success!',
-                'app-name': 'Shopware Analytics',
-                'app-description': 'Unlock store performance metrics',
-                'go-to-app': 'Try it out now'
-            },
-            'de-DE': {
-                'badge-new': 'Jetzt verfügbar',
-                'promotion-title': 'Shopware Analytics',
-                'promotion-text': 'Entdecke die neue Suite an Kennzahlen mit Deinen Verkaufs- und Leistungsmetriken in Shopware. Mach Dich bereit, von einer ständig wachsenden Auswahl an Auswertungen zu profitieren, die Deine Reise zum Erfolg unterstützen!',
-                'app-name': 'Shopware Analytics',
-                'app-description': 'Erfasse wichtige Shop-Kennzahlen',
-                'go-to-app': 'Jetzt ausprobieren'
-            }
-            /* eslint-enable max-len */
-        }
-    },
-
     data() {
         return {
             analyticsPromotionIcon,

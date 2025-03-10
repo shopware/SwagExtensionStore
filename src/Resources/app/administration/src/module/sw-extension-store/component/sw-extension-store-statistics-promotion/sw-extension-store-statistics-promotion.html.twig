@@ -1,4 +1,4 @@
-<sw-card
+<div
     v-if="showBanner"
     class="sw-extension-store-statistics-promotion"
 >
@@ -10,21 +10,21 @@
 
         <div class="sw-extension-store-statistics-promotion__app-info">
             <h4 class="sw-extension-store-statistics-promotion__app-info-name">
-                {{ $tc('app-name') }}
+                {{ $t('sw-extension-store-statistics-promotion.app-name') }}
             </h4>
 
             <span class="sw-extension-store-statistics-promotion__app-info-description">
-                {{ $tc('app-description') }}
+                {{ $t('sw-extension-store-statistics-promotion.app-description') }}
             </span>
         </div>
     </div>
 
-    <sw-button
+    <mt-button
         class="sw-extension-store-statistics-promotion__go-to-app"
         variant="primary"
         :disabled="!linkToStatisticsAppExists"
         @click="goToStatisticsAppDetailPage"
     >
-        {{ $tc('go-to-app') }} <sw-icon name="regular-long-arrow-right" size="12px" />
-    </sw-button>
-</sw-card>
+        {{ $t('sw-extension-store-statistics-promotion.go-to-app') }} <mt-icon name="regular-long-arrow-right" size="12px" />
+    </mt-button>
+</div>

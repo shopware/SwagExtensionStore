@@ -159,7 +159,7 @@ $padding-summary-card: 22px;
             color: $color-gray-500;
         }
 
-        .sw-button {
+        .mt-button {
             margin-top: 16px;
         }
     }
@@ -204,7 +204,7 @@ $padding-summary-card: 22px;
         margin-top: 5px;
     }
 
-    .sw-field__label .is--required::after {
+    .mt-field__label .is--required::after {
         display: none;
     }
 
