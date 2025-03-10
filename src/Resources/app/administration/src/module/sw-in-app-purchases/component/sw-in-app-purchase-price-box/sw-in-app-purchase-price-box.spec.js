@@ -13,12 +13,6 @@ async function createWrapper(overrides) {
                 duration: 1,
                 ...overrides
             }
-        },
-        global: {
-            stubs: {
-                'sw-icon': true,
-                'sw-alert': true
-            }
         }
     });
 }

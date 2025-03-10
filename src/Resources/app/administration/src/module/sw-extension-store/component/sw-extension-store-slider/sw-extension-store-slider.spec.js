@@ -13,9 +13,6 @@ async function createWrapper() {
         },
         global: {
             stubs: {
-                'sw-icon': {
-                    template: '<div class="sw-icon"></div>'
-                },
                 'sw-loader': true
             },
             provide: {}

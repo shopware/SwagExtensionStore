@@ -10,9 +10,7 @@ async function createWrapper(props) {
         props,
         global: {
             stubs: {
-                'sw-button': true,
-                'sw-loader': true,
-                'sw-icon': true
+                'sw-loader': true
             }
         }
     });

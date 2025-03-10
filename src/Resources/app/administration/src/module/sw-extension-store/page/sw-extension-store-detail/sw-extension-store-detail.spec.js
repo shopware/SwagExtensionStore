@@ -66,16 +66,13 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAp
                 'sw-loader': true,
                 'sw-extension-type-label': true,
                 'sw-extension-store-slider': true,
-                'sw-icon': true,
                 'sw-meteor-card': true,
-                'sw-button': await wrapTestComponent('sw-button'),
                 'sw-label': await wrapTestComponent('sw-label'),
                 'sw-button-group': true,
                 'sw-context-button': true,
                 'sw-context-menu-item': true,
                 'sw-extension-ratings-card': true,
                 'sw-button-process': await wrapTestComponent('sw-button-process'),
-                'sw-alert': true,
                 'sw-extension-rating-stars': true,
                 'router-link': {
                     template: '<div class="router-link"><slot></slot></div>'

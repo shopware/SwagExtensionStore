@@ -9,11 +9,7 @@ async function createWrapper(props) {
         props,
         global: {
             mocks: {
-                $tc: (key) => key
-            },
-            stubs: {
-                'sw-button': true,
-                'sw-icon': true
+                $t: (key) => key
             }
         }
     });

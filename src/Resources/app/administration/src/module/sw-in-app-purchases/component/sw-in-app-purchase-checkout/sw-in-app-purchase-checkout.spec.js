@@ -56,8 +56,6 @@ async function createWrapper(error = false) {
                                <slot name="default"></slot>
                            </div>`
                 },
-                'sw-alert': true,
-                'sw-button': true,
                 'sw-loader': true,
                 'sw-extension-icon': true,
                 'sw-in-app-purchase-checkout-overview': true,

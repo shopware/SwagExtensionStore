@@ -15,7 +15,6 @@ async function createWrapper(extension) {
         },
         global: {
             stubs: {
-                'sw-icon': true,
                 'sw-extension-rating-stars': true,
                 'router-link': true,
                 'sw-extension-type-label': true,
@@ -44,7 +43,7 @@ async function createWrapper(extension) {
                 )
             },
             mocks: {
-                $tc: (key, recommendation, price) => JSON.stringify({ key, recommendation, price })
+                $t: (key, price, recommendation) => JSON.stringify({ key, recommendation, price })
             }
         }
     });
