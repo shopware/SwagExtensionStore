@@ -253,6 +253,7 @@ export default {
             }
 
             this.$emit('modal-close');
+            window.location.reload();
         },
 
         setSelectedVariantId(variantId) {
