@@ -22,9 +22,9 @@ class InAppPurchasesService
     ) {
     }
 
-    public function createCart(string $extensionName, string $feature, Context $context): InAppPurchaseCartStruct
+    public function createCart(string $extensionName, string $feature, string $variant, Context $context): InAppPurchaseCartStruct
     {
-        return $this->client->createInAppPurchaseCart($extensionName, $feature, $context);
+        return $this->client->createInAppPurchaseCart($extensionName, $feature, $variant, $context);
     }
 
     /**

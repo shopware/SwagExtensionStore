@@ -204,7 +204,7 @@ class StoreClient
         }
     }
 
-    public function createInAppPurchaseCart(string $extensionName, string $feature, Context $context): InAppPurchaseCartStruct
+    public function createInAppPurchaseCart(string $extensionName, string $feature, string $variant, Context $context): InAppPurchaseCartStruct
     {
         try {
             $response = $this->client->request(
@@ -216,6 +216,7 @@ class StoreClient
                     'json' => [
                         'extensionName' => $extensionName,
                         'inAppFeatureIdentifier' => $feature,
+                        'variant' => $variant ?: null,
                     ],
                 ],
             );

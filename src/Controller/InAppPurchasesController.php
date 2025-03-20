@@ -43,7 +43,7 @@ class InAppPurchasesController
     }
 
     #[Route('/api/_action/in-app-purchases/{technicalName}/details', name: 'api.in-app-purchases.detail', methods: ['GET'])]
-    public function getInAppFeature(string $technicalName, Context $context): Response
+    public function getInAppPurchaseDetails(string $technicalName, Context $context): Response
     {
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('name', $technicalName));
@@ -55,13 +55,25 @@ class InAppPurchasesController
         return new JsonResponse($extension);
     }
 
+    #[Route('/api/_action/in-app-purchases/{technicalName}/{inAppPurchase}', name: 'api.in-app-purchases.in-app-purchase', methods: ['GET'])]
+    public function getInAppPurchase(string $technicalName, string $inAppPurchase, Context $context): Response
+    {
+        $inAppPurchaseCollection = $this->inAppPurchasesService->listPurchases($technicalName, $context);
+        $iap = $inAppPurchaseCollection->filter(
+            fn ($availableInAppPurchases) => $availableInAppPurchases->getIdentifier() === $inAppPurchase
+        )->first();
+
+        return new JsonResponse($iap);
+    }
+
     #[Route('/api/_action/in-app-purchases/cart/new', name: 'api.in-app-purchases.cart.new', methods: ['POST'])]
     public function createCart(RequestDataBag $data, Context $context): Response
     {
         $name = $data->getString('name');
         $feature = $data->getString('feature');
+        $variant = $data->getString('variant');
 
-        $cart = $this->inAppPurchasesService->createCart($name, $feature, $context);
+        $cart = $this->inAppPurchasesService->createCart($name, $feature, $variant, $context);
 
         return new JsonResponse($cart);
     }

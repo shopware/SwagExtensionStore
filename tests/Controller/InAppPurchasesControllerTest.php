@@ -48,7 +48,7 @@ class InAppPurchasesControllerTest extends TestCase
         );
 
         $content = $this->validateResponse(
-            $controller->getInAppFeature('testExtension', Context::createDefaultContext()),
+            $controller->getInAppPurchaseDetails('testExtension', Context::createDefaultContext()),
         );
 
         static::assertSame('testExtension', $content['name']);
@@ -73,6 +73,43 @@ class InAppPurchasesControllerTest extends TestCase
         $requestDataBag = new RequestDataBag([
             'name' => 'testExtension',
             'feature' => 'testFeature',
+            'variant' => 'monthly',
+        ]);
+
+        $content = $this->validateResponse(
+            $controller->createCart($requestDataBag, Context::createDefaultContext()),
+        );
+
+        static::assertSame(50, $content['netPrice']);
+        static::assertSame(59.5, $content['grossPrice']);
+        static::assertSame(9.5, $content['taxValue']);
+        static::assertSame(19, $content['taxRate']);
+        static::assertSame('testFeature', $content['positions'][0]['feature']['identifier']);
+        static::assertSame('Test Feature', $content['positions'][0]['feature']['name']);
+        static::assertSame('random-type', $content['positions'][0]['priceModel']['type']);
+        static::assertSame(59.5, $content['positions'][0]['priceModel']['price']);
+    }
+
+    public function testCreateCartWithEmptyVariant(): void
+    {
+        $cartStruct = $this->getInAppPurchaseCartStruct();
+        $service = $this->createMock(InAppPurchasesService::class);
+        $service->expects(static::once())
+            ->method('createCart')
+            ->willReturn($cartStruct);
+
+        $controller = new InAppPurchasesController(
+            $service,
+            $this->createMock(InAppPurchaseUpdater::class),
+            $this->createMock(AbstractExtensionDataProvider::class),
+            $this->createMock(InAppPurchasesGateway::class),
+            $this->createMock(EntityRepository::class),
+        );
+
+        $requestDataBag = new RequestDataBag([
+            'name' => 'testExtension',
+            'feature' => 'testFeature',
+            'variant' => '',
         ]);
 
         $content = $this->validateResponse(

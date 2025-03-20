@@ -12,10 +12,6 @@ export default Shopware.Component.wrapComponentConfig({
             type: Object as PropType<IAP.InAppPurchase>,
             required: true,
         },
-        priceModel: {
-            type: Object as PropType<IAP.InAppPurchasePriceModel>,
-            required: true,
-        },
         tosAccepted: {
             type: Boolean,
             required: true,
@@ -25,6 +21,15 @@ export default Shopware.Component.wrapComponentConfig({
     methods: {
         onTosAcceptedChange(value: boolean) {
             this.$emit('update:tos-accepted', value);
+        },
+
+        getPurchaseOptions(priceModels: IAP.InAppPurchasePriceModelCollection): Array<{ value: string, name: string }> {
+            return priceModels.map((priceModel: IAP.InAppPurchasePriceModel) => {
+                return {
+                    value: priceModel.variant,
+                    name: `€${priceModel.price}* /${ this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`)}`
+                };
+            });
         },
     },
 });

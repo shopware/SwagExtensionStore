@@ -18,7 +18,6 @@
     "successSubtitle": "Du kannst jetzt dein neues Feature erleben."
   },
   "sw-in-app-purchase-price-box": {
-    "priceText": "Preis",
     "duration": {
       "monthly": "monatlich",
       "yearly": "jährlich"

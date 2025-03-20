@@ -18,7 +18,7 @@ use Shopware\Core\Framework\Struct\Struct;
 class InAppPurchaseStruct extends Struct
 {
     private function __construct(
-        protected InAppPurchasePriceModelStruct $priceModel,
+        protected InAppPurchasePriceModelCollection $priceModels,
         protected string $identifier = '',
         protected string $name = '',
         protected ?string $description = null,
@@ -30,7 +30,7 @@ class InAppPurchaseStruct extends Struct
      */
     public static function fromArray(array $data): self
     {
-        return (new self(InAppPurchasePriceModelStruct::fromArray($data['priceModel'])))->assign($data);
+        return (new self(InAppPurchasePriceModelCollection::fromArray($data['priceModels'])))->assign($data);
     }
 
     public function getIdentifier(): string
@@ -63,13 +63,18 @@ class InAppPurchaseStruct extends Struct
         $this->description = $description;
     }
 
-    public function getPriceModel(): InAppPurchasePriceModelStruct
+    public function getPriceModels(): InAppPurchasePriceModelCollection
     {
-        return $this->priceModel;
+        return $this->priceModels;
     }
 
-    public function setPriceModals(InAppPurchasePriceModelStruct $priceModel): void
+    public function setPriceModels(InAppPurchasePriceModelCollection $priceModels): void
     {
-        $this->priceModel = $priceModel;
+        $this->priceModels = $priceModels;
+    }
+
+    public function addPriceModel(InAppPurchasePriceModelStruct $priceModel): void
+    {
+        $this->priceModels->add($priceModel);
     }
 }

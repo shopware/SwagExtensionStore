@@ -10,8 +10,17 @@
     </div>
 
     <sw-in-app-purchase-price-box
-        :price-model="priceModel"
+        v-if="purchase.priceModels.length === 1"
+        :price-model="purchase.priceModels[0]"
     />
+
+    <sw-radio-field
+        v-else
+        block
+        :options="getPurchaseOptions(purchase.priceModels)"
+        class="sw-in-app-purchase-checkout-purchase__feature__choices"
+    />
+
 
     <div class="sw-in-app-purchase-checkout-purchase__subtext">
         <p class="sw-in-app-purchase-checkout-purchase__subtext__bill">

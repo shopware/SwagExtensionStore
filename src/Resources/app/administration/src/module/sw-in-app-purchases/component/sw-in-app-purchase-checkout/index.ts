@@ -23,6 +23,7 @@ export default Shopware.Component.wrapComponentConfig({
             store: Shopware.Store.get('inAppPurchaseCheckout'),
             inAppPurchaseCart: null as IAP.InAppPurchaseCart | null,
             extension: null as IAP.Extension | null,
+            purchase: null as IAP.InAppPurchase | null,
             tosAccepted: false,
             errorSnippet: null as string | null,
         };
@@ -35,12 +36,6 @@ export default Shopware.Component.wrapComponentConfig({
     computed: {
         assetFilter() {
             return Shopware.Filter.getByName('asset');
-        },
-        priceModel(): IAP.InAppPurchasePriceModel | null {
-            return this.inAppPurchaseCart?.positions?.[0].feature.priceModel || null;
-        },
-        purchase(): IAP.InAppPurchase | null {
-            return this.inAppPurchaseCart?.positions?.[0].feature || null;
         },
         extensionIcon() {
             if (this.extension?.icon) {
@@ -72,13 +67,11 @@ export default Shopware.Component.wrapComponentConfig({
             this.state = 'loading';
 
             await Promise.all([
-                this.inAppPurchasesService.createCart(
-                    this.store.extension,
-                    this.store.entry.identifier,
-                ),
                 this.inAppPurchasesService.getExtension(this.store.extension),
-            ]).then(([inAppPurchaseCart, extension]) => {
-                this.inAppPurchaseCart = inAppPurchaseCart;
+                this.inAppPurchasesService.getPriceModels(this.store.extension, this.store.entry.identifier),
+            ]).then(([extension, purchase]) => {
+                console.log(purchase);
+                this.purchase = purchase;
                 this.extension = extension;
                 this.state = 'purchase';
             }).catch((errorResponse: ErrorResponse) => {
@@ -94,12 +87,26 @@ export default Shopware.Component.wrapComponentConfig({
                 return;
             }
 
-            this.inAppPurchasesService.orderCart(
-                this.inAppPurchaseCart?.taxRate,
-                this.inAppPurchaseCart?.positions,
-                this.extension?.name,
-            ).then(() => {
-                this.state = 'success';
+            if (!this.store.entry.variant) {
+                console.log('no variant');
+            }
+
+            this.inAppPurchasesService.createCart(
+                this.store.extension,
+                this.store.entry.identifier,
+                /* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */
+                this.store.entry.variant
+            ).then((inAppPurchaseCart) => {
+                this.inAppPurchasesService.orderCart(
+                    inAppPurchaseCart?.taxRate,
+                    inAppPurchaseCart?.positions,
+                    this.extension?.name
+                ).then(() => {
+                    this.state = 'success';
+                }).catch((errorResponse: ErrorResponse) => {
+                    Shopware.Utils.debug.error(errorResponse);
+                    this.state = 'error';
+                });
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error(errorResponse);
                 this.state = 'error';
@@ -141,6 +148,7 @@ export default Shopware.Component.wrapComponentConfig({
             this.extension = null;
             this.errorSnippet = null;
             this.state = 'loading';
+            this.purchase = null;
         },
     },
 });
