@@ -210,7 +210,7 @@
                             v-if="extensionHasPermissions"
                             class="sw-extension-buy-modal__checkbox sw-extension-buy-modal__checkbox-permissions"
                             :class="`sw-extension-buy-modal__checkbox-permissions--${extension.name}`"
-                            v-model:checked="permissionsAccepted"
+                            v-model:value="permissionsAccepted"
                         >
                             <template #label>
                                 <span v-if="legalText">
@@ -251,7 +251,7 @@
                         {# `mt-switch` doesn't provide a label slot yet #}
                         <sw-checkbox-field-deprecated
                             v-if="!extensionHasPermissions && legalText"
-                            v-model:checked="legalTextAccepted"
+                            v-model:value="legalTextAccepted"
                             class="sw-extension-buy-modal__checkbox sw-extension-buy-modal__checkbox-app-provider"
                             :class="`sw-extension-buy-modal__checkbox-app-provider--${extension.name}`"
                         >
@@ -273,7 +273,7 @@
                         {# `mt-switch` doesn't provide a label slot yet #}
                         <sw-checkbox-field-deprecated
                             v-if="extension.privacyPolicyExtension"
-                            v-model:checked="privacyExtensionsAccepted"
+                            v-model:value="privacyExtensionsAccepted"
                             class="sw-extension-buy-modal__checkbox-privacy-policy"
                             :class="`sw-extension-buy-modal__checkbox-privacy-policy--${extension.name}`"
                         >
