@@ -249,7 +249,7 @@
                     {% block sw_extension_buy_modal_accept_extension_app_provider %}
                         <sw-checkbox-field
                             v-if="!extensionHasPermissions && legalText"
-                            v-model="legalTextAccepted"
+                            v-model:value="legalTextAccepted"
                             class="sw-extension-buy-modal__checkbox sw-extension-buy-modal__checkbox-app-provider"
                             :class="`sw-extension-buy-modal__checkbox-app-provider--${extension.name}`"
                         >
@@ -270,7 +270,7 @@
                     {% block sw_extension_buy_modal_accept_extension_privacy_policy_extensions %}
                         <sw-checkbox-field
                             v-if="extension.privacyPolicyExtension"
-                            v-model="privacyExtensionsAccepted"
+                            v-model:value="privacyExtensionsAccepted"
                             class="sw-extension-buy-modal__checkbox-privacy-policy"
                             :class="`sw-extension-buy-modal__checkbox-privacy-policy--${extension.name}`"
                         >
