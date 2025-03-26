@@ -3,7 +3,6 @@
 # Folders
 /.github export-ignore
 /tests export-ignore
-/src/Resources/app/administration/internal-rules export-ignore
 
 # Files
 /src/Resources/app/administration/.eslintignore export-ignore
