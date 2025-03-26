@@ -5,9 +5,9 @@
                 <div class="sw-extension-listing-card__preview" :style="previewMedia">
                     {% block sw_extension_listing_card_preview_type_label %}
                         <sw-extension-type-label
-:type="extension.type"
-                                                 class="sw-extension-listing-card__extension-type-label"
-/>
+                            :type="extension.type"
+                            class="sw-extension-listing-card__extension-type-label"
+                        />
                     {% endblock %}
                 </div>
             {% endblock %}
@@ -16,23 +16,23 @@
                 <div class="sw-extension-listing-card__info-grid">
                     {% block sw_extension_listing_card_info_name %}
                         <p class="sw-extension-listing-card__info-name">
-{{ extension.label }}
-</p>
+                            {{ extension.label }}
+                        </p>
                     {% endblock %}
 
                     {% block sw_extension_listing_card_info_description %}
                         <p class="sw-extension-listing-card__info-description is--wrap-content">
-{{ extension.shortDescription }}
-</p>
+                            {{ extension.shortDescription }}
+                        </p>
                     {% endblock %}
 
                     {% block sw_extension_listing_card_info_rating %}
                         <div class="sw-extension-listing-card__info-rating">
                             <sw-extension-rating-stars
-class="sw-extension-listing-card__info-rating-stars"
-                                                       :rating="extension.rating"
-                                                       :size="12"
-/>
+                                class="sw-extension-listing-card__info-rating-stars"
+                                :rating="extension.rating"
+                                :size="12"
+                            />
 
                             <span class="sw-extension-listing-card__info-rating-count">
                                 {{ extension.numberOfRatings }}
@@ -59,7 +59,7 @@ class="sw-extension-listing-card__info-rating-stars"
                             v-if="extension.labels.length > 0"
                             :labels="extension.labels"
                             class="sw-extension-listing-card__label-display"
-/>
+                        />
                     {% endblock %}
                 </div>
             {% endblock %}

@@ -447,8 +447,8 @@
 
                             {% block sw_extension_store_detail_card_details_languages %}
                                 <dt v-if="extensionLanguages.length">
-{{ $t('sw-extension-store.detail.details.labelLanguages') }}
-</dt>
+                                    {{ $t('sw-extension-store.detail.details.labelLanguages') }}
+                                </dt>
                                 <dd>{{ extensionLanguages }}</dd>
                             {% endblock %}
 
@@ -506,7 +506,7 @@
                     :producer-name="extension.producerName"
                     :is-installed-and-licensed="isLicensed && isInstalled"
                     @update-extension="fetchExtensionAndScrollToRatings"
-/>
+                />
             {% endblock %}
 
             {% block sw_extension_store_detail_card_faq %}
@@ -543,21 +543,21 @@
                             :key="`sw-extension-store-detail__changelog-entry-${index}`"
                             class="sw-extension-store-detail__changelog-entry"
                         >
-                                {% block sw_extension_store_detail_card_changelog_entries_version %}
-                                    <div class="sw-extension-store-detail__changelog-version">
-{{ binary.version }}
-</div>
-                                {% endblock %}
+                            {% block sw_extension_store_detail_card_changelog_entries_version %}
+                                <div class="sw-extension-store-detail__changelog-version">
+                                    {{ binary.version }}
+                                </div>
+                            {% endblock %}
 
-                                {% block sw_extension_store_detail_card_changelog_entries_creation_date %}
-                                    <div class="sw-extension-store-detail__changelog-creation-date">
-                                        {{ dateFilter(binary.creationDate, { month: 'numeric', year: 'numeric', hour: undefined, minute: undefined }) }}
-                                    </div>
-                                {% endblock %}
+                            {% block sw_extension_store_detail_card_changelog_entries_creation_date %}
+                                <div class="sw-extension-store-detail__changelog-creation-date">
+                                    {{ dateFilter(binary.creationDate, { month: 'numeric', year: 'numeric', hour: undefined, minute: undefined }) }}
+                                </div>
+                            {% endblock %}
 
-                                {% block sw_extension_store_detail_card_changelog_entries_changelog_text %}
-                                    <p class="sw-extension-store-detail__changelog-text" v-html="binary.text" />
-                                {% endblock %}
+                            {% block sw_extension_store_detail_card_changelog_entries_changelog_text %}
+                                <p class="sw-extension-store-detail__changelog-text" v-html="binary.text" />
+                            {% endblock %}
                         </section>
                     {% endblock %}
                 </sw-meteor-card>

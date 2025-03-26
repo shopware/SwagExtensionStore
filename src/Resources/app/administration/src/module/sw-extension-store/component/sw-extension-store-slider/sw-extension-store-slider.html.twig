@@ -1,11 +1,11 @@
 {% block sw_extension_store_slider %}
     <div
-class="sw-extension-store-slider sw-meteor-card"
-         :class="[
-             cardClasses,
-             `sw-extension-store-slider__slides-count-${usedSlideCount}`
-         ]"
->
+        class="sw-extension-store-slider sw-meteor-card"
+        :class="[
+            cardClasses,
+            `sw-extension-store-slider__slides-count-${usedSlideCount}`
+        ]"
+    >
         {% block sw_extension_store_slider_slides %}
             <div ref="movingImageWrapper" class="sw-extension-store-slider__slides">
                 {% block sw_extension_store_slider_loader %}
@@ -17,13 +17,13 @@ class="sw-extension-store-slider sw-meteor-card"
                 <template v-else>
                     {% block sw_extension_store_slider_slide_item %}
                         <div
-v-for="img, key in images"
-                             :key="key"
-                             class="sw-extension-store-slider__slide-item"
-                             :class="slideClasses(key)"
-                             :data-key="key"
-                             :style="getActiveStyle(key)"
->
+                            v-for="img, key in images"
+                            :key="key"
+                            class="sw-extension-store-slider__slide-item"
+                            :class="slideClasses(key)"
+                            :data-key="key"
+                            :style="getActiveStyle(key)"
+                        >
                             <img :src="img">
                         </div>
                     {% endblock %}

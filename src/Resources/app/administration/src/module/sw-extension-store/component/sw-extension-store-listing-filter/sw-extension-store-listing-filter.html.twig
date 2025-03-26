@@ -26,15 +26,15 @@
                         @update:value="changeValueForFilter(filter, $event)"
                     >
                         <template
-v-if="filter.type === 'category'"
-                                  #result-label-property="{ item, valueProperty }"
->
+                            v-if="filter.type === 'category'"
+                            #result-label-property="{ item, valueProperty }"
+                        >
                             {% block sw_extension_store_listing_filter_category_filter_result %}
                                 <div
-v-if="item[valueProperty] !== null"
-                                     :class="{ 'is--root-category': isRootCategory(item) }"
-                                     :style="{ 'padding-left': isRootCategory(item) ? '0': `${categoryDepth(item)}em` }"
->
+                                    v-if="item[valueProperty] !== null"
+                                    :class="{ 'is--root-category': isRootCategory(item) }"
+                                    :style="{ 'padding-left': isRootCategory(item) ? '0': `${categoryDepth(item)}em` }"
+                                >
                                     {{ item.label }}
                                 </div>
                             {% endblock %}
