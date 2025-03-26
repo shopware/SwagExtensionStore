@@ -14,6 +14,10 @@ export default Shopware.Component.wrapComponentConfig({
             type: Boolean,
             required: true,
         },
+        gtcAccepted: {
+            type: Boolean,
+            required: true,
+        }
     },
 
     computed: {
@@ -22,7 +26,7 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         disabled() {
-            return this.state === 'purchase' && !this.tosAccepted;
+            return this.state === 'purchase' && (!this.tosAccepted || !this.gtcAccepted);
         },
 
         text() {

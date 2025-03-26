@@ -55,17 +55,6 @@ class InAppPurchasesController
         return new JsonResponse($extension);
     }
 
-    #[Route('/api/_action/in-app-purchases/{technicalName}/{inAppPurchase}', name: 'api.in-app-purchases.in-app-purchase', methods: ['GET'])]
-    public function getInAppPurchase(string $technicalName, string $inAppPurchase, Context $context): Response
-    {
-        $inAppPurchaseCollection = $this->inAppPurchasesService->listPurchases($technicalName, $context);
-        $iap = $inAppPurchaseCollection->filter(
-            fn ($availableInAppPurchases) => $availableInAppPurchases->getIdentifier() === $inAppPurchase
-        )->first();
-
-        return new JsonResponse($iap);
-    }
-
     #[Route('/api/_action/in-app-purchases/cart/new', name: 'api.in-app-purchases.cart.new', methods: ['POST'])]
     public function createCart(RequestDataBag $data, Context $context): Response
     {
@@ -141,6 +130,17 @@ class InAppPurchasesController
         });
 
         return new JsonResponse(status: Response::HTTP_NO_CONTENT);
+    }
+
+    #[Route('/api/_action/in-app-purchases/{technicalName}/{inAppPurchase}', name: 'api.in-app-purchases.in-app-purchase', methods: ['GET'])]
+    public function getInAppPurchase(string $technicalName, string $inAppPurchase, Context $context): Response
+    {
+        $inAppPurchaseCollection = $this->inAppPurchasesService->listPurchases($technicalName, $context);
+        $iap = $inAppPurchaseCollection->filter(
+            fn ($availableInAppPurchases) => $availableInAppPurchases->getIdentifier() === $inAppPurchase
+        )->first();
+
+        return new JsonResponse($iap);
     }
 
     private function getAppByName(string $appName, Context $context): ?AppEntity

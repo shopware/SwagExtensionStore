@@ -375,36 +375,39 @@ class InAppPurchasesControllerTest extends TestCase
                 'identifier' => 'testFeature',
                 'name' => 'Test Feature',
                 'description' => null,
-                'priceModel' => [
-                    'type' => 'random-type',
+                'priceModels' => [[
+                    'variant' => 'yearly',
+                    'type' => 'rent',
                     'price' => 59.5,
-                    'duration' => 'yearly',
+                    'duration' => 12,
                     'oneTimeOnly' => false,
-                ],
+                ]],
             ],
             $valid ? [
                 'extensionName' => 'testExtension',
                 'identifier' => 'testFeature2',
                 'name' => 'Test Feature 2',
                 'description' => null,
-                'priceModel' => [
-                    'type' => 'monthly-type',
+                'priceModels' => [[
+                    'variant' => 'monthly',
+                    'type' => 'rent',
                     'price' => 1.5,
-                    'duration' => 'monthly',
+                    'duration' => 1,
                     'oneTimeOnly' => false,
-                ],
+                ]],
             ] : null,
             [
                 'extensionName' => 'testExtension',
                 'identifier' => 'testFeature3',
                 'name' => 'Test Feature 3',
                 'description' => null,
-                'priceModel' => [
-                    'type' => 'monthly-type',
+                'priceModels' => [[
+                    'variant' => 'monthly',
+                    'type' => 'rent',
                     'price' => 1.5,
-                    'duration' => 'monthly',
+                    'duration' => 1,
                     'oneTimeOnly' => false,
-                ],
+                ]],
             ],
         ]));
     }

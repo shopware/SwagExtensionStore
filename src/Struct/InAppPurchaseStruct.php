@@ -22,6 +22,8 @@ class InAppPurchaseStruct extends Struct
         protected string $identifier = '',
         protected string $name = '',
         protected ?string $description = null,
+        protected ?string $serviceConditions = null,
+        protected ?string $websiteGtc = null,
     ) {
     }
 
@@ -76,5 +78,25 @@ class InAppPurchaseStruct extends Struct
     public function addPriceModel(InAppPurchasePriceModelStruct $priceModel): void
     {
         $this->priceModels->add($priceModel);
+    }
+
+    public function getServiceConditions(): ?string
+    {
+        return $this->serviceConditions;
+    }
+
+    public function setServiceConditions(?string $serviceConditions): void
+    {
+        $this->serviceConditions = $serviceConditions;
+    }
+
+    public function getWebsiteGtc(): ?string
+    {
+        return $this->websiteGtc;
+    }
+
+    public function setWebsiteGtc(?string $websiteGtc): void
+    {
+        $this->websiteGtc = $websiteGtc;
     }
 }

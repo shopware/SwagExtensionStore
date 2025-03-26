@@ -25,6 +25,7 @@ export default Shopware.Component.wrapComponentConfig({
             extension: null as IAP.Extension | null,
             purchase: null as IAP.InAppPurchase | null,
             tosAccepted: false,
+            gtcAccepted: false,
             errorSnippet: null as string | null,
         };
     },
@@ -70,8 +71,8 @@ export default Shopware.Component.wrapComponentConfig({
                 this.inAppPurchasesService.getExtension(this.store.extension),
                 this.inAppPurchasesService.getPriceModels(this.store.extension, this.store.entry.identifier),
             ]).then(([extension, purchase]) => {
-                console.log(purchase);
                 this.purchase = purchase;
+                this.gtcAccepted = purchase.priceModels[0]?.conditionsType === null;
                 this.extension = extension;
                 this.state = 'purchase';
             }).catch((errorResponse: ErrorResponse) => {

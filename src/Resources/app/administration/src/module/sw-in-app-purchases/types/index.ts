@@ -1,24 +1,23 @@
 export type { Extension } from 'src/module/sw-extension/service/extension-store-action.service';
 
-export type InAppPurchasePriceModel<Type extends 'rent' | 'buy' = 'rent' | 'buy'> = {
-    type: Type;
+export type InAppPurchasePriceModel = {
+    type: 'rent' | 'buy';
     price: number;
-    duration: Type extends 'rent' ? number : undefined | null;
-    oneTimeOnly: Type extends 'buy' ? boolean : undefined | null;
+    duration: number | null;
+    oneTimeOnly: null;
     variant: string;
-};
-
-export type InAppPurchasePriceModelCollection = {
-    priceModels: Array<InAppPurchasePriceModel>;
-};
+    conditionsType?: string | null;
+}
 
 export type InAppPurchase = {
     identifier: string;
     name: string;
     description?: string | null;
     price: number;
-    priceModels: InAppPurchasePriceModelCollection;
-};
+    serviceConditions?: string | null;
+    websiteGtc?: string | null;
+    priceModels: Array<InAppPurchasePriceModel>;
+}
 
 export type InAppPurchaseCartPositions = {
     feature: InAppPurchase;

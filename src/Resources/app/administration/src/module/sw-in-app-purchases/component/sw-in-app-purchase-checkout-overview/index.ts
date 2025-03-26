@@ -1,11 +1,11 @@
-import type * as IAP from 'src/module/sw-in-app-purchases/types';
+import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout-overview.html.twig';
 import './sw-in-app-purchase-checkout-overview.scss';
 
 export default Shopware.Component.wrapComponentConfig({
     template,
 
-    emits: ['update:tos-accepted'],
+    emits: ['update:tos-accepted', 'update:gtc-accepted'],
 
     props: {
         purchase: {
@@ -16,6 +16,19 @@ export default Shopware.Component.wrapComponentConfig({
             type: Boolean,
             required: true,
         },
+        gtcAccepted: {
+            type: Boolean,
+            required: true,
+        },
+        producer: {
+            type: String,
+            required: true,
+        },
+        showConditionsModal: {
+            type: Boolean,
+            required: false,
+            default: false,
+        }
     },
 
     methods: {
@@ -23,11 +36,15 @@ export default Shopware.Component.wrapComponentConfig({
             this.$emit('update:tos-accepted', value);
         },
 
-        getPurchaseOptions(priceModels: IAP.InAppPurchasePriceModelCollection): Array<{ value: string, name: string }> {
-            return priceModels.map((priceModel: IAP.InAppPurchasePriceModel) => {
+        onGtcAcceptedChange(value: boolean) {
+            this.$emit('update:gtc-accepted', value);
+        },
+
+        getPurchaseOptions(priceModels: Array<IAP.InAppPurchasePriceModel>): Array<{ value: string, name: string }> {
+            return priceModels.map((priceModel): { value: string, name: string } => {
                 return {
                     value: priceModel.variant,
-                    name: `€${priceModel.price}* /${ this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`)}`
+                    name: `€${priceModel.price}* /${this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`)}`
                 };
             });
         },

@@ -25,7 +25,9 @@
     <sw-in-app-purchase-checkout-overview
         v-if="state === 'purchase'"
         v-model:tos-accepted="tosAccepted"
+        v-model:gtc-accepted="gtcAccepted"
         :purchase="purchase"
+        :producer="extension.producerName"
     />
 
     <sw-in-app-purchase-checkout-state
@@ -38,6 +40,7 @@
         <sw-in-app-purchase-checkout-button
             :state="state"
             :tos-accepted="tosAccepted"
+            :gtc-accepted="gtcAccepted"
             @click="handleStateActions(true)"
         />
     </template>
