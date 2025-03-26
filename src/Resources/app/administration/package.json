@@ -6,33 +6,27 @@
     "scripts": {
         "unit": "jest --config jest.config.js --ci",
         "unit-watch": "jest --config jest.config.js --watch",
-        "lint": "eslint --ext .js,.ts,.vue src",
-        "lint-fix": "eslint --fix --ext .js,.ts,.vue src",
+        "lint": "eslint src",
+        "lint-fix": "eslint src --fix",
         "lint-ci": "npm run lint -- --format junit --output-file eslint.junit.xml"
     },
     "author": "",
     "license": "MIT",
     "devDependencies": {
-        "@babel/eslint-parser": "^7.26.5",
-        "@babel/plugin-transform-runtime": "^7.25.9",
         "@babel/preset-env": "^7.20.2",
         "@shopware-ag/eslint-config-base": "2.0.0",
         "@shopware-ag/jest-preset-sw6-admin": "^6.0.1",
-        "@stylistic/eslint-plugin-ts": "^3.1.0",
-        "@types/jest": "^29.5.0",
-        "@typescript-eslint/eslint-plugin": "^8.25.0",
-        "@typescript-eslint/parser": "^8.25.0",
-        "@vue/test-utils": "2.4.6",
-        "babel-jest": "29.5.0",
-        "eslint-import-resolver-webpack": "0.13.2",
-        "eslint-plugin-internal-rules": "file:internal-rules",
-        "eslint-plugin-jest": "28.11.0",
+        "@stylistic/eslint-plugin": "^4.2.0",
+        "@types/jest": "^29.5.14",
+        "eslint": "^9.21.0",
+        "eslint-import-resolver-typescript": "^3.8.3",
+        "eslint-plugin-import": "^2.31.0",
+        "eslint-plugin-jest": "^28.9.0",
+        "eslint-plugin-vue": "^9.32.0",
         "jest": "^29.7.0",
-        "jest-environment-jsdom": "^29.7.0"
-    },
-    "dependencies": {
-        "vue": "3.5.13",
-        "vue-i18n": "10.0.5"
+        "jest-environment-jsdom": "^29.7.0",
+        "typescript": "~5.8.2",
+        "typescript-eslint": "^8.26.0"
     },
     "optionalDependencies": {
         "administration": "^6.x"

@@ -42,12 +42,10 @@ module.exports = {
         '^SwagExtensionStore/../static(.*)\\?(url|raw)$': '<rootDir>/static$1',
         '^SwagExtensionStore(.*)$': '<rootDir>src$1',
         '^src(.*)$': `${process.env.ADMIN_PATH}/src$1`,
-        '^@shopware-ag/meteor-admin-sdk/es/(.*)':
-            `${process.env.ADMIN_PATH}/node_modules/@shopware-ag/meteor-admin-sdk/umd/$1`,
-        '^@shopware-ag/meteor-component-library$':
-            `${process.env.ADMIN_PATH}/node_modules/@shopware-ag/meteor-component-library/dist/common/index.js`,
-        vue$: '<rootDir>/node_modules/vue/dist/vue.cjs.js',
-        '@vue/test-utils': '<rootDir>/node_modules/@vue/test-utils'
+        '^@shopware-ag/meteor-admin-sdk/es/(.*)': `${process.env.ADMIN_PATH}/node_modules/@shopware-ag/meteor-admin-sdk/umd/$1`,
+        '^@shopware-ag/meteor-component-library$': `${process.env.ADMIN_PATH}/node_modules/@shopware-ag/meteor-component-library/dist/common/index.js`,
+        vue$: `${process.env.ADMIN_PATH}/node_modules/vue/dist/vue.cjs.js`,
+        '^@vue/test-utils$': `${process.env.ADMIN_PATH}/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js`,
     },
 
     testEnvironmentOptions: {
