@@ -6,7 +6,7 @@
     "serviceConditions": null,
     "websiteGtc": null,
     "id": 1,
-    "priceModel":  [{
+    "priceModels": [{
       "variant": "monthly",
       "type": "rent",
       "price": 99.99,
@@ -23,7 +23,7 @@
     "serviceConditions": null,
     "websiteGtc": null,
     "id": 2,
-    "priceModel":   [{
+    "priceModels": [{
       "variant": "monthly",
       "type": "rent",
       "price": 4.99,
