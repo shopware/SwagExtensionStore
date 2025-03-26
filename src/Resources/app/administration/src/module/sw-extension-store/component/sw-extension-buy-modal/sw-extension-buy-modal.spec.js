@@ -17,7 +17,7 @@ import 'src/module/sw-extension/mixin/sw-extension-error.mixin';
 
 Shopware.Component.register(
     'sw-extension-buy-modal',
-    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-buy-modal')
+    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-buy-modal'),
 );
 
 describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
@@ -27,48 +27,48 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             label: 'Test app',
             permissions: {},
             variants: [],
-            ...overrides
+            ...overrides,
         };
     }
 
     async function createWrapper(overrides, httpClient = null) {
         const loginService = {
-            getToken: () => Promise.resolve({ access: true, refresh: true })
+            getToken: () => Promise.resolve({ access: true, refresh: true }),
         };
 
         httpClient = httpClient ?? {
             post: jest.fn(),
-            get: jest.fn(() => Promise.resolve())
+            get: jest.fn(() => Promise.resolve()),
         };
 
         const shopwareExtensionService = new ShopwareExtensionService(
             { fetchAppModules() { return Promise.resolve(); } },
             new ExtensionStoreActionService(httpClient, loginService),
             new ShopwareDiscountCampaignService(),
-            new StoreApiService(httpClient, loginService)
+            new StoreApiService(httpClient, loginService),
         );
 
         const extensionStoreLicensesService = new ExtensionStoreLicensesService(httpClient, loginService);
 
         const wrapper = mount(await Shopware.Component.build('sw-extension-buy-modal'), {
             props: {
-                extension: provideTestExtension(overrides)
+                extension: provideTestExtension(overrides),
             },
             global: {
                 renderStubDefaultSlot: true,
                 mixins: [
-                    Shopware.Mixin.getByName('sw-extension-error')
+                    Shopware.Mixin.getByName('sw-extension-error'),
                 ],
                 provide: {
                     shopwareExtensionService,
-                    extensionStoreLicensesService
+                    extensionStoreLicensesService,
                 },
                 stubs: {
                     'sw-modal': {
                         template: `<div class="sw-modal">
                                    <slot name="default"></slot>
                                    <slot name="footer"></slot>
-                               </div>`
+                               </div>`,
                     },
                     'sw-base-field': await wrapTestComponent('sw-base-field', { sync: true }),
                     'sw-field-error': await wrapTestComponent('sw-field-error', { sync: true }),
@@ -83,9 +83,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                     'sw-single-select': true,
                     'sw-ai-copilot-badge': true,
                     'sw-help-text': true,
-                    'sw-inheritance-switch': true
-                }
-            }
+                    'sw-inheritance-switch': true,
+                },
+            },
         });
 
         Shopware.Application.getApplicationRoot = () => { return wrapper.vm; };
@@ -101,8 +101,8 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 netPrice: 497,
                 trialPhaseIncluded: false,
                 discountCampaign: null,
-                extensions: []
-            }]
+                extensions: [],
+            }],
         });
 
         expect(wrapper.find('.sw-extension-buy-modal__checkbox-permissions--test-app').exists()).toBe(false);
@@ -117,14 +117,14 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 netPrice: 497,
                 trialPhaseIncluded: false,
                 discountCampaign: null,
-                extensions: []
+                extensions: [],
             }],
             permissions: {
                 product: [{
                     entity: 'product',
-                    operation: 'read'
-                }]
-            }
+                    operation: 'read',
+                }],
+            },
         });
         await flushPromises();
 
@@ -144,9 +144,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 netPrice: 497,
                 trialPhaseIncluded: false,
                 discountCampaign: null,
-                extensions: []
+                extensions: [],
             }],
-            privacyPolicyExtension: 'Don\'t talk about the fight club!'
+            privacyPolicyExtension: 'Don\'t talk about the fight club!',
         });
 
         await wrapper.get('.sw-extension-buy-modal__checkbox-privacy-policy--test-app .privacy-policy-modal-trigger')
@@ -167,21 +167,21 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                             bookingShop: {},
                             grossPrice: 0,
                             licenseShop: {},
-                            legalText: '<p>Sub processor text</p>'
-                        }
+                            legalText: '<p>Sub processor text</p>',
+                        },
                     });
                 }
 
                 if (route === '/_action/store/checklogin') {
                     return Promise.resolve({
                         data: {
-                            userInfo: { email: 'j.doe@shopware.com' }
-                        }
+                            userInfo: { email: 'j.doe@shopware.com' },
+                        },
                     });
                 }
 
                 return Promise.resolve();
-            }
+            },
         };
 
         const wrapper = await createWrapper({
@@ -191,9 +191,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 netPrice: 497,
                 trialPhaseIncluded: false,
                 discountCampaign: null,
-                extensions: []
+                extensions: [],
             }],
-            type: 'plugin'
+            type: 'plugin',
         }, httpClient);
 
         // Check gtc checkbox to re-evaluate computed `userCanBuyFromStore`
@@ -223,35 +223,35 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             get: jest.fn((route) => {
                 if (route === '/_action/extension/installed') {
                     return Promise.resolve({
-                        data: []
+                        data: [],
                     });
                 }
                 return Promise.resolve();
             }),
             post: (route) => {
                 if (route === '/_action/extension-store/cart/order') {
-                    // eslint-disable-next-line prefer-promise-reject-errors
+                     
                     return Promise.reject({
-                        response: { data: { errors: [] } }
+                        response: { data: { errors: [] } },
                     });
                 }
 
                 if (route === '/_action/extension/refresh') {
                     return Promise.resolve({
-                        data: []
+                        data: [],
                     });
                 }
 
                 if (route === '/_action/store/checklogin') {
                     return Promise.resolve({
                         data: {
-                            userInfo: { email: 'j.doe@shopware.com' }
-                        }
+                            userInfo: { email: 'j.doe@shopware.com' },
+                        },
                     });
                 }
 
                 return Promise.resolve();
-            }
+            },
         };
 
         const wrapper = await createWrapper({
@@ -261,8 +261,8 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 netPrice: 497,
                 trialPhaseIncluded: false,
                 discountCampaign: null,
-                extensions: []
-            }]
+                extensions: [],
+            }],
         }, httpClient);
         await flushPromises();
 
@@ -281,9 +281,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             headers: expect.objectContaining({
                 Accept: expect.anything(),
                 Authorization: expect.anything(),
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             }),
-            version: expect.anything()
+            version: expect.anything(),
         });
 
         await wrapper.getComponent('sw-extension-adding-failed-stub').trigger('close');
@@ -296,7 +296,7 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             get: jest.fn((route) => {
                 if (route === '/_action/extension/installed') {
                     return Promise.resolve({
-                        data: []
+                        data: [],
                     });
                 }
 
@@ -309,20 +309,20 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
 
                 if (route === '/_action/extension/refresh') {
                     return Promise.resolve({
-                        data: []
+                        data: [],
                     });
                 }
 
                 if (route === '/_action/store/checklogin') {
                     return Promise.resolve({
                         data: {
-                            userInfo: { email: 'j.doe@shopware.com' }
-                        }
+                            userInfo: { email: 'j.doe@shopware.com' },
+                        },
                     });
                 }
 
                 return Promise.resolve();
-            }
+            },
         };
 
         const wrapper = await createWrapper({
@@ -332,8 +332,8 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 netPrice: 497,
                 trialPhaseIncluded: false,
                 discountCampaign: null,
-                extensions: []
-            }]
+                extensions: [],
+            }],
         }, httpClient);
         await flushPromises();
 
@@ -351,9 +351,9 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
             headers: expect.objectContaining({
                 Accept: expect.anything(),
                 Authorization: expect.anything(),
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             }),
-            version: expect.anything()
+            version: expect.anything(),
         });
 
         await wrapper.getComponent('sw-extension-adding-success-stub').trigger('close');

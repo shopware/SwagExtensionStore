@@ -1,27 +1,26 @@
 import { mount } from '@vue/test-utils';
 import ExtensionErrorService from 'src/module/sw-extension/service/extension-error.service';
 import 'src/app/component/meteor/sw-meteor-page';
-import { reactive } from 'vue';
 
 Shopware.Component.register(
     'sw-extension-store-index',
-    () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-index')
+    () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-index'),
 );
 Shopware.Component.register(
     'sw-extension-store-detail',
-    () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail')
+    () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail'),
 );
 
 const myExtensionsMock = jest.fn(() => Promise.resolve([{
     name: 'SwagExtensionStore',
     latestVersion: null,
-    version: '1.3.0'
+    version: '1.3.0',
 }]));
 
 Shopware.Application.addServiceProvider('extensionErrorService', () => {
     return new ExtensionErrorService({}, {
         title: 'global.default.error',
-        message: 'global.notification.unspecifiedSaveErrorMessage'
+        message: 'global.notification.unspecifiedSaveErrorMessage',
     });
 });
 
@@ -31,12 +30,12 @@ async function createWrapper() {
         global: {
             renderStubDefaultSlot: true,
             mocks: {
-                $route: reactive({
+                $route: Shopware.Vue.reactive({
                     name: 'sw.extension.store.listing.app',
                     meta: {
-                        $module: {}
-                    }
-                })
+                        $module: {},
+                    },
+                }),
             },
             stubs: {
                 /* sw-meteor-page */
@@ -49,7 +48,7 @@ async function createWrapper() {
                 'sw-extension-component-section': true,
                 'sw-app-topbar-button': true,
                 'sw-search-bar': {
-                    template: '<div class="sw-search-bar"></div>'
+                    template: '<div class="sw-search-bar"></div>',
                 },
                 /* sw-meteor-page */
 
@@ -58,18 +57,18 @@ async function createWrapper() {
                 'router-view': true,
                 'sw-extension-store-error-card': true,
                 'sw-extension-store-update-warning': true,
-                'sw-help-center': true
+                'sw-help-center': true,
             },
             provide: {
                 extensionStoreActionService: {
-                    getMyExtensions: myExtensionsMock
+                    getMyExtensions: myExtensionsMock,
                 },
                 shopwareExtensionService: {
-                    updateExtensionData: jest.fn()
+                    updateExtensionData: jest.fn(),
                 },
-                extensionErrorService: Shopware.Service('extensionErrorService')
-            }
-        }
+                extensionErrorService: Shopware.Service('extensionErrorService'),
+            },
+        },
     });
 }
 
@@ -80,12 +79,12 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
             id: 'shopwareExtensions',
             state: () => ({
                 search: {
-                    filter: {}
-                }
+                    filter: {},
+                },
             }),
             actions: {
-                setSearchValue: setSearchValueMock
-            }
+                setSearchValue: setSearchValueMock,
+            },
         });
     });
 
@@ -108,7 +107,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         expect(setSearchValueMock).toHaveBeenCalledTimes(1);
         expect(setSearchValueMock).toHaveBeenCalledWith({
             key: 'page',
-            value: 1
+            value: 1,
         });
         setSearchValueMock.mockClear();
 
@@ -117,7 +116,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
 
         expect(setSearchValueMock).toHaveBeenCalledWith({
             key: 'term',
-            value: 'Nice theme'
+            value: 'Nice theme',
         });
     });
 
@@ -127,7 +126,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         const filter = Shopware.Store.get('shopwareExtensions').search.filter;
 
         expect(filter).toEqual({
-            group: 'apps'
+            group: 'apps',
         });
     });
 
@@ -140,7 +139,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         const filter = Shopware.Store.get('shopwareExtensions').search.filter;
 
         expect(filter).toEqual({
-            group: 'themes'
+            group: 'themes',
         });
     });
 
@@ -149,7 +148,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         myExtensionsMock.mockImplementationOnce(() => Promise.resolve([{
             name: 'SwagExtensionStore',
             latestVersion: '1.4.0',
-            version: '1.3.0'
+            version: '1.3.0',
         }]));
 
         const wrapper = await createWrapper();
@@ -175,13 +174,13 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
                         code: 'FRAMEWORK__STORE_ERROR',
                         detail: 'The given Shopware version is unknown, please contact our customer service',
                         meta: {
-                            documentationLink: 'https://docs.shopware.com'
+                            documentationLink: 'https://docs.shopware.com',
                         },
                         status: '500',
-                        title: 'Shopware version is unknown'
-                    }
-                ]
-            }
+                        title: 'Shopware version is unknown',
+                    },
+                ],
+            },
         };
 
         // Emit listing error on router view

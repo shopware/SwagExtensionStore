@@ -11,22 +11,22 @@ export default {
 
     inject: [
         'shopwareExtensionService',
-        'extensionStoreLicensesService'
+        'extensionStoreLicensesService',
     ],
 
     emits: [
-        'modal-close'
+        'modal-close',
     ],
 
     mixins: [
-        'sw-extension-error'
+        'sw-extension-error',
     ],
 
     props: {
         extension: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
 
     data() {
@@ -43,7 +43,7 @@ export default {
             checkoutStep: null,
             checkoutError: null,
             cart: null,
-            paymentMeans: []
+            paymentMeans: [],
         };
     },
 
@@ -83,7 +83,7 @@ export default {
 
             return Utils.format.currency(
                 this.shopwareExtensionService.getPriceFromVariant(this.selectedVariant),
-                'EUR'
+                'EUR',
             );
         },
 
@@ -107,13 +107,13 @@ export default {
 
         vatIncludedClasses() {
             return {
-                'is--hidden': this.selectedVariant.type === this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.FREE
+                'is--hidden': this.selectedVariant.type === this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.FREE,
             };
         },
 
         renewalDateClasses() {
             return {
-                'is--hidden': this.selectedVariant.type !== this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.RENT
+                'is--hidden': this.selectedVariant.type !== this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.RENT,
             };
         },
 
@@ -133,8 +133,8 @@ export default {
         /* onPrem we need to check if the user is connected to the store in saas we check if the user has a plan */
         userCanBuyFromStore() {
             // Trigger for recompute value
-            // eslint-disable-next-line no-unused-vars
-            const trigger = this.tocAccepted;
+
+            const _trigger = this.tocAccepted;
 
             return Shopware.Store.get('shopwareExtensions').userInfo !== null;
         },
@@ -148,7 +148,7 @@ export default {
             return Object.freeze({
                 CHECKOUT: null,
                 SUCCESS: 'checkout-success',
-                FAILED: 'checkout-failed'
+                FAILED: 'checkout-failed',
             });
         },
 
@@ -164,7 +164,7 @@ export default {
 
             return this.$sanitize(this.cart.payment.paymentText, {
                 ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong', 'p', 'br'],
-                ALLOWED_ATTR: ['href', 'target', 'rel']
+                ALLOWED_ATTR: ['href', 'target', 'rel'],
             });
         },
 
@@ -175,7 +175,7 @@ export default {
 
             return this.$sanitize(this.cart.legalText, {
                 ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong', 'p', 'br'],
-                ALLOWED_ATTR: ['href', 'target', 'rel']
+                ALLOWED_ATTR: ['href', 'target', 'rel'],
             });
         },
 
@@ -192,9 +192,9 @@ export default {
                 }
 
                 this.cart.payment.paymentMean = {
-                    id: paymentId
+                    id: paymentId,
                 };
-            }
+            },
         },
 
         checkoutErrorDocumentationLink() {
@@ -203,7 +203,7 @@ export default {
 
         firstMonthFree() {
             return this.cart && this.cart.positions[0] && this.cart.positions[0].firstMonthFree === true;
-        }
+        },
     },
 
     async created() {
@@ -243,7 +243,7 @@ export default {
          */
         permissionsAccepted(value) {
             this.legalTextAccepted = value;
-        }
+        },
     },
 
     methods: {
@@ -265,7 +265,7 @@ export default {
 
         variantCardClass(variant) {
             return {
-                'is--selected': variant.id === this.selectedVariantId
+                'is--selected': variant.id === this.selectedVariantId,
             };
         },
 
@@ -327,7 +327,7 @@ export default {
 
         getDiscountClasses(variant) {
             return {
-                'is--discounted': this.hasDiscount(variant)
+                'is--discounted': this.hasDiscount(variant),
             };
         },
 
@@ -356,7 +356,7 @@ export default {
 
         getDiscountEnds(variant) {
             return Utils.format.date(
-                variant.discountCampaign ? new Date(Date.parse(variant.discountCampaign.endDate)) : null
+                variant.discountCampaign ? new Date(Date.parse(variant.discountCampaign.endDate)) : null,
             );
         },
 
@@ -404,7 +404,7 @@ export default {
                         autoClose: false,
                         growl: true,
                         title: e.title,
-                        message: e.detail
+                        message: e.detail,
                     });
                 });
             });
@@ -417,7 +417,7 @@ export default {
 
             return this.$sanitize(variant.legalText, {
                 ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong', 'p', 'br'],
-                ALLOWED_ATTR: ['href', 'target', 'rel']
+                ALLOWED_ATTR: ['href', 'target', 'rel'],
             });
         },
 
@@ -427,6 +427,6 @@ export default {
 
         closePrivacyModal() {
             this.showPrivacyModal = false;
-        }
-    }
+        },
+    },
 };

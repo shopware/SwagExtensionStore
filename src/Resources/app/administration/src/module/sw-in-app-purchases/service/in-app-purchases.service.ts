@@ -13,7 +13,7 @@ export default class InAppPurchasesService extends ApiService {
     async getExtension(technicalName: string) {
         return this.httpClient.get<IAP.Extension>(
             `_action/${this.apiEndpoint}/${technicalName}/details`,
-            { headers: this.getBasicHeaders() }
+            { headers: this.getBasicHeaders() },
         ).then(ApiService.handleResponse.bind(this));
     }
 
@@ -21,7 +21,7 @@ export default class InAppPurchasesService extends ApiService {
         return this.httpClient.post<IAP.InAppPurchaseCart>(
             `_action/${this.apiEndpoint}/cart/new`,
             { name, feature },
-            { headers: this.getBasicHeaders() }
+            { headers: this.getBasicHeaders() },
         ).then(ApiService.handleResponse.bind(this));
     }
 
@@ -29,21 +29,21 @@ export default class InAppPurchasesService extends ApiService {
         return this.httpClient.post<IAP.InAppPurchase>(
             `_action/${this.apiEndpoint}/cart/order`,
             { taxRate, positions, name },
-            { headers: this.getBasicHeaders() }
+            { headers: this.getBasicHeaders() },
         ).then(ApiService.handleResponse.bind(this));
     }
 
     async getAvailablePurchases(name: string) {
         return this.httpClient.get<IAP.InAppPurchaseCollection>(
             `_action/${this.apiEndpoint}/${name}/list`,
-            { headers: this.getBasicHeaders() }
+            { headers: this.getBasicHeaders() },
         ).then(ApiService.handleResponse.bind(this));
     }
 
     async refreshInAppPurchases() {
         return this.httpClient.get<never>(
             `_action/${this.apiEndpoint}/refresh`,
-            { headers: this.getBasicHeaders() }
+            { headers: this.getBasicHeaders() },
         ).then(ApiService.handleResponse.bind(this));
     }
 }

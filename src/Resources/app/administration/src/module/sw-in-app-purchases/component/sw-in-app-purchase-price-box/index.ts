@@ -8,8 +8,8 @@ export default Shopware.Component.wrapComponentConfig({
     props: {
         priceModel: {
             type: Object as PropType<IAP.InAppPurchasePriceModel>,
-            required: true
-        }
+            required: true,
+        },
     },
 
     computed: {
@@ -23,6 +23,6 @@ export default Shopware.Component.wrapComponentConfig({
             }
 
             return null;
-        }
-    }
+        },
+    },
 });

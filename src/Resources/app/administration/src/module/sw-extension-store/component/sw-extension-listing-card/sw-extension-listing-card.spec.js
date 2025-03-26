@@ -5,26 +5,26 @@ import 'src/module/sw-extension/store/extensions.store';
 
 Shopware.Component.register(
     'sw-extension-listing-card',
-    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-listing-card')
+    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-listing-card'),
 );
 
 async function createWrapper(extension) {
     return mount(await Shopware.Component.build('sw-extension-listing-card'), {
         props: {
-            extension
+            extension,
         },
         global: {
             stubs: {
                 'sw-extension-rating-stars': true,
                 'router-link': true,
                 'sw-extension-type-label': true,
-                'sw-extension-store-label-display': true
+                'sw-extension-store-label-display': true,
             },
             provide: {
                 repositoryFactory: {
                     create: () => {
                         return {};
-                    }
+                    },
                 },
                 systemConfigApiService: {
                     getValues: () => {
@@ -32,20 +32,20 @@ async function createWrapper(extension) {
                             'core.store.apiUri': 'https://api.shopware.com',
                             'core.store.licenseHost': 'sw6.test.shopware.in',
                             'core.store.shopSecret': 'very.s3cret',
-                            'core.store.shopwareId': 'max@muster.com'
+                            'core.store.shopwareId': 'max@muster.com',
                         });
-                    }
+                    },
                 },
                 shopwareExtensionService: new ShopwareExtensionService(
                     undefined,
                     undefined,
-                    new ShopwareDiscountCampaignService()
-                )
+                    new ShopwareDiscountCampaignService(),
+                ),
             },
             mocks: {
-                $t: (key, price, recommendation) => JSON.stringify({ key, recommendation, price })
-            }
-        }
+                $t: (key, price, recommendation) => JSON.stringify({ key, recommendation, price }),
+            },
+        },
     });
 }
 
@@ -56,7 +56,7 @@ describe('sw-extension-listing-card', () => {
     beforeEach(() => {
         Shopware.Store.get('shopwareExtensions').setMyExtensions([{
             name: 'Test',
-            installedAt: null
+            installedAt: null,
         }]);
     });
 
@@ -71,9 +71,9 @@ describe('sw-extension-listing-card', () => {
                     id: 79102,
                     type: 'free',
                     netPrice: 0,
-                    trialPhaseIncluded: true
-                }
-            ]
+                    trialPhaseIncluded: true,
+                },
+            ],
         });
 
         expect(wrapper.vm).toBeTruthy();
@@ -90,9 +90,9 @@ describe('sw-extension-listing-card', () => {
                     id: 79102,
                     type: 'free',
                     netPrice: 0,
-                    trialPhaseIncluded: true
-                }
-            ]
+                    trialPhaseIncluded: true,
+                },
+            ],
         });
 
         expect(wrapper.vm.isInstalled).toBe(false);
@@ -101,7 +101,7 @@ describe('sw-extension-listing-card', () => {
     it('isInstalled should be true when extension is in store', async () => {
         Shopware.Store.get('shopwareExtensions').setMyExtensions([{
             name: 'Test',
-            installedAt: 'some date'
+            installedAt: 'some date',
         }]);
 
         wrapper = await createWrapper({
@@ -114,9 +114,9 @@ describe('sw-extension-listing-card', () => {
                     id: 79102,
                     type: 'free',
                     netPrice: 0,
-                    trialPhaseIncluded: true
-                }
-            ]
+                    trialPhaseIncluded: true,
+                },
+            ],
         });
 
         expect(wrapper.vm.isInstalled).toBe(true);
@@ -133,13 +133,13 @@ describe('sw-extension-listing-card', () => {
                     id: 79102,
                     type: 'free',
                     netPrice: 0,
-                    trialPhaseIncluded: true
-                }
-            ]
+                    trialPhaseIncluded: true,
+                },
+            ],
         });
 
         expect(wrapper.vm.previewMedia).toStrictEqual({
-            'background-image': 'url(\'default_theme_preview.jpg\')'
+            'background-image': 'url(\'default_theme_preview.jpg\')',
         });
     });
 
@@ -153,19 +153,19 @@ describe('sw-extension-listing-card', () => {
                     id: 79102,
                     type: 'free',
                     netPrice: 0,
-                    trialPhaseIncluded: true
-                }
+                    trialPhaseIncluded: true,
+                },
             ],
             images: [
                 {
-                    remoteLink: 'a'
-                }
-            ]
+                    remoteLink: 'a',
+                },
+            ],
         });
 
         expect(wrapper.vm.previewMedia).toStrictEqual({
             'background-image': 'url(\'a\')',
-            'background-size': 'cover'
+            'background-size': 'cover',
         });
     });
 
@@ -174,7 +174,7 @@ describe('sw-extension-listing-card', () => {
             label: 'Test',
             name: 'Test',
             labels: [],
-            variants: []
+            variants: [],
         });
 
         expect(wrapper.vm.calculatedPrice).toBeNull();
@@ -185,7 +185,7 @@ describe('sw-extension-listing-card', () => {
             label: 'Test',
             name: 'Test2',
             labels: [],
-            variants: []
+            variants: [],
         });
 
         expect(wrapper.vm.isLicensed).toBe(false);
@@ -202,12 +202,12 @@ describe('sw-extension-listing-card', () => {
                 type: 'buy',
                 netPrice: 497,
                 trialPhaseIncluded: false,
-                extensions: []
-            }]
+                extensions: [],
+            }],
         });
 
         wrapper.vm.$router = {
-            push: jest.fn()
+            push: jest.fn(),
         };
 
         wrapper.vm.openDetailPage();
@@ -225,10 +225,10 @@ describe('sw-extension-listing-card', () => {
                 type: 'rent',
                 netPrice: 19,
                 trialPhaseIncluded: true,
-                extensions: []
+                extensions: [],
             }],
             rating: 4,
-            numberOfRatings: 10
+            numberOfRatings: 10,
         });
 
         expect(wrapper.find('.sw-extension-listing-card__info-name').text()).toBe('A Label');
@@ -240,7 +240,7 @@ describe('sw-extension-listing-card', () => {
             .toBe(JSON.stringify({
                 key: 'sw-extension-store.general.labelPrice',
                 recommendation: 1,
-                price: { price: '€19.00' }
+                price: { price: '€19.00' },
             }));
     });
 
@@ -271,9 +271,9 @@ describe('sw-extension-listing-card', () => {
                     discount: 15,
                     discountedPrice: 126.65,
                     startDate: '',
-                    discountAppliesForMonths: null
+                    discountAppliesForMonths: null,
                 },
-                extensions: []
+                extensions: [],
             }, {
                 id: 11,
                 type: 'rent',
@@ -284,21 +284,21 @@ describe('sw-extension-listing-card', () => {
                     discount: 15,
                     discountedPrice: 16.15,
                     startDate: '2021-01-27T00:01:00+01:00',
-                    discountAppliesForMonths: null
+                    discountAppliesForMonths: null,
                 },
-                extensions: []
+                extensions: [],
             }],
             images: [{
                 remoteLink: 'https://example.com',
                 raw: null,
-                extensions: []
+                extensions: [],
             }],
             icon: null,
             iconRaw: null,
             active: false,
             type: 'plugin',
             isTheme: false,
-            extensions: []
+            extensions: [],
         });
 
         expect(wrapper.find('.sw-extension-listing-card__info-name').text()).toBe('Sample Extension Label');
@@ -310,7 +310,7 @@ describe('sw-extension-listing-card', () => {
             .toBe(JSON.stringify({
                 key: 'sw-extension-store.general.labelPrice',
                 recommendation: 1,
-                price: { price: '€16.15' }
+                price: { price: '€16.15' },
             }));
     });
 
@@ -337,7 +337,7 @@ describe('sw-extension-listing-card', () => {
                 netPrice: 25,
                 trialPhaseIncluded: false,
                 discountCampaign: null,
-                extensions: []
+                extensions: [],
             },
             {
                 id: 11,
@@ -345,20 +345,20 @@ describe('sw-extension-listing-card', () => {
                 netPrice: 0,
                 trialPhaseIncluded: false,
                 discountCampaign: null,
-                extensions: []
+                extensions: [],
             }],
 
             images: [{
                 remoteLink: 'https://example.com',
                 raw: null,
-                extensions: []
+                extensions: [],
             }],
             icon: null,
             iconRaw: null,
             active: false,
             type: 'plugin',
             isTheme: false,
-            extensions: []
+            extensions: [],
         });
 
         expect(wrapper.find('.sw-extension-listing-card__info-name').text()).toBe('Sample Extension Label');
@@ -370,7 +370,7 @@ describe('sw-extension-listing-card', () => {
             .toBe(JSON.stringify({
                 key: 'sw-extension-store.general.labelPrice',
                 recommendation: 2,
-                price: { price: '€25.00' }
+                price: { price: '€25.00' },
             }));
     });
 
@@ -401,28 +401,28 @@ describe('sw-extension-listing-card', () => {
                     discount: 20.12072372,
                     discountedPrice: 397,
                     startDate: '2021-01-27T00:01:00+01:00',
-                    discountAppliesForMonths: null
+                    discountAppliesForMonths: null,
                 },
-                extensions: []
+                extensions: [],
             }, {
                 id: 80843,
                 type: 'test',
                 netPrice: 0,
                 trialPhaseIncluded: false,
                 discountCampaign: null,
-                extensions: []
+                extensions: [],
             }],
             images: [{
                 remoteLink: 'https://example.com',
                 raw: null,
-                extensions: []
+                extensions: [],
             }],
             icon: null,
             iconRaw: null,
             active: false,
             type: 'plugin',
             isTheme: true,
-            extensions: []
+            extensions: [],
         });
 
         expect(wrapper.find('.sw-extension-listing-card__info-name').text()).toBe('Sample Extension Label');
@@ -434,7 +434,7 @@ describe('sw-extension-listing-card', () => {
             .toBe(JSON.stringify({
                 key: 'sw-extension-store.general.labelPrice',
                 recommendation: 2,
-                price: { price: '€397.00' }
+                price: { price: '€397.00' },
             }));
     });
 });

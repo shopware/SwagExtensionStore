@@ -2,15 +2,15 @@ import { mount } from '@vue/test-utils';
 
 Shopware.Component.register(
     'sw-extension-store-detail',
-    () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail')
+    () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail'),
 );
 
 const cacheApiService = {
-    clear: jest.fn(() => Promise.resolve())
+    clear: jest.fn(() => Promise.resolve()),
 };
 
 const extensionHelperService = {
-    downloadAndActivateExtension: jest.fn(() => Promise.resolve())
+    downloadAndActivateExtension: jest.fn(() => Promise.resolve()),
 };
 
 async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAppPurchases = true) {
@@ -19,7 +19,7 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAp
         categories: [
             { details: { name: 'Productivity' } },
             { details: { name: 'Admin' } },
-            { details: { name: 'Storefront' } }
+            { details: { name: 'Storefront' } },
         ],
         description: '<p>This is a really cool extension.</p>',
         inAppFeaturesAvailable: inAppPurchases,
@@ -37,14 +37,14 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAp
         labels: [],
         faq: [],
         addons: [],
-        ...extensionCustomProps
+        ...extensionCustomProps,
     };
 
     const inAppPurchasesService = getInAppPurchasesMockService(inAppPurchases);
 
     return mount(await Shopware.Component.build('sw-extension-store-detail'), {
         props: {
-            id: 'a1b2c3'
+            id: 'a1b2c3',
         },
         global: {
             renderStubDefaultSlot: true,
@@ -59,7 +59,7 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAp
                 'sw-extension-component-section': true,
                 'sw-app-topbar-button': true,
                 'sw-search-bar': {
-                    template: '<div class="sw-search-bar"></div>'
+                    template: '<div class="sw-search-bar"></div>',
                 },
                 /* sw-meteor-page */
 
@@ -75,7 +75,7 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAp
                 'sw-button-process': await wrapTestComponent('sw-button-process'),
                 'sw-extension-rating-stars': true,
                 'router-link': {
-                    template: '<div class="router-link"><slot></slot></div>'
+                    template: '<div class="router-link"><slot></slot></div>',
                 },
                 'sw-extension-store-label-display': true,
                 'sw-extension-buy-modal': true,
@@ -84,49 +84,31 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAp
                 'sw-extension-adding-failed': true,
                 'sw-extension-store-in-app-purchases-listing-modal': true,
                 'sw-extension-icon': true,
-                'sw-external-link': true
+                'sw-external-link': true,
             },
             provide: {
                 shopwareExtensionService: {
                     updateExtensionData: jest.fn(),
                     isVariantDiscounted: jest.fn(),
                     orderVariantsByRecommendation: () => [],
-                    getOpenLink: () => (canBeOpened ? 'open-link' : null)
+                    getOpenLink: () => (canBeOpened ? 'open-link' : null),
                 },
                 extensionStoreDataService: {
                     getDetail: () => {
                         return testExtension;
-                    }
+                    },
                 },
                 extensionHelperService,
                 cacheApiService,
-                inAppPurchasesService
-            }
-        }
+                inAppPurchasesService,
+            },
+        },
     });
 }
 
 const setSearchValueMock = jest.fn();
 describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail', () => {
     const originalWindowLocation = window.location;
-
-    beforeAll(async () => {
-        Shopware.Store.register({
-            id: 'shopwareExtensions',
-            actions: {
-                setSearchValue: setSearchValueMock
-            }
-        });
-
-        Object.defineProperty(window, 'location', {
-            configurable: true,
-            value: { reload: jest.fn() }
-        });
-    });
-
-    afterAll(() => {
-        Object.defineProperty(window, 'location', { configurable: true, value: originalWindowLocation });
-    });
 
     beforeEach(() => {
         Shopware.Store.get('session').languageId = 'b2c3d4';
@@ -136,16 +118,34 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 active: true,
                 name: 'SwagB2BPlatform',
                 storeLicense: { variants: [{}] },
-                id: 1337
-            }]
+                id: 1337,
+            }],
         };
 
         setSearchValueMock.mockClear();
     });
 
+    beforeAll(async () => {
+        Shopware.Store.register({
+            id: 'shopwareExtensions',
+            actions: {
+                setSearchValue: setSearchValueMock,
+            },
+        });
+
+        Object.defineProperty(window, 'location', {
+            configurable: true,
+            value: { reload: jest.fn() },
+        });
+    });
+
     afterEach(() => {
         Shopware.Store.get('session').languageId = '';
         Shopware.Store.get('shopwareExtensions').myExtensions = { data: [], loading: false };
+    });
+
+    afterAll(() => {
+        Object.defineProperty(window, 'location', { configurable: true, value: originalWindowLocation });
     });
 
     it('should show all extension category names', async () => {
@@ -160,14 +160,14 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 active: true,
                 name: 'SwagB2BPlatform',
                 storeLicense: false,
-                id: 1337
-            }]
+                id: 1337,
+            }],
         };
 
         const wrapper = await createWrapper({
             storeLicense: false,
             addons: ['SW6_EnterpriseFeature'],
-            variants: []
+            variants: [],
         });
         await flushPromises();
 
@@ -208,12 +208,12 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     active: true,
                     name: 'TestExtension',
                     storeLicense: false,
-                    id: 1337
-                }]
+                    id: 1337,
+                }],
             };
 
             const wrapper = await createWrapper({
-                storeLicense: null
+                storeLicense: null,
             });
             await flushPromises();
 
@@ -239,17 +239,17 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     installedAt: {
                         date: '2021-07-08 07:34:11.794000',
                         timezone: 'UTC',
-                        timezone_type: 3
-                    }
-                }]
+                        timezone_type: 3,
+                    },
+                }],
             };
 
             const wrapper = await createWrapper({
                 installedAt: {
                     date: '2021-07-08 07:34:11.794000',
                     timezone: 'UTC',
-                    timezone_type: 3
-                }
+                    timezone_type: 3,
+                },
             });
             await flushPromises();
 
@@ -257,7 +257,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 .toBe('sw-extension-store.detail.labelButtonOpenExtension');
         });
 
-        /* eslint-disable-next-line max-len */
+
         it('should render "configuration" context menu when extension is installed, licensed and configurable', async () => {
             Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
@@ -269,17 +269,17 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     installedAt: {
                         date: '2021-07-08 07:34:11.794000',
                         timezone: 'UTC',
-                        timezone_type: 3
-                    }
-                }]
+                        timezone_type: 3,
+                    },
+                }],
             };
 
             const wrapper = await createWrapper({
                 installedAt: {
                     date: '2021-07-08 07:34:11.794000',
                     timezone: 'UTC',
-                    timezone_type: 3
-                }
+                    timezone_type: 3,
+                },
             });
             await flushPromises();
 
@@ -287,7 +287,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 .toBe('sw-extension-store.detail.openConfiguration');
         });
 
-        /* eslint-disable-next-line max-len */
+
         it('should render "configuration" button when extension is installed, licensed and configurable but can\'t be opened', async () => {
             Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
@@ -299,17 +299,17 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     installedAt: {
                         date: '2021-07-08 07:34:11.794000',
                         timezone: 'UTC',
-                        timezone_type: 3
-                    }
-                }]
+                        timezone_type: 3,
+                    },
+                }],
             };
 
             const wrapper = await createWrapper({
                 installedAt: {
                     date: '2021-07-08 07:34:11.794000',
                     timezone: 'UTC',
-                    timezone_type: 3
-                }
+                    timezone_type: 3,
+                },
             }, false);
             await flushPromises();
 
@@ -323,14 +323,14 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     active: true,
                     name: 'SwagB2BPlatform',
                     storeLicense: null,
-                    id: 1337
-                }]
+                    id: 1337,
+                }],
             };
 
             const wrapper = await createWrapper({
                 storeLicense: null,
                 addons: ['SW6_EnterpriseFeature'],
-                variants: []
+                variants: [],
             });
             await flushPromises();
 
@@ -338,20 +338,20 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 .toBe('sw-extension-store.detail.enterpriseContactLinkText');
         });
 
-        /* eslint-disable-next-line max-len */
+
         it('should not render any button when extension is not licensed, not purchasable and has no enterprise flag', async () => {
             Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
                     active: true,
                     name: 'SomeOtherExtension',
                     storeLicense: { variants: [{}] },
-                    id: 555
-                }]
+                    id: 555,
+                }],
             };
 
             const wrapper = await createWrapper({
                 storeLicense: null,
-                variants: []
+                variants: [],
             });
             await flushPromises();
 
@@ -367,13 +367,13 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     active: true,
                     name: 'TestExtension',
                     storeLicense: false,
-                    id: 1337
-                }]
+                    id: 1337,
+                }],
             };
 
             const wrapper = await createWrapper({
                 inAppFeaturesAvailable: true,
-                variants: [{ foo: 'bar' }]
+                variants: [{ foo: 'bar' }],
             });
 
             await flushPromises();
@@ -389,13 +389,13 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     active: true,
                     name: 'TestExtension',
                     storeLicense: false,
-                    id: 1337
-                }]
+                    id: 1337,
+                }],
             };
 
             const wrapper = await createWrapper({
                 inAppFeaturesAvailable: false,
-                variants: [{ foo: 'bar' }]
+                variants: [{ foo: 'bar' }],
             });
 
             await flushPromises();
@@ -422,7 +422,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
 function getInAppPurchasesMockService(inAppPurchases) {
     return {
-        getAvailablePurchases: jest.fn(() => getInAppPurchaseMockResponse(inAppPurchases))
+        getAvailablePurchases: jest.fn(() => getInAppPurchaseMockResponse(inAppPurchases)),
     };
 }
 
@@ -445,14 +445,14 @@ function getInAppPurchaseMockResponse(inAppPurchases) {
                 {
                     price: 9.99,
                     currency: 'USD',
-                    duration: 'monthly'
+                    duration: 'monthly',
                 },
                 {
                     price: 99.99,
                     currency: 'USD',
-                    duration: 'yearly'
-                }
-            ]
+                    duration: 'yearly',
+                },
+            ],
         },
         {
             identifier: 'feature2',
@@ -462,14 +462,14 @@ function getInAppPurchaseMockResponse(inAppPurchases) {
                 {
                     price: 4.99,
                     currency: 'USD',
-                    duration: 'monthly'
+                    duration: 'monthly',
                 },
                 {
                     price: 49.99,
                     currency: 'USD',
-                    duration: 'yearly'
-                }
-            ]
-        }
+                    duration: 'yearly',
+                },
+            ],
+        },
     ];
 }

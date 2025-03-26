@@ -3,42 +3,46 @@
         class="sw-extension-buy-modal"
         :title="$t('sw-extension-store.component.sw-extension-buy-modal.title')"
         size="450px"
-        :isLoading="isLoading"
-        @modal-close="emitClose">
+        :is-loading="isLoading"
+        @modal-close="emitClose"
+>
 
         {% block sw_extension_buy_modal_content %}
             <template v-if="checkoutStep === checkoutSteps.SUCCESS">
                 {% block sw_extension_buy_modal_adding_success_content %}
                     <sw-extension-adding-success
-                        @close="emitClose">
-                    </sw-extension-adding-success>
+                        @close="emitClose"
+/>
                 {% endblock %}
             </template>
 
             <template v-else-if="checkoutStep === checkoutSteps.FAILED">
                 {% block sw_extension_buy_modal_adding_failed_content %}
                     <sw-extension-adding-failed
-                        :extensionName="extension.name"
+                        :extension-name="extension.name"
                         :title="checkoutError && checkoutError.title"
                         :detail="checkoutError && checkoutError.detail"
-                        :documentationLink="checkoutErrorDocumentationLink"
-                        @close="emitClose">
-                    </sw-extension-adding-failed>
+                        :documentation-link="checkoutErrorDocumentationLink"
+                        @close="emitClose"
+/>
                 {% endblock %}
             </template>
 
             <template v-else>
                 {% block sw_extension_buy_modal_content_not_installed %}
                     {% block sw_extension_buy_modal_variant_selection %}
-                        <div class="sw-extension-buy-modal__variants-selection" :class="{
+                        <div
+class="sw-extension-buy-modal__variants-selection"
+:class="{
                             'sw-extension-buy-modal__variants-selection-single-entry': recommendedVariants.length <= 1
-                        }">
+                        }"
+>
                             {% block sw_extension_buy_modal_variant_selection_content %}
                                 {% block sw_extension_buy_modal_variant_selection_extension_preview %}
                                     <div class="sw-extension-buy-modal__extension-summary">
                                         {% block sw_extension_buy_modal_variant_selection_extension_preview_content %}
                                             {% block sw_extension_buy_modal_variant_selection_extension_icon %}
-                                                <sw-extension-icon :src="extension.icon"/>
+                                                <sw-extension-icon :src="extension.icon" />
                                             {% endblock %}
 
                                             {% block sw_extension_buy_modal_variant_selection_extension_name %}
@@ -53,43 +57,52 @@
                                 {% block sw_extension_buy_modal_variant_selection_variant_list %}
                                     <ul>
                                         {% block sw_extension_buy_modal_variant_selection_variant_list_item %}
-                                            <li v-for="variant in recommendedVariants"
+                                            <li
+v-for="variant in recommendedVariants"
                                                 :key="variant.id"
                                                 class="sw-extension-buy-modal__variants-card"
                                                 :class="variantCardClass(variant)"
-                                                @click="onChangeVariantSelection(variant)">
+                                                @click="onChangeVariantSelection(variant)"
+>
 
                                                 {% block sw_extension_buy_modal_variant_selection_variant_list_item_radio_button %}
                                                     <div class="sw-extension-buy-modal__variants-card-input sw-field--radio">
                                                         <div class="sw-field__radio-input">
-                                                            <input type="radio"
+                                                            <input
+:id="`sw-extension-buy-modal__variant-${variant.type}`"
+                                                                   type="radio"
                                                                    name="variant-selection"
-                                                                   :id="`sw-extension-buy-modal__variant-${variant.type}`"
                                                                    :value="variant.id"
                                                                    :checked="variant.id === selectedVariantId"
-                                                                   :disabled="isLoading"/>
-                                                            <div class="sw-field__radio-state"></div>
+                                                                   :disabled="isLoading"
+>
+                                                            <div class="sw-field__radio-state" />
                                                         </div>
                                                     </div>
                                                 {% endblock %}
 
                                                 {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label %}
                                                     {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_description %}
-                                                        <label :for="`sw-extension-buy-modal__variant-${variant.type}`"
-                                                               class="sw-extension-buy-modal__variant-description">
+                                                        <label
+:for="`sw-extension-buy-modal__variant-${variant.type}`"
+                                                               class="sw-extension-buy-modal__variant-description"
+>
                                                             {{ variant.label || variant.type }}
                                                         </label>
                                                     {% endblock %}
 
                                                     {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent %}
-                                                        <div v-if="variant.type === 'rent'"
-                                                             class="sw-extension-buy-modal__rent">
+                                                        <div
+v-if="variant.type === 'rent'"
+                                                             class="sw-extension-buy-modal__rent"
+>
 
                                                             {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent_prices %}
                                                                 <i18n-t
                                                                     keypath="sw-extension-store.buy-modal.rent.priceDisplay"
                                                                     tag="span"
-                                                                    :class="getDiscountClasses(variant)">
+                                                                    :class="getDiscountClasses(variant)"
+>
                                                                     <template #priceDisplay>
                                                                         <span class="sw-extension-buy-modal__list-price">{{ renderPrice(variant.netPrice) }}</span>
                                                                         <span v-if="hasDiscount(variant)" class="sw-extension-buy-modal__discounted-price">{{ getDiscountPrice(variant) }}</span>
@@ -98,7 +111,9 @@
                                                             {% endblock %}
 
                                                             {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent_trial %}
-                                                                <div v-if="variant.trialPhaseIncluded && firstMonthFree">{{ $t('sw-extension-store.buy-modal.rent.freeTrial') }}</div>
+                                                                <div v-if="variant.trialPhaseIncluded && firstMonthFree">
+{{ $t('sw-extension-store.buy-modal.rent.freeTrial') }}
+</div>
                                                             {% endblock %}
 
                                                             {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_rent_disclaimer %}
@@ -108,28 +123,36 @@
                                                     {% endblock %}
 
                                                     {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_buy %}
-                                                        <div v-else-if="variant.type === 'buy'"
-                                                             :class="getDiscountClasses(variant)">
+                                                        <div
+v-else-if="variant.type === 'buy'"
+                                                             :class="getDiscountClasses(variant)"
+>
 
                                                             {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_buy_prices %}
-                                                                <span v-if="hasDiscount(variant)"
-                                                                      class="sw-extension-buy-modal__list-price">{{ renderPrice(variant.netPrice) }}</span>
+                                                                <span
+v-if="hasDiscount(variant)"
+                                                                      class="sw-extension-buy-modal__list-price"
+>{{ renderPrice(variant.netPrice) }}</span>
                                                                 <span class="sw-extension-buy-modal__discounted-price">{{ renderBuyPrice(variant) }}</span>
                                                             {% endblock %}
                                                         </div>
                                                     {% endblock %}
 
                                                     {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_fallback %}
-                                                        <span v-else
-                                                              class="sw-extension-buy-modal__display-default-price">
+                                                        <span
+v-else
+                                                              class="sw-extension-buy-modal__display-default-price"
+>
                                                             {{ renderPrice(variant.netPrice) }}
                                                         </span>
                                                     {% endblock %}
 
                                                     {% block sw_extension_buy_modal_variant_selection_variant_list_item_variant_label_legal %}
-                                                        <span v-if="variant.legalText"
+                                                        <span
+v-if="variant.legalText"
+                                                              class="sw-extension-buy-modal__variant-text-block"
                                                               v-html="legalTextForVariant(variant)"
-                                                              class="sw-extension-buy-modal__variant-text-block"/>
+/>
                                                     {% endblock %}
                                                 {% endblock %}
                                             </li>
@@ -153,8 +176,10 @@
                                             {% endblock %}
 
                                             {% block sw_extension_buy_modal_summary_actual_price %}
-                                                <span v-if="!isLoading"
-                                                      class="sw-extension-buy-modal__variant-summary-actual-price">
+                                                <span
+v-if="!isLoading"
+                                                      class="sw-extension-buy-modal__variant-summary-actual-price"
+>
                                                     {{ $t('sw-extension-store.general.labelPrice', { price: formattedPrice }, variantRecommendation(selectedVariant)) }}
                                                 </span>
                                             {% endblock %}
@@ -163,15 +188,19 @@
                                 {% endblock %}
 
                                 {% block sw_extension_buy_modal_summary_label_plus_vat %}
-                                    <p class="sw-extension-buy-modal__variant-summary-price-subline"
-                                       :class="vatIncludedClasses">
+                                    <p
+class="sw-extension-buy-modal__variant-summary-price-subline"
+                                       :class="vatIncludedClasses"
+>
                                         {{ $t('sw-extension-store.component.sw-extension-buy-modal.variantSummary.labelVat') }}
                                     </p>
                                 {% endblock %}
 
                                 {% block sw_extension_buy_modal_summary_renewal_date %}
-                                    <p class="sw-extension-buy-modal__variant-summary-price-subline"
-                                       :class="renewalDateClasses">
+                                    <p
+class="sw-extension-buy-modal__variant-summary-price-subline"
+                                       :class="renewalDateClasses"
+>
                                         {{ $t('sw-extension-store.component.sw-extension-buy-modal.variantSummary.renewal', { renewalDate: dateFilter(todayPlusOneMonth) }, 0) }}
                                     </p>
                                 {% endblock %}
@@ -182,35 +211,34 @@
                     {% block sw_extension_payment_selection %}
                         <sw-single-select
                             v-if="showPaymentSelection"
+                            v-model:value="selectedPaymentMean"
                             :options="paymentMeans"
                             :placeholder="$t('sw-extension-store.buy-modal.paymentSelectionPlaceholder')"
-                            valueProperty="id"
-                            v-model:value="selectedPaymentMean"
-                        >
-                        </sw-single-select>
+                            value-property="id"
+                        />
                     {% endblock %}
 
                     {% block sw_extension_payment_general_text_block %}
-                        <p class="sw-extension-buy-modal__general-text-block"
-                           v-if="paymentText"
-                           v-html="paymentText">
-                        </p>
+                        <p
+v-if="paymentText"
+                           class="sw-extension-buy-modal__general-text-block"
+                           v-html="paymentText"
+/>
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_accept_toc %}
                         <sw-gtc-checkbox
                             v-model:value="tocAccepted"
-                        >
-                        </sw-gtc-checkbox>
+                        />
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_accept_extension_permissions %}
                         {# `mt-switch` doesn't provide a label slot yet #}
                         <sw-checkbox-field-deprecated
                             v-if="extensionHasPermissions"
+                            v-model:value="permissionsAccepted"
                             class="sw-extension-buy-modal__checkbox sw-extension-buy-modal__checkbox-permissions"
                             :class="`sw-extension-buy-modal__checkbox-permissions--${extension.name}`"
-                            v-model:value="permissionsAccepted"
                         >
                             <template #label>
                                 <span v-if="legalText">
@@ -258,9 +286,9 @@
                             <template #label>
                                 {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.appProviderStartText') }}
                                 <a
-                                    @click.prevent="openLegalTextModal"
                                     class="link legal-text-modal-trigger"
                                     href="#"
+                                    @click.prevent="openLegalTextModal"
                                 >
                                     {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.buttonAppProvider') }}
                                 </a>
@@ -309,17 +337,19 @@
                                     class="sw-extension-buy-modal__external-link"
                                 >
                                     {{ $t('sw-extension-store.buy-modal.warnings.paymentMeansRequiredLinkText') }}
-                                    <mt-icon name="regular-long-arrow-right"></mt-icon>
+                                    <mt-icon name="regular-long-arrow-right" />
                                 </sw-external-link>
                             {% endblock %}
                         </mt-banner>
                     {% endblock %}
 
                     {% block sw_extension_buy_modal_button_purchase %}
-                        <mt-button variant="primary"
+                        <mt-button
+variant="primary"
                                    block
                                    :disabled="!canPurchaseExtension"
-                                   @click="purchaseExtension">
+                                   @click="purchaseExtension"
+>
                             {{ purchaseButtonLabel }}
                         </mt-button>
                     {% endblock %}
@@ -328,35 +358,37 @@
                 {% block sw_extension_buy_modal_permissions_modal %}
                     <sw-extension-permissions-modal
                         v-if="showPermissionsModal"
-                        :extensionLabel="extension.label"
+                        :extension-label="extension.label"
                         :domains="extension.domains"
                         :permissions="extension.permissions"
-                        @modal-close="closePermissionsModal">
-                    </sw-extension-permissions-modal>
+                        @modal-close="closePermissionsModal"
+/>
                 {% endblock %}
 
                 {% block sw_extension_buy_modal_privacy_extensions_modal %}
                     <sw-extension-privacy-policy-extensions-modal
                         v-if="showPrivacyModal"
-                        :extensionName="extension.label"
-                        :privacyPolicyExtension="extension.privacyPolicyExtension"
-                        @modal-close="closePrivacyModal">
-                    </sw-extension-privacy-policy-extensions-modal>
+                        :extension-name="extension.label"
+                        :privacy-policy-extension="extension.privacyPolicyExtension"
+                        @modal-close="closePrivacyModal"
+/>
                 {% endblock %}
 
                 {% block sw_extension_buy_modal_legal_text_modal %}
                     <sw-modal
                         v-if="showLegalTextModal"
-                        @modal-close="closeLegalTextModal"
                         class="sw-extension-buy-modal__legal-text-modal"
-                        :title="$t('sw-extension-store.buy-modal.legalTextModal.title')">
-                        <div v-html="legalText"></div>
+                        :title="$t('sw-extension-store.buy-modal.legalTextModal.title')"
+                        @modal-close="closeLegalTextModal"
+>
+                        <div v-html="legalText" />
 
                         <template #modal-footer>
                             <mt-button
                                 variant="primary"
                                 size="small"
-                                @click="closeLegalTextModal">
+                                @click="closeLegalTextModal"
+>
                                 {{ $t('global.default.close') }}
                             </mt-button>
                         </template>

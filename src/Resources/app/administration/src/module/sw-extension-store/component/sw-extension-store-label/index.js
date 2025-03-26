@@ -12,8 +12,8 @@ export default {
             type: String,
             required: false,
             // matches sass variable $color-darkgray-600
-            default: '#29333dbf'
-        }
+            default: '#29333dbf',
+        },
     },
 
     methods: {
@@ -29,6 +29,6 @@ export default {
             const b = parseInt(hexColor.substring(4, 6), 16); // hexToB
 
             return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000' : '#fff';
-        }
-    }
+        },
+    },
 };

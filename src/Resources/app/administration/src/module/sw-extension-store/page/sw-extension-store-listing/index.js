@@ -16,7 +16,7 @@ export default {
 
     data() {
         return {
-            isLoading: false
+            isLoading: false,
         };
     },
 
@@ -51,7 +51,7 @@ export default {
 
         currentLocale() {
             return Shopware.Store.get('session').currentLocale === 'de-DE' ? 'de' : 'en';
-        }
+        },
     },
 
     watch: {
@@ -60,13 +60,13 @@ export default {
             immediate: true,
             handler() {
                 this.getList();
-            }
+            },
         },
         languageId(newValue) {
             if (newValue !== '') {
                 this.getList();
             }
-        }
+        },
     },
 
     methods: {
@@ -92,7 +92,7 @@ export default {
 
             const page = await extensionDataService.getExtensionList(
                 Shopware.Store.get('shopwareExtensions').search,
-                { ...Shopware.Context.api, languageId: Shopware.Store.get('session').languageId }
+                { ...Shopware.Context.api, languageId: Shopware.Store.get('session').languageId },
             );
 
             Shopware.Store.get('shopwareExtensions').extensionListing = page;
@@ -101,6 +101,6 @@ export default {
         setPage({ limit, page }) {
             Shopware.Store.get('shopwareExtensions').setSearchValue({ key: 'limit', value: limit });
             Shopware.Store.get('shopwareExtensions').setSearchValue({ key: 'page', value: page });
-        }
-    }
+        },
+    },
 };

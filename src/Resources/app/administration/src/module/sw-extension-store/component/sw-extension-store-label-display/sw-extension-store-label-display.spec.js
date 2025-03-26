@@ -2,24 +2,24 @@ import { mount } from '@vue/test-utils';
 
 Shopware.Component.register(
     'sw-extension-store-label-display',
-    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-label-display')
+    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-label-display'),
 );
 Shopware.Component.register(
     'sw-extension-label',
-    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-label')
+    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-label'),
 );
 
 
 async function createWrapper(labels) {
     return mount(await Shopware.Component.build('sw-extension-store-label-display'), {
         props: {
-            labels
+            labels,
         },
         global: {
             stubs: {
-                'sw-extension-label': await Shopware.Component.build('sw-extension-label')
-            }
-        }
+                'sw-extension-label': await Shopware.Component.build('sw-extension-label'),
+            },
+        },
     });
 }
 
@@ -27,7 +27,7 @@ describe('sw-extension-store-label-display', () => {
     it('should be a Vue.JS component', async () => {
         const wrapper = await createWrapper([{
             label: 'Gold zerifiziert',
-            color: '#cbac44'
+            color: '#cbac44',
         }]);
 
         expect(wrapper.vm).toBeTruthy();
@@ -36,14 +36,14 @@ describe('sw-extension-store-label-display', () => {
     it('should display the labels with the correct background', async () => {
         const wrapper = await createWrapper([{
             label: 'Label Text 0',
-            color: '#cbac44'
+            color: '#cbac44',
         },
         {
-            label: 'Label Text 1'
+            label: 'Label Text 1',
         },
         {
             label: 'Label Text 2',
-            color: '#000'
+            color: '#000',
         }]);
 
         const label = wrapper.findAll('.sw-extension-label');

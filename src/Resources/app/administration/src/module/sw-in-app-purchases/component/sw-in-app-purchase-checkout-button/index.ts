@@ -8,12 +8,12 @@ export default Shopware.Component.wrapComponentConfig({
     props: {
         state: {
             type: String as PropType<'error' | 'success' | 'purchase'>,
-            required: true
+            required: true,
         },
         tosAccepted: {
             type: Boolean,
-            required: true
-        }
+            required: true,
+        },
     },
 
     computed: {
@@ -36,12 +36,12 @@ export default Shopware.Component.wrapComponentConfig({
                 default:
                     return null;
             }
-        }
+        },
     },
 
     methods: {
         onClick() {
             this.$emit('click');
-        }
-    }
+        },
+    },
 });

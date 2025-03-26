@@ -10,21 +10,21 @@ export default Shopware.Component.wrapComponentConfig({
     props: {
         purchase: {
             type: Object as PropType<IAP.InAppPurchase>,
-            required: true
+            required: true,
         },
         priceModel: {
             type: Object as PropType<IAP.InAppPurchasePriceModel>,
-            required: true
+            required: true,
         },
         tosAccepted: {
             type: Boolean,
-            required: true
-        }
+            required: true,
+        },
     },
 
     methods: {
         onTosAcceptedChange(value: boolean) {
             this.$emit('update:tos-accepted', value);
-        }
-    }
+        },
+    },
 });

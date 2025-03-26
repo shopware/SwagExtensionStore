@@ -4,7 +4,7 @@ const STATISTICS_APP_NAME = 'SwagAnalytics';
 
 Shopware.Component.register(
     'sw-extension-store-statistics-promotion',
-    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-statistics-promotion')
+    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-statistics-promotion'),
 );
 
 describe('src/module/sw-extension-store/component/sw-extension-store-statistics-promotion', () => {
@@ -14,7 +14,7 @@ describe('src/module/sw-extension-store/component/sw-extension-store-statistics-
         const app = !isAppExistingInTheStore ? null : {
             id: 99999,
             label: 'Statistics service app by shopware',
-            name: STATISTICS_APP_NAME
+            name: STATISTICS_APP_NAME,
         };
 
         router.push = jest.fn();
@@ -23,16 +23,16 @@ describe('src/module/sw-extension-store/component/sw-extension-store-statistics-
             global: {
                 provide: {
                     extensionStoreDataService: {
-                        getExtensionByName: jest.fn(() => Promise.resolve(app))
-                    }
+                        getExtensionByName: jest.fn(() => Promise.resolve(app)),
+                    },
                 },
                 stubs: {
-                    'sw-extension-icon': true
+                    'sw-extension-icon': true,
                 },
                 mocks: {
-                    $router: router
-                }
-            }
+                    $router: router,
+                },
+            },
         });
     }
 
@@ -42,7 +42,7 @@ describe('src/module/sw-extension-store/component/sw-extension-store-statistics-
             css: [],
             js: [],
             type: 'app',
-            active: isActive
+            active: isActive,
         };
     }
 

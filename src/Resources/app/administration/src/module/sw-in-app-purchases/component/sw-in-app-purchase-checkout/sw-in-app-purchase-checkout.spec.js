@@ -4,7 +4,7 @@ import 'src/app/store/in-app-purchase-checkout.store';
 
 Shopware.Component.register(
     'sw-in-app-purchase-checkout',
-    () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout')
+    () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout'),
 );
 
 async function createWrapper(error = false) {
@@ -22,7 +22,7 @@ async function createWrapper(error = false) {
                         return Promise.resolve({
                             name: 'test-extension',
                             icon: 'test-icon',
-                            iconRaw: 'test-icon-raw'
+                            iconRaw: 'test-icon-raw',
                         });
                     },
                     createCart: () => {
@@ -33,8 +33,8 @@ async function createWrapper(error = false) {
                             taxValue: 9.5,
                             positions: [{
                                 priceModel: 'yearly',
-                                feature: 'random-feature'
-                            }]
+                                feature: 'random-feature',
+                            }],
                         });
                     },
                     orderCart: () => {
@@ -42,27 +42,27 @@ async function createWrapper(error = false) {
                             identifier: 'test-identifier',
                             name: 'test-name',
                             description: null,
-                            price: 59.5
+                            price: 59.5,
                         });
                     },
                     refreshInAppPurchases: () => {
                         return Promise.resolve();
-                    }
-                }
+                    },
+                },
             },
             stubs: {
                 'sw-modal': {
                     template: `<div class="sw-modal">
                                <slot name="default"></slot>
-                           </div>`
+                           </div>`,
                 },
                 'sw-loader': true,
                 'sw-extension-icon': true,
                 'sw-in-app-purchase-checkout-overview': true,
                 'sw-in-app-purchase-checkout-state': true,
-                'sw-in-app-purchase-checkout-button': true
-            }
-        }
+                'sw-in-app-purchase-checkout-button': true,
+            },
+        },
     });
 }
 
@@ -89,7 +89,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
             version: '1.0.0',
             type: 'app',
             integrationId: '123',
-            active: true
+            active: true,
         });
         wrapper.vm.store.$reset();
 
@@ -106,8 +106,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 version: '1.0.0',
                 type: 'app',
                 integrationId: '123',
-                active: true
-            }
+                active: true,
+            },
         };
 
         wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
@@ -132,8 +132,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 version: '1.0.0',
                 type: 'app',
                 integrationId: '123',
-                active: true
-            }
+                active: true,
+            },
         };
         wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
 
@@ -157,8 +157,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 version: '1.0.0',
                 type: 'app',
                 integrationId: '123',
-                active: true
-            }
+                active: true,
+            },
         };
         wrapper.vm.store.request(null, 'jestapp');
 
@@ -178,8 +178,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 version: '1.0.0',
                 type: 'app',
                 integrationId: '123',
-                active: true
-            }
+                active: true,
+            },
         };
 
         wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
@@ -208,8 +208,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 version: '1.0.0',
                 type: 'app',
                 integrationId: '123',
-                active: true
-            }
+                active: true,
+            },
         };
         wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
 
@@ -225,7 +225,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
     it('handles handleStateActions method correctly', async () => {
         delete window.location;
         window.location = {
-            reload: jest.fn()
+            reload: jest.fn(),
         };
 
         const spyOnPurchaseFeature = jest.spyOn(wrapper.vm, 'onPurchaseFeature');
@@ -284,8 +284,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         // Test when extension has an icon
         await wrapper.setData({
             extension: {
-                icon: 'icon-url'
-            }
+                icon: 'icon-url',
+            },
         });
         expect(wrapper.vm.extensionIcon).toBe('icon-url');
 
@@ -293,8 +293,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         await wrapper.setData({
             extension: {
                 icon: '',
-                iconRaw: 'base64data'
-            }
+                iconRaw: 'base64data',
+            },
         });
         expect(wrapper.vm.extensionIcon).toBe('data:image/png;base64, base64data');
 
@@ -302,8 +302,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         await wrapper.setData({
             extension: {
                 icon: '',
-                iconRaw: ''
-            }
+                iconRaw: '',
+            },
         });
         expect(wrapper.vm.extensionIcon).toBe('default_theme_preview.jpg');
     });

@@ -8,7 +8,7 @@ export default class ExtensionLicenseService extends Shopware.Classes.ApiService
         return this.httpClient.post(
             `/_action/${this.apiEndpoint}/cart/new`,
             { extensionId, variantId },
-            { headers: this.basicHeaders(), version: 3 }
+            { headers: this.basicHeaders(), version: 3 },
         );
     }
 
@@ -16,14 +16,14 @@ export default class ExtensionLicenseService extends Shopware.Classes.ApiService
         return this.httpClient.post(
             `/_action/${this.apiEndpoint}/cart/order`,
             payload,
-            { headers: this.basicHeaders(), version: 3 }
+            { headers: this.basicHeaders(), version: 3 },
         );
     }
 
     getPaymentMeans() {
         return this.httpClient.get(
             `/_action/${this.apiEndpoint}/cart/payment-means`,
-            { headers: this.basicHeaders(), version: 3 }
+            { headers: this.basicHeaders(), version: 3 },
         );
     }
 
@@ -31,7 +31,7 @@ export default class ExtensionLicenseService extends Shopware.Classes.ApiService
         const headers = {
             'Content-Type': 'application/json',
             Accept: 'application/json',
-            Authorization: `Bearer ${this.loginService.getToken()}`
+            Authorization: `Bearer ${this.loginService.getToken()}`,
         };
 
         if (context && context.languageId) {

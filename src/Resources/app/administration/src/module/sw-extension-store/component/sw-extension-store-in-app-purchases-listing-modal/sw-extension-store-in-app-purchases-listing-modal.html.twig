@@ -6,7 +6,11 @@
     @modal-close="closeInAppPurchasesListingModal"
 >
     {% block sw_extension_store_detail_in_app_purchases_listing_modal_content %}
-        <sw-collapse v-for="inAppPurchase in inAppPurchases" class="sw-extension-store-detail-in-app-purchases-listing-modal-content__collapse">
+        <sw-collapse
+            v-for="inAppPurchase in inAppPurchases"
+            :key="inAppPurchase.identifier"
+            class="sw-extension-store-detail-in-app-purchases-listing-modal-content__collapse"
+        >
             <template #header="{ expanded }">
                 <div class="sw-extension-store-detail-in-app-purchases-listing-modal-content__title">
                     {{ inAppPurchase.name }}
@@ -17,7 +21,7 @@
                                 class="sw-extension-store-detail-in-app-purchases-listing-modal-content__button"
                                 name="regular-chevron-down-xs"
                                 size="12px"
-                            ></mt-icon>
+                            />
                         {% endblock %}
 
                         {% block sw_extension_store_detail_in_app_purchases_listing_modal_header_icon_not_expanded %}
@@ -26,7 +30,7 @@
                                 class="sw-extension-store-detail-in-app-purchases-listing-modal-content__button"
                                 name="regular-chevron-right-xs"
                                 size="12px"
-                            ></mt-icon>
+                            />
                         {% endblock %}
                     {% endblock %}
                 </div>
@@ -54,7 +58,8 @@
         <mt-button
             variant="secondary"
             size="small"
-            @click="closeInAppPurchasesListingModal">
+            @click="closeInAppPurchasesListingModal"
+>
             {{ $t('global.default.close') }}
         </mt-button>
     </template>

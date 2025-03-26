@@ -14,7 +14,7 @@ export default {
         'shopwareExtensionService',
         'extensionHelperService',
         'cacheApiService',
-        'inAppPurchasesService'
+        'inAppPurchasesService',
     ],
 
     mixins: ['sw-extension-error'],
@@ -22,8 +22,8 @@ export default {
     props: {
         id: {
             type: String,
-            required: true
-        }
+            required: true,
+        },
     },
 
     data() {
@@ -43,7 +43,7 @@ export default {
             isDescriptionCollapsed: false,
             installationError: null,
             fetchError: false,
-            canBeOpened: false
+            canBeOpened: false,
         };
     },
 
@@ -142,7 +142,7 @@ export default {
 
         discountClass() {
             return {
-                'is--discounted': this.hasActiveDiscount
+                'is--discounted': this.hasActiveDiscount,
             };
         },
 
@@ -152,7 +152,7 @@ export default {
 
         variantClass() {
             return {
-                'is--theme': this.extension && this.extension.isTheme
+                'is--theme': this.extension && this.extension.isTheme,
             };
         },
 
@@ -178,7 +178,7 @@ export default {
             }
 
             return !!this.extension.addons.find(addon => addon === 'SW6_EnterpriseFeature');
-        }
+        },
     },
 
     watch: {
@@ -186,7 +186,7 @@ export default {
             immediate: true,
             handler() {
                 this.fetchExtension();
-            }
+            },
         },
 
         '$route.hash'() {
@@ -213,7 +213,7 @@ export default {
             this.$nextTick(() => {
                 this.checkDescriptionCollapsed();
             });
-        }
+        },
     },
 
     async created() {
@@ -236,7 +236,7 @@ export default {
                 this.fetchError = false;
                 this.extension = await this.extensionStoreDataService.getDetail(
                     this.id,
-                    { ...Shopware.Context.api, languageId: this.languageId }
+                    { ...Shopware.Context.api, languageId: this.languageId },
                 );
             } catch (error) {
                 const errorData = error.response.data.errors[0];
@@ -244,13 +244,13 @@ export default {
                 if (errorData.code === 'FRAMEWORK__STORE_ERROR' && errorData.title === 'Extension unknown') {
                     this.fetchError = errorData;
 
-                    // eslint-disable-next-line max-len
+                     
                     const docLink = this.$t('sw-extension.errors.messageToTheShopwareDocumentation', errorData.meta);
 
                     this.createNotificationError({
                         title: errorData.title,
                         message: `${errorData.detail} <br> ${docLink}`,
-                        autoClose: false
+                        autoClose: false,
                     });
 
                     return;
@@ -435,6 +435,6 @@ export default {
 
         async fetchInAppPurchases() {
             this.inAppPurchases = await this.inAppPurchasesService.getAvailablePurchases(this.extension.name);
-        }
-    }
+        },
+    },
 };

@@ -7,8 +7,10 @@
         {% endblock %}
 
         {% block sw_extension_type_label_cloud %}
-            <sw-extension-label v-if="isApp"
-                class="sw-extension-type-label__cloud-label">
+            <sw-extension-label
+v-if="isApp"
+                class="sw-extension-type-label__cloud-label"
+>
                 {{ $t('sw-extension-store.typeLabels.cloud') }}
             </sw-extension-label>
         {% endblock %}
