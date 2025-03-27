@@ -31,7 +31,7 @@
         </p>
 
         <mt-checkbox
-            v-if="purchase.priceModels[0].conditionsType === 'gtc' || purchase.priceModels[0].conditionsType === 'detailed'"
+            v-if="purchase.priceModels[0].conditionsType !== null"
             :checked="gtcAccepted"
             v-model:value="gtcAccepted"
             class="sw-in-app-purchase-checkout-purchase__subtext__partner_gtc"
@@ -40,11 +40,10 @@
             <template #label>
                 {{ $t('sw-in-app-purchase-checkout-overview.partner.accept') }}
                 <mt-link
-                    v-if="purchase.priceModels[0].conditionsType !== null"
-                    class="sw-external-link"
-                    type="external"
-                    :href="purchase.websiteGtc ?? '#'"
-                    @click="showConditionsModal = true"
+                    :type="purchase.priceModels[0].conditionsType === 'gtc' ? 'external' : 'internal'"
+                    :as="purchase.priceModels[0].conditionsType === 'gtc' ? 'a' : 'button'"
+                    :href="purchase.priceModels[0].conditionsType === 'gtc' ? purchase.websiteGtc : undefined"
+                    @click="purchase.priceModels[0].conditionsType === 'detailed' ? openConditionsModal() : null"
                 >
                     {{ $t('sw-in-app-purchase-checkout-overview.partner.gtc', { partner: producer }, 0) }}
                 </mt-link>
@@ -62,7 +61,7 @@
         v-if="purchase.priceModels[0].conditionsType === 'detailed' && showConditionsModal"
         :title="$t('sw-in-app-purchase-checkout-overview.partner.gtc', { partner: producer }, 0)"
         variant="small"
-        @modal-close="showConditionsModal = false"
+        @modal-close="closeConditionsModal"
     >
         {{ purchase.serviceConditions }}
     </sw-modal>

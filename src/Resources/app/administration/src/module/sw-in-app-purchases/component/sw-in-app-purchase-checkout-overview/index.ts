@@ -23,15 +23,26 @@ export default Shopware.Component.wrapComponentConfig({
         producer: {
             type: String,
             required: true,
-        },
-        showConditionsModal: {
-            type: Boolean,
-            required: false,
-            default: false,
         }
     },
 
+    data(): {
+        showConditionsModal: boolean
+    } {
+        return {
+            showConditionsModal: false
+        };
+    },
+
     methods: {
+        openConditionsModal() {
+            this.showConditionsModal = true;
+        },
+
+        closeConditionsModal() {
+            this.showConditionsModal = false;
+        },
+
         onTosAcceptedChange(value: boolean) {
             this.$emit('update:tos-accepted', value);
         },
