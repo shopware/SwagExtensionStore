@@ -1,3 +1,4 @@
+import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout-button.html.twig';
 
 export default Shopware.Component.wrapComponentConfig({
@@ -19,8 +20,8 @@ export default Shopware.Component.wrapComponentConfig({
             required: true,
         },
         variant: {
-            type: String as PropType<'non-consumable' | 'service' | 'monthly' | 'yearly'> | null,
-            required: true,
+            type: String as PropType<IAP.InAppPurchasePriceModel['variant'] | null>,
+            required: true
         }
     },
 

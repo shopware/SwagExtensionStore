@@ -28,13 +28,11 @@ export default Shopware.Component.wrapComponentConfig({
 
     data(): {
         showConditionsModal: boolean,
-        priceModelOptions: Array<{ value: string, name: string }>,
         gtcAccepted: boolean,
         priceModel: IAP.InAppPurchasePriceModel
     } {
         return {
             showConditionsModal: false,
-            priceModelOptions: [],
             gtcAccepted: false,
             priceModel: this.purchase.priceModels[0]
         };

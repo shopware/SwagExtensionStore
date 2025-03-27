@@ -5,7 +5,7 @@ export type InAppPurchasePriceModel<Type extends 'rent' | 'buy' = 'rent' | 'buy'
     price: number;
     duration: Type extends 'rent' ? number : undefined | null;
     oneTimeOnly: null;
-    variant: string;
+    variant: 'non-consumable' | 'service' | 'monthly' | 'yearly';
     conditionsType: Type extends 'buy' ? string : undefined | null;
 }
 
