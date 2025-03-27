@@ -17,6 +17,10 @@ export default Shopware.Component.wrapComponentConfig({
         gtcAccepted: {
             type: Boolean,
             required: true,
+        },
+        variant: {
+            type: String as PropType<'non-consumable' | 'service' | 'monthly' | 'yearly'> | null,
+            required: true,
         }
     },
 
@@ -26,7 +30,7 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         disabled() {
-            return this.state === 'purchase' && (!this.tosAccepted || !this.gtcAccepted);
+            return this.state === 'purchase' && (!this.tosAccepted || !this.gtcAccepted || !this.variant);
         },
 
         text() {

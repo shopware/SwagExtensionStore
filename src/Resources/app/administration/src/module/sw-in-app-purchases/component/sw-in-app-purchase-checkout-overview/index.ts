@@ -5,7 +5,7 @@ import './sw-in-app-purchase-checkout-overview.scss';
 export default Shopware.Component.wrapComponentConfig({
     template,
 
-    emits: ['update:tos-accepted', 'update:gtc-accepted'],
+    emits: ['update:tos-accepted', 'update:gtc-accepted', 'update:variant'],
 
     props: {
         purchase: {
@@ -34,6 +34,10 @@ export default Shopware.Component.wrapComponentConfig({
         };
     },
 
+    created() {
+        this.setVariant();
+    },
+
     methods: {
         openConditionsModal() {
             this.showConditionsModal = true;
@@ -58,6 +62,13 @@ export default Shopware.Component.wrapComponentConfig({
                     name: `€${priceModel.price}* /${this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`)}`
                 };
             });
+        },
+
+        setVariant(variant?: string) {
+            if (!variant) {
+                variant = this.purchase.priceModels[0].variant;
+            }
+            this.$emit('update:variant', variant);
         },
     },
 });

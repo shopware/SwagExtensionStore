@@ -19,6 +19,7 @@
         block
         :options="getPurchaseOptions(purchase.priceModels)"
         class="sw-in-app-purchase-checkout-purchase__feature__choices"
+        @update:value="setVariant"
     />
 
     <div class="sw-in-app-purchase-checkout-purchase__subtext">

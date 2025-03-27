@@ -26,6 +26,7 @@ export default Shopware.Component.wrapComponentConfig({
             purchase: null as IAP.InAppPurchase | null,
             tosAccepted: false,
             gtcAccepted: false,
+            variant: null as string | null,
             errorSnippet: null as string | null,
         };
     },
@@ -82,21 +83,16 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         onPurchaseFeature() {
-            if (!this.store.extension || !this.store.entry) {
+            if (!this.store.extension || !this.store.entry || !this.variant) {
                 this.reset();
 
                 return;
             }
 
-            if (!this.store.entry.variant) {
-                console.log('no variant');
-            }
-
             this.inAppPurchasesService.createCart(
                 this.store.extension,
                 this.store.entry.identifier,
-                /* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */
-                this.store.entry.variant
+                this.variant
             ).then((inAppPurchaseCart) => {
                 this.inAppPurchasesService.orderCart(
                     inAppPurchaseCart?.taxRate,
@@ -150,6 +146,9 @@ export default Shopware.Component.wrapComponentConfig({
             this.errorSnippet = null;
             this.state = 'loading';
             this.purchase = null;
+            this.variant = null;
+            this.tosAccepted = false;
+            this.gtcAccepted = false;
         },
     },
 });

@@ -17,7 +17,7 @@ export default class InAppPurchasesService extends ApiService {
         ).then(ApiService.handleResponse.bind(this));
     }
 
-    async createCart(name: string, feature: string, variant?: string) {
+    async createCart(name: string, feature: string, variant: string) {
         return this.httpClient.post<IAP.InAppPurchaseCart>(
             `_action/${this.apiEndpoint}/cart/new`,
             { name, feature, variant },

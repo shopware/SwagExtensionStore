@@ -26,6 +26,7 @@
         v-if="state === 'purchase'"
         v-model:tos-accepted="tosAccepted"
         v-model:gtc-accepted="gtcAccepted"
+        v-model:variant="variant"
         :purchase="purchase"
         :producer="extension.producerName"
     />
@@ -41,6 +42,7 @@
             :state="state"
             :tos-accepted="tosAccepted"
             :gtc-accepted="gtcAccepted"
+            :variant="variant"
             @click="handleStateActions(true)"
         />
     </template>
