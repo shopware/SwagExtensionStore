@@ -27,15 +27,32 @@ export default Shopware.Component.wrapComponentConfig({
     },
 
     data(): {
-        showConditionsModal: boolean
+        showConditionsModal: boolean,
+        priceModelOptions: Array<{ value: string, name: string }>,
+        gtcAccepted: boolean,
+        priceModel: IAP.InAppPurchasePriceModel
     } {
         return {
-            showConditionsModal: false
+            showConditionsModal: false,
+            priceModelOptions: [],
+            gtcAccepted: false,
+            priceModel: this.purchase.priceModels[0]
         };
     },
 
     created() {
-        this.setVariant();
+        this.setPriceModel();
+    },
+
+    computed: {
+        purchaseOptions(): Array<{ value: IAP.InAppPurchasePriceModel, name: string }> {
+            return this.purchase.priceModels.map((priceModel): { value: IAP.InAppPurchasePriceModel, name: string } => {
+                return {
+                    value: priceModel,
+                    name: `€${priceModel.price}* /${this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`)}`
+                };
+            });
+        }
     },
 
     methods: {
@@ -52,23 +69,17 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         onGtcAcceptedChange(value: boolean) {
+            this.gtcAccepted = value;
             this.$emit('update:gtc-accepted', value);
         },
 
-        getPurchaseOptions(priceModels: Array<IAP.InAppPurchasePriceModel>): Array<{ value: string, name: string }> {
-            return priceModels.map((priceModel): { value: string, name: string } => {
-                return {
-                    value: priceModel.variant,
-                    name: `€${priceModel.price}* /${this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`)}`
-                };
-            });
-        },
-
-        setVariant(variant?: string) {
-            if (!variant) {
-                variant = this.purchase.priceModels[0].variant;
+        setPriceModel(priceModel?: IAP.InAppPurchasePriceModel) {
+            if (!priceModel) {
+                priceModel = this.purchase.priceModels[0];
             }
-            this.$emit('update:variant', variant);
+            this.priceModel = priceModel;
+            this.onGtcAcceptedChange(priceModel.conditionsType === null);
+            this.$emit('update:variant', this.priceModel.variant);
         },
     },
 });

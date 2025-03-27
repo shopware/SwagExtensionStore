@@ -1,12 +1,12 @@
 export type { Extension } from 'src/module/sw-extension/service/extension-store-action.service';
 
-export type InAppPurchasePriceModel = {
-    type: 'rent' | 'buy';
+export type InAppPurchasePriceModel<Type extends 'rent' | 'buy' = 'rent' | 'buy'> = {
+    type: Type;
     price: number;
-    duration: number | null;
+    duration: Type extends 'rent' ? number : undefined | null;
     oneTimeOnly: null;
     variant: string;
-    conditionsType?: string | null;
+    conditionsType: Type extends 'buy' ? string : undefined | null;
 }
 
 export type InAppPurchase = {

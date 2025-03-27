@@ -11,11 +11,10 @@ Shopware.Component.override(
 );
 
 Shopware.Store.get('context').app = {
-    config:
-        {
-            settings: {},
-            inAppPurchases: { SwagB2BPlatform: ['purchase1', 'purchase2'] }
-        }
+    config: {
+        settings: {},
+        inAppPurchases: { SwagB2BPlatform: ['purchase1', 'purchase2'] }
+    }
 };
 
 async function createWrapper(extensionCustomProps = {}) {

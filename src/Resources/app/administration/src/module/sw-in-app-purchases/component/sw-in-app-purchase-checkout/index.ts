@@ -73,7 +73,6 @@ export default Shopware.Component.wrapComponentConfig({
                 this.inAppPurchasesService.getPriceModels(this.store.extension, this.store.entry.identifier),
             ]).then(([extension, purchase]) => {
                 this.purchase = purchase;
-                this.gtcAccepted = purchase.priceModels[0]?.conditionsType === null;
                 this.extension = extension;
                 this.state = 'purchase';
             }).catch((errorResponse: ErrorResponse) => {
@@ -94,16 +93,13 @@ export default Shopware.Component.wrapComponentConfig({
                 this.store.entry.identifier,
                 this.variant
             ).then((inAppPurchaseCart) => {
-                this.inAppPurchasesService.orderCart(
+                return this.inAppPurchasesService.orderCart(
                     inAppPurchaseCart?.taxRate,
                     inAppPurchaseCart?.positions,
                     this.extension?.name
-                ).then(() => {
-                    this.state = 'success';
-                }).catch((errorResponse: ErrorResponse) => {
-                    Shopware.Utils.debug.error(errorResponse);
-                    this.state = 'error';
-                });
+                );
+            }).then(() => {
+                this.state = 'success';
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error(errorResponse);
                 this.state = 'error';
