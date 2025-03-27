@@ -110,6 +110,20 @@ const setSearchValueMock = jest.fn();
 describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail', () => {
     const originalWindowLocation = window.location;
 
+    beforeAll(async () => {
+        Shopware.Store.register({
+            id: 'shopwareExtensions',
+            actions: {
+                setSearchValue: setSearchValueMock,
+            },
+        });
+
+        Object.defineProperty(window, 'location', {
+            configurable: true,
+            value: { reload: jest.fn() },
+        });
+    });
+
     beforeEach(() => {
         Shopware.Store.get('session').languageId = 'b2c3d4';
         Shopware.Store.get('shopwareExtensions').myExtensions = {
@@ -123,20 +137,6 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
         };
 
         setSearchValueMock.mockClear();
-    });
-
-    beforeAll(async () => {
-        Shopware.Store.register({
-            id: 'shopwareExtensions',
-            actions: {
-                setSearchValue: setSearchValueMock,
-            },
-        });
-
-        Object.defineProperty(window, 'location', {
-            configurable: true,
-            value: { reload: jest.fn() },
-        });
     });
 
     afterEach(() => {
