@@ -8,30 +8,33 @@
                         size="small"
                         :label="$t('sw-extension.store.listing.sort')"
                         :options="sortingOptions"
-                        valueProperty="orderIdentifier"
+                        value-property="orderIdentifier"
                         :value="sortingValue"
                         @update:value="setSelectedSorting"
-                    >
-                    </sw-meteor-single-select>
+                    />
                 {% endblock %}
 
                 {% block sw_extension_store_listing_all_filters %}
                     <sw-meteor-single-select
                         v-for="filter in listingFiltersSorted"
-                        class="sw-extension-store-listing-filter__filters"
                         :key="filter.name"
+                        class="sw-extension-store-listing-filter__filters"
                         size="small"
                         :label="filter.label"
                         :options="getOptionsForFilter(filter)"
                         :value="getValueForFilter(filter)"
                         @update:value="changeValueForFilter(filter, $event)"
                     >
-                        <template v-if="filter.type === 'category'"
-                                  #result-label-property="{ item, valueProperty }">
+                        <template
+                            v-if="filter.type === 'category'"
+                            #result-label-property="{ item, valueProperty }"
+                        >
                             {% block sw_extension_store_listing_filter_category_filter_result %}
-                                <div v-if="item[valueProperty] !== null"
-                                     :class="{ 'is--root-category': isRootCategory(item) }"
-                                     :style="{ 'padding-left': isRootCategory(item) ? '0': `${categoryDepth(item)}em` }">
+                                <div
+                                    v-if="item[valueProperty] !== null"
+                                    :class="{ 'is--root-category': isRootCategory(item) }"
+                                    :style="{ 'padding-left': isRootCategory(item) ? '0': `${categoryDepth(item)}em` }"
+                                >
                                     {{ item.label }}
                                 </div>
                             {% endblock %}
@@ -41,7 +44,7 @@
             {% endblock %}
         </template>
         <template v-else>
-            <sw-loader></sw-loader>
+            <sw-loader />
         </template>
     </div>
 {% endblock %}

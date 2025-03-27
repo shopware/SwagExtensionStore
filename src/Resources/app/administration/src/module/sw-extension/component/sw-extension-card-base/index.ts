@@ -16,6 +16,6 @@ export default Shopware.Component.wrapComponentConfig({
 
         hasActiveInAppPurchases(extensionName: string) {
             return Shopware.InAppPurchase.getByExtension(extensionName).length > 0;
-        }
-    }
+        },
+    },
 });

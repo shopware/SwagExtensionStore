@@ -4,7 +4,7 @@ const STATISTICS_APP_NAME = 'SwagAnalytics';
 
 Shopware.Component.register(
     'sw-dashboard-statistics-promotion-card',
-    () => import('SwagExtensionStore/module/sw-dashboard/component/sw-dashboard-statistics-promotion-card')
+    () => import('SwagExtensionStore/module/sw-dashboard/component/sw-dashboard-statistics-promotion-card'),
 );
 
 describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-card', () => {
@@ -15,7 +15,7 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
         const app = !isAppExistingInTheStore ? null : {
             id: 99999,
             label: 'Statistics service app by shopware',
-            name: STATISTICS_APP_NAME
+            name: STATISTICS_APP_NAME,
         };
 
         extensionStoreDataService.getExtensionByName = hasPermission
@@ -29,16 +29,16 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
                 provide: {
                     extensionStoreDataService,
                     acl: {
-                        can: () => hasPermission
-                    }
+                        can: () => hasPermission,
+                    },
                 },
                 stubs: {
-                    'sw-extension-icon': true
+                    'sw-extension-icon': true,
                 },
                 mocks: {
-                    $router: router
-                }
-            }
+                    $router: router,
+                },
+            },
         });
     }
 
@@ -48,7 +48,7 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
             css: [],
             js: [],
             type: 'app',
-            active: isActive
+            active: isActive,
         };
     }
 
@@ -110,7 +110,7 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
 
             wrapper.vm.goToStatisticsAppDetailPage();
             expect(router.push).toHaveBeenNthCalledWith(1, { name: 'sw.extension.store' });
-        }
+        },
     );
 
     it('shows the badge if the date is before 2025', async () => {
@@ -138,7 +138,7 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
         wrapper.vm.goToStatisticsAppDetailPage();
         expect(router.push).toHaveBeenNthCalledWith(1, {
             name: 'sw.extension.store.detail',
-            params: { id: 99999 }
+            params: { id: 99999 },
         });
     });
 });

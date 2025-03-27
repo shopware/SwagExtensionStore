@@ -19,8 +19,8 @@
             {% block sw_extension_store_update_warning_actions %}
                 <mt-button
                     variant="primary"
+                    :is-loading="isUpdating"
                     @click="updateExtension"
-                    :isLoading="isUpdating"
                 >
                     {{ $t('sw-extension-store.updateWarning.update') }}
                 </mt-button>

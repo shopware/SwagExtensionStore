@@ -11,14 +11,14 @@ export default {
     template,
 
     inject: [
-        'shopwareExtensionService'
+        'shopwareExtensionService',
     ],
 
     props: {
         extension: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
 
     computed: {
@@ -27,13 +27,13 @@ export default {
 
             if (!image) {
                 return {
-                    'background-image': `url('${defaultThemePreview}')`
+                    'background-image': `url('${defaultThemePreview}')`,
                 };
             }
 
             return {
                 'background-image': `url('${image.remoteLink}')`,
-                'background-size': 'cover'
+                'background-size': 'cover',
             };
         },
 
@@ -47,7 +47,7 @@ export default {
 
         discountClass() {
             return {
-                'sw-extension-listing-card__info-price-discounted': this.hasActiveDiscount
+                'sw-extension-listing-card__info-price-discounted': this.hasActiveDiscount,
             };
         },
 
@@ -61,10 +61,10 @@ export default {
                 {
                     price: Utils.format.currency(
                         this.shopwareExtensionService.getPriceFromVariant(this.recommendedVariant),
-                        'EUR'
-                    )
+                        'EUR',
+                    ),
                 },
-                this.shopwareExtensionService.mapVariantToRecommendation(this.recommendedVariant)
+                this.shopwareExtensionService.mapVariantToRecommendation(this.recommendedVariant),
             );
         },
 
@@ -83,15 +83,15 @@ export default {
             }
 
             return !!extension.storeLicense;
-        }
+        },
     },
 
     methods: {
         openDetailPage() {
             this.$router.push({
                 name: 'sw.extension.store.detail',
-                params: { id: this.extension.id.toString() }
+                params: { id: this.extension.id.toString() },
             });
-        }
-    }
+        },
+    },
 };

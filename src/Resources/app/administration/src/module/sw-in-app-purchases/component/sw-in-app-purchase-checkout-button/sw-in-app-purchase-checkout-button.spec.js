@@ -2,16 +2,16 @@ import { mount } from '@vue/test-utils';
 
 Shopware.Component.register(
     'sw-in-app-purchase-checkout-button',
-    () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-button')
+    () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-button'),
 );
 async function createWrapper(props) {
     return mount(await Shopware.Component.build('sw-in-app-purchase-checkout-button'), {
         props,
         global: {
             mocks: {
-                $t: (key) => key
-            }
-        }
+                $t: (key) => key,
+            },
+        },
     });
 }
 

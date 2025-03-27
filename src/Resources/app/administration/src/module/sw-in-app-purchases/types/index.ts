@@ -5,7 +5,7 @@ export type InAppPurchasePriceModel<Type extends 'rent' | 'buy' = 'rent' | 'buy'
     price: number;
     duration: Type extends 'rent' ? number : undefined | null;
     oneTimeOnly: Type extends 'buy' ? boolean : undefined | null;
-}
+};
 
 export type InAppPurchase = {
     identifier: string;
@@ -13,7 +13,7 @@ export type InAppPurchase = {
     description?: string | null;
     price: number;
     priceModel: InAppPurchasePriceModel;
-}
+};
 
 export type InAppPurchaseCartPositions = {
     feature: InAppPurchase;
@@ -22,7 +22,7 @@ export type InAppPurchaseCartPositions = {
     grossPrice: number;
     taxRate: number;
     taxValue: number;
-}
+};
 
 export type InAppPurchaseCart = {
     netPrice: number;
@@ -30,6 +30,6 @@ export type InAppPurchaseCart = {
     taxRate: number;
     taxValue: number;
     positions: Array<InAppPurchaseCartPositions>;
-}
+};
 
 export type InAppPurchaseCollection = Array<InAppPurchase>;

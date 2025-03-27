@@ -7,13 +7,13 @@ export default Shopware.Component.wrapComponentConfig({
     props: {
         state: {
             type: String as PropType<'loading' | 'error' | 'success'>,
-            required: true
+            required: true,
         },
         errorSnippet: {
             type: String,
             required: false,
-            default: 'errorSubtitle'
-        }
+            default: 'errorSubtitle',
+        },
     },
 
     computed: {
@@ -21,7 +21,7 @@ export default Shopware.Component.wrapComponentConfig({
             return {
                 'is--error': this.state === 'error',
                 'is--success': this.state === 'success',
-                'is--loading': this.state === 'loading'
+                'is--loading': this.state === 'loading',
             };
         },
 
@@ -56,6 +56,6 @@ export default Shopware.Component.wrapComponentConfig({
                 default:
                     return null;
             }
-        }
-    }
+        },
+    },
 });

@@ -1,7 +1,7 @@
 import ExtensionStoreDataService from './service/extension-store-data.service';
 import ExtensionLicenseService from './service/extension-store-licenses.service';
 
-/* eslint-disable max-len */
+ 
 Shopware.Component.register('sw-extension-store-index', () => import('./page/sw-extension-store-index'));
 Shopware.Component.register('sw-extension-store-listing', () => import('./page/sw-extension-store-listing'));
 Shopware.Component.register('sw-extension-store-detail', () => import('./page/sw-extension-store-detail'));
@@ -16,19 +16,19 @@ Shopware.Component.register('sw-extension-store-label-display', () => import('./
 Shopware.Component.register('sw-extension-store-error-card', () => import('./component/sw-extension-store-error-card'));
 Shopware.Component.register('sw-extension-store-statistics-promotion', () => import('./component/sw-extension-store-statistics-promotion'));
 Shopware.Component.register('sw-extension-store-in-app-purchases-listing-modal', () => import('./component/sw-extension-store-in-app-purchases-listing-modal'));
-/* eslint-enable max-len */
+ 
 
 Shopware.Application.addServiceProvider('extensionStoreDataService', () => {
     return new ExtensionStoreDataService(
         Shopware.Application.getContainer('init').httpClient,
-        Shopware.Service('loginService')
+        Shopware.Service('loginService'),
     );
 });
 
 Shopware.Application.addServiceProvider('extensionStoreLicensesService', () => {
     return new ExtensionLicenseService(
         Shopware.Application.getContainer('init').httpClient,
-        Shopware.Service('loginService')
+        Shopware.Service('loginService'),
     );
 });
 
@@ -41,10 +41,10 @@ Shopware.Module.register('sw-extension-store', {
         store: {
             path: 'store',
             redirect: {
-                name: 'sw.extension.store.listing'
+                name: 'sw.extension.store.listing',
             },
             meta: {
-                privilege: 'system.extension_store'
+                privilege: 'system.extension_store',
             },
             component: 'sw-extension-store-index',
             children: {
@@ -52,49 +52,49 @@ Shopware.Module.register('sw-extension-store', {
                     path: 'listing',
                     component: 'sw-extension-store-listing',
                     redirect: {
-                        name: 'sw.extension.store.listing.app'
+                        name: 'sw.extension.store.listing.app',
                     },
                     meta: {
-                        privilege: 'system.extension_store'
+                        privilege: 'system.extension_store',
                     },
                     children: {
                         app: {
                             path: 'app',
                             component: 'sw-extension-store-listing',
                             propsData: {
-                                isTheme: false
+                                isTheme: false,
                             },
                             meta: {
-                                privilege: 'system.extension_store'
-                            }
+                                privilege: 'system.extension_store',
+                            },
                         },
                         theme: {
                             path: 'theme',
                             component: 'sw-extension-store-listing',
                             propsData: {
-                                isTheme: true
+                                isTheme: true,
                             },
                             meta: {
-                                privilege: 'system.extension_store'
-                            }
-                        }
-                    }
-                }
-            }
+                                privilege: 'system.extension_store',
+                            },
+                        },
+                    },
+                },
+            },
         },
         'store.detail': {
             component: 'sw-extension-store-detail',
             path: 'store/detail/:id',
             meta: {
                 parentPath: 'sw.extension.store',
-                privilege: 'system.extension_store'
+                privilege: 'system.extension_store',
             },
             props: {
                 default: (route) => {
                     return { id: route.params.id };
-                }
-            }
-        }
+                },
+            },
+        },
     },
 
     /**
@@ -103,10 +103,10 @@ Shopware.Module.register('sw-extension-store', {
     routeMiddleware(next, currentRoute) {
         if (currentRoute.name === 'sw.extension.store.landing-page') {
             currentRoute.redirect = {
-                name: 'sw.extension.store.listing'
+                name: 'sw.extension.store.listing',
             };
         }
 
         next(currentRoute);
-    }
+    },
 });

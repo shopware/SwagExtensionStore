@@ -9,37 +9,37 @@ export default {
     props: {
         images: {
             type: Array,
-            required: true
+            required: true,
         },
         infinite: {
             type: Boolean,
             required: false,
-            default: false
+            default: false,
         },
         slideCount: {
             type: Number,
             required: false,
-            default: 2
+            default: 2,
         },
         large: {
             type: Boolean,
             required: false,
-            default: false
-        }
+            default: false,
+        },
     },
 
     data() {
         return {
             activeImgIndex: 0,
             lastActiveImgIndex: null,
-            isDirectionRight: null
+            isDirectionRight: null,
         };
     },
 
     computed: {
         cardClasses() {
             return {
-                'sw-card--large': this.large
+                'sw-card--large': this.large,
             };
         },
 
@@ -69,7 +69,7 @@ export default {
             }
 
             return this.slideCount < 1 ? 1 : this.slideCount;
-        }
+        },
     },
 
     methods: {
@@ -83,7 +83,7 @@ export default {
             // handle start position after component creation
             if (this.isDirectionRight === null) {
                 return {
-                    left: `${key * move}%`
+                    left: `${key * move}%`,
                 };
             }
 
@@ -94,7 +94,7 @@ export default {
             // guarantee that first active image is always left
             if (key === this.activeImgIndex) {
                 return {
-                    left: '0%'
+                    left: '0%',
                 };
             }
 
@@ -108,12 +108,12 @@ export default {
             // handle images that were not active before
             if (Number.isNaN(position)) {
                 return {
-                    left: `${100 - move}%`
+                    left: `${100 - move}%`,
                 };
             }
 
             return {
-                left: this.isDirectionRight ? `${position - move}%` : `${position + move}%`
+                left: this.isDirectionRight ? `${position - move}%` : `${position + move}%`,
             };
         },
 
@@ -174,7 +174,7 @@ export default {
                 return {
                     'is--previous': index === 0 && !this.isActive(index),
                     'is--next': this.images.length - 1 === index && !this.isActive(index),
-                    'is--active': this.isActive(index)
+                    'is--active': this.isActive(index),
                 };
             }
 
@@ -182,8 +182,8 @@ export default {
                 'is--previous': this.activeImgIndex - 1 === index
                     || (this.activeImgIndex === 0 && index === this.images.length - 1),
                 'is--active': this.isActive(index),
-                'is--next': this.isNext(index)
+                'is--next': this.isNext(index),
             };
-        }
-    }
+        },
+    },
 };

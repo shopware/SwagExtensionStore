@@ -10,7 +10,7 @@ export default {
     props: {
         labels: {
             type: Array,
-            required: true
-        }
-    }
+            required: true,
+        },
+    },
 };

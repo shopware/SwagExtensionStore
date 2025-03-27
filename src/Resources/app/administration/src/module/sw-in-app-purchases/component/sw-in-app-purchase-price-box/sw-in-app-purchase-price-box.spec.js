@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 
 Shopware.Component.register(
     'sw-in-app-purchase-price-box',
-    () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-price-box')
+    () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-price-box'),
 );
 
 async function createWrapper(overrides) {
@@ -11,9 +11,9 @@ async function createWrapper(overrides) {
             priceModel: {
                 type: 'rent',
                 duration: 1,
-                ...overrides
-            }
-        }
+                ...overrides,
+            },
+        },
     });
 }
 

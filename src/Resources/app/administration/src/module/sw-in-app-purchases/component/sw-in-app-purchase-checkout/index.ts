@@ -11,11 +11,11 @@ export default Shopware.Component.wrapComponentConfig({
     template,
 
     inject: [
-        'inAppPurchasesService'
+        'inAppPurchasesService',
     ],
 
     mixins: [
-        Shopware.Mixin.getByName('notification')
+        Shopware.Mixin.getByName('notification'),
     ],
 
     data() {
@@ -25,7 +25,7 @@ export default Shopware.Component.wrapComponentConfig({
             inAppPurchaseCart: null as IAP.InAppPurchaseCart | null,
             extension: null as IAP.Extension | null,
             tosAccepted: false,
-            errorSnippet: null as string | null
+            errorSnippet: null as string | null,
         };
     },
 
@@ -50,7 +50,7 @@ export default Shopware.Component.wrapComponentConfig({
             }
 
             return defaultThemePreview as string;
-        }
+        },
     },
 
     methods: {
@@ -72,9 +72,9 @@ export default Shopware.Component.wrapComponentConfig({
             await Promise.all([
                 this.inAppPurchasesService.createCart(
                     this.store.extension,
-                    this.store.entry.identifier
+                    this.store.entry.identifier,
                 ),
-                this.inAppPurchasesService.getExtension(this.store.extension)
+                this.inAppPurchasesService.getExtension(this.store.extension),
             ]).then(([inAppPurchaseCart, extension]) => {
                 this.inAppPurchaseCart = inAppPurchaseCart;
                 this.extension = extension;
@@ -95,7 +95,7 @@ export default Shopware.Component.wrapComponentConfig({
             this.inAppPurchasesService.orderCart(
                 this.inAppPurchaseCart?.taxRate,
                 this.inAppPurchaseCart?.positions,
-                this.extension?.name
+                this.extension?.name,
             ).then(() => {
                 this.state = 'success';
             }).catch((errorResponse: ErrorResponse) => {
@@ -139,6 +139,6 @@ export default Shopware.Component.wrapComponentConfig({
             this.extension = null;
             this.errorSnippet = null;
             this.state = 'loading';
-        }
-    }
+        },
+    },
 });

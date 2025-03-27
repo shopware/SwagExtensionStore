@@ -13,8 +13,8 @@ export default {
         id: {
             type: String,
             required: false,
-            default: null
-        }
+            default: null,
+        },
     },
 
     data() {
@@ -22,7 +22,7 @@ export default {
             isAvailable: false,
             failReason: '',
             listingError: null,
-            isLoading: false
+            isLoading: false,
         };
     },
 
@@ -43,7 +43,7 @@ export default {
             const isTheme = this.$route.name.includes('theme');
 
             return isTheme ? 'themes' : 'apps';
-        }
+        },
     },
 
     watch: {
@@ -52,11 +52,11 @@ export default {
             handler(newValue) {
                 Shopware.Store.get('shopwareExtensions').setSearchValue({
                     key: 'page',
-                    value: 1
+                    value: 1,
                 });
                 this.activeFilters.group = newValue;
-            }
-        }
+            },
+        },
     },
 
     created() {
@@ -116,8 +116,8 @@ export default {
         updateSearch(term) {
             Shopware.Store.get('shopwareExtensions').setSearchValue({
                 key: 'term',
-                value: term
+                value: term,
             });
-        }
-    }
+        },
+    },
 };

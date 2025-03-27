@@ -2,12 +2,12 @@ import { mount } from '@vue/test-utils';
 
 Shopware.Component.register(
     'sw-extension-card-base',
-    () => import('src/module/sw-extension/component/sw-extension-card-base')
+    () => import('src/module/sw-extension/component/sw-extension-card-base'),
 );
 
 Shopware.Component.override(
     'sw-extension-card-base',
-    () => import('SwagExtensionStore/module/sw-extension/component/sw-extension-card-base')
+    () => import('SwagExtensionStore/module/sw-extension/component/sw-extension-card-base'),
 );
 
 Shopware.Store.get('context').app = { config: { settings: {}, inAppPurchases: { SwagB2BPlatform: ['purchase1', 'purchase2'] } } };
@@ -18,7 +18,7 @@ async function createWrapper(extensionCustomProps = {}) {
         categories: [
             { details: { name: 'Productivity' } },
             { details: { name: 'Admin' } },
-            { details: { name: 'Storefront' } }
+            { details: { name: 'Storefront' } },
         ],
         installedAt: { date: new Date() },
         description: '<p>This is a really cool extension.</p>',
@@ -36,13 +36,13 @@ async function createWrapper(extensionCustomProps = {}) {
         labels: [],
         faq: [],
         addons: [],
-        ...extensionCustomProps
+        ...extensionCustomProps,
     };
 
 
     return mount(await Shopware.Component.build('sw-extension-card-base'), {
         props: {
-            extension: testExtension
+            extension: testExtension,
         },
         global: {
             renderStubDefaultSlot: true,
@@ -57,19 +57,19 @@ async function createWrapper(extensionCustomProps = {}) {
                 'sw-extension-uninstall-modal': true,
                 'sw-extension-removal-modal': true,
                 'sw-extension-permissions-modal': true,
-                'sw-extension-privacy-policy-extensions-modal': true
+                'sw-extension-privacy-policy-extensions-modal': true,
             },
             provide: {
                 shopwareExtensionService: {
                     updateExtensionData: jest.fn(),
                     isVariantDiscounted: jest.fn(),
                     orderVariantsByRecommendation: () => [],
-                    getOpenLink: () => { }
+                    getOpenLink: () => { },
                 },
                 cacheApiService: {},
-                extensionStoreActionService: {}
-            }
-        }
+                extensionStoreActionService: {},
+            },
+        },
     });
 }
 

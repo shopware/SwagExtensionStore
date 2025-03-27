@@ -7,7 +7,7 @@ export default {
     template,
 
     mixins: [
-        'notification'
+        'notification',
     ],
 
     inject: ['extensionStoreDataService'],
@@ -16,7 +16,7 @@ export default {
         return {
             isLoading: true,
             listingFilters: [],
-            listingSorting: {}
+            listingSorting: {},
         };
     },
 
@@ -31,7 +31,7 @@ export default {
             },
             set(newFilter) {
                 Shopware.Store.get('shopwareExtensions').search.filter = newFilter;
-            }
+            },
         },
 
         sortingOptions() {
@@ -86,7 +86,7 @@ export default {
             }
 
             return listingFiltersCopy;
-        }
+        },
     },
 
     created() {
@@ -106,7 +106,7 @@ export default {
                 })
                 .catch((e) => {
                     this.createNotificationError({
-                        message: e
+                        message: e,
                     });
                 })
                 .finally(() => {
@@ -130,12 +130,12 @@ export default {
         getOptionsForFilter(filter) {
             const anyOption = {
                 label: this.$t('sw-extension.store.listing.anyOption'),
-                value: null
+                value: null,
             };
 
             return [
                 anyOption,
-                ...filter.options
+                ...filter.options,
             ];
         },
 
@@ -145,7 +145,7 @@ export default {
             const [field, order] = orderIdentifier.split('##');
 
             Shopware.Store.get('shopwareExtensions').setSearchValue(
-                { key: 'sorting', value: Criteria.sort(field, order) }
+                { key: 'sorting', value: Criteria.sort(field, order) },
             );
         },
 
@@ -203,6 +203,6 @@ export default {
                 .forEach((child) => flat.push(...this.flatTree(child)));
 
             return flat;
-        }
-    }
+        },
+    },
 };

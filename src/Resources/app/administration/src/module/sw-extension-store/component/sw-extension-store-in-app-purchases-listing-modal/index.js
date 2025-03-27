@@ -13,12 +13,12 @@ export default {
     props: {
         extension: {
             type: Object,
-            required: true
+            required: true,
         },
         inAppPurchases: {
             type: Array,
-            required: true
-        }
+            required: true,
+        },
     },
     methods: {
         closeInAppPurchasesListingModal() {
@@ -27,6 +27,6 @@ export default {
 
         formatCurrency(price, currency) {
             return Utils.format.currency(price, currency);
-        }
-    }
+        },
+    },
 };

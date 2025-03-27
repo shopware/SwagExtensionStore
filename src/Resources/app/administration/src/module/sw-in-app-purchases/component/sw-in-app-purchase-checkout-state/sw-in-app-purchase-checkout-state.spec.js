@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 
 Shopware.Component.register(
     'sw-in-app-purchase-checkout-state',
-    () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-state')
+    () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-state'),
 );
 
 async function createWrapper(props) {
@@ -10,9 +10,9 @@ async function createWrapper(props) {
         props,
         global: {
             stubs: {
-                'sw-loader': true
-            }
-        }
+                'sw-loader': true,
+            },
+        },
     });
 }
 

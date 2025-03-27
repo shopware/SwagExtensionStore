@@ -1,15 +1,15 @@
 {% block sw_extension_store_index %}
-    <sw-meteor-page class="sw-extension-store-index" hideIcon>
+    <sw-meteor-page class="sw-extension-store-index" hide-icon>
         {% block sw_extension_store_index_slots %}
             {% block sw_extension_store_index_slot_search_bar %}
                 <template #search-bar>
                     {% block sw_extension_store_index_search_bar %}
                         <sw-search-bar
                             :key="storeSearchKey"
-                            @search="updateSearch"
-                            :initialSearch="searchValue"
-                            initialSearchType="extension"
+                            :initial-search="searchValue"
+                            initial-search-type="extension"
                             :placeholder="$t('sw-extension-store.listing.placeholderSearchBar')"
+                            @search="updateSearch"
                         />
                     {% endblock %}
                 </template>
@@ -37,7 +37,7 @@
                 <template #default>
 
                     {% block sw_extension_store_index_loader %}
-                        <sw-loader v-if="isLoading"></sw-loader>
+                        <sw-loader v-if="isLoading" />
                     {% endblock %}
 
                     <template v-else>
@@ -45,8 +45,8 @@
                             {% block sw_extension_store_index_content_view %}
                                 <router-view
                                     v-if="isAvailable"
-                                    @extension-listing-errors="onExtensionListingError">
-                                </router-view>
+                                    @extension-listing-errors="onExtensionListingError"
+                                />
                             {% endblock %}
 
                             {% block sw_extension_store_index_content_offline_warning %}
@@ -60,8 +60,7 @@
                             {% endblock %}
 
                             {% block sw_extension_store_index_content_update_warning %}
-                                <sw-extension-store-update-warning v-else-if="failReason === 'outdated'">
-                                </sw-extension-store-update-warning>
+                                <sw-extension-store-update-warning v-else-if="failReason === 'outdated'" />
                             {% endblock %}
 
                             {% block sw_extension_store_index_content_listing_error %}

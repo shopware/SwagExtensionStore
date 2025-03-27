@@ -1,22 +1,22 @@
-/* eslint-disable max-len */
+
 import { mount } from '@vue/test-utils';
 
 Shopware.Component.register(
     'sw-extension-store-slider',
-    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-slider')
+    () => import('SwagExtensionStore/module/sw-extension-store/component/sw-extension-store-slider'),
 );
 
 async function createWrapper() {
     return mount(await Shopware.Component.build('sw-extension-store-slider'), {
         props: {
-            images: []
+            images: [],
         },
         global: {
             stubs: {
-                'sw-loader': true
+                'sw-loader': true,
             },
-            provide: {}
-        }
+            provide: {},
+        },
     });
 }
 
@@ -31,14 +31,14 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         expect(wrapper.vm).toBeTruthy();
     });
 
-    it('should show a placeholder image if no images are provided', async () => {
-        // TODO: a fallback is not implemented now
-    });
+    // TODO: a fallback is not implemented now
+    // it('should show a placeholder image if no images are provided', async () => {
+    // });
 
     it('should show a single image', async () => {
         const images = ['https://via.placeholder.com/800x400'];
         await wrapper.setProps({
-            images: images
+            images: images,
         });
 
         const singleImage = wrapper.findAll('img');
@@ -50,12 +50,12 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
     [
         { slideCount: 2, imagesLength: 4 },
         { slideCount: 1, imagesLength: 2 },
-        { slideCount: 3, imagesLength: 6 }
+        { slideCount: 3, imagesLength: 6 },
     ].forEach((sample) => {
         it(`should show the navigation only when images.length (${sample.imagesLength}) is higher than slideCount (${sample.slideCount})`, async () => {
             await wrapper.setProps({
                 images: Array(sample.imagesLength).map(() => 'https://via.placeholder.com/800x400'),
-                slideCount: sample.slideCount
+                slideCount: sample.slideCount,
             });
 
             const sliderNavigation = wrapper.find('.sw-extension-store-slider__navigation');
@@ -69,12 +69,12 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         { slideCount: 2, imagesLength: 1 },
         { slideCount: 2, imagesLength: 2 },
         { slideCount: 1, imagesLength: 1 },
-        { slideCount: 3, imagesLength: 3 }
+        { slideCount: 3, imagesLength: 3 },
     ].forEach((sample) => {
         it(`should not show the navigation only when images.length (${sample.imagesLength}) is lower or equal than slideCount (${sample.slideCount})`, async () => {
             await wrapper.setProps({
                 images: Array(sample.imagesLength).map(() => 'https://via.placeholder.com/800x400'),
-                slideCount: sample.slideCount
+                slideCount: sample.slideCount,
             });
 
             const sliderNavigation = wrapper.find('.sw-extension-store-slider__navigation');
@@ -91,12 +91,12 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
                 'https://via.placeholder.com/800x400',
                 'https://via.placeholder.com/800x400',
                 'https://via.placeholder.com/800x400',
-                'https://via.placeholder.com/800x400'
+                'https://via.placeholder.com/800x400',
             ];
 
             await wrapper.setProps({
                 images: images,
-                slideCount: slideCount
+                slideCount: slideCount,
             });
 
             const activeItems = wrapper.findAll('.sw-extension-store-slider__slide-item.is--active');
@@ -112,12 +112,12 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
             'https://via.placeholder.com/800x400',
             'https://via.placeholder.com/800x400',
             'https://via.placeholder.com/800x400',
-            'https://via.placeholder.com/800x400'
+            'https://via.placeholder.com/800x400',
         ];
 
         await wrapper.setProps({
             images: images,
-            slideCount: 5
+            slideCount: 5,
         });
 
         const activeItems = wrapper.findAll('.sw-extension-store-slider__slide-item.is--active');
@@ -132,12 +132,12 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
             'https://via.placeholder.com/400x400',
             'https://via.placeholder.com/500x400',
             'https://via.placeholder.com/600x400',
-            'https://via.placeholder.com/700x400'
+            'https://via.placeholder.com/700x400',
         ];
 
         await wrapper.setProps({
             images: images,
-            slideCount: 3
+            slideCount: 3,
         });
 
         const activeItems = wrapper.findAll('.sw-extension-store-slider__slide-item.is--active');
@@ -158,12 +158,12 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
             'https://via.placeholder.com/400x400',
             'https://via.placeholder.com/500x400',
             'https://via.placeholder.com/600x400',
-            'https://via.placeholder.com/700x400'
+            'https://via.placeholder.com/700x400',
         ];
 
         await wrapper.setProps({
             images: images,
-            slideCount: 1
+            slideCount: 1,
         });
 
         const buttonNext = wrapper.find('.sw-extension-store-slider__btn-next');
@@ -201,12 +201,12 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
             'https://via.placeholder.com/400x400',
             'https://via.placeholder.com/500x400',
             'https://via.placeholder.com/600x400',
-            'https://via.placeholder.com/700x400'
+            'https://via.placeholder.com/700x400',
         ];
 
         await wrapper.setProps({
             images: images,
-            slideCount: 1
+            slideCount: 1,
         });
 
         const buttonNext = wrapper.find('.sw-extension-store-slider__btn-next');
@@ -251,12 +251,12 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         const images = [
             'https://via.placeholder.com/100x400',
             'https://via.placeholder.com/200x400',
-            'https://via.placeholder.com/300x400'
+            'https://via.placeholder.com/300x400',
         ];
 
         await wrapper.setProps({
             images: images,
-            slideCount: 1
+            slideCount: 1,
         });
 
         const buttonBack = wrapper.find('.sw-extension-store-slider__btn-back');
@@ -286,13 +286,13 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         const images = [
             'https://via.placeholder.com/100x400',
             'https://via.placeholder.com/200x400',
-            'https://via.placeholder.com/300x400'
+            'https://via.placeholder.com/300x400',
         ];
 
         await wrapper.setProps({
             images: images,
             slideCount: 1,
-            infinite: true
+            infinite: true,
         });
 
         const buttonBack = wrapper.find('.sw-extension-store-slider__btn-back');
@@ -322,12 +322,12 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         const images = [
             'https://via.placeholder.com/100x400',
             'https://via.placeholder.com/200x400',
-            'https://via.placeholder.com/300x400'
+            'https://via.placeholder.com/300x400',
         ];
 
         await wrapper.setProps({
             images: images,
-            slideCount: 1
+            slideCount: 1,
         });
 
         const buttonNext = wrapper.find('.sw-extension-store-slider__btn-next');
@@ -366,13 +366,13 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         const images = [
             'https://via.placeholder.com/100x400',
             'https://via.placeholder.com/200x400',
-            'https://via.placeholder.com/300x400'
+            'https://via.placeholder.com/300x400',
         ];
 
         await wrapper.setProps({
             images: images,
             slideCount: 1,
-            infinite: true
+            infinite: true,
         });
 
         const buttonNext = wrapper.find('.sw-extension-store-slider__btn-next');
@@ -411,11 +411,11 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         const images = [
             'https://via.placeholder.com/100x400',
             'https://via.placeholder.com/200x400',
-            'https://via.placeholder.com/300x400'
+            'https://via.placeholder.com/300x400',
         ];
 
         await wrapper.setProps({
-            images: images
+            images: images,
         });
 
         expect(wrapper.classes()).not.toContain('sw-card--large');
@@ -425,12 +425,12 @@ describe('src/module/sw-extension-store/component/sw-extension-store-slider', ()
         const images = [
             'https://via.placeholder.com/100x400',
             'https://via.placeholder.com/200x400',
-            'https://via.placeholder.com/300x400'
+            'https://via.placeholder.com/300x400',
         ];
 
         await wrapper.setProps({
             images: images,
-            large: true
+            large: true,
         });
 
         expect(wrapper.classes()).toContain('sw-card--large');

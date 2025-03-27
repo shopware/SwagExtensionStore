@@ -10,7 +10,7 @@ export default {
     props: {
         title: {
             type: String,
-            required: false
+            required: false,
         },
         variant: {
             type: String,
@@ -18,8 +18,8 @@ export default {
             default: 'neutral',
             validator(value) {
                 return ['info', 'danger', 'success', 'warning', 'neutral'].includes(value);
-            }
-        }
+            },
+        },
     },
 
     computed: {
@@ -40,8 +40,8 @@ export default {
 
         componentClasses() {
             return [
-                `sw-extension-store-error-card--variant-${this.variant}`
+                `sw-extension-store-error-card--variant-${this.variant}`,
             ];
-        }
-    }
+        },
+    },
 };

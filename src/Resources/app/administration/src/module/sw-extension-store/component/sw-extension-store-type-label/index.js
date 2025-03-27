@@ -14,13 +14,13 @@ export default {
                 const validTypes = ['app', 'plugin'];
 
                 return validTypes.includes(value);
-            }
-        }
+            },
+        },
     },
 
     computed: {
         isApp() {
             return this.type === 'app';
-        }
-    }
+        },
+    },
 };

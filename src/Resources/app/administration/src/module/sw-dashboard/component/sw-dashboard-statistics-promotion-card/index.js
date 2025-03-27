@@ -16,7 +16,7 @@ export default Shopware.Component.wrapComponentConfig({
             analyticsPromotionIcon,
             analyticsPromotionGraphic,
             isAppInstalled: false,
-            routeToApp: null
+            routeToApp: null,
         };
     },
 
@@ -32,7 +32,7 @@ export default Shopware.Component.wrapComponentConfig({
 
         linkToStatisticsAppExists() {
             return !!this.routeToApp;
-        }
+        },
     },
 
     created() {
@@ -52,7 +52,7 @@ export default Shopware.Component.wrapComponentConfig({
 
             this.extensionStoreDataService.getExtensionByName(
                 STATISTICS_APP_NAME,
-                Shopware.Context.api
+                Shopware.Context.api,
             ).then((extension) => {
                 if (extension) {
                     this.routeToApp = { name: 'sw.extension.store.detail', params: { id: extension.id } };
@@ -70,6 +70,6 @@ export default Shopware.Component.wrapComponentConfig({
 
         canAccessExtensionStore() {
             return this.acl.can('system.plugin_maintain');
-        }
-    }
+        },
+    },
 });

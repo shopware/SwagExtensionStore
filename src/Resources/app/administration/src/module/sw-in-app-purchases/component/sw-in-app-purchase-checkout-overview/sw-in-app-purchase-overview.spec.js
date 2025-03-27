@@ -2,12 +2,12 @@ import { mount } from '@vue/test-utils';
 
 Shopware.Component.register(
     'sw-in-app-purchase-checkout-overview',
-    () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-overview')
+    () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-overview'),
 );
 
 jest.mock('SwagExtensionStore/module/sw-in-app-purchases/types', () => ({
     InAppPurchase: jest.fn(),
-    InAppPurchasePriceModel: jest.fn()
+    InAppPurchasePriceModel: jest.fn(),
 }));
 
 async function createWrapper() {
@@ -15,14 +15,14 @@ async function createWrapper() {
         props: {
             purchase: {},
             priceModel: {},
-            tosAccepted: false
+            tosAccepted: false,
         },
         global: {
             stubs: {
                 'sw-in-app-purchase-price-box': true,
-                'sw-gtc-checkbox': true
-            }
-        }
+                'sw-gtc-checkbox': true,
+            },
+        },
     });
 }
 

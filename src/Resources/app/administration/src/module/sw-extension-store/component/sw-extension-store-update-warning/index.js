@@ -12,16 +12,16 @@ export default {
     inject: [
         'shopwareExtensionService',
         'extensionStoreActionService',
-        'cacheApiService'
+        'cacheApiService',
     ],
 
     mixins: [
-        Mixin.getByName('notification')
+        Mixin.getByName('notification'),
     ],
 
     data() {
         return {
-            isUpdating: false
+            isUpdating: false,
         };
     },
 
@@ -41,8 +41,8 @@ export default {
                 Shopware.Utils.debug.error(e);
                 this.createNotificationError({
                     message: this.$t(
-                        'global.notification.unspecifiedSaveErrorMessage'
-                    )
+                        'global.notification.unspecifiedSaveErrorMessage',
+                    ),
                 });
             }
         },
@@ -51,6 +51,6 @@ export default {
             return this.cacheApiService.clear().then(() => {
                 window.location.reload();
             });
-        }
-    }
+        },
+    },
 };

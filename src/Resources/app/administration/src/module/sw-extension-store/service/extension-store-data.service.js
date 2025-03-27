@@ -9,7 +9,7 @@ export default class ExtensionStoreDataService extends Shopware.Classes.ApiServi
     async listingFilters(context) {
         const res = await this.httpClient.get(`_action/${this.apiEndpoint}/store-filters`, {
             headers: this.basicHeaders(context),
-            version: 3
+            version: 3,
         });
 
         return res.data;
@@ -20,7 +20,7 @@ export default class ExtensionStoreDataService extends Shopware.Classes.ApiServi
 
         const { data } = await this.httpClient.post(`_action/${this.apiEndpoint}/list`, criteria.parse(), {
             headers: this.basicHeaders(context),
-            version: 3
+            version: 3,
         });
 
         const extensions = [];
@@ -35,14 +35,14 @@ export default class ExtensionStoreDataService extends Shopware.Classes.ApiServi
      */
     async getExtensionByName(name, context) {
         return this.getExtensionList({ term: name }, context).then(
-            (extensions) => extensions.find((extension) => extension.name === name) ?? null
+            (extensions) => extensions.find((extension) => extension.name === name) ?? null,
         );
     }
 
     async getDetail(id, context) {
         const { data } = await this.httpClient.get(`_action/${this.apiEndpoint}/detail/${id}`, {
             headers: this.basicHeaders(context),
-            version: 3
+            version: 3,
         });
 
         return data;
@@ -51,13 +51,13 @@ export default class ExtensionStoreDataService extends Shopware.Classes.ApiServi
     async getReviews(page, limit, id) {
         const criteria = new Criteria(
             page,
-            limit
+            limit,
         );
 
         const { data } = await this.httpClient.get(`_action/${this.apiEndpoint}/${id}/reviews`, {
             headers: this.basicHeaders(),
             params: criteria.parse(),
-            version: 3
+            version: 3,
         });
 
         return data;
@@ -67,7 +67,7 @@ export default class ExtensionStoreDataService extends Shopware.Classes.ApiServi
         const headers = {
             'Content-Type': 'application/json',
             Accept: 'application/json',
-            Authorization: `Bearer ${this.loginService.getToken()}`
+            Authorization: `Bearer ${this.loginService.getToken()}`,
         };
 
         if (context && context.languageId) {
@@ -84,11 +84,11 @@ export default class ExtensionStoreDataService extends Shopware.Classes.ApiServi
         category = null,
         term = null,
         sorting = null,
-        filter = {}
+        filter = {},
     } = {}) {
         const criteria = new Criteria(
             page,
-            limit
+            limit,
         );
 
         if (term) {
