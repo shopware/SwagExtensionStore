@@ -23,8 +23,9 @@ export default Shopware.Component.wrapComponentConfig({
             required: true,
         },
         variant: {
-            type: String as PropType<IAP.InAppPurchasePriceModel['variant'] | null>,
-            required: true,
+            type: String as PropType<IAP.InAppPurchasePriceModel['variant']>,
+            required: false,
+            default: null,
         },
     },
 

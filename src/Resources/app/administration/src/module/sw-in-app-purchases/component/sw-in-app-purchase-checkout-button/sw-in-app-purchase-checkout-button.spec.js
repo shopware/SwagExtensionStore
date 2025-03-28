@@ -23,7 +23,7 @@ describe('sw-in-app-purchase-checkout-button', () => {
         { state: 'purchase', tosAccepted: false, gtcAccepted: true, variant: 'monthly', expected: true },
         { state: 'purchase', tosAccepted: true, gtcAccepted: false, variant: null, expected: true },
         { state: 'purchase', tosAccepted: true, gtcAccepted: false, variant: 'monthly', expected: true },
-        { state: 'purchase', tosAccepted: true, gtcAccepted: true, variant: null, expected: false },
+        { state: 'purchase', tosAccepted: true, gtcAccepted: true, variant: null, expected: true },
         { state: 'purchase', tosAccepted: true, gtcAccepted: true, variant: 'monthly', expected: false },
         { state: 'error', tosAccepted: false, gtcAccepted: true, variant: null, expected: false },
         { state: 'error', tosAccepted: false, gtcAccepted: true, variant: 'monthly', expected: false },
@@ -36,7 +36,7 @@ describe('sw-in-app-purchase-checkout-button', () => {
     let wrapper;
 
     beforeEach(async () => {
-        wrapper = await createWrapper({ state: 'purchase', tosAccepted: false, gtcAccepted: false, variant: undefined });
+        wrapper = await createWrapper({ state: 'purchase', tosAccepted: false, gtcAccepted: false, variant: null });
     });
 
     it('should be a Vue.js component', () => {
