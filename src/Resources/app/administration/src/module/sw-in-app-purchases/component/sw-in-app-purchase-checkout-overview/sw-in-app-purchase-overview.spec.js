@@ -19,7 +19,7 @@ async function createWrapper() {
                     duration: 1,
                     variant: 'monthly',
                     conditionsType: null,
-                }]
+                }],
             },
             tosAccepted: false,
             gtcAccepted: false,
@@ -91,7 +91,7 @@ describe('sw-in-app-purchase-checkout-overview', () => {
             price: 10.99,
             duration: 12,
             variant: 'yearly',
-            conditionsType: null
+            conditionsType: null,
         };
 
         // now we call it with a different price model, to see if it updates and emits accordingly

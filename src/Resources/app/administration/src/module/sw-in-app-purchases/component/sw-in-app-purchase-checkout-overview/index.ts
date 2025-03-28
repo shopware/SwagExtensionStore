@@ -26,16 +26,16 @@ export default Shopware.Component.wrapComponentConfig({
         producer: {
             type: String,
             required: true,
-        }
+        },
     },
 
     data(): {
-        showConditionsModal: boolean,
-        priceModel: IAP.InAppPurchasePriceModel
+        showConditionsModal: boolean;
+        priceModel: IAP.InAppPurchasePriceModel;
     } {
         return {
             showConditionsModal: false,
-            priceModel: this.purchase.priceModels[0]
+            priceModel: this.purchase.priceModels[0],
         };
     },
 
@@ -44,14 +44,14 @@ export default Shopware.Component.wrapComponentConfig({
     },
 
     computed: {
-        purchaseOptions(): Array<{ value: IAP.InAppPurchasePriceModel, name: string }> {
-            return this.purchase.priceModels.map((priceModel): { value: IAP.InAppPurchasePriceModel, name: string } => {
+        purchaseOptions(): Array<{ value: IAP.InAppPurchasePriceModel; name: string }> {
+            return this.purchase.priceModels.map((priceModel): { value: IAP.InAppPurchasePriceModel; name: string } => {
                 return {
                     value: priceModel,
-                    name: `€${priceModel.price}* /${this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`)}`
+                    name: `€${priceModel.price}* /${this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`)}`,
                 };
             });
-        }
+        },
     },
 
     methods: {

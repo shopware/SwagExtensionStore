@@ -60,7 +60,7 @@ async function createWrapper(error = false) {
                             price: 0.99,
                             duration: 1,
                             variant: 'monthly',
-                            conditionsType: null
+                            conditionsType: null,
                         }]);
                     },
                 },
@@ -226,8 +226,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 version: '1.0.0',
                 type: 'app',
                 integrationId: '123',
-                active: true
-            }
+                active: true,
+            },
         };
         wrapper.vm.variant = 'service';
         wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');

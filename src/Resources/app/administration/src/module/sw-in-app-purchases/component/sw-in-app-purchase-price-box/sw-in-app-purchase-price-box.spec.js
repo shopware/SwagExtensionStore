@@ -43,6 +43,6 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-price-box'
     it('does not compute for priceModel that is not rent', async () => {
         await wrapper.setProps({ priceModel: { type: 'buy', variant: 'service' } });
         await wrapper.vm.$nextTick();
-        expect(wrapper.vm.rentDuration).toBe(null);
+        expect(wrapper.vm.rentDuration).toBeNull();
     });
 });

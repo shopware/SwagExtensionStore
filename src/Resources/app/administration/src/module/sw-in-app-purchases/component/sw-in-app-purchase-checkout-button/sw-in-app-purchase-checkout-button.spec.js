@@ -30,7 +30,7 @@ describe('sw-in-app-purchase-checkout-button', () => {
         { state: 'error', tosAccepted: true, gtcAccepted: false, variant: null, expected: false },
         { state: 'error', tosAccepted: true, gtcAccepted: false, variant: 'monthly', expected: false },
         { state: 'error', tosAccepted: false, gtcAccepted: false, variant: null, expected: false },
-        { state: 'error', tosAccepted: false, gtcAccepted: false, variant: 'monthly', expected: false }
+        { state: 'error', tosAccepted: false, gtcAccepted: false, variant: 'monthly', expected: false },
     ];
 
     let wrapper;
@@ -62,7 +62,7 @@ describe('sw-in-app-purchase-checkout-button', () => {
         async ({ state, tosAccepted, gtcAccepted, variant, expected }) => {
             await wrapper.setProps({ state: state, tosAccepted: tosAccepted, gtcAccepted: gtcAccepted, variant: variant });
             expect(wrapper.vm.disabled).toBe(expected);
-        }
+        },
     );
 
     it('computes text correctly', async () => {

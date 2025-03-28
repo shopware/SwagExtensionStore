@@ -33,8 +33,8 @@
 
         <mt-checkbox
             v-if="priceModel.conditionsType !== null"
-            :checked="gtcAccepted"
             v-model:value="gtcAccepted"
+            :checked="gtcAccepted"
             class="sw-in-app-purchase-checkout-purchase__subtext__partner_gtc"
             @update:checked="onGtcAcceptedChange"
         >

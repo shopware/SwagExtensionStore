@@ -7,7 +7,7 @@ export type InAppPurchasePriceModel<Type extends 'rent' | 'buy' = 'rent' | 'buy'
     oneTimeOnly: null;
     variant: 'non-consumable' | 'service' | 'monthly' | 'yearly';
     conditionsType: Type extends 'buy' ? string : undefined | null;
-}
+};
 
 export type InAppPurchase = {
     identifier: string;
@@ -17,7 +17,7 @@ export type InAppPurchase = {
     serviceConditions?: string | null;
     websiteGtc?: string | null;
     priceModels: Array<InAppPurchasePriceModel>;
-}
+};
 
 export type InAppPurchaseCartPositions = {
     feature: InAppPurchase;
