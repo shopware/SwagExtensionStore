@@ -84,9 +84,9 @@ class DataControllerTest extends TestCase
         $response = $this->controller->reviews($extensionId, new Request(), Context::createDefaultContext());
         $data = json_decode($this->assertResponseContent($response), true);
 
-        static::assertArrayHasKey('summary', $data);
+        static::assertTrue(isset($data['reviews']));
+        static::assertTrue(isset($data['summary']));
         static::assertSame(7, $data['summary']['numberOfRatings']);
-        static::assertArrayHasKey('reviews', $data);
     }
 
     private function setListingResponse(): void

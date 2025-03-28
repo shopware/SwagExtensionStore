@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="tests/TestBootstrap.php" executionOrder="random">
-  <coverage>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd" bootstrap="tests/TestBootstrap.php" executionOrder="random">
+  <source>
     <include>
       <directory suffix=".php">./</directory>
     </include>
@@ -14,7 +14,7 @@
       <directory suffix="Exception.php">./</directory>
       <file>src/SwagExtensionStore.php</file>
     </exclude>
-  </coverage>
+  </source>
   <php>
     <ini name="error_reporting" value="-1"/>
     <server name="KERNEL_CLASS" value="Shopware\Core\Kernel"/>
@@ -24,7 +24,7 @@
     <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
   </php>
   <testsuites>
-    <testsuite name="SwagExtensionStore Testsuite">
+    <testsuite name="swagextensionstore-testsuite">
       <directory>tests</directory>
     </testsuite>
   </testsuites>

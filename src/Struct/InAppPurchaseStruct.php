@@ -12,7 +12,7 @@ use Shopware\Core\Framework\Struct\Struct;
  *
  * @phpstan-import-type InAppPurchasePriceModel from InAppPurchasePriceModelStruct
  *
- * @phpstan-type InAppPurchase array{identifier: string, name: string, description: string|null, priceModel: InAppPurchasePriceModel}
+ * @phpstan-type InAppPurchase array{identifier: string, name: string, description: string|null, priceModels: InAppPurchasePriceModel[]}
  */
 #[Package('checkout')]
 class InAppPurchaseStruct extends Struct

@@ -381,6 +381,7 @@ class InAppPurchasesControllerTest extends TestCase
                     'price' => 59.5,
                     'duration' => 12,
                     'oneTimeOnly' => false,
+                    'conditionsType' => null,
                 ]],
             ],
             $valid ? [
@@ -394,6 +395,7 @@ class InAppPurchasesControllerTest extends TestCase
                     'price' => 1.5,
                     'duration' => 1,
                     'oneTimeOnly' => false,
+                    'conditionsType' => null,
                 ]],
             ] : null,
             [
@@ -407,6 +409,7 @@ class InAppPurchasesControllerTest extends TestCase
                     'price' => 1.5,
                     'duration' => 1,
                     'oneTimeOnly' => false,
+                    'conditionsType' => null,
                 ]],
             ],
         ]));

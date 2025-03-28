@@ -10,7 +10,7 @@ use Shopware\Core\Framework\Struct\Struct;
 /**
  * @codeCoverageIgnore
  *
- * @phpstan-type InAppPurchasePriceModel array{type: string, price: float, duration: string|null, oneTimeOnly: bool|null, conditionsType: string|null}
+ * @phpstan-type InAppPurchasePriceModel array{type: string, price: float, duration: int|null, oneTimeOnly: bool|null, conditionsType: string|null}
  */
 #[Package('checkout')]
 class InAppPurchasePriceModelStruct extends Struct
