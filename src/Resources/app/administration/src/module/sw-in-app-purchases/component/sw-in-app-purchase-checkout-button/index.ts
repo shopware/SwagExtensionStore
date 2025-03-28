@@ -1,6 +1,9 @@
 import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout-button.html.twig';
 
+/**
+ * @private
+ */
 export default Shopware.Component.wrapComponentConfig({
     template,
 

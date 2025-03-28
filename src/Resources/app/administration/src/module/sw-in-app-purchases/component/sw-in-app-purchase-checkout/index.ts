@@ -6,6 +6,9 @@ interface ErrorResponse {
     errors: Array<ShopwareHttpError>;
 }
 
+/**
+ * @private
+ */
 export default Shopware.Component.wrapComponentConfig({
     template,
 
