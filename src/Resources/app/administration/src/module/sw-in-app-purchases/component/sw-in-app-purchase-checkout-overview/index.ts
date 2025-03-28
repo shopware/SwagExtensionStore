@@ -28,12 +28,10 @@ export default Shopware.Component.wrapComponentConfig({
 
     data(): {
         showConditionsModal: boolean,
-        gtcAccepted: boolean,
         priceModel: IAP.InAppPurchasePriceModel
     } {
         return {
             showConditionsModal: false,
-            gtcAccepted: false,
             priceModel: this.purchase.priceModels[0]
         };
     },
@@ -67,7 +65,6 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         onGtcAcceptedChange(value: boolean) {
-            this.gtcAccepted = value;
             this.$emit('update:gtc-accepted', value);
         },
 
@@ -77,7 +74,7 @@ export default Shopware.Component.wrapComponentConfig({
             }
             this.priceModel = priceModel;
             this.onGtcAcceptedChange(priceModel.conditionsType === null);
-            this.$emit('update:variant', this.priceModel.variant);
+            this.$emit('update:variant', priceModel.variant);
         },
     },
 });
