@@ -30,6 +30,7 @@ async function createWrapper() {
                 'sw-in-app-purchase-price-box': true,
                 'sw-gtc-checkbox': true,
                 'sw-radio-field': true,
+                'sw-button': true,
             },
         },
     });
