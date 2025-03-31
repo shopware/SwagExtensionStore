@@ -7,7 +7,7 @@ Shopware.Component.register(
     () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout'),
 );
 
-async function createWrapper(error = false) {
+async function createWrapper() {
     const store = Shopware.Store.get('inAppPurchaseCheckout');
 
     return mount(await Shopware.Component.build('sw-in-app-purchase-checkout'), {
@@ -16,9 +16,6 @@ async function createWrapper(error = false) {
                 store,
                 inAppPurchasesService: {
                     getExtension: () => {
-                        if (error) {
-                            return Promise.reject(new Error('Test error'));
-                        }
                         return Promise.resolve({
                             name: 'test-extension',
                             icon: 'test-icon',
@@ -26,9 +23,6 @@ async function createWrapper(error = false) {
                         });
                     },
                     createCart: () => {
-                        if (error) {
-                            return Promise.reject(new Error('Test error'));
-                        }
                         return Promise.resolve({
                             netPrice: 50.0,
                             grossPrice: 59.5,
@@ -41,9 +35,6 @@ async function createWrapper(error = false) {
                         });
                     },
                     orderCart: () => {
-                        if (error) {
-                            return Promise.reject(new Error('Test error'));
-                        }
                         return Promise.resolve({
                             identifier: 'test-identifier',
                             name: 'test-name',
