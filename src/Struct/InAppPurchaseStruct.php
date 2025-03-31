@@ -22,7 +22,7 @@ class InAppPurchaseStruct extends Struct
 
     private function __construct(
         protected InAppPurchasePriceModelCollection $priceModels,
-        protected string $status = '',
+        protected InAppPurchaseStatus $status = InAppPurchaseStatus::INACTIVE,
         protected string $identifier = '',
         protected string $name = '',
         protected ?string $description = null,
@@ -104,12 +104,12 @@ class InAppPurchaseStruct extends Struct
         $this->websiteGtc = $websiteGtc;
     }
 
-    public function getStatus(): string
+    public function getStatus(): InAppPurchaseStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): void
+    public function setStatus(InAppPurchaseStatus $status): void
     {
         $this->status = $status;
     }

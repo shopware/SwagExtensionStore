@@ -7,6 +7,7 @@ use Shopware\Core\Framework\Context;
 use SwagExtensionStore\Services\InAppPurchasesService;
 use SwagExtensionStore\Services\StoreClient;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
+use SwagExtensionStore\Struct\InAppPurchaseStatus;
 use SwagExtensionStore\Struct\InAppPurchaseStruct;
 
 class InAppPurchasesServiceTest extends TestCase
@@ -27,12 +28,12 @@ class InAppPurchasesServiceTest extends TestCase
 
         $firstPurchase = $response->first();
         static::assertInstanceOf(InAppPurchaseStruct::class, $firstPurchase);
-        static::assertSame($firstPurchase->getStatus(), InAppPurchaseStruct::STATUS_ACTIVE);
+        static::assertSame($firstPurchase->getStatus(), InAppPurchaseStatus::ACTIVE);
         static::assertSame($firstPurchase->getIdentifier(), 'testFeature');
 
         $lastPurchase = $response->last();
         static::assertInstanceOf(InAppPurchaseStruct::class, $lastPurchase);
-        static::assertSame($lastPurchase->getStatus(), InAppPurchaseStruct::STATUS_ACTIVE);
+        static::assertSame($lastPurchase->getStatus(), InAppPurchaseStatus::ACTIVE);
         static::assertSame($lastPurchase->getIdentifier(), 'testFeature2');
     }
 
@@ -52,7 +53,7 @@ class InAppPurchasesServiceTest extends TestCase
                     'oneTimeOnly' => false,
                     'conditionsType' => null,
                 ]],
-                'status' => InAppPurchaseStruct::STATUS_ACTIVE,
+                'status' => InAppPurchaseStatus::ACTIVE,
             ], [
                 'extensionName' => 'testExtension',
                 'identifier' => 'testFeature2',
@@ -66,7 +67,7 @@ class InAppPurchasesServiceTest extends TestCase
                     'oneTimeOnly' => false,
                     'conditionsType' => null,
                 ]],
-                'status' => InAppPurchaseStruct::STATUS_ACTIVE,
+                'status' => InAppPurchaseStatus::ACTIVE,
             ], [
                 'extensionName' => 'testExtension',
                 'identifier' => 'testFeature3',
