@@ -51,7 +51,7 @@ export default Shopware.Component.wrapComponentConfig({
                 return `data:image/png;base64, ${this.extension.iconRaw}`;
             }
 
-            return this.assetFilter('/swagextensionstore/static/img/theme/default_theme_preview.jpg');
+            return this.assetFilter('/swagextensionstore/administration/static/img/theme/default_theme_preview.jpg');
         },
     },
 

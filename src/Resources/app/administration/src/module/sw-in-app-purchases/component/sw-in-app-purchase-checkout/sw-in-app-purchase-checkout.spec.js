@@ -305,7 +305,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 iconRaw: '',
             },
         });
-        expect(wrapper.vm.extensionIcon).toBe('swagextensionstore/static/img/theme/default_theme_preview.jpg');
+        expect(wrapper.vm.extensionIcon).toBe('swagextensionstore/administration/static/img/theme/default_theme_preview.jpg');
     });
 
     it('refreshes after a successful purchase', async () => {

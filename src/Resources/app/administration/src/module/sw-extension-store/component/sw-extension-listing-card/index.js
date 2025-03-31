@@ -29,7 +29,7 @@ export default {
             const image = Utils.get(this.extension, 'images[0]', null);
 
             if (!image) {
-                const previewImage = this.assetFilter('/swagextensionstore/static/img/theme/default_theme_preview.jpg');
+                const previewImage = this.assetFilter('/swagextensionstore/administration/static/img/theme/default_theme_preview.jpg');
                 return {
                     'background-image': `url('${previewImage}')`,
                 };
