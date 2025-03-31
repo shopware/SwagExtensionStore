@@ -9,6 +9,7 @@ use Shopware\Core\Framework\Log\Package;
 use SwagExtensionStore\Struct\InAppPurchaseCartPositionStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
+use SwagExtensionStore\Struct\InAppPurchaseStruct;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -37,6 +38,8 @@ class InAppPurchasesService
 
     public function listPurchases(string $extensionName, Context $context): InAppPurchaseCollection
     {
-        return $this->client->listInAppPurchases($extensionName, $context);
+        $purchases = $this->client->listInAppPurchases($extensionName, $context);
+
+        return $purchases->filter(fn (InAppPurchaseStruct $purchase) => $purchase->getStatus() === InAppPurchaseStruct::STATUS_ACTIVE);
     }
 }

@@ -17,8 +17,12 @@ use Shopware\Core\Framework\Struct\Struct;
 #[Package('checkout')]
 class InAppPurchaseStruct extends Struct
 {
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_INACTIVE = 'inactive';
+
     private function __construct(
         protected InAppPurchasePriceModelCollection $priceModels,
+        protected string $status = '',
         protected string $identifier = '',
         protected string $name = '',
         protected ?string $description = null,
@@ -98,5 +102,15 @@ class InAppPurchaseStruct extends Struct
     public function setWebsiteGtc(?string $websiteGtc): void
     {
         $this->websiteGtc = $websiteGtc;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
     }
 }
