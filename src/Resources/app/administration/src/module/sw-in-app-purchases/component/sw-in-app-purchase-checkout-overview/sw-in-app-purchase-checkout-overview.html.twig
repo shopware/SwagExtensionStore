@@ -41,12 +41,20 @@
             <template #label>
                 {{ $t('sw-in-app-purchase-checkout-overview.partner.accept') }}
                 <mt-link
-                    :type="priceModel.conditionsType === 'gtc' ? 'external' : 'internal'"
-                    :as="priceModel.conditionsType === 'gtc' ? 'a' : 'button'"
-                    :href="priceModel.conditionsType === 'gtc' ? purchase.websiteGtc : undefined"
-                    @click="priceModel.conditionsType === 'detailed' ? openConditionsModal() : null"
+                    v-if="priceModel.conditionsType === 'gtc'"
+                    type="external"
+                    as="a"
+                    :href="purchase.websiteGtc"
                 >
                     {{ $t('sw-in-app-purchase-checkout-overview.partner.gtc', { partner: producer }, 0) }}
+                </mt-link>
+                <mt-link
+                    v-else-if="priceModel.conditionsType === 'detailed'"
+                    type="internal"
+                    as="button"
+                    @click="openConditionsModal()"
+                >
+                    {{ $t('sw-in-app-purchase-checkout-overview.partner.conditions', { partner: producer }, 0) }}
                 </mt-link>
             </template>
         </mt-checkbox>
@@ -60,10 +68,19 @@
 
     <sw-modal
         v-if="priceModel.conditionsType === 'detailed' && showConditionsModal"
-        :title="$t('sw-in-app-purchase-checkout-overview.partner.gtc', { partner: producer }, 0)"
+        :title="$t('sw-in-app-purchase-checkout-overview.partner.conditions-header')"
         variant="small"
         @modal-close="closeConditionsModal"
     >
-        {{ purchase.serviceConditions }}
+        <div v-html="$sanitize(purchase.serviceConditions, { ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'ul', 'li', 'ol'], ALLOWED_ATTR: ['href', 'target'] })"></div>
+
+        <template #modal-footer>
+            <sw-button
+                variant="secondary"
+                @click="closeConditionsModal"
+            >
+                {{ $t('sw-in-app-purchase-checkout-button.closeButton') }}
+            </sw-button>
+        </template>
     </sw-modal>
 </div>

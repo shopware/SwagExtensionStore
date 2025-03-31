@@ -12,7 +12,9 @@
     "excludeVat": "* Alle Preise exklusive Mehrwertsteuer",
     "partner": {
       "accept": "Ich akzeptiere die",
-      "gtc": "Allgemeinen Geschäftsbedingungen von {partner}"
+      "gtc": "AGB von {partner}",
+      "conditions": "Servicebedingungen von {partner}",
+      "conditions-header": "Servicebedingungen"
     }
   },
   "sw-in-app-purchase-checkout-state": {

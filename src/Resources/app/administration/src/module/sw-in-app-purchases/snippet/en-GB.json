@@ -12,7 +12,9 @@
     "excludeVat": "* All prices are exclusive of VAT",
     "partner": {
       "accept": "I accept",
-      "gtc": "{partner}'s terms and conditions"
+      "gtc": "{partner}'s terms and conditions",
+      "conditions": "{partner}'s service conditions",
+      "conditions-header": "Service conditions"
     }
   },
   "sw-in-app-purchase-checkout-state": {
