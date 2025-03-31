@@ -39,7 +39,6 @@ module.exports = {
     ],
 
     moduleNameMapper: {
-        '^SwagExtensionStore/../static(.*)\\?(url|raw)$': '<rootDir>/static$1',
         '^SwagExtensionStore(.*)$': '<rootDir>src$1',
         '^src(.*)$': `${process.env.ADMIN_PATH}/src$1`,
         '^@shopware-ag/meteor-admin-sdk/es/(.*)': `${process.env.ADMIN_PATH}/node_modules/@shopware-ag/meteor-admin-sdk/umd/$1`,

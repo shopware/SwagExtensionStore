@@ -1,4 +1,3 @@
-import analyticsPromotionIcon from 'SwagExtensionStore/../static/img/analytics/extension/icon.svg?url';
 import template from './sw-extension-store-statistics-promotion.html.twig';
 import './sw-extension-store-statistics-promotion.scss';
 
@@ -11,13 +10,16 @@ export default Shopware.Component.wrapComponentConfig({
 
     data() {
         return {
-            analyticsPromotionIcon,
             extension: null,
             isAppInstalled: false,
         };
     },
 
     computed: {
+        assetFilter() {
+            return Shopware.Filter.getByName('asset');
+        },
+
         showBanner() {
             // If the app is installed and deactivated, we still want to not show the banner
             return !this.isAppInstalled;

@@ -139,7 +139,7 @@ describe('sw-extension-listing-card', () => {
         });
 
         expect(wrapper.vm.previewMedia).toStrictEqual({
-            'background-image': 'url(\'default_theme_preview.jpg\')',
+            'background-image': 'url(\'swagextensionstore/static/img/theme/default_theme_preview.jpg\')',
         });
     });
 
@@ -235,7 +235,7 @@ describe('sw-extension-listing-card', () => {
         expect(wrapper.find('.sw-extension-listing-card__info-description').text()).toBe('A short description');
         expect(wrapper.find('.sw-extension-listing-card__info-rating-count').text()).toBe('10');
         expect(wrapper.find('.sw-extension-listing-card__preview').attributes().style)
-            .toBe('background-image: url(default_theme_preview.jpg);');
+            .toBe('background-image: url(swagextensionstore/static/img/theme/default_theme_preview.jpg);');
         expect(wrapper.find('.sw-extension-listing-card__info-price').text())
             .toBe(JSON.stringify({
                 key: 'sw-extension-store.general.labelPrice',

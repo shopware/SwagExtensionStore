@@ -1,4 +1,3 @@
-import defaultThemePreview from 'SwagExtensionStore/../static/img/theme/default_theme_preview.jpg?url';
 import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout.html.twig';
 import './sw-in-app-purchase-checkout.scss';
@@ -34,6 +33,9 @@ export default Shopware.Component.wrapComponentConfig({
     },
 
     computed: {
+        assetFilter() {
+            return Shopware.Filter.getByName('asset');
+        },
         priceModel(): IAP.InAppPurchasePriceModel | null {
             return this.inAppPurchaseCart?.positions?.[0].feature.priceModel || null;
         },
@@ -49,7 +51,7 @@ export default Shopware.Component.wrapComponentConfig({
                 return `data:image/png;base64, ${this.extension.iconRaw}`;
             }
 
-            return defaultThemePreview as string;
+            return this.assetFilter('/swagextensionstore/static/img/theme/default_theme_preview.jpg');
         },
     },
 
