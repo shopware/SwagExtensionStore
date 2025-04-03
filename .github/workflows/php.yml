@@ -4,9 +4,11 @@ on:
     paths:
       - '**/*.php'
       - .github/workflows/php.yml
+      - phpunit.xml
   push:
     paths:
       - '**/*.php'
+      - phpunit.xml
     branches:
       - trunk
   workflow_dispatch:
