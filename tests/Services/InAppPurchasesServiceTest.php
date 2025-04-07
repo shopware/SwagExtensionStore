@@ -53,7 +53,7 @@ class InAppPurchasesServiceTest extends TestCase
                     'oneTimeOnly' => false,
                     'conditionsType' => null,
                 ]],
-                'status' => InAppPurchaseStatus::ACTIVE,
+                'status' => 'active',
             ], [
                 'extensionName' => 'testExtension',
                 'identifier' => 'testFeature2',
@@ -67,7 +67,7 @@ class InAppPurchasesServiceTest extends TestCase
                     'oneTimeOnly' => false,
                     'conditionsType' => null,
                 ]],
-                'status' => InAppPurchaseStatus::ACTIVE,
+                'status' => 'active',
             ], [
                 'extensionName' => 'testExtension',
                 'identifier' => 'testFeature3',
@@ -81,7 +81,7 @@ class InAppPurchasesServiceTest extends TestCase
                     'oneTimeOnly' => false,
                     'conditionsType' => null,
                 ]],
-                'status' => InAppPurchaseStatus::INACTIVE,
+                'status' => 'inactive',
             ],
         ]);
     }
