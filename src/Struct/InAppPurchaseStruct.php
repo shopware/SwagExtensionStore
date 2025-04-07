@@ -17,9 +17,6 @@ use Shopware\Core\Framework\Struct\Struct;
 #[Package('checkout')]
 class InAppPurchaseStruct extends Struct
 {
-    public const STATUS_ACTIVE = 'active';
-    public const STATUS_INACTIVE = 'inactive';
-
     private function __construct(
         protected InAppPurchasePriceModelCollection $priceModels,
         protected InAppPurchaseStatus $status = InAppPurchaseStatus::INACTIVE,

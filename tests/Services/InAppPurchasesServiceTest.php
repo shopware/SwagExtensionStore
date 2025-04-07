@@ -81,7 +81,7 @@ class InAppPurchasesServiceTest extends TestCase
                     'oneTimeOnly' => false,
                     'conditionsType' => null,
                 ]],
-                'status' => InAppPurchaseStruct::STATUS_INACTIVE,
+                'status' => InAppPurchaseStatus::INACTIVE,
             ],
         ]);
     }
