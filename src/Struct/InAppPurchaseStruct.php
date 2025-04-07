@@ -33,6 +33,8 @@ class InAppPurchaseStruct extends Struct
      */
     public static function fromArray(array $data): self
     {
+        $data['status'] = InAppPurchaseStatus::tryFrom($data['status'] ?? 'inactive');
+
         return (new self(InAppPurchasePriceModelCollection::fromArray($data['priceModels'])))->assign($data);
     }
 
