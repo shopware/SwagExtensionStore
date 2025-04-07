@@ -17,10 +17,10 @@ export default class InAppPurchasesService extends ApiService {
         ).then(ApiService.handleResponse.bind(this));
     }
 
-    async createCart(name: string, feature: string) {
+    async createCart(name: string, feature: string, variant: string) {
         return this.httpClient.post<IAP.InAppPurchaseCart>(
             `_action/${this.apiEndpoint}/cart/new`,
-            { name, feature },
+            { name, feature, variant },
             { headers: this.getBasicHeaders() },
         ).then(ApiService.handleResponse.bind(this));
     }
@@ -36,6 +36,13 @@ export default class InAppPurchasesService extends ApiService {
     async getAvailablePurchases(name: string) {
         return this.httpClient.get<IAP.InAppPurchaseCollection>(
             `_action/${this.apiEndpoint}/${name}/list`,
+            { headers: this.getBasicHeaders() },
+        ).then(ApiService.handleResponse.bind(this));
+    }
+
+    async getPriceModels(name: string, feature:string) {
+        return this.httpClient.get<IAP.InAppPurchase>(
+            `_action/${this.apiEndpoint}/${name}/${feature}`,
             { headers: this.getBasicHeaders() },
         ).then(ApiService.handleResponse.bind(this));
     }

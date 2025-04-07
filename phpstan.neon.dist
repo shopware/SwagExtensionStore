@@ -10,7 +10,7 @@ parameters:
         - src/Resources
     symfony:
         constantHassers: false
-        containerXmlPath: '../../../var/cache/phpstan_dev/Shopware_Core_DevOps_StaticAnalyze_StaticAnalyzeKernelPhpstan_devDebugContainer.xml'
+        containerXmlPath: '../../../var/cache/static_phpstan_dev/Shopware_Core_DevOps_StaticAnalyze_StaticAnalyzeKernelPhpstan_devDebugContainer.xml'
         consoleApplicationLoader: ../../../src/Core/DevOps/StaticAnalyze/console-application.php
 
     ignoreErrors:
@@ -18,10 +18,6 @@ parameters:
         - # Direct container access
             message: '#Service ".*" is private#'
             path: tests
-
-        - # Ignore namespace for test plugins
-            message: '#Class like namespace .* does not follow PSR-4 configuration in composer.json#'
-            path: tests/_fixtures
 
 rules:
     # Shopware core rules
@@ -32,4 +28,3 @@ rules:
     - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\DecorationPatternRule
     - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\PackageAnnotationRule
     - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\DomainExceptionRule
-    - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\NoAfterStatementRule

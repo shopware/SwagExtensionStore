@@ -74,26 +74,36 @@ class InAppPurchaseCollectionTest extends TestCase
     {
         $data = [
             [
+                'id' => 1,
                 'identifier' => 'purchase_1',
                 'name' => 'Feature 1',
                 'description' => 'Description 1',
-                'priceModel' => [
-                    'type' => 'subscription',
+                'serviceConditions' => null,
+                'websiteGtc' => null,
+                'priceModels' => [[
+                    'variant' => 'monthly',
+                    'type' => 'rent',
                     'price' => 10.0,
-                    'duration' => '1 month',
+                    'duration' => 12,
                     'oneTimeOnly' => false,
-                ],
+                    'conditionsType' => null,
+                ]],
             ],
             [
+                'id' => 2,
                 'identifier' => 'purchase_2',
                 'name' => 'Feature 2',
                 'description' => 'Description 2',
-                'priceModel' => [
-                    'type' => 'one-time',
+                'serviceConditions' => null,
+                'websiteGtc' => null,
+                'priceModels' => [[
+                    'variant' => 'non-consumable',
+                    'type' => 'buy',
                     'price' => 100.0,
                     'duration' => null,
-                    'oneTimeOnly' => true,
-                ],
+                    'oneTimeOnly' => false,
+                    'conditionsType' => null,
+                ]],
             ],
         ];
 

@@ -12,16 +12,19 @@ use Shopware\Core\Framework\Struct\Struct;
  *
  * @phpstan-import-type InAppPurchasePriceModel from InAppPurchasePriceModelStruct
  *
- * @phpstan-type InAppPurchase array{identifier: string, name: string, description: string|null, priceModel: InAppPurchasePriceModel}
+ * @phpstan-type InAppPurchase array{identifier: string, name: string, description: string|null, priceModels: InAppPurchasePriceModel[]}
  */
 #[Package('checkout')]
 class InAppPurchaseStruct extends Struct
 {
     private function __construct(
-        protected InAppPurchasePriceModelStruct $priceModel,
+        protected InAppPurchasePriceModelCollection $priceModels,
+        protected InAppPurchaseStatus $status = InAppPurchaseStatus::INACTIVE,
         protected string $identifier = '',
         protected string $name = '',
         protected ?string $description = null,
+        protected ?string $serviceConditions = null,
+        protected ?string $websiteGtc = null,
     ) {
     }
 
@@ -30,7 +33,7 @@ class InAppPurchaseStruct extends Struct
      */
     public static function fromArray(array $data): self
     {
-        return (new self(InAppPurchasePriceModelStruct::fromArray($data['priceModel'])))->assign($data);
+        return (new self(InAppPurchasePriceModelCollection::fromArray($data['priceModels'])))->assign($data);
     }
 
     public function getIdentifier(): string
@@ -63,13 +66,48 @@ class InAppPurchaseStruct extends Struct
         $this->description = $description;
     }
 
-    public function getPriceModel(): InAppPurchasePriceModelStruct
+    public function getPriceModels(): InAppPurchasePriceModelCollection
     {
-        return $this->priceModel;
+        return $this->priceModels;
     }
 
-    public function setPriceModals(InAppPurchasePriceModelStruct $priceModel): void
+    public function setPriceModels(InAppPurchasePriceModelCollection $priceModels): void
     {
-        $this->priceModel = $priceModel;
+        $this->priceModels = $priceModels;
+    }
+
+    public function addPriceModel(InAppPurchasePriceModelStruct $priceModel): void
+    {
+        $this->priceModels->add($priceModel);
+    }
+
+    public function getServiceConditions(): ?string
+    {
+        return $this->serviceConditions;
+    }
+
+    public function setServiceConditions(?string $serviceConditions): void
+    {
+        $this->serviceConditions = $serviceConditions;
+    }
+
+    public function getWebsiteGtc(): ?string
+    {
+        return $this->websiteGtc;
+    }
+
+    public function setWebsiteGtc(?string $websiteGtc): void
+    {
+        $this->websiteGtc = $websiteGtc;
+    }
+
+    public function getStatus(): InAppPurchaseStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(InAppPurchaseStatus $status): void
+    {
+        $this->status = $status;
     }
 }

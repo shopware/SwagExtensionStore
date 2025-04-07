@@ -9,7 +9,13 @@
   },
   "sw-in-app-purchase-checkout-overview": {
     "billHint": "Die Kosten werden auf Ihrer Shopware-Rechnung ausgewiesen. Stornierung jederzeit in Ihrem Shopware-Konto.",
-    "excludeVat": "* Alle Preise exklusive Mehrwertsteuer"
+    "excludeVat": "* Alle Preise exklusive Mehrwertsteuer",
+    "partner": {
+      "accept": "Ich akzeptiere die",
+      "gtc": "AGB von {partner}",
+      "conditions": "Servicebedingungen von {partner}",
+      "conditions-header": "Servicebedingungen"
+    }
   },
   "sw-in-app-purchase-checkout-state": {
     "errorTitle": "Etwas ist schiefgelaufen.",
@@ -18,7 +24,6 @@
     "successSubtitle": "Du kannst jetzt dein neues Feature erleben."
   },
   "sw-in-app-purchase-price-box": {
-    "priceText": "Preis",
     "duration": {
       "monthly": "monatlich",
       "yearly": "jährlich"

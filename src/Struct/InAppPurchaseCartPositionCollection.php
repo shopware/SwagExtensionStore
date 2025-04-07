@@ -34,7 +34,7 @@ class InAppPurchaseCartPositionCollection extends Collection
     {
         return array_map(static function (InAppPurchaseCartPositionStruct $position) {
             return $position->toCart();
-        }, $this->elements); // @phpstan-ignore-line property.deprecated will be strictly typed. Remove this ignore for shopware v6.7.0
+        }, $this->elements);
     }
 
     /**

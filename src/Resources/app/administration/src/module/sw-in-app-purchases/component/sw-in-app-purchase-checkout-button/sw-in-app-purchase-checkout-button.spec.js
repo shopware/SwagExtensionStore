@@ -16,10 +16,27 @@ async function createWrapper(props) {
 }
 
 describe('sw-in-app-purchase-checkout-button', () => {
+    const buttonStatesDataSet = [
+        { state: 'purchase', tosAccepted: false, gtcAccepted: false, variant: null, expected: true },
+        { state: 'purchase', tosAccepted: false, gtcAccepted: false, variant: 'monthly', expected: true },
+        { state: 'purchase', tosAccepted: false, gtcAccepted: true, variant: null, expected: true },
+        { state: 'purchase', tosAccepted: false, gtcAccepted: true, variant: 'monthly', expected: true },
+        { state: 'purchase', tosAccepted: true, gtcAccepted: false, variant: null, expected: true },
+        { state: 'purchase', tosAccepted: true, gtcAccepted: false, variant: 'monthly', expected: true },
+        { state: 'purchase', tosAccepted: true, gtcAccepted: true, variant: null, expected: true },
+        { state: 'purchase', tosAccepted: true, gtcAccepted: true, variant: 'monthly', expected: false },
+        { state: 'error', tosAccepted: false, gtcAccepted: true, variant: null, expected: false },
+        { state: 'error', tosAccepted: false, gtcAccepted: true, variant: 'monthly', expected: false },
+        { state: 'error', tosAccepted: true, gtcAccepted: false, variant: null, expected: false },
+        { state: 'error', tosAccepted: true, gtcAccepted: false, variant: 'monthly', expected: false },
+        { state: 'error', tosAccepted: false, gtcAccepted: false, variant: null, expected: false },
+        { state: 'error', tosAccepted: false, gtcAccepted: false, variant: 'monthly', expected: false },
+    ];
+
     let wrapper;
 
     beforeEach(async () => {
-        wrapper = await createWrapper({ state: 'purchase', tosAccepted: false });
+        wrapper = await createWrapper({ state: 'purchase', tosAccepted: false, gtcAccepted: false, variant: null });
     });
 
     it('should be a Vue.js component', () => {
@@ -40,16 +57,13 @@ describe('sw-in-app-purchase-checkout-button', () => {
         expect(wrapper.vm.show).toBe(false);
     });
 
-    it('computes disabled correctly', async () => {
-        await wrapper.setProps({ state: 'purchase', tosAccepted: false });
-        expect(wrapper.vm.disabled).toBe(true);
-
-        await wrapper.setProps({ state: 'purchase', tosAccepted: true });
-        expect(wrapper.vm.disabled).toBe(false);
-
-        await wrapper.setProps({ state: 'error', tosAccepted: false });
-        expect(wrapper.vm.disabled).toBe(false);
-    });
+    it.each(buttonStatesDataSet)(
+        'computes disabled correctly ($state, $tosAccepted, $gtcAccepted, $variant)',
+        async ({ state, tosAccepted, gtcAccepted, variant, expected }) => {
+            await wrapper.setProps({ state: state, tosAccepted: tosAccepted, gtcAccepted: gtcAccepted, variant: variant });
+            expect(wrapper.vm.disabled).toBe(expected);
+        },
+    );
 
     it('computes text correctly', async () => {
         await wrapper.setProps({ state: 'error' });

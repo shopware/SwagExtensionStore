@@ -45,7 +45,9 @@
                 </span>
 
                 <ul class="sw-extension-store-detail-in-app-purchases-listing-modal-content__payment-options">
-                    {{ formatCurrency(inAppPurchase.priceModel.price, inAppPurchase.priceModel.currency) }}* {{ inAppPurchase.priceModel.duration }}
+                    <li v-for="(priceModel, index) in inAppPurchase.priceModels" :key="index">
+                        {{ formatCurrency(priceModel.price, priceModel.currency) }}* {{ priceModel.type === 'rent' ? priceModel.variant : $t('sw-extension-store.in-app-purchases.onceOff') }}
+                    </li>
                 </ul>
             </template>
         </sw-collapse>

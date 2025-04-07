@@ -10,7 +10,7 @@ async function createWrapper(overrides) {
         props: {
             priceModel: {
                 type: 'rent',
-                duration: 1,
+                variant: 'monthly',
                 ...overrides,
             },
         },
@@ -29,25 +29,19 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-price-box'
     });
 
     it('computes rentDuration correctly for monthly rent', async () => {
-        await wrapper.setProps({ priceModel: { type: 'rent', duration: 1 } });
+        await wrapper.setProps({ priceModel: { type: 'rent', variant: 'monthly' } });
         await wrapper.vm.$nextTick();
         expect(wrapper.vm.rentDuration).toBe('monthly');
     });
 
     it('computes rentDuration correctly for yearly rent', async () => {
-        await wrapper.setProps({ priceModel: { type: 'rent', duration: 12 } });
+        await wrapper.setProps({ priceModel: { type: 'rent', variant: 'yearly' } });
         await wrapper.vm.$nextTick();
         expect(wrapper.vm.rentDuration).toBe('yearly');
     });
 
-    it('computes rentDuration correctly for non-rent type', async () => {
-        await wrapper.setProps({ priceModel: { type: 'buy', duration: 0 } });
-        await wrapper.vm.$nextTick();
-        expect(wrapper.vm.rentDuration).toBeNull();
-    });
-
-    it('computes rentDuration correctly for unknown duration', async () => {
-        await wrapper.setProps({ priceModel: { type: 'rent', duration: 6 } });
+    it('does not compute for priceModel that is not rent', async () => {
+        await wrapper.setProps({ priceModel: { type: 'buy', variant: 'service' } });
         await wrapper.vm.$nextTick();
         expect(wrapper.vm.rentDuration).toBeNull();
     });

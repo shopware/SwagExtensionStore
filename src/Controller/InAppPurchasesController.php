@@ -19,6 +19,7 @@ use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use SwagExtensionStore\Exception\ExtensionStoreException;
 use SwagExtensionStore\Services\InAppPurchasesService;
 use SwagExtensionStore\Struct\InAppPurchaseCartPositionCollection;
+use SwagExtensionStore\Struct\InAppPurchaseStruct;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -43,7 +44,7 @@ class InAppPurchasesController
     }
 
     #[Route('/api/_action/in-app-purchases/{technicalName}/details', name: 'api.in-app-purchases.detail', methods: ['GET'])]
-    public function getInAppFeature(string $technicalName, Context $context): Response
+    public function getInAppPurchaseDetails(string $technicalName, Context $context): Response
     {
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('name', $technicalName));
@@ -60,8 +61,9 @@ class InAppPurchasesController
     {
         $name = $data->getString('name');
         $feature = $data->getString('feature');
+        $variant = $data->getString('variant');
 
-        $cart = $this->inAppPurchasesService->createCart($name, $feature, $context);
+        $cart = $this->inAppPurchasesService->createCart($name, $feature, $variant, $context);
 
         return new JsonResponse($cart);
     }
@@ -129,6 +131,17 @@ class InAppPurchasesController
         });
 
         return new JsonResponse(status: Response::HTTP_NO_CONTENT);
+    }
+
+    #[Route('/api/_action/in-app-purchases/{technicalName}/{inAppPurchase}', name: 'api.in-app-purchases.in-app-purchase', methods: ['GET'])]
+    public function getInAppPurchase(string $technicalName, string $inAppPurchase, Context $context): Response
+    {
+        $inAppPurchaseCollection = $this->inAppPurchasesService->listPurchases($technicalName, $context);
+        $iap = $inAppPurchaseCollection->filter(
+            fn (InAppPurchaseStruct $availableInAppPurchases) => $availableInAppPurchases->getIdentifier() === $inAppPurchase
+        )->first();
+
+        return new JsonResponse($iap);
     }
 
     private function getAppByName(string $appName, Context $context): ?AppEntity

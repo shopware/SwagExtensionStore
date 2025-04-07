@@ -31,6 +31,25 @@
             font-size: var(--font-size-s);
             color: var(--color-text-secondary-default);
         }
+
+        &__choices {
+            margin-bottom:0;
+
+            .sw-field__radio-group{
+                .sw-field__radio-option {
+                    padding:var(--scale-size-24);
+
+                    .sw-field__radio-input {
+                        margin-top:var(--scale-size-4);
+                    }
+
+                    .sw-field__radio-option-label {
+                        font-size: var(--font-size-m);
+                        color: var(--color-text-primary-default);
+                    }
+                }
+            }
+        }
     }
 
     &__subtext {
