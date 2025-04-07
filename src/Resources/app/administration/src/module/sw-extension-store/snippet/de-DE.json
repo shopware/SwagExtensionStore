@@ -66,6 +66,9 @@
                 "paymentMeansRequiredText": "Um diese App zu kaufen, musst Du",
                 "paymentMeansRequiredLinkText": "eine Zahlungsmethode hinzufügen"
             }
+        },
+        "in-app-purchases": {
+            "onceOff": "einmalig"
         }
     },
     "sw-extension-store-statistics-promotion": {
