@@ -1,4 +1,4 @@
-import type * as IAP from 'src/module/sw-in-app-purchases/types';
+import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout.html.twig';
 import './sw-in-app-purchase-checkout.scss';
 
@@ -10,6 +10,9 @@ interface StoreExtension {
     name: string;
 }
 
+/**
+ * @private
+ */
 export default Shopware.Component.wrapComponentConfig({
     template,
 
@@ -27,7 +30,10 @@ export default Shopware.Component.wrapComponentConfig({
             store: Shopware.Store.get('inAppPurchaseCheckout'),
             inAppPurchaseCart: null as IAP.InAppPurchaseCart | null,
             extension: null as IAP.Extension | null,
+            purchase: null as IAP.InAppPurchase | null,
             tosAccepted: false,
+            gtcAccepted: false,
+            variant: null as string | null,
             errorSnippet: null as string | null
         };
     },
@@ -37,12 +43,6 @@ export default Shopware.Component.wrapComponentConfig({
     },
 
     computed: {
-        priceModel(): IAP.InAppPurchasePriceModel | null {
-            return this.inAppPurchaseCart?.positions?.[0].feature.priceModel || null;
-        },
-        purchase(): IAP.InAppPurchase | null {
-            return this.inAppPurchaseCart?.positions?.[0].feature || null;
-        },
         assetFilter() {
             return Shopware.Filter.getByName('asset');
         },
@@ -85,13 +85,10 @@ export default Shopware.Component.wrapComponentConfig({
             this.state = 'loading';
 
             await Promise.all([
-                this.cart = this.inAppPurchasesService.createCart(
-                    this.storeExtension,
-                    this.store.entry.identifier
-                ),
-                this.inAppPurchasesService.getExtension(this.storeExtension)
-            ]).then(([inAppPurchaseCart, extension]) => {
-                this.inAppPurchaseCart = inAppPurchaseCart;
+                this.inAppPurchasesService.getExtension(this.store.extension),
+                this.inAppPurchasesService.getPriceModels(this.store.extension, this.store.entry.identifier)
+            ]).then(([extension, purchase]) => {
+                this.purchase = purchase;
                 this.extension = extension;
                 this.state = 'purchase';
             }).catch((errorResponse: ErrorResponse) => {
@@ -101,17 +98,23 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         onPurchaseFeature() {
-            if (!this.store.extension || !this.store.entry) {
+            if (!this.store.extension || !this.store.entry || !this.variant) {
                 this.reset();
 
                 return;
             }
 
-            this.inAppPurchasesService.orderCart(
-                this.inAppPurchaseCart?.taxRate,
-                this.inAppPurchaseCart?.positions,
-                this.extension?.name
-            ).then(() => {
+            this.inAppPurchasesService.createCart(
+                this.store.extension,
+                this.store.entry.identifier,
+                this.variant
+            ).then((inAppPurchaseCart) => {
+                return this.inAppPurchasesService.orderCart(
+                    inAppPurchaseCart?.taxRate,
+                    inAppPurchaseCart?.positions,
+                    this.extension?.name
+                );
+            }).then(() => {
                 this.state = 'success';
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error(errorResponse);
@@ -154,6 +157,10 @@ export default Shopware.Component.wrapComponentConfig({
             this.extension = null;
             this.errorSnippet = null;
             this.state = 'loading';
+            this.purchase = null;
+            this.variant = null;
+            this.tosAccepted = false;
+            this.gtcAccepted = false;
         }
     }
 });

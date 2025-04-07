@@ -9,7 +9,13 @@
   },
   "sw-in-app-purchase-checkout-overview": {
     "billHint": "Costs will be added to your shopware bill. Cancellation at any time in your shopware account.",
-    "excludeVat": "* All prices are exclusive of VAT"
+    "excludeVat": "* All prices are exclusive of VAT",
+    "partner": {
+      "accept": "I accept",
+      "gtc": "{partner}'s terms and conditions",
+      "conditions": "{partner}'s service conditions",
+      "conditions-header": "Service conditions"
+    }
   },
   "sw-in-app-purchase-checkout-state": {
     "errorTitle": "Something went wrong.",
@@ -18,7 +24,6 @@
     "successSubtitle": "You can now experience your new feature."
   },
   "sw-in-app-purchase-price-box": {
-    "priceText": "Price",
     "duration": {
       "monthly": "monthly",
       "yearly": "yearly"

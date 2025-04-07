@@ -7,7 +7,7 @@ Shopware.Component.register(
     () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout')
 );
 
-async function createWrapper(error = false) {
+async function createWrapper() {
     const store = Shopware.Store.get('inAppPurchaseCheckout');
 
     return mount(await Shopware.Component.build('sw-in-app-purchase-checkout'), {
@@ -16,9 +16,6 @@ async function createWrapper(error = false) {
                 store,
                 inAppPurchasesService: {
                     getExtension: () => {
-                        if (error) {
-                            return Promise.reject(new Error('Test error'));
-                        }
                         return Promise.resolve({
                             name: 'test-extension',
                             icon: 'test-icon',
@@ -47,6 +44,15 @@ async function createWrapper(error = false) {
                     },
                     refreshInAppPurchases: () => {
                         return Promise.resolve();
+                    },
+                    getPriceModels: () => {
+                        return Promise.resolve([{
+                            type: 'rent',
+                            price: 0.99,
+                            duration: 1,
+                            variant: 'monthly',
+                            conditionsType: null
+                        }]);
                     }
                 }
             },
@@ -56,9 +62,11 @@ async function createWrapper(error = false) {
                                <slot name="default"></slot>
                            </div>`
                 },
-                'sw-alert': true,
-                'sw-button': true,
-                'sw-loader': true
+                'sw-loader': true,
+                'sw-extension-icon': true,
+                'sw-in-app-purchase-checkout-overview': true,
+                'sw-in-app-purchase-checkout-state': true,
+                'sw-in-app-purchase-checkout-button': true
             }
         }
     });
@@ -121,7 +129,10 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
     it('catches requestFeature error correctly', async () => {
         Shopware.Utils.debug.error = jest.fn();
 
-        wrapper = await createWrapper(true);
+        wrapper.vm.inAppPurchasesService.getExtension = () => {
+            return Promise.reject(new Error('Test error'));
+        };
+
         Shopware.Context.app.config.bundles = {
             jestapp: {
                 name: 'jestapp',
@@ -179,7 +190,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 active: true
             }
         };
-
+        wrapper.vm.variant = 'service';
         wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
         await flushPromises();
 
@@ -193,10 +204,10 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         wrapper.vm.reset();
     });
 
-    it('catches onPurchaseFeature error correctly', async () => {
-        Shopware.Utils.debug.error = jest.fn();
-
-        wrapper = await createWrapper(true);
+    it('catches error if createCart fails', async () => {
+        wrapper.vm.inAppPurchasesService.createCart = () => {
+            return Promise.reject(new Error('Test error'));
+        };
 
         Shopware.Context.app.config.bundles = {
             jestapp: {
@@ -209,6 +220,37 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 active: true
             }
         };
+        wrapper.vm.variant = 'service';
+        wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
+
+        wrapper.vm.onPurchaseFeature();
+        expect(wrapper.vm.state).toBe('loading');
+
+        await flushPromises();
+        expect(wrapper.vm.state).toBe('error');
+        wrapper.vm.store.$reset();
+        wrapper.vm.reset();
+    });
+
+    it('catches error if orderCart fails', async () => {
+        Shopware.Utils.debug.error = jest.fn();
+
+        wrapper.vm.inAppPurchasesService.orderCart = () => {
+            return Promise.reject(new Error('Test error'));
+        };
+
+        Shopware.Context.app.config.bundles = {
+            jestapp: {
+                name: 'jestapp',
+                baseUrl: '',
+                permissions: [],
+                version: '1.0.0',
+                type: 'app',
+                integrationId: '123',
+                active: true
+            }
+        };
+        wrapper.vm.variant = 'service';
         wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
 
         wrapper.vm.onPurchaseFeature();

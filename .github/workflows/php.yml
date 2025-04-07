@@ -30,5 +30,6 @@ jobs:
       extensionName: ${{ github.event.repository.name }}
       shopwareVersion: 6.6.x
       uploadCoverage: true
+      filterName: swagextensionstore-testsuite
     secrets:
       codecovToken: ${{ secrets.CODECOV_TOKEN }}
