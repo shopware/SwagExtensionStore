@@ -72,7 +72,7 @@
         variant="small"
         @modal-close="closeConditionsModal"
     >
-        <div v-html="$sanitize(purchase.serviceConditions, { ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'ul', 'li', 'ol'], ALLOWED_ATTR: ['href', 'target'] })"></div>
+        <div v-html="$sanitize(purchase.serviceConditions, { ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'ul', 'li', 'ol'], ALLOWED_ATTR: ['href', 'target'] })" />
 
         <template #modal-footer>
             <sw-button

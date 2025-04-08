@@ -178,7 +178,7 @@ class InAppPurchasesControllerTest extends TestCase
     public function testOrderCartWithInvalidItem(): void
     {
         $this->expectException(ExtensionStoreException::class);
-        $this->expectExceptionMessage('The in-app purchase could not be completed. Please contact the extension provider.');
+        $this->expectExceptionMessage('The extension provider disallowed your purchase. Please contact the extension provider.');
 
         $service = $this->createMock(InAppPurchasesService::class);
         $service->expects(static::never())

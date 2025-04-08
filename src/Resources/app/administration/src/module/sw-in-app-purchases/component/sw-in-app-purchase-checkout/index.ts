@@ -2,10 +2,6 @@ import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout.html.twig';
 import './sw-in-app-purchase-checkout.scss';
 
-interface ErrorResponse {
-    errors: Array<ShopwareHttpError>;
-}
-
 /**
  * @private
  */
@@ -80,6 +76,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.state = 'purchase';
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error(errorResponse);
+                this.errorSnippet = this.getError(errorResponse);
                 this.state = 'error';
             });
         },
@@ -105,6 +102,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.state = 'success';
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error(errorResponse);
+                this.errorSnippet = this.getError(errorResponse);
                 this.state = 'error';
             });
         },
@@ -136,6 +134,10 @@ export default Shopware.Component.wrapComponentConfig({
                     this.reset();
                     break;
             }
+        },
+
+        getError(errorResponse: ErrorResponse): string | null {
+            return errorResponse?.response?.data.errors[0]?.detail ?? null;
         },
 
         reset() {
