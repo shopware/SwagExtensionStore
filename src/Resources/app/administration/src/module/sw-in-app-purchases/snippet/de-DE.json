@@ -23,7 +23,7 @@
     "successTitle": "In-App Kauf war erfolgreich!",
     "successSubtitle": "Du kannst jetzt dein neues Feature erleben.",
     "errors": {
-        "the-extension-provider-disallowed-your-purchase-please-contact-the-extension-provider": "Der Anbieter der Nebenstelle hat Ihren Kauf abgelehnt. Bitte kontaktieren Sie den Anbieter der Verlängerung."
+        "the-extension-provider-disallowed-your-purchase-please-contact-the-extension-provider": "Der Anbieter der Erweiterung hat Ihren Kauf abgelehnt. Bitte kontaktieren Sie den Anbieter."
     }
   },
   "sw-in-app-purchase-price-box": {

@@ -12,7 +12,7 @@ export default Shopware.Component.wrapComponentConfig({
             type: String as PropType<'loading' | 'error' | 'success'>,
             required: true,
         },
-        errorSnippet: {
+        error: {
             type: String,
             required: false,
             default: 'errorSubtitle',
@@ -62,23 +62,21 @@ export default Shopware.Component.wrapComponentConfig({
         subtitle(): string | null {
             switch (this.state) {
                 case 'error':
-                    return this.getError();
+                    return this.errorSnippet;
                 case 'success':
                     return this.$t('sw-in-app-purchase-checkout-state.successSubtitle');
                 default:
                     return null;
             }
         },
-    },
 
-    methods: {
-        getError(): string {
+        errorSnippet(): string {
             // if snippet is null, return the default error message
-            if (!this.errorSnippet) {
+            if (!this.error) {
                 return this.$t('sw-in-app-purchase-checkout-state.errorSubtitle');
             }
 
-            const slugifiedSnippet = 'errors.' + this.errorSnippet
+            const slugifiedSnippet = 'errors.' + this.error
                 .toLowerCase()
                 .replace(/[^a-zA-Z0-9_ -]/g, '') // remove all non-alphanumeric characters except underscores and spaces
                 .replace(/[\s_]+/g, '-'); // replace spaces and underscores with hyphens
@@ -89,12 +87,12 @@ export default Shopware.Component.wrapComponentConfig({
             }
 
             // if it does not exist in the allowedErrors return the default error message
-            if (!this.allowedErrors.includes(this.errorSnippet)) {
+            if (!this.allowedErrors.includes(this.error)) {
                 return this.$t('sw-in-app-purchase-checkout-state.errorSubtitle');
             }
 
             // if it exists in the allowedErrors it comes from SBP and is already translated
-            return this.errorSnippet;
+            return this.error;
         },
     },
 });

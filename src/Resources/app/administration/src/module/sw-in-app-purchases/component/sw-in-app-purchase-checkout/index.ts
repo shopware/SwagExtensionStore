@@ -26,7 +26,7 @@ export default Shopware.Component.wrapComponentConfig({
             tosAccepted: false,
             gtcAccepted: false,
             variant: null as string | null,
-            errorSnippet: null as string | null,
+            errorMessage: null as string | null,
         };
     },
 
@@ -76,7 +76,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.state = 'purchase';
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error(errorResponse);
-                this.errorSnippet = this.getError(errorResponse);
+                this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
             });
         },
@@ -102,7 +102,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.state = 'success';
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error(errorResponse);
-                this.errorSnippet = this.getError(errorResponse);
+                this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
             });
         },
@@ -144,7 +144,7 @@ export default Shopware.Component.wrapComponentConfig({
             this.store.dismiss();
             this.inAppPurchaseCart = null;
             this.extension = null;
-            this.errorSnippet = null;
+            this.errorMessage = null;
             this.state = 'loading';
             this.purchase = null;
             this.variant = null;
