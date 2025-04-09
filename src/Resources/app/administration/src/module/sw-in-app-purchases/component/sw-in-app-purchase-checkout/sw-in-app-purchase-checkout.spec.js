@@ -316,7 +316,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         expect(spyDismiss).toHaveBeenCalledTimes(1);
         expect(wrapper.vm.inAppPurchaseCart).toBeNull();
         expect(wrapper.vm.extension).toBeNull();
-        expect(wrapper.vm.errorSnippet).toBeNull();
+        expect(wrapper.vm.errorMessage).toBeNull();
         expect(wrapper.vm.state).toBe('loading');
     });
 

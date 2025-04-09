@@ -21,7 +21,10 @@
     "errorTitle": "Etwas ist schiefgelaufen.",
     "errorSubtitle": "Bitte versuche es erneut oder kontaktiere den Hersteller.",
     "successTitle": "In-App Kauf war erfolgreich!",
-    "successSubtitle": "Du kannst jetzt dein neues Feature erleben."
+    "successSubtitle": "Du kannst jetzt dein neues Feature erleben.",
+    "errors": {
+        "the-extension-provider-disallowed-your-purchase-please-contact-the-extension-provider": "Der Anbieter der Erweiterung hat Ihren Kauf abgelehnt. Bitte kontaktieren Sie den Anbieter."
+    }
   },
   "sw-in-app-purchase-price-box": {
     "duration": {

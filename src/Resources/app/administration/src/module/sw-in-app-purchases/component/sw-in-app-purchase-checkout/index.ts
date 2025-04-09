@@ -2,10 +2,6 @@ import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout.html.twig';
 import './sw-in-app-purchase-checkout.scss';
 
-interface ErrorResponse {
-    errors: Array<ShopwareHttpError>;
-}
-
 /**
  * @private
  */
@@ -30,7 +26,7 @@ export default Shopware.Component.wrapComponentConfig({
             tosAccepted: false,
             gtcAccepted: false,
             variant: null as string | null,
-            errorSnippet: null as string | null,
+            errorMessage: null as string | null,
         };
     },
 
@@ -80,6 +76,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.state = 'purchase';
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error(errorResponse);
+                this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
             });
         },
@@ -105,6 +102,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.state = 'success';
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error(errorResponse);
+                this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
             });
         },
@@ -138,11 +136,15 @@ export default Shopware.Component.wrapComponentConfig({
             }
         },
 
+        getError(errorResponse: ErrorResponse): string | null {
+            return errorResponse?.response?.data.errors[0]?.detail ?? null;
+        },
+
         reset() {
             this.store.dismiss();
             this.inAppPurchaseCart = null;
             this.extension = null;
-            this.errorSnippet = null;
+            this.errorMessage = null;
             this.state = 'loading';
             this.purchase = null;
             this.variant = null;
