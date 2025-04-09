@@ -5,9 +5,19 @@ Shopware.Component.register(
     () => import('SwagExtensionStore/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-state')
 );
 
-async function createWrapper(propsData) {
+async function createWrapper(props) {
     return mount(await Shopware.Component.build('sw-in-app-purchase-checkout-state'), {
-        propsData
+        props,
+        global: {
+            stubs: {
+                'sw-loader': true
+            },
+            mocks: {
+                $te: (key) => {
+                    return key === 'sw-in-app-purchase-checkout-state.errors.this-error-exists';
+                }
+            }
+        }
     });
 }
 
@@ -59,8 +69,21 @@ describe('sw-in-app-purchase-checkout-state', () => {
     });
 
     it('should compute subtitle correctly', async () => {
-        wrapper = await createWrapper({ state: 'error' });
-        expect(wrapper.vm.subtitle).toBe(wrapper.vm.$tc('sw-in-app-purchase-checkout-state.errorSubtitle'));
+        // error comes from SBP
+        wrapper = await createWrapper({ state: 'error', error: 'The requested in-app feature has already been purchased' });
+        expect(wrapper.vm.subtitle).toBe('The requested in-app feature has already been purchased');
+
+        // error comes from ExtensionStore
+        wrapper = await createWrapper({ state: 'error', error: 'This-error_exists.' });
+        expect(wrapper.vm.subtitle).toBe(wrapper.vm.$t('sw-in-app-purchase-checkout-state.errors.this-error-exists'));
+
+        // error not found in SBP or allowed
+        wrapper = await createWrapper({ state: 'error', error: 'error is not allowed' });
+        expect(wrapper.vm.subtitle).toBe(wrapper.vm.$t('sw-in-app-purchase-checkout-state.errorSubtitle'));
+
+        // error is not set
+        wrapper = await createWrapper({ state: 'error', error: null });
+        expect(wrapper.vm.subtitle).toBe(wrapper.vm.$t('sw-in-app-purchase-checkout-state.errorSubtitle'));
 
         wrapper.setProps({ state: 'success' });
         await wrapper.vm.$nextTick();
@@ -69,10 +92,5 @@ describe('sw-in-app-purchase-checkout-state', () => {
         wrapper.setProps({ state: 'loading' });
         await wrapper.vm.$nextTick();
         expect(wrapper.vm.subtitle).toBeNull();
-    });
-
-    it('should handle custom errorSnippet correctly', async () => {
-        wrapper = await createWrapper({ state: 'error', errorSnippet: 'customError' });
-        expect(wrapper.vm.subtitle).toBe(wrapper.vm.$tc('sw-in-app-purchase-checkout-state.customError'));
     });
 });
