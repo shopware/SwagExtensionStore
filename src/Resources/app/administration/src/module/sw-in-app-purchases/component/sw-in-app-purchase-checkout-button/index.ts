@@ -1,6 +1,10 @@
+import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout-button.html.twig';
 import './sw-in-app-purchase-checkout-button.scss';
 
+/**
+ * @private
+ */
 export default Shopware.Component.wrapComponentConfig({
     template,
 
@@ -12,6 +16,15 @@ export default Shopware.Component.wrapComponentConfig({
         tosAccepted: {
             type: Boolean,
             required: true
+        },
+        gtcAccepted: {
+            type: Boolean,
+            required: true
+        },
+        variant: {
+            type: String as PropType<IAP.InAppPurchasePriceModel['variant']>,
+            required: false,
+            default: null
         }
     },
 
@@ -21,17 +34,17 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         disabled() {
-            return this.state === 'purchase' && !this.tosAccepted;
+            return this.state === 'purchase' && (!this.tosAccepted || !this.gtcAccepted || !this.variant);
         },
 
         text() {
             switch (this.state) {
                 case 'error':
-                    return this.$tc('sw-in-app-purchase-checkout-button.tryAgainButton');
+                    return this.$t('sw-in-app-purchase-checkout-button.tryAgainButton');
                 case 'success':
-                    return this.$tc('sw-in-app-purchase-checkout-button.closeButton');
+                    return this.$t('sw-in-app-purchase-checkout-button.closeButton');
                 case 'purchase':
-                    return this.$tc('sw-in-app-purchase-checkout-button.purchaseButton');
+                    return this.$t('sw-in-app-purchase-checkout-button.purchaseButton');
                 default:
                     return null;
             }

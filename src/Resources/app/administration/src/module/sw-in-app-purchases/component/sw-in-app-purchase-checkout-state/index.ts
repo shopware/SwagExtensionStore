@@ -1,6 +1,9 @@
 import template from './sw-in-app-purchase-checkout-state.html.twig';
 import './sw-in-app-purchase-checkout-state.scss';
 
+/**
+ * @private
+ */
 export default Shopware.Component.wrapComponentConfig({
     template,
 

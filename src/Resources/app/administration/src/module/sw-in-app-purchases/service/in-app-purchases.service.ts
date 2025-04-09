@@ -1,4 +1,4 @@
-import type * as IAP from 'src/module/sw-in-app-purchases/types';
+import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import type { LoginService } from 'src/core/service/login.service';
 import type { AxiosInstance } from 'axios';
 
@@ -17,10 +17,10 @@ export default class InAppPurchasesService extends ApiService {
         ).then(ApiService.handleResponse.bind(this));
     }
 
-    async createCart(name: string, feature: string) {
+    async createCart(name: string, feature: string, variant: string) {
         return this.httpClient.post<IAP.InAppPurchaseCart>(
             `_action/${this.apiEndpoint}/cart/new`,
-            { name, feature },
+            { name, feature, variant },
             { headers: this.getBasicHeaders() }
         ).then(ApiService.handleResponse.bind(this));
     }
@@ -40,8 +40,15 @@ export default class InAppPurchasesService extends ApiService {
         ).then(ApiService.handleResponse.bind(this));
     }
 
+    async getPriceModels(name: string, feature:string) {
+        return this.httpClient.get<IAP.InAppPurchase>(
+            `_action/${this.apiEndpoint}/${name}/${feature}`,
+            { headers: this.getBasicHeaders() }
+        ).then(ApiService.handleResponse.bind(this));
+    }
+
     async refreshInAppPurchases() {
-        return this.httpClient.get(
+        return this.httpClient.get<never>(
             `_action/${this.apiEndpoint}/refresh`,
             { headers: this.getBasicHeaders() }
         ).then(ApiService.handleResponse.bind(this));
