@@ -15,7 +15,7 @@ export default Shopware.Component.wrapComponentConfig({
         error: {
             type: String,
             required: false,
-            default: 'errorSubtitle',
+            default: null,
         },
     },
 
