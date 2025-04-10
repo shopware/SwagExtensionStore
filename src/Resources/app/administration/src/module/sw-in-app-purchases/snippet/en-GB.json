@@ -21,7 +21,10 @@
     "errorTitle": "Something went wrong.",
     "errorSubtitle": "Please try again or contact the manufacturer.",
     "successTitle": "In-App Purchase was successful!",
-    "successSubtitle": "You can now experience your new feature."
+    "successSubtitle": "You can now experience your new feature.",
+    "errors": {
+      "the-extension-provider-disallowed-your-purchase-please-contact-the-extension-provider": "The extension provider disallowed your purchase. Please contact the extension provider."
+    }
   },
   "sw-in-app-purchase-price-box": {
     "duration": {

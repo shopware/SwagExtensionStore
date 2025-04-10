@@ -12,11 +12,20 @@ export default Shopware.Component.wrapComponentConfig({
             type: String as PropType<'loading' | 'error' | 'success'>,
             required: true
         },
-        errorSnippet: {
+        error: {
             type: String,
             required: false,
-            default: 'errorSubtitle'
+            default: null
         }
+    },
+
+    data() {
+        return {
+            allowedErrors: [
+                'The requested in-app feature has already been purchased',
+                'Das angefragte In-App Feature wurde bereits erworben'
+            ]
+        };
     },
 
     computed: {
@@ -42,9 +51,9 @@ export default Shopware.Component.wrapComponentConfig({
         title(): string | null {
             switch (this.state) {
                 case 'error':
-                    return this.$tc('sw-in-app-purchase-checkout-state.errorTitle');
+                    return this.$t('sw-in-app-purchase-checkout-state.errorTitle');
                 case 'success':
-                    return this.$tc('sw-in-app-purchase-checkout-state.successTitle');
+                    return this.$t('sw-in-app-purchase-checkout-state.successTitle');
                 default:
                     return null;
             }
@@ -53,12 +62,37 @@ export default Shopware.Component.wrapComponentConfig({
         subtitle(): string | null {
             switch (this.state) {
                 case 'error':
-                    return this.$tc(`sw-in-app-purchase-checkout-state.${this.errorSnippet || 'errorSubtitle'}`);
+                    return this.errorSnippet;
                 case 'success':
-                    return this.$tc('sw-in-app-purchase-checkout-state.successSubtitle');
+                    return this.$t('sw-in-app-purchase-checkout-state.successSubtitle');
                 default:
                     return null;
             }
+        },
+
+        errorSnippet(): string {
+            // if snippet is null, return the default error message
+            if (!this.error) {
+                return this.$t('sw-in-app-purchase-checkout-state.errorSubtitle');
+            }
+
+            const slugifiedSnippet = this.error
+                .toLowerCase()
+                .replace(/[^a-zA-Z0-9_ -]/g, '') // remove all non-alphanumeric characters except underscores and spaces
+                .replace(/[\s_]+/g, '-'); // replace spaces and underscores with hyphens
+
+            // if snippet slug exists in translation file, it comes from the extension store and must be translated
+            if (this.$te(`sw-in-app-purchase-checkout-state.errors.${slugifiedSnippet}`)) {
+                return this.$t(`sw-in-app-purchase-checkout-state.errors.${slugifiedSnippet}`);
+            }
+
+            // if it does not exist in the allowedErrors return the default error message
+            if (!this.allowedErrors.includes(this.error)) {
+                return this.$t('sw-in-app-purchase-checkout-state.errorSubtitle');
+            }
+
+            // if it exists in the allowedErrors it comes from SBP and is already translated
+            return this.error;
         }
     }
 });
