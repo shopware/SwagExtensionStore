@@ -243,33 +243,33 @@
                         <template #label>
                             <span v-if="legalText">
                                 {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.introText') }}
-                                <a
-                                    href="#"
+                                <mt-link
                                     class="link permissions-modal-trigger"
-                                    @click.prevent="openPermissionsModal"
+                                    as="a"
+                                    @click="openPermissionsModal"
                                 >
                                     {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.buttonPermissions') }}
-                                </a>
+                                </mt-link>
                                 {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.middleText') }}
-                                <a
-                                    href="#"
+                                <mt-link
                                     class="link legal-text-modal-trigger"
-                                    @click.prevent="openLegalTextModal"
+                                    as="a"
+                                    @click="openLegalTextModal"
                                 >
                                     {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.buttonAppProvider') }}
-                                </a>
+                                </mt-link>
                                 {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.endText') }}
                             </span>
 
                             <span v-else>
                                 {{ $t('sw-extension-store.component.sw-extension-buy-modal.labelAcceptPermissions') }}
-                                <a
-                                    href="#"
+                                <mt-link
                                     class="link permissions-modal-trigger"
+                                    as="a"
                                     @click="openPermissionsModal"
                                 >
                                     {{ $t('sw-extension-store.detail.labelButtonShowPermissions') }}
-                                </a>
+                                </mt-link>
                             </span>
                         </template>
                     </sw-checkbox-field-deprecated>
@@ -285,13 +285,13 @@
                     >
                         <template #label>
                             {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.appProviderStartText') }}
-                            <a
+                            <mt-link
                                 class="link legal-text-modal-trigger"
-                                href="#"
-                                @click.prevent="openLegalTextModal"
+                                as="a"
+                                @click="openLegalTextModal"
                             >
                                 {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.buttonAppProvider') }}
-                            </a>
+                            </mt-link>
                             {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.endText') }}
                         </template>
                     </sw-checkbox-field-deprecated>
@@ -309,13 +309,13 @@
                             <span class="is--required">
                                 {{ $t('sw-extension-store.component.sw-extension-buy-modal.labelAcceptPrivacyExtensions') }}
                             </span>
-                            <a
-                                href="#"
+                            <mt-link
                                 class="link privacy-policy-modal-trigger"
-                                @click.prevent="openPrivacyModal"
+                                as="a"
+                                @click="openPrivacyModal"
                             >
                                 {{ $t('sw-extension-store.component.sw-extension-buy-modal.buttonShowPrivacyExtensions') }}
-                            </a>
+                            </mt-link>
                         </template>
                     </sw-checkbox-field-deprecated>
                 {% endblock %}
