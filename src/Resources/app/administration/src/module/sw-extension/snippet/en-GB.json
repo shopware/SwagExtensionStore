@@ -3,7 +3,8 @@
         "in-app-purchase": {
             "badge-label": "In-App Purchases",
             "context-menu": {
-                "account-link-label": "Manage purchases"
+                "account-link-label": "Manage purchases",
+                "in-app-purchases-label": "Show available purchases"
             }
         }
     }
