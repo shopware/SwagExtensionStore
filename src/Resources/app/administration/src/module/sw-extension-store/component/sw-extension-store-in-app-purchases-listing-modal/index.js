@@ -1,4 +1,5 @@
 import template from './sw-extension-store-in-app-purchases-listing-modal.html.twig';
+import './sw-extension-store-in-app-purchases-listing-modal.scss';
 
 const { Utils } = Shopware;
 

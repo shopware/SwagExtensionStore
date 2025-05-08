@@ -62,7 +62,10 @@ async function createWrapper(extensionCustomProps = {}) {
                 'sw-extension-uninstall-modal': true,
                 'sw-extension-removal-modal': true,
                 'sw-extension-permissions-modal': true,
-                'sw-extension-privacy-policy-extensions-modal': true
+                'sw-extension-privacy-policy-extensions-modal': true,
+                'mt-icon': true,
+                'sw-internal-link': true,
+                'sw-extension-store-in-app-purchases-listing-modal': true
             },
             provide: {
                 shopwareExtensionService: {
@@ -72,7 +75,13 @@ async function createWrapper(extensionCustomProps = {}) {
                     getOpenLink: () => { }
                 },
                 cacheApiService: {},
-                extensionStoreActionService: {}
+                extensionStoreActionService: {},
+                inAppPurchasesService: {
+                    getAvailablePurchases: jest.fn().mockResolvedValue([
+                        { id: 'purchase1', name: 'Purchase 1' },
+                        { id: 'purchase2', name: 'Purchase 2' }
+                    ])
+                }
             }
         }
     });
@@ -105,5 +114,50 @@ describe('SwagExtensionStore/module/sw-extension/component/sw-extension', () => 
         expect(wrapper.find('.sw-extension-card-base__in-app-purchase__store_link').exists()).toBe(true);
         expect(wrapper.get('.sw-extension-card-base__in-app-purchase__store_link').text())
             .toBe('sw-extension.in-app-purchase.context-menu.account-link-label');
+    });
+
+    it('should open account page in new tab', async () => {
+        const wrapper = await createWrapper();
+        global.window.open = jest.fn();
+
+        await wrapper.vm.openAccountPage();
+
+        expect(global.window.open).toHaveBeenCalledWith('https://account.shopware.com/shops/shops', '_blank');
+    });
+
+    it('should open in-app purchases listing modal', async () => {
+        const wrapper = await createWrapper();
+        wrapper.vm.fetchInAppPurchases = jest.fn();
+
+        await wrapper.vm.openInAppPurchasesListingModal();
+
+        expect(wrapper.vm.showInAppPurchasesListingModal).toBe(true);
+        expect(wrapper.vm.fetchInAppPurchases).toHaveBeenCalled();
+    });
+
+    it('should close in-app purchases listing modal', async () => {
+        const wrapper = await createWrapper();
+
+        // Set initial state
+        wrapper.vm.showInAppPurchasesListingModal = true;
+        wrapper.vm.inAppPurchases = [{ id: 'purchase1' }];
+
+        await wrapper.vm.closeInAppPurchasesListingModal();
+
+        expect(wrapper.vm.showInAppPurchasesListingModal).toBe(false);
+        expect(wrapper.vm.inAppPurchases).toEqual([]);
+    });
+
+    it('should fetch in-app purchases for an extension', async () => {
+        const wrapper = await createWrapper();
+        const inAppPurchasesService = wrapper.vm.inAppPurchasesService;
+
+        await wrapper.vm.fetchInAppPurchases();
+
+        expect(inAppPurchasesService.getAvailablePurchases).toHaveBeenCalledWith('SwagB2BPlatform');
+        expect(wrapper.vm.inAppPurchases).toEqual([
+            { id: 'purchase1', name: 'Purchase 1' },
+            { id: 'purchase2', name: 'Purchase 2' }
+        ]);
     });
 });
