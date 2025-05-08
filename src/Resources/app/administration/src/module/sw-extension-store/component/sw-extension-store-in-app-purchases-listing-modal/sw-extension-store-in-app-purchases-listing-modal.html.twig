@@ -6,8 +6,12 @@
     @modal-close="closeInAppPurchasesListingModal"
 >
     {% block sw_extension_store_detail_in_app_purchases_listing_modal_content %}
+        <mt-loader
+            v-if="inAppPurchases.length === 0"
+        />
         <sw-collapse
             v-for="inAppPurchase in inAppPurchases"
+            v-else
             :key="inAppPurchase.identifier"
             class="sw-extension-store-detail-in-app-purchases-listing-modal-content__collapse"
         >
@@ -52,7 +56,10 @@
             </template>
         </sw-collapse>
     {% endblock %}
-    <span class="sw-extension-store-detail-in-app-purchases-listing-modal-content__tax-notice">
+    <span
+        v-if="inAppPurchases.length"
+        class="sw-extension-store-detail-in-app-purchases-listing-modal-content__tax-notice"
+    >
         {{ $t('sw-extension-store.general.taxNotice') }}
     </span>
 
