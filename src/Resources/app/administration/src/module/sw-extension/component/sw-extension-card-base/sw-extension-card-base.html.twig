@@ -6,7 +6,7 @@
         </span>
 
         <span v-if="extension.inAppFeaturesAvailable" class="sw-extension-card-base__in-app-purchase__badge">
-            {{ $tc('sw-extension.in-app-purchase.badge-label') }}
+            {{ $t('sw-extension.in-app-purchase.badge-label') }}
         </span>
     </section>
 </div>
@@ -14,10 +14,32 @@
 
 {% block sw_extension_card_base_context_menu_actions_additional %}
     {% parent %}
-
-    <sw-context-menu-item v-if="hasActiveInAppPurchases(extension.name)" @click="openAccountPage" class="sw-extension-card-base__in-app-purchase__store_link">
+    <sw-context-menu-item
+        v-if="hasActiveInAppPurchases(extension.name)"
+        class="sw-extension-card-base__in-app-purchase__store_link"
+        @click="openAccountPage"
+    >
         <sw-external-link>
-            {{ $tc('sw-extension.in-app-purchase.context-menu.account-link-label') }}
+            {{ $t('sw-extension.in-app-purchase.context-menu.account-link-label') }}
         </sw-external-link>
     </sw-context-menu-item>
+
+    <sw-context-menu-item
+        v-if="extension.inAppFeaturesAvailable"
+        class="sw-extension-card-base__in-app-purchase__in-app-purchase-link"
+        @click="openInAppPurchasesListingModal"
+    >
+        <sw-internal-link hide-icon="true">
+            {{ $t('sw-extension.in-app-purchase.context-menu.in-app-purchases-label') }}
+        </sw-internal-link>
+    </sw-context-menu-item>
+{% endblock %}
+
+{% block sw_extension_card_base_modals %}
+    <sw-extension-store-in-app-purchases-listing-modal
+        v-if="showInAppPurchasesListingModal"
+        :extension="extension"
+        :in-app-purchases="inAppPurchases"
+        @modal-close="closeInAppPurchasesListingModal"
+    />
 {% endblock %}
