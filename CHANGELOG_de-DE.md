@@ -38,3 +38,6 @@
 
 # 1.7.0
 - Anzeige des Changelog auf der Detailseite verbessert
+
+# 1.7.1
+- Fehler beim Darstellen der Seitennummerierung der Erweiterungsliste

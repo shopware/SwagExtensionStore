@@ -38,3 +38,6 @@
 
 # 1.7.0
 - Improved the display of the changelog on the details page
+
+# 1.7.1
+- Fixed the pagination of the extension listing page
