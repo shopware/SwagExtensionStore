@@ -8,7 +8,7 @@ $padding-summary-card: 22px;
         display: none;
     }
 
-    .sw-extension-buy-modal__variants-selection {
+    &__variants-selection {
         padding: $padding-summary-card;
         border: 1px solid $color-gray-300;
         border-bottom: 0 none;
@@ -37,7 +37,7 @@ $padding-summary-card: 22px;
         }
     }
 
-    .sw-extension-buy-modal__extension-summary {
+    &__extension-summary {
         display: grid;
         grid-template-columns: 72px 1fr;
         grid-column-gap: 12px;
@@ -50,13 +50,13 @@ $padding-summary-card: 22px;
         height: 64px;
     }
 
-    .sw-extension-buy-modal__extension-summary-name {
+    &__extension-summary-name {
         margin-bottom: 0;
         font-weight: $font-weight-semi-bold;
         font-size: $font-size-s;
     }
 
-    .sw-extension-buy-modal__variants-card {
+    &__variants-card {
         display: grid;
         grid-template-columns: auto 1fr;
         grid-column-gap: 12px;
@@ -85,17 +85,17 @@ $padding-summary-card: 22px;
         }
     }
 
-    .sw-extension-buy-modal__variants-card-input {
+    &__variants-card-input {
         align-self: center;
         grid-column: 1;
     }
 
-    .sw-extension-buy-modal__variant-description {
+    &__variant-description {
         font-weight: $font-weight-semi-bold;
         font-size: $font-size-s;
     }
 
-    .sw-extension-buy-modal__list-price {
+    &__list-price {
         font-weight: $font-weight-bold;
         font-size: 16px;
     }
@@ -116,7 +116,7 @@ $padding-summary-card: 22px;
         }
     }
 
-    .sw-extension-buy-modal__variant-summary {
+    &__variant-summary {
         margin-bottom: 16px;
         padding: $padding-summary-card;
         background: $color-module-blue-50;
@@ -132,7 +132,7 @@ $padding-summary-card: 22px;
         }
     }
 
-    .sw-extension-buy-modal__variant-summary-price {
+    &__variant-summary-price {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
@@ -140,11 +140,11 @@ $padding-summary-card: 22px;
         font-weight: $font-weight-semi-bold;
     }
 
-    .sw-extension-buy-modal__variant-summary-actual-price {
+    &__variant-summary-actual-price {
         font-size: $font-size-m;
     }
 
-    .sw-extension-buy-modal__content-installed {
+    &__content-installed {
         text-align: center;
 
         .sw-circle-icon {
@@ -168,7 +168,8 @@ $padding-summary-card: 22px;
         margin-bottom: 16px;
     }
 
-    .sw-extension-buy-modal__checkbox {
+    &__checkbox {
+        margin-bottom: var(--scale-size-16);
         font-size: $font-size-xs;
 
         .mt-field--checkbox__content {
@@ -191,14 +192,14 @@ $padding-summary-card: 22px;
         }
     }
 
-    .sw-extension-buy-modal__general-text-block {
+    &__general-text-block {
         font-size: $font-size-xs;
         line-height: 22px;
         margin-bottom: 21px;
         margin-top: 5px;
     }
 
-    .sw-extension-buy-modal__variant-text-block {
+    &__variant-text-block {
         font-size: $font-size-xs;
         line-height: 22px;
         margin-top: 5px;
@@ -208,7 +209,7 @@ $padding-summary-card: 22px;
         display: none;
     }
 
-    .sw-extension-buy-modal__external-link {
+    &__external-link {
         color: $color-shopware-brand-500;
 
         .sw-icon {
