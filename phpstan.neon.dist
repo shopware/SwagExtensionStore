@@ -1,0 +1,26 @@
+includes:
+    - ../../../vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+parameters:
+    level: 8
+    tmpDir: var/cache/phpstan
+    inferPrivatePropertyTypeFromConstructor: true
+    checkGenericClassInNonGenericObjectType: false
+    reportUnmatchedIgnoredErrors: false
+
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - src/Resources
+
+    symfony:
+        constantHassers: false
+        containerXmlPath: '../../../var/cache/phpstan_dev/Shopware_Core_DevOps_StaticAnalyze_StaticAnalyzeKernelPhpstan_devDebugContainer.xml'
+        consoleApplicationLoader: ../../../src/Core/DevOps/StaticAnalyze/PHPStan/console-application.php
+
+    ignoreErrors:
+        - # Direct container access
+            message: '#Service ".*" is private#'
+            path: tests
+
