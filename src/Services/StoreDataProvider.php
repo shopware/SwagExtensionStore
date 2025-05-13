@@ -12,7 +12,7 @@ use Shopware\Core\Framework\Store\Struct\ReviewSummaryStruct;
 
 class StoreDataProvider
 {
-    public const HEADER_NAME_TOTAL_COUNT = 'SW-Meta-Total';
+    public const HEADER_NAME_TOTAL_COUNT = 'sw-meta-total';
 
     private StoreClient $client;
     private ExtensionLoader $extensionLoader;
@@ -50,7 +50,7 @@ class StoreDataProvider
         $listingResponse = $this->client->listExtensions($criteria, $context);
         $extensionListing = $this->extensionLoader->loadFromListingArray($context, $listingResponse['data']);
 
-        $total = $listingResponse['headers'][self::HEADER_NAME_TOTAL_COUNT][0] ?? 0;
+        $total = \array_change_key_case($listingResponse['headers'])[self::HEADER_NAME_TOTAL_COUNT][0] ?? 0;
         $extensionListing->setTotal((int) $total);
 
         return $extensionListing;
