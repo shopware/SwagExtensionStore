@@ -1,0 +1,25 @@
+{
+  "base": "/bundles/swagextensionstore/administration/",
+  "entryPoints": {
+    "swag-extension-store": {
+      "css": [
+        "/bundles/swagextensionstore/administration/css/swag-extension-store.css"
+      ],
+      "dynamic": [],
+      "js": [
+        "/bundles/swagextensionstore/administration/js/swag-extension-store.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.0.4",
+    7,
+    0,
+    4
+  ],
+  "viteServer": null
+}
