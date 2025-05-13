@@ -229,14 +229,14 @@
                 {% block sw_extension_buy_modal_accept_toc %}
                     <sw-gtc-checkbox
                         v-model:value="tocAccepted"
+                        class="sw-extension-buy-modal__checkbox"
                     />
                 {% endblock %}
 
                 {% block sw_extension_buy_modal_accept_extension_permissions %}
-                    {# `mt-switch` doesn't provide a label slot yet #}
-                    <sw-checkbox-field-deprecated
+                    <mt-checkbox
                         v-if="extensionHasPermissions"
-                        v-model:value="permissionsAccepted"
+                        v-model:checked="permissionsAccepted"
                         class="sw-extension-buy-modal__checkbox sw-extension-buy-modal__checkbox-permissions"
                         :class="`sw-extension-buy-modal__checkbox-permissions--${extension.name}`"
                     >
@@ -272,14 +272,13 @@
                                 </mt-link>
                             </span>
                         </template>
-                    </sw-checkbox-field-deprecated>
+                    </mt-checkbox>
                 {% endblock %}
 
                 {% block sw_extension_buy_modal_accept_extension_app_provider %}
-                    {# `mt-switch` doesn't provide a label slot yet #}
-                    <sw-checkbox-field-deprecated
+                    <mt-checkbox
                         v-if="!extensionHasPermissions && legalText"
-                        v-model:value="legalTextAccepted"
+                        v-model:checked="legalTextAccepted"
                         class="sw-extension-buy-modal__checkbox sw-extension-buy-modal__checkbox-app-provider"
                         :class="`sw-extension-buy-modal__checkbox-app-provider--${extension.name}`"
                     >
@@ -294,14 +293,13 @@
                             </mt-link>
                             {{ $t('sw-extension-store.buy-modal.checkboxes.permissionsAndAppProvider.endText') }}
                         </template>
-                    </sw-checkbox-field-deprecated>
+                    </mt-checkbox>
                 {% endblock %}
 
                 {% block sw_extension_buy_modal_accept_extension_privacy_policy_extensions %}
-                    {# `mt-switch` doesn't provide a label slot yet #}
-                    <sw-checkbox-field-deprecated
+                    <mt-checkbox
                         v-if="extension.privacyPolicyExtension"
-                        v-model:value="privacyExtensionsAccepted"
+                        v-model:checked="privacyExtensionsAccepted"
                         class="sw-extension-buy-modal__checkbox-privacy-policy"
                         :class="`sw-extension-buy-modal__checkbox-privacy-policy--${extension.name}`"
                     >
@@ -317,7 +315,7 @@
                                 {{ $t('sw-extension-store.component.sw-extension-buy-modal.buttonShowPrivacyExtensions') }}
                             </mt-link>
                         </template>
-                    </sw-checkbox-field-deprecated>
+                    </mt-checkbox>
                 {% endblock %}
 
                 {% block sw_extension_buy_modal_alert_can_not_buy %}

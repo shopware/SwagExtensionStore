@@ -66,7 +66,7 @@
                             {% block sw_extension_store_index_content_listing_error %}
                                 <sw-extension-store-error-card
                                     v-else
-                                    :title="listingError && listingError.title"
+                                    :title="listingError?.title"
                                     variant="danger"
                                 >
                                     <template v-if="listingError">
