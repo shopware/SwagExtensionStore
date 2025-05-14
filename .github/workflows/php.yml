@@ -20,11 +20,12 @@ jobs:
     with:
       rules: ''
 
-  phpstan:
-    uses: shopware/github-actions/.github/workflows/phpstan.yml@main
-    with:
-      extensionName: ${{ github.event.repository.name }}
-      shopwareVersion: 6.4
+  # does not out of the box run with 6.4
+  # phpstan:
+  #   uses: shopware/github-actions/.github/workflows/phpstan.yml@main
+  #   with:
+  #     extensionName: ${{ github.event.repository.name }}
+  #     shopwareVersion: 6.4
 
   phpunit:
     uses: shopware/github-actions/.github/workflows/phpunit.yml@main
