@@ -45,6 +45,12 @@
         }
     },
     "scripts": {
+	    "cs": [
+	        "@php ../../../vendor/bin/php-cs-fixer fix --dry-run"
+	    ],
+	    "cs-fix": [
+	        "@php ../../../vendor/bin/php-cs-fixer fix"
+	    ],
         "phpstan": [
             "@php ../../../src/Core/DevOps/StaticAnalyze/PHPStan/phpstan-bootstrap.php",
             "@php ../../../vendor/bin/phpstan analyze"
