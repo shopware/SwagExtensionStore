@@ -36,6 +36,7 @@
 {% endblock %}
 
 {% block sw_extension_card_base_modals %}
+    {% parent %}
     <sw-extension-store-in-app-purchases-listing-modal
         v-if="showInAppPurchasesListingModal"
         :extension="extension"
