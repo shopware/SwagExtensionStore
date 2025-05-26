@@ -80,31 +80,74 @@
 
         .sw-meteor-page__smart-bar-module-info {
             grid-template-rows: min-content auto;
+
+            .sw-meteor-page__smart-bar-header {
+                flex-wrap: nowrap;
+                flex-direction: column;
+                align-items: stretch;
+
+                .sw-meteor-page__smart-bar-title {
+                    font-size: $font-size-l;
+                    font-weight: $font-weight-bold;
+                    margin-bottom: 5px;
+                    margin-top: -4px;
+                }
+
+                .sw-meteor-page__smart-bar-meta {
+                    color: $color-gray-500;
+                    font-size: $font-size-xxs;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: baseline;
+                    margin-bottom: 1px;
+                    font-weight: $font-weight-medium;
+                    gap: 8px;
+                }
+            }
+
+            .sw-meteor-page__smart-bar-description {
+                color: $color-gray-500;
+                font-size: $font-size-xs;
+
+                .sw-extension-store-detail__label-and-rating-overview {
+                    display: flex;
+                    gap: 8px;
+
+                    .sw-extension-store-detail__rating-overview {
+                        flex-shrink: 0;
+                        align-self: start;
+                        display: flex;
+                        align-items: center;
+
+                        & > *:not(:last-child) {
+                            margin-right: 8px;
+                        }
+
+                        a,
+                        a:active,
+                        a:visited {
+                            font-size: $font-size-xxs;
+                            font-weight: $font-weight-medium;
+                            color: $color-shopware-brand-500;
+                            margin-top: 2px;
+                            transition: color .2s ease;
+
+                            &:hover,
+                            &:focus,
+                            &:focus-visible,
+                            &:focus-within {
+                                color: $color-shopware-brand-700;
+                            }
+                        }
+
+                        .sw-extension-store-detail__no-ratings-text {
+                            font-size: $font-size-xxs;
+                            font-weight: $font-weight-medium;
+                        }
+                    }
+                }
+            }
         }
-    }
-
-    .sw-meteor-page__smart-bar-header {
-        flex-wrap: nowrap;
-        flex-direction: column;
-        align-items: stretch;
-
-        .sw-meteor-page__smart-bar-title {
-            font-size: $font-size-l;
-            font-weight: $font-weight-bold;
-            margin-bottom: 5px;
-            margin-top: -4px;
-        }
-    }
-
-    .sw-meteor-page__smart-bar-meta {
-        color: $color-gray-500;
-        font-size: $font-size-xxs;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: baseline;
-        margin-bottom: 1px;
-        font-weight: $font-weight-medium;
-        gap: 8px;
     }
 
     .sw-extension-store-detail__extension-type-label,
@@ -172,48 +215,6 @@
         }
     }
 
-    .sw-meteor-page__smart-bar-description {
-        color: $color-gray-500;
-        font-size: $font-size-xs;
-
-        .sw-extension-store-detail__label-and-rating-overview {
-            display: flex;
-            gap: 8px;
-
-            .sw-extension-store-detail__rating-overview {
-                flex-shrink: 0;
-                align-self: start;
-                display: flex;
-                align-items: center;
-
-                & > *:not(:last-child) {
-                    margin-right: 8px;
-                }
-
-                a,
-                a:active,
-                a:visited {
-                    font-size: $font-size-xxs;
-                    font-weight: $font-weight-medium;
-                    color: $color-shopware-brand-500;
-                    margin-top: 2px;
-                    transition: color .2s ease;
-
-                    &:hover,
-                    &:focus,
-                    &:focus-visible,
-                    &:focus-within {
-                        color: $color-shopware-brand-700;
-                    }
-                }
-
-                .sw-extension-store-detail__no-ratings-text {
-                    font-size: $font-size-xxs;
-                    font-weight: $font-weight-medium;
-                }
-            }
-        }
-    }
 
     &.is--theme .sw-extension-store-slider .sw-extension-store-slider__slides {
         height: 70vw;
