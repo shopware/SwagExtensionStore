@@ -50,7 +50,8 @@ export default {
         isTheme: {
             immediate: true,
             handler(newValue) {
-                Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'page', value: 1 });
+                const value = this.isTheme === this.activeFilters.group ? Shopware.State.get('shopwareExtensions').search.page : 1;
+                Shopware.State.commit('shopwareExtensions/setSearchValue', { key: 'page', value });
                 if (this.feature.isActive('VUE3')) {
                     this.activeFilters.group = newValue;
                 } else {
