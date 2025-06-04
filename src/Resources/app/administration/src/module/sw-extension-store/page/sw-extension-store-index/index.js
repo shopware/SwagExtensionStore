@@ -52,7 +52,7 @@ export default {
             handler(newValue) {
                 Shopware.State.commit('shopwareExtensions/setSearchValue', {
                     key: 'page',
-                    value: 1
+                    value: this.isTheme === this.activeFilters.group ? Shopware.State.get('shopwareExtensions').search.page : 1
                 });
                 this.activeFilters.group = newValue;
             }
