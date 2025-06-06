@@ -1,53 +1,55 @@
-<div
+<mt-card
     v-if="showBanner"
     class="sw-dashboard-statistics-promotion-banner"
 >
-    <div class="sw-dashboard-statistics-promotion-banner__advertisement">
-        <div class="sw-dashboard-statistics-promotion-banner__advertisement-details">
-            <div
-                v-if="showBadge"
-                class="sw-dashboard-statistics-promotion-banner__advertisement-details-badge"
+    <template #grid>
+        <div class="sw-dashboard-statistics-promotion-banner__advertisement">
+            <div class="sw-dashboard-statistics-promotion-banner__advertisement-details">
+                <div
+                    v-if="showBadge"
+                    class="sw-dashboard-statistics-promotion-banner__advertisement-details-badge"
+                >
+                    {{ $t('sw-dashboard-statistics-promotion-card.badge-new') }}
+                </div>
+                <h3 class="sw-dashboard-statistics-promotion-banner__advertisement-details-title">
+                    {{ $t('sw-dashboard-statistics-promotion-card.promotion-title') }}
+                </h3>
+
+                <div class="sw-dashboard-statistics-promotion-banner__advertisement-details-description">
+                    {{ $t('sw-dashboard-statistics-promotion-card.promotion-text') }}
+                </div>
+            </div>
+            <div class="sw-dashboard-statistics-promotion-banner__advertisement-graph">
+                <img :src="assetFilter('/swagextensionstore/administration/static/img/analytics/promotion/graphic.svg')">
+            </div>
+        </div>
+
+        <div class="sw-dashboard-statistics-promotion-banner__app-card">
+            <div class="sw-dashboard-statistics-promotion-banner__app-card-app">
+                <sw-extension-icon
+                    class="sw-dashboard-statistics-promotion-banner__app-card-app-icon"
+                    :src="assetFilter('/swagextensionstore/administration/static/img/analytics/extension/icon.svg')"
+                />
+
+                <div class="sw-dashboard-statistics-promotion-banner__app-card-app-info">
+                    <h4 class="sw-dashboard-statistics-promotion-banner__app-card-app-info-name">
+                        {{ $t('sw-dashboard-statistics-promotion-card.app-name') }}
+                    </h4>
+
+                    <span class="sw-dashboard-statistics-promotion-banner__app-card-app-info-description">
+                        {{ $t('sw-dashboard-statistics-promotion-card.app-description') }}
+                    </span>
+                </div>
+            </div>
+
+            <mt-button
+                class="sw-dashboard-statistics-promotion-banner__app-card-go-to-app"
+                variant="primary"
+                :disabled="!linkToStatisticsAppExists"
+                @click="goToStatisticsAppDetailPage"
             >
-                {{ $t('sw-dashboard-statistics-promotion-card.badge-new') }}
-            </div>
-            <h3 class="sw-dashboard-statistics-promotion-banner__advertisement-details-title">
-                {{ $t('sw-dashboard-statistics-promotion-card.promotion-title') }}
-            </h3>
-
-            <div class="sw-dashboard-statistics-promotion-banner__advertisement-details-description">
-                {{ $t('sw-dashboard-statistics-promotion-card.promotion-text') }}
-            </div>
+                {{ $t('sw-dashboard-statistics-promotion-card.go-to-app') }} <mt-icon name="regular-long-arrow-right" size="12px" />
+            </mt-button>
         </div>
-        <div class="sw-dashboard-statistics-promotion-banner__advertisement-graph">
-            <img :src="assetFilter('/swagextensionstore/administration/static/img/analytics/promotion/graphic.svg')">
-        </div>
-    </div>
-
-    <div class="sw-dashboard-statistics-promotion-banner__app-card">
-        <div class="sw-dashboard-statistics-promotion-banner__app-card-app">
-            <sw-extension-icon
-                class="sw-dashboard-statistics-promotion-banner__app-card-app-icon"
-                :src="assetFilter('/swagextensionstore/administration/static/img/analytics/extension/icon.svg')"
-            />
-
-            <div class="sw-dashboard-statistics-promotion-banner__app-card-app-info">
-                <h4 class="sw-dashboard-statistics-promotion-banner__app-card-app-info-name">
-                    {{ $t('sw-dashboard-statistics-promotion-card.app-name') }}
-                </h4>
-
-                <span class="sw-dashboard-statistics-promotion-banner__app-card-app-info-description">
-                    {{ $t('sw-dashboard-statistics-promotion-card.app-description') }}
-                </span>
-            </div>
-        </div>
-
-        <mt-button
-            class="sw-dashboard-statistics-promotion-banner__app-card-go-to-app"
-            variant="primary"
-            :disabled="!linkToStatisticsAppExists"
-            @click="goToStatisticsAppDetailPage"
-        >
-            {{ $t('sw-dashboard-statistics-promotion-card.go-to-app') }} <mt-icon name="regular-long-arrow-right" size="12px" />
-        </mt-button>
-    </div>
-</div>
+    </template>
+</mt-card>
