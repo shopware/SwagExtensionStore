@@ -62,5 +62,10 @@
                 "paymentMeansRequiredLinkText": "add a payment method"
             }
         }
+    },
+    "sw-extension-store-accessibility": {
+      "accessibility-text": "Learn more about accessibility of extensions in the Shopware Store",
+      "accessibility-more-information": "Learn more now",
+      "accessibility-link": "https://store.shopware.com/en/resources/accessibility-of-extensions/"
     }
 }
