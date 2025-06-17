@@ -74,6 +74,9 @@
     "sw-extension-store-statistics-promotion": {
         "app-name": "Shopware Analytics",
         "app-description": "Unlock store performance metrics",
-        "go-to-app": "Try it out now"
+        "go-to-app": "Try it out now",
+        "accessibility-text": "Learn more about accessibility of extensions in the Shopware Store",
+        "accessibility-more-information": "Learn more now",
+        "accessibility-link": "https://store.shopware.com/en/resources/accessibility-of-extensions/"
     }
 }
