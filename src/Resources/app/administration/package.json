@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "unit": "jest --config jest.config.js --ci",
-        "unit-watch": "jest --config jest.config.js --watchAll",
+        "unit-watch": "jest --config jest.config.js --watch",
         "lint": "eslint src",
         "lint-fix": "eslint src --fix",
         "lint-ci": "npm run lint -- --format junit --output-file eslint.junit.xml"
