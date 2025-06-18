@@ -106,6 +106,7 @@ export default {
         },
 
         isUpdateable(extension) {
+            return false;
             if (!extension || extension.latestVersion === null) {
                 return false;
             }

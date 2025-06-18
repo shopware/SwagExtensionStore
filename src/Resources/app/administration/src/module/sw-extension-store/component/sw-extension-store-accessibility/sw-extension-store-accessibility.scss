@@ -1,0 +1,19 @@
+@import '~scss/variables';
+
+.sw-extension-store-accessibility {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    background: linear-gradient(#003075, #0156D0);
+    padding: 16px 20px;
+    border-radius: $border-radius-lg;
+    margin-bottom: 20px;
+
+    &__info {
+        color: white;
+        align-self: center;
+    }
+
+    &__link {
+        justify-self: end;
+    }
+}
