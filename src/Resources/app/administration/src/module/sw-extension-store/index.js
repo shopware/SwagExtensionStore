@@ -1,7 +1,7 @@
 import ExtensionStoreDataService from './service/extension-store-data.service';
 import ExtensionLicenseService from './service/extension-store-licenses.service';
 
- 
+
 Shopware.Component.register('sw-extension-store-index', () => import('./page/sw-extension-store-index'));
 Shopware.Component.register('sw-extension-store-listing', () => import('./page/sw-extension-store-listing'));
 Shopware.Component.register('sw-extension-store-detail', () => import('./page/sw-extension-store-detail'));
@@ -14,9 +14,10 @@ Shopware.Component.register('sw-extension-label', () => import('./component/sw-e
 Shopware.Component.register('sw-extension-type-label', () => import('./component/sw-extension-store-type-label'));
 Shopware.Component.register('sw-extension-store-label-display', () => import('./component/sw-extension-store-label-display'));
 Shopware.Component.register('sw-extension-store-error-card', () => import('./component/sw-extension-store-error-card'));
+Shopware.Component.register('sw-extension-store-accessibility', () => import('./component/sw-extension-store-accessibility'));
 Shopware.Component.register('sw-extension-store-statistics-promotion', () => import('./component/sw-extension-store-statistics-promotion'));
 Shopware.Component.register('sw-extension-store-in-app-purchases-listing-modal', () => import('./component/sw-extension-store-in-app-purchases-listing-modal'));
- 
+
 
 Shopware.Application.addServiceProvider('extensionStoreDataService', () => {
     return new ExtensionStoreDataService(
