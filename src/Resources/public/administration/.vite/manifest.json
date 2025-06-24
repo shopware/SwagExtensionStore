@@ -1,0 +1,234 @@
+{
+  "main.js": {
+    "file": "assets/swag-extension-store-BVXLweMj.js",
+    "name": "swag-extension-store",
+    "src": "main.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "module/sw-extension/component/sw-extension-card-base/index.ts",
+      "module/sw-extension-store/page/sw-extension-store-index/index.js",
+      "module/sw-extension-store/page/sw-extension-store-listing/index.js",
+      "module/sw-extension-store/page/sw-extension-store-detail/index.js",
+      "module/sw-extension-store/component/sw-extension-store-slider/index.js",
+      "module/sw-extension-store/component/sw-extension-store-listing-filter/index.js",
+      "module/sw-extension-store/component/sw-extension-buy-modal/index.js",
+      "module/sw-extension-store/component/sw-extension-listing-card/index.js",
+      "module/sw-extension-store/component/sw-extension-store-update-warning/index.js",
+      "module/sw-extension-store/component/sw-extension-store-label/index.js",
+      "module/sw-extension-store/component/sw-extension-store-type-label/index.js",
+      "module/sw-extension-store/component/sw-extension-store-label-display/index.js",
+      "module/sw-extension-store/component/sw-extension-store-error-card/index.js",
+      "module/sw-extension-store/component/sw-extension-store-accessibility/index.js",
+      "module/sw-extension-store/component/sw-extension-store-statistics-promotion/index.js",
+      "module/sw-extension-store/component/sw-extension-store-in-app-purchases-listing-modal/index.js",
+      "module/sw-dashboard/page/sw-dashboard-index/index.js",
+      "module/sw-dashboard/component/sw-dashboard-statistics-promotion-card/index.js",
+      "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout/index.ts",
+      "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-button/index.ts",
+      "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-overview/index.ts",
+      "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-state/index.ts",
+      "module/sw-in-app-purchases/component/sw-in-app-purchase-price-box/index.ts"
+    ]
+  },
+  "module/sw-dashboard/component/sw-dashboard-statistics-promotion-card/index.js": {
+    "file": "assets/index-DQeqGYt1.js",
+    "name": "index",
+    "src": "module/sw-dashboard/component/sw-dashboard-statistics-promotion-card/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-74-FFmJT.css"
+    ]
+  },
+  "module/sw-dashboard/page/sw-dashboard-index/index.js": {
+    "file": "assets/index-DrPu5oHT.js",
+    "name": "index",
+    "src": "module/sw-dashboard/page/sw-dashboard-index/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-DmFcILee.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-buy-modal/index.js": {
+    "file": "assets/index-C9VuboZq.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-buy-modal/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-BT5m7-c6.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-listing-card/index.js": {
+    "file": "assets/index-DRvH5o4y.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-listing-card/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-Bqkl44FJ.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-accessibility/index.js": {
+    "file": "assets/index-DaeaMNLJ.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-accessibility/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-CTG67Cjd.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-error-card/index.js": {
+    "file": "assets/index-BDVmH2uv.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-error-card/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-D0hoS1Ul.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-in-app-purchases-listing-modal/index.js": {
+    "file": "assets/index-BUrN8f6i.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-in-app-purchases-listing-modal/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-hFy3IpB6.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-label-display/index.js": {
+    "file": "assets/index-bhUWFysY.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-label-display/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-CJNG0EjM.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-label/index.js": {
+    "file": "assets/index-lhyP4jpg.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-label/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-D86yCN6L.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-listing-filter/index.js": {
+    "file": "assets/index-tXSw-CgH.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-listing-filter/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-BoK6ytTg.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-slider/index.js": {
+    "file": "assets/index-Blaprb7h.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-slider/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-Dl_yw-Gl.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-statistics-promotion/index.js": {
+    "file": "assets/index-DvBJBOO9.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-statistics-promotion/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-CmJI9CLW.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-type-label/index.js": {
+    "file": "assets/index-BpNQ2pWb.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-type-label/index.js",
+    "isDynamicEntry": true
+  },
+  "module/sw-extension-store/component/sw-extension-store-update-warning/index.js": {
+    "file": "assets/index-LL5-5fQ2.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-update-warning/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-CrTblKKA.css"
+    ]
+  },
+  "module/sw-extension-store/page/sw-extension-store-detail/index.js": {
+    "file": "assets/index-BLyiNZgQ.js",
+    "name": "index",
+    "src": "module/sw-extension-store/page/sw-extension-store-detail/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-D-nxiM38.css"
+    ]
+  },
+  "module/sw-extension-store/page/sw-extension-store-index/index.js": {
+    "file": "assets/index-B9KUrNuD.js",
+    "name": "index",
+    "src": "module/sw-extension-store/page/sw-extension-store-index/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-DUPQ0p__.css"
+    ]
+  },
+  "module/sw-extension-store/page/sw-extension-store-listing/index.js": {
+    "file": "assets/index-Byx0BsDj.js",
+    "name": "index",
+    "src": "module/sw-extension-store/page/sw-extension-store-listing/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-B0RsaVU4.css"
+    ]
+  },
+  "module/sw-extension/component/sw-extension-card-base/index.ts": {
+    "file": "assets/index-BsZmNlG0.js",
+    "name": "index",
+    "src": "module/sw-extension/component/sw-extension-card-base/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-N545uvQi.css"
+    ]
+  },
+  "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-button/index.ts": {
+    "file": "assets/index-Dekgn5_U.js",
+    "name": "index",
+    "src": "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-button/index.ts",
+    "isDynamicEntry": true
+  },
+  "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-overview/index.ts": {
+    "file": "assets/index-Br5BmnCj.js",
+    "name": "index",
+    "src": "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-overview/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-DEJW3V-I.css"
+    ]
+  },
+  "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-state/index.ts": {
+    "file": "assets/index-BkJD84yc.js",
+    "name": "index",
+    "src": "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-state/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-BQYsrxQJ.css"
+    ]
+  },
+  "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout/index.ts": {
+    "file": "assets/index-v8hVzgit.js",
+    "name": "index",
+    "src": "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-Dhlf12Oj.css"
+    ]
+  },
+  "module/sw-in-app-purchases/component/sw-in-app-purchase-price-box/index.ts": {
+    "file": "assets/index-K5F9SEzY.js",
+    "name": "index",
+    "src": "module/sw-in-app-purchases/component/sw-in-app-purchase-price-box/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-CHJLSQ_D.css"
+    ]
+  }
+}

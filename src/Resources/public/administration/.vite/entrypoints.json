@@ -1,0 +1,47 @@
+{
+  "base": "/bundles/swagextensionstore/administration/",
+  "entryPoints": {
+    "swag-extension-store": {
+      "css": [],
+      "dynamic": [
+        "/bundles/swagextensionstore/administration/assets/index-BsZmNlG0.js",
+        "/bundles/swagextensionstore/administration/assets/index-B9KUrNuD.js",
+        "/bundles/swagextensionstore/administration/assets/index-Byx0BsDj.js",
+        "/bundles/swagextensionstore/administration/assets/index-BLyiNZgQ.js",
+        "/bundles/swagextensionstore/administration/assets/index-Blaprb7h.js",
+        "/bundles/swagextensionstore/administration/assets/index-tXSw-CgH.js",
+        "/bundles/swagextensionstore/administration/assets/index-C9VuboZq.js",
+        "/bundles/swagextensionstore/administration/assets/index-DRvH5o4y.js",
+        "/bundles/swagextensionstore/administration/assets/index-LL5-5fQ2.js",
+        "/bundles/swagextensionstore/administration/assets/index-lhyP4jpg.js",
+        "/bundles/swagextensionstore/administration/assets/index-BpNQ2pWb.js",
+        "/bundles/swagextensionstore/administration/assets/index-bhUWFysY.js",
+        "/bundles/swagextensionstore/administration/assets/index-BDVmH2uv.js",
+        "/bundles/swagextensionstore/administration/assets/index-DaeaMNLJ.js",
+        "/bundles/swagextensionstore/administration/assets/index-DvBJBOO9.js",
+        "/bundles/swagextensionstore/administration/assets/index-BUrN8f6i.js",
+        "/bundles/swagextensionstore/administration/assets/index-DrPu5oHT.js",
+        "/bundles/swagextensionstore/administration/assets/index-DQeqGYt1.js",
+        "/bundles/swagextensionstore/administration/assets/index-v8hVzgit.js",
+        "/bundles/swagextensionstore/administration/assets/index-Dekgn5_U.js",
+        "/bundles/swagextensionstore/administration/assets/index-Br5BmnCj.js",
+        "/bundles/swagextensionstore/administration/assets/index-BkJD84yc.js",
+        "/bundles/swagextensionstore/administration/assets/index-K5F9SEzY.js"
+      ],
+      "js": [
+        "/bundles/swagextensionstore/administration/assets/swag-extension-store-BVXLweMj.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.1.0",
+    7,
+    1,
+    0
+  ],
+  "viteServer": null
+}
