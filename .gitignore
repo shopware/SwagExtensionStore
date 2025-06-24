@@ -17,4 +17,3 @@
 
 #ignore distributed files
 /src/Resources/public
-/src/Resources/app/administration/.tmp
