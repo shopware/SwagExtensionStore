@@ -70,5 +70,10 @@
         "in-app-purchases": {
             "onceOff": "einmalig"
         }
+    },
+    "sw-extension-store-accessibility": {
+      "accessibility-text": "Erfahre mehr zu Barrierefreiheit von Erweiterungen im Shopware Store",
+      "accessibility-more-information": "Jetzt mehr erfahren",
+      "accessibility-link": "https://store.shopware.com/de/ressourcen/barrierefreiheit-von-erweiterungen/"
     }
 }
