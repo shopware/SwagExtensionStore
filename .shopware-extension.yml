@@ -1,5 +1,5 @@
 build:
-  shopwareVersionConstraint: ~6.4
+  shopwareVersionConstraint: ~6.4.20
   zip:
     assets:
       enable_es_build_for_admin: false

@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "shopware/core": "~6.4@dev",
+        "shopware/core": "~6.4.20@dev",
         "shopware/administration": "~6.4@dev"
     },
     "autoload": {
