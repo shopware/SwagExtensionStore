@@ -4,8 +4,31 @@ on:
   push:
     branches:
       - 6.4.x
+
 jobs:
   build:
-    uses: shopware/github-actions/.github/workflows/build-zip.yml@main
-    with:
-      extensionName: ${{ github.event.repository.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1 # to avoid artifact conflicts
+      matrix:
+        PLATFORM_BRANCH: ["6.6.20.0", "6.4.x"]
+    steps:
+      - name: Attempt to download the artifact
+        id: artifact-download
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ${{ format('{0}.zip', github.event.repository.name) }}
+          path: /tmp/existing-artifact
+
+      - name: Build and validate zip
+        if: steps.artifact-download.outcome != 'success'
+        uses: shopware/github-actions/build-zip@main
+        with:
+          extensionName: ${{ github.event.repository.name }}
+
+      - name: Test install zip
+        uses: shopware/github-actions/setup-extension@main
+        with:
+          extension-zip: ${{ steps.upload.outputs.artifact-url }}
+          shopware-version: ${{ matrix.PLATFORM_BRANCH }}
