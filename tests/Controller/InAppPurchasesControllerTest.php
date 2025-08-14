@@ -41,7 +41,7 @@ class InAppPurchasesControllerTest extends TestCase
             ->method('getInstalledExtensions')
             ->willReturn(new ExtensionCollection([
                 'otherExtension' => $otherExtension,
-                'testExtension' => $extension
+                'testExtension' => $extension,
             ]));
 
         $controller = new InAppPurchasesController(
