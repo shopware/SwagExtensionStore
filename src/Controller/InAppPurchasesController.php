@@ -43,7 +43,7 @@ class InAppPurchasesController
     ) {
     }
 
-    #[Route('/api/_action/in-app-purchases/{technicalName}/details', name: 'api.in-app-purchases.detail', methods: ['GET'])]
+    #[Route('/api/_action/in-app-purchases/{technicalName}/details', name: 'api.in-app-purchases.detail', defaults: ['auth_required' => false], methods: ['GET'])]
     public function getInAppPurchaseDetails(string $technicalName, Context $context): Response
     {
         $criteria = new Criteria();
@@ -51,7 +51,11 @@ class InAppPurchasesController
 
         $extension = $this->extensionDataProvider
             ->getInstalledExtensions($context, false, $criteria)
-            ->first();
+            ->get($technicalName);
+
+        if (!$extension) {
+            throw ExtensionStoreException::unknownExtension($technicalName);
+        }
 
         return new JsonResponse($extension);
     }

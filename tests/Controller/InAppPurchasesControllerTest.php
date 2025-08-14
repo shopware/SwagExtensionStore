@@ -33,11 +33,13 @@ class InAppPurchasesControllerTest extends TestCase
     {
         $extension = new ExtensionStruct();
         $extension->setName('testExtension');
+        $otherExtension = new ExtensionStruct();
+        $otherExtension->setName('otherExtension');
         $service = $this->createMock(InAppPurchasesService::class);
         $dataProvider = $this->createMock(AbstractExtensionDataProvider::class);
         $dataProvider->expects(static::once())
             ->method('getInstalledExtensions')
-            ->willReturn(new ExtensionCollection([$extension]));
+            ->willReturn(new ExtensionCollection([$otherExtension, $extension]));
 
         $controller = new InAppPurchasesController(
             $service,
