@@ -43,7 +43,7 @@ class InAppPurchasesController
     ) {
     }
 
-    #[Route('/api/_action/in-app-purchases/{technicalName}/details', name: 'api.in-app-purchases.detail', defaults: ['auth_required' => false], methods: ['GET'])]
+    #[Route('/api/_action/in-app-purchases/{technicalName}/details', name: 'api.in-app-purchases.detail', methods: ['GET'])]
     public function getInAppPurchaseDetails(string $technicalName, Context $context): Response
     {
         $criteria = new Criteria();
