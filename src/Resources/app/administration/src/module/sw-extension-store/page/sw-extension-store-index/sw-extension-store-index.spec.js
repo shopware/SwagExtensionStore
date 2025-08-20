@@ -58,6 +58,7 @@ async function createWrapper() {
                 'sw-extension-store-error-card': true,
                 'sw-extension-store-update-warning': true,
                 'sw-help-center': true,
+                'sw-app-topbar-sidebar': true,
             },
             provide: {
                 extensionStoreActionService: {

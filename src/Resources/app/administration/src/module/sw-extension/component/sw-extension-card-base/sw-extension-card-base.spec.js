@@ -66,6 +66,7 @@ async function createWrapper(extensionCustomProps = {}) {
                 'mt-icon': true,
                 'sw-internal-link': true,
                 'sw-extension-store-in-app-purchases-listing-modal': true,
+                'sw-time-ago': true,
             },
             provide: {
                 shopwareExtensionService: {
