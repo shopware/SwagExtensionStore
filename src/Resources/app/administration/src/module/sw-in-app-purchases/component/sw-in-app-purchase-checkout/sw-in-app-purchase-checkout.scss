@@ -1,4 +1,6 @@
 .sw-in-app-purchase-checkout {
+    z-index: 1050;
+
     .sw-modal {
         &__footer {
             grid-template-columns: 1fr;

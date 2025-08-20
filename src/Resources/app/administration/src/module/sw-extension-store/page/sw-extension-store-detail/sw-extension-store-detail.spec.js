@@ -85,6 +85,7 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAp
                 'sw-extension-store-in-app-purchases-listing-modal': true,
                 'sw-extension-icon': true,
                 'sw-external-link': true,
+                'sw-app-topbar-sidebar': true,
             },
             provide: {
                 shopwareExtensionService: {
