@@ -48,4 +48,14 @@ class ExtensionStoreException extends HttpException
             'The extension provider disallowed your purchase. Please contact the extension provider.',
         );
     }
+
+    public static function unknownExtension(string $technicalName): self
+    {
+        return new self(
+            Response::HTTP_NOT_FOUND,
+            'FRAMEWORK__UNKNOWN_EXTENSION',
+            'The extension with technical name "{{ technicalName }}" is not known.',
+            ['technicalName' => $technicalName],
+        );
+    }
 }

@@ -1,6 +1,6 @@
 {
     "name": "swag/swag-extension-store",
-    "version": "4.0.4",
+    "version": "4.0.5",
     "description": "SWAG Extension Store",
     "type": "shopware-platform-plugin",
     "license": "MIT",
