@@ -51,7 +51,11 @@ class InAppPurchasesController
 
         $extension = $this->extensionDataProvider
             ->getInstalledExtensions($context, false, $criteria)
-            ->first();
+            ->get($technicalName);
+
+        if (!$extension) {
+            throw ExtensionStoreException::unknownExtension($technicalName);
+        }
 
         return new JsonResponse($extension);
     }

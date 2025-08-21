@@ -33,11 +33,16 @@ class InAppPurchasesControllerTest extends TestCase
     {
         $extension = new ExtensionStruct();
         $extension->setName('testExtension');
+        $otherExtension = new ExtensionStruct();
+        $otherExtension->setName('otherExtension');
         $service = $this->createMock(InAppPurchasesService::class);
         $dataProvider = $this->createMock(AbstractExtensionDataProvider::class);
         $dataProvider->expects(static::once())
             ->method('getInstalledExtensions')
-            ->willReturn(new ExtensionCollection([$extension]));
+            ->willReturn(new ExtensionCollection([
+                'otherExtension' => $otherExtension,
+                'testExtension' => $extension,
+            ]));
 
         $controller = new InAppPurchasesController(
             $service,
@@ -52,6 +57,30 @@ class InAppPurchasesControllerTest extends TestCase
         );
 
         static::assertSame('testExtension', $content['name']);
+    }
+
+    public function testGetInAppFeatureWithUnknownExtension(): void
+    {
+        $extension = new ExtensionStruct();
+        $extension->setName('testExtension');
+        $service = $this->createMock(InAppPurchasesService::class);
+        $dataProvider = $this->createMock(AbstractExtensionDataProvider::class);
+        $dataProvider->expects(static::once())
+            ->method('getInstalledExtensions')
+            ->willReturn(new ExtensionCollection(['testExtension' => $extension]));
+
+        $controller = new InAppPurchasesController(
+            $service,
+            $this->createMock(InAppPurchaseUpdater::class),
+            $dataProvider,
+            $this->createMock(InAppPurchasesGateway::class),
+            $this->createMock(EntityRepository::class),
+        );
+
+        $this->expectException(ExtensionStoreException::class);
+        $this->expectExceptionMessage('The extension with technical name "otherExtension" is not known.');
+
+        $controller->getInAppPurchaseDetails('otherExtension', Context::createDefaultContext());
     }
 
     public function testCreateCart(): void
