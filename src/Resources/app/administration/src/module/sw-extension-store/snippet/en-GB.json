@@ -1,9 +1,12 @@
 {
     "sw-extension-store": {
         "general": {
-            "labelPrice": "Free | {price}/month | {price}",
+            "labelPriceOneTime": "{price}",
+            "labelPricePerMonth": "{price} /month",
+            "labelFromPricePerMonth": "from {price} /month",
             "labelFree": "Free",
             "labelRentSuffix": "/ month*",
+            "labelSale": "% Sale",
             "labelDiscountedPrice": "Free | <s>{price}</s> <strong>{discountedPrice}</strong>/month | <s>{price}</s> <strong>{discountedPrice}</strong>",
             "title": "Store",
             "taxNotice": "* All prices are exclusive of VAT"

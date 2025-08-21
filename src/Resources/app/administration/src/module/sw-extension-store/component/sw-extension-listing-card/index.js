@@ -10,7 +10,7 @@ export default {
     template,
 
     inject: [
-        'shopwareExtensionService',
+        'extensionStoreService',
     ],
 
     props: {
@@ -25,51 +25,36 @@ export default {
             return Shopware.Filter.getByName('asset');
         },
 
-        previewMedia() {
-            const image = Utils.get(this.extension, 'images[0]', null);
-
-            if (!image) {
-                const previewImage = this.assetFilter('/swagextensionstore/administration/static/img/theme/default_theme_preview.jpg');
-                return {
-                    'background-image': `url('${previewImage}')`,
-                };
-            }
-
-            return {
-                'background-image': `url('${image.remoteLink}')`,
-                'background-size': 'cover',
-            };
-        },
-
-        recommendedVariant() {
-            return this.shopwareExtensionService.orderVariantsByRecommendation(this.extension.variants)[0];
-        },
-
-        hasActiveDiscount() {
-            return this.shopwareExtensionService.isVariantDiscounted(this.recommendedVariant);
-        },
-
-        discountClass() {
-            return {
-                'sw-extension-listing-card__info-price-discounted': this.hasActiveDiscount,
-            };
-        },
-
         calculatedPrice() {
             if (!this.recommendedVariant) {
                 return null;
             }
 
-            return this.$t(
-                'sw-extension-store.general.labelPrice',
-                {
-                    price: Utils.format.currency(
-                        this.shopwareExtensionService.getPriceFromVariant(this.recommendedVariant),
-                        'EUR',
-                    ),
-                },
-                this.shopwareExtensionService.mapVariantToRecommendation(this.recommendedVariant),
+            return Utils.format.currency(
+                this.pricePerMonth,
+                'EUR',
+                2,
             );
+        },
+
+        calculatedPriceSnippet() {
+            if (this.extensionStoreService.isVariantOfTypeBuy(this.recommendedVariant)) {
+                return 'sw-extension-store.general.labelPriceOneTime';
+            }
+
+            if (this.extension.variants.length > 1) {
+                return 'sw-extension-store.general.labelFromPricePerMonth';
+            }
+
+            return 'sw-extension-store.general.labelPricePerMonth';
+        },
+
+        hasActiveDiscount() {
+            return this.extensionStoreService.isExtensionDiscounted(this.extension.variants);
+        },
+
+        isFree() {
+            return this.extensionStoreService.isVariantOfTypeFree(this.recommendedVariant);
         },
 
         isInstalled() {
@@ -87,6 +72,38 @@ export default {
             }
 
             return !!extension.storeLicense;
+        },
+
+        priceClass() {
+            return {
+                'sw-extension-listing-card__info-price-discounted': this.hasActiveDiscount,
+            };
+        },
+
+        pricePerMonth() {
+            if (!this.recommendedVariant) {
+                return null;
+            }
+
+            const perMonth = this.extensionStoreService.isVariantOfTypeRent(this.recommendedVariant);
+
+            return this.extensionStoreService.getPriceFromVariant(this.recommendedVariant, perMonth);
+        },
+
+        recommendedVariant() {
+            const variants = this.extension.variants;
+
+            if (variants.length === 1) {
+                return variants[0];
+            }
+
+            const variant = this.extensionStoreService.orderVariantsByPricePerMonth(variants)[0];
+
+            if (!variant) {
+                return null;
+            }
+
+            return variant;
         },
     },
 
