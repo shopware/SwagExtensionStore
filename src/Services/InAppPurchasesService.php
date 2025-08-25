@@ -14,7 +14,7 @@ use SwagExtensionStore\Struct\InAppPurchaseStruct;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * @phpstan-import-type InAppPurchaseCartPosition from InAppPurchaseCartPositionStruct
+ * @phpstan-import-type InAppPurchaseCartItem from InAppPurchaseCartPositionStruct
  */
 #[Package('checkout')]
 class InAppPurchasesService
@@ -30,7 +30,7 @@ class InAppPurchasesService
     }
 
     /**
-     * @param array<int, InAppPurchaseCartPosition> $positions
+     * @param array<int, InAppPurchaseCartItem> $positions
      */
     public function orderCart(float $taxRate, array $positions, Context $context): JsonResponse
     {
@@ -42,5 +42,10 @@ class InAppPurchasesService
         $purchases = $this->client->listInAppPurchases($extensionName, $context);
 
         return $purchases->filter(fn (InAppPurchaseStruct $purchase) => $purchase->getStatus() === InAppPurchaseStatus::ACTIVE);
+    }
+
+    public function getInAppPurchase(string $extensionName, string $inAppPurchase, Context $context): InAppPurchaseStruct
+    {
+        return $this->client->getInAppPurchase($extensionName, $inAppPurchase, $context);
     }
 }

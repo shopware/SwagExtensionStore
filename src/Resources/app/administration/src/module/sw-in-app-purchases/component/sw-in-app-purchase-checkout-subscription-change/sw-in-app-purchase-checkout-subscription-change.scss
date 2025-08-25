@@ -1,0 +1,36 @@
+.sw-in-app-purchase-checkout-subscription-change {
+  padding: var(--scale-size-16);
+  background-color: var(--color-background-brand-default);
+  border: 1px solid var(--color-shopware-brand-900);
+  border-radius: var(--border-radius-default);
+  display: flex;
+  flex-direction: column;
+  gap: var(--scale-size-24);
+  font-size: var(--font-size-xs);
+  line-height: var(--font-line-height-xs);
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--scale-size-16);
+  }
+
+  &__plan-price, &__due-day {
+    font-size: var(--font-size-m);
+    line-height: var(--font-line-height-m);
+  }
+
+  &__due-day {
+    margin-top: var(--scale-size-16);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  &__note, &__info-hin {
+    color: var(--color-text-secondary-default);
+  }
+
+  &__divider {
+    border-bottom: 1px solid var(--color-shopware-brand-900);
+  }
+}

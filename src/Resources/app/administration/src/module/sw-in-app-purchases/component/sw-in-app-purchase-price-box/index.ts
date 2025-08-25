@@ -23,5 +23,9 @@ export default Shopware.Component.wrapComponentConfig({
 
             return null;
         },
+
+        currencyFilter() {
+            return Shopware.Filter.getByName('currency');
+        },
     },
 });

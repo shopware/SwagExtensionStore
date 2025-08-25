@@ -25,6 +25,7 @@ class InAppPurchaseStruct extends Struct
         protected ?string $description = null,
         protected ?string $serviceConditions = null,
         protected ?string $websiteGtc = null,
+        protected ?string $preselectedVariant = null,
     ) {
     }
 
@@ -111,5 +112,15 @@ class InAppPurchaseStruct extends Struct
     public function setStatus(InAppPurchaseStatus $status): void
     {
         $this->status = $status;
+    }
+
+    public function getPreselectedVariant(): ?string
+    {
+        return $this->preselectedVariant;
+    }
+
+    public function setPreselectedVariant(?string $preselectedVariant): void
+    {
+        $this->preselectedVariant = $preselectedVariant;
     }
 }

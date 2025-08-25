@@ -19,7 +19,6 @@ use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use SwagExtensionStore\Exception\ExtensionStoreException;
 use SwagExtensionStore\Services\InAppPurchasesService;
 use SwagExtensionStore\Struct\InAppPurchaseCartPositionCollection;
-use SwagExtensionStore\Struct\InAppPurchaseStruct;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -140,12 +139,9 @@ class InAppPurchasesController
     #[Route('/api/_action/in-app-purchases/{technicalName}/{inAppPurchase}', name: 'api.in-app-purchases.in-app-purchase', methods: ['GET'])]
     public function getInAppPurchase(string $technicalName, string $inAppPurchase, Context $context): Response
     {
-        $inAppPurchaseCollection = $this->inAppPurchasesService->listPurchases($technicalName, $context);
-        $iap = $inAppPurchaseCollection->filter(
-            fn (InAppPurchaseStruct $availableInAppPurchases) => $availableInAppPurchases->getIdentifier() === $inAppPurchase
-        )->first();
+        $purchase = $this->inAppPurchasesService->getInAppPurchase($technicalName, $inAppPurchase, $context);
 
-        return new JsonResponse($iap);
+        return new JsonResponse($purchase);
     }
 
     private function getAppByName(string $appName, Context $context): ?AppEntity
