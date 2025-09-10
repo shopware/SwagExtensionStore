@@ -5,7 +5,6 @@
             "labelPricePerMonth": "{price} /month",
             "labelFromPricePerMonth": "from {price} /month",
             "labelFree": "Free",
-            "labelRentSuffix": "/ month*",
             "labelSale": "% Sale",
             "labelDiscountedPrice": "Free | <s>{price}</s> <strong>{discountedPrice}</strong>/month | <s>{price}</s> <strong>{discountedPrice}</strong>",
             "title": "Store",

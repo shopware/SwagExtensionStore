@@ -1,8 +1,6 @@
 import template from './sw-extension-listing-card.html.twig';
 import './sw-extension-listing-card.scss';
 
-const { Utils } = Shopware;
-
 /**
  * @private
  */
@@ -26,27 +24,11 @@ export default {
         },
 
         calculatedPrice() {
-            if (!this.recommendedVariant) {
-                return null;
-            }
-
-            return Utils.format.currency(
-                this.pricePerMonth,
-                'EUR',
-                2,
-            );
+            return this.extensionStoreService.getCalculatedPrice(this.recommendedVariant);
         },
 
         calculatedPriceSnippet() {
-            if (this.extensionStoreService.isVariantOfTypeBuy(this.recommendedVariant)) {
-                return 'sw-extension-store.general.labelPriceOneTime';
-            }
-
-            if (this.extension.variants.length > 1) {
-                return 'sw-extension-store.general.labelFromPricePerMonth';
-            }
-
-            return 'sw-extension-store.general.labelPricePerMonth';
+            return this.extensionStoreService.getCalculatedPriceSnippet(this.extension.variants);
         },
 
         hasActiveDiscount() {
@@ -80,30 +62,8 @@ export default {
             };
         },
 
-        pricePerMonth() {
-            if (!this.recommendedVariant) {
-                return null;
-            }
-
-            const perMonth = this.extensionStoreService.isVariantOfTypeRent(this.recommendedVariant);
-
-            return this.extensionStoreService.getPriceFromVariant(this.recommendedVariant, perMonth);
-        },
-
         recommendedVariant() {
-            const variants = this.extension.variants;
-
-            if (variants.length === 1) {
-                return variants[0];
-            }
-
-            const variant = this.extensionStoreService.orderVariantsByPricePerMonth(variants)[0];
-
-            if (!variant) {
-                return null;
-            }
-
-            return variant;
+            return this.extensionStoreService.getRecommendedVariant(this.extension.variants);
         },
     },
 
