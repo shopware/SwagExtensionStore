@@ -2,6 +2,8 @@ import type { ShopwareDiscountCampaignService } from 'src/app/service/discount-c
 import type { ExtensionVariant } from 'src/module/sw-extension/service/extension-store-action.service';
 import type ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
 
+const { Utils } = Shopware;
+
 export default class ExtensionStoreService {
     constructor(
         private readonly discountCampaignService: ShopwareDiscountCampaignService,
@@ -18,12 +20,49 @@ export default class ExtensionStoreService {
         });
     }
 
+    public getCalculatedPrice(variant: ExtensionVariant): string {
+        const perMonth = this.isVariantOfTypeRent(variant);
+        const price = this.getPriceFromVariant(variant, perMonth);
+
+        return Utils.format.currency(price, 'EUR', 2);
+    }
+
+    public getCalculatedPriceSnippet(variants: ExtensionVariant[]): string {
+        const recommendedVariant = this.getRecommendedVariant(variants);
+
+        if (recommendedVariant && this.isVariantOfTypeBuy(recommendedVariant)) {
+            return 'sw-extension-store.general.labelPriceOneTime';
+        }
+
+        if (variants.length > 1) {
+            return 'sw-extension-store.general.labelFromPricePerMonth';
+        }
+
+        return 'sw-extension-store.general.labelPricePerMonth';
+    }
+
     public getPriceFromVariant(variant: ExtensionVariant, perMonth = false): number {
         if (this.isVariantDiscounted(variant)) {
             return perMonth ? variant?.discountCampaign.discountedPricePerMonth : variant?.discountCampaign.discountedPrice;
         }
 
-        return perMonth ? (variant as ExtensionVariant & { netPricePerMonth: number })?.netPricePerMonth : variant?.netPrice;
+        let price = 0;
+
+        if (perMonth && (variant as ExtensionVariant & { netPricePerMonth: number })?.netPricePerMonth) {
+            price = (variant as ExtensionVariant & { netPricePerMonth: number }).netPricePerMonth;
+        } else if (variant?.netPrice) {
+            price = variant.netPrice;
+        }
+
+        return price;
+    }
+
+    public getRecommendedVariant(variants: ExtensionVariant[]): ExtensionVariant {
+        if (variants.length === 1) {
+            return variants[0];
+        }
+
+        return this.orderVariantsByPricePerMonth(variants)[0];
     }
 
     public isExtensionDiscounted(variants: ExtensionVariant[]): boolean {
@@ -37,6 +76,7 @@ export default class ExtensionStoreService {
         };
     } {
         if (
+            !variant ||
             !variant.discountCampaign ||
             typeof variant.discountCampaign.discountedPrice !== 'number' ||
             variant.discountCampaign.discountedPrice === variant.netPrice

@@ -58,7 +58,7 @@
                                 <strong>{{ $t('sw-extension-store.general.labelFree') }}</strong>
                             </template>
 
-                            <template v-else>
+                            <template v-else-if="recommendedVariant">
                                 <span
                                     v-if="hasActiveDiscount"
                                     class="sw-extension-listing-card__info-price-badge-sale"

@@ -154,31 +154,27 @@
                                 {% endblock %}
 
                                 {% block sw_extension_store_detail_smart_bar_price %}
-                                    <template v-if="recommendedVariant && recommendedVariant.netPrice == 0">
-                                        <span class="sw-extension-store-detail__price-free">
-                                            {{ $t('sw-extension-store.general.labelFree') }}
-                                        </span>
-                                    </template>
-                                    <span
-                                        v-else-if="recommendedVariant"
-                                        :class="discountClass"
-                                    >
-                                        <span class="sw-extension-store-detail__net-price">
-                                            {{ renderPrice(recommendedVariant.netPrice) }}
-                                        </span>
-                                        <span
-                                            v-if="recommendedVariant.netPrice !== discountedPrice"
-                                            class="sw-extension-store-detail__discounted-price"
-                                        >
-                                            {{ renderPrice(discountedPrice) }}
-                                        </span>
-                                        <span
-                                            v-if="shopwareExtensionService.mapVariantToRecommendation(recommendedVariant) === 1"
-                                            class="sw-extension-store-detail__rent-suffix"
-                                        >
-                                            {{ $t('sw-extension-store.general.labelRentSuffix') }}
-                                        </span>
-                                    </span>
+                                    <div class="sw-extension-store-detail__price">
+                                        <template v-if="isFree">
+                                            <span class="sw-extension-store-detail__price-free">
+                                                <strong>{{ $t('sw-extension-store.general.labelFree') }}</strong>
+                                            </span>
+                                        </template>
+                                        <template v-else-if="recommendedVariant">
+                                            <span
+                                                v-if="hasActiveDiscount"
+                                                class="sw-extension-store-detail__price-badge-sale"
+                                            >
+                                                {{ $t('sw-extension-store.general.labelSale') }}
+                                            </span>
+
+                                            <i18n-t :keypath="calculatedPriceSnippet" tag="span" :class="priceClass">
+                                                <template #price>
+                                                    <strong>{{ calculatedPrice }}</strong>
+                                                </template>
+                                            </i18n-t>
+                                        </template>
+                                    </div>
                                 {% endblock %}
 
                                 {% block sw_extension_store_detail_smart_bar_discounted_price_info %}
@@ -186,11 +182,7 @@
                                         v-if="hasActiveDiscount"
                                         class="sw-extension-store-detail__discounted-price-info"
                                     >
-                                        <template v-if="!!discountAppliesForMonths">
-                                            {{ $t('sw-extension-store.detail.labelDiscountPeriod', { months: discountAppliesForMonths }, discountAppliesForMonths) }}
-                                        </template>
-
-                                        {{ $t('sw-extension-store.detail.labelDiscountInfo', { endDate: dateFilter(recommendedVariant.discountCampaign.endDate) }) }}
+                                        {{ $t('sw-extension-store.detail.labelDiscountInfo', { endDate: dateFilter(recommendedVariant.discountCampaign.endDate, dateFilterOptions) }) }}
                                     </small>
                                 {% endblock %}
 

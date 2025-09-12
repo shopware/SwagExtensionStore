@@ -110,10 +110,12 @@
         }
 
         .sw-extension-listing-card__info-price {
+            color: var(--color-text-secondary-default);
             grid-area: price;
             font-size: $font-size-xxs;
 
             strong {
+                color: var(--color-text-primary-default);
                 font-size: $font-size-xs;
                 font-weight: $font-weight-semi-bold;
             }

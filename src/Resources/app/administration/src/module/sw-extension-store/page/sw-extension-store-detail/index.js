@@ -10,6 +10,7 @@ export default {
     template,
 
     inject: [
+        'extensionStoreService',
         'extensionStoreDataService',
         'shopwareExtensionService',
         'extensionHelperService',
@@ -52,6 +53,14 @@ export default {
             return this.extension === null;
         },
 
+        calculatedPrice() {
+            return this.extensionStoreService.getCalculatedPrice(this.recommendedVariant);
+        },
+
+        calculatedPriceSnippet() {
+            return this.extensionStoreService.getCalculatedPriceSnippet(this.extension.variants);
+        },
+
         extensionMetaData() {
             if (this.suspended) {
                 return null;
@@ -60,6 +69,10 @@ export default {
             return Shopware.Store.get('shopwareExtensions').myExtensions.data.find((extension) => {
                 return extension.id === this.extension.id;
             });
+        },
+
+        isFree() {
+            return this.extensionStoreService.isVariantOfTypeFree(this.recommendedVariant);
         },
 
         isLicensed() {
@@ -121,33 +134,22 @@ export default {
         },
 
         recommendedVariant() {
-            return this.shopwareExtensionService.orderVariantsByRecommendation(this.extension.variants)[0];
+            return this.extensionStoreService.getRecommendedVariant(this.extension.variants);
         },
 
         dateFilter() {
             return Shopware.Filter.getByName('date');
         },
 
-        hasActiveDiscount() {
-            return this.shopwareExtensionService.isVariantDiscounted(this.recommendedVariant);
-        },
-
-        discountAppliesForMonths() {
-            if (!this.hasActiveDiscount) {
-                return null;
-            }
-
-            return this.recommendedVariant.discountCampaign.discountAppliesForMonths;
-        },
-
-        discountClass() {
+        dateFilterOptions() {
             return {
-                'is--discounted': this.hasActiveDiscount,
+                month: 'numeric',
+                year: 'numeric',
             };
         },
 
-        discountedPrice() {
-            return this.shopwareExtensionService.getPriceFromVariant(this.recommendedVariant);
+        hasActiveDiscount() {
+            return this.extensionStoreService.isExtensionDiscounted(this.extension.variants);
         },
 
         variantClass() {
@@ -158,6 +160,12 @@ export default {
 
         orderedBinaries() {
             return Utils.get(this.extension, 'binaries', []).slice().reverse();
+        },
+
+        priceClass() {
+            return {
+                'sw-extension-store-detail__price-discounted': this.hasActiveDiscount,
+            };
         },
 
         description() {
@@ -244,7 +252,7 @@ export default {
                 if (errorData.code === 'FRAMEWORK__STORE_ERROR' && errorData.title === 'Extension unknown') {
                     this.fetchError = errorData;
 
-                     
+
                     const docLink = this.$t('sw-extension.errors.messageToTheShopwareDocumentation', errorData.meta);
 
                     this.createNotificationError({
