@@ -281,8 +281,8 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                     netPricePerMonth: 10,
                     duration: 1,
                     discountCampaign: {
-                        discountedPrice: 8,
-                        discountedPricePerMonth: 8,
+                        discountedPrice: 6,
+                        discountedPricePerMonth: 6,
                         discountAppliesForMonths: 3,
                         startDate: '2021-01-27T00:01:00+01:00',
                         endDate: '2121-01-28T00:01:00+01:00',
