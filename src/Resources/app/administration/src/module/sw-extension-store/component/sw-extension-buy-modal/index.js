@@ -11,6 +11,7 @@ export default {
 
     inject: [
         'shopwareExtensionService',
+        'extensionStoreService',
         'extensionStoreLicensesService',
     ],
 
@@ -48,28 +49,7 @@ export default {
     },
 
     computed: {
-        recommendedVariants() {
-            return this.shopwareExtensionService.orderVariantsByRecommendation(this.extension.variants);
-        },
-
-        selectedVariant() {
-            return this.extension.variants.find((variant) => {
-                return variant.id === this.selectedVariantId;
-            });
-        },
-
-        todayPlusOneMonth() {
-            const date = new Date();
-            date.setMonth(date.getMonth() + 1);
-
-            return date;
-        },
-
-        dateFilter() {
-            return Utils.format.date;
-        },
-
-        formattedPrice() {
+        actualPrice() {
             const cartPosition = this.cart && this.cart.positions && this.cart.positions[0];
             const netPrice = cartPosition && cartPosition.netPrice;
 
@@ -82,38 +62,89 @@ export default {
             }
 
             return Utils.format.currency(
-                this.shopwareExtensionService.getPriceFromVariant(this.selectedVariant),
+                this.extensionStoreService.getPriceFromVariant(this.selectedVariant),
                 'EUR',
             );
         },
 
-        trialPrice() {
-            return this.renderPrice(0);
+        actualPriceSnippet() {
+            if (this.extensionStoreService.isVariantOfTypeFree(this.selectedVariant)) {
+                return 'sw-extension-store.general.labelFree';
+            }
+
+            if (this.extensionStoreService.isVariantOfTypeBuy(this.selectedVariant)) {
+                return 'sw-extension-store.general.labelPriceOneTime';
+            }
+
+            const cartPosition = this.cart && this.cart.positions && this.cart.positions[0];
+            const netPrice = cartPosition && cartPosition.netPrice;
+
+            if (netPrice && cartPosition && cartPosition.firstMonthFree) {
+                return 'sw-extension-store.general.labelPriceFirstMonth';
+            }
+
+            if (this.isRentDurationYearly(this.selectedVariant)) {
+                return 'sw-extension-store.general.labelPricePerYear';
+            }
+
+            return 'sw-extension-store.general.labelPricePerMonth';
+        },
+
+        finalPriceSnippet() {
+            if (this.isRentDurationYearly(this.selectedVariant)) {
+                return 'sw-extension-store.buy-modal.rent.yearly.finalPrice';
+            }
+
+            return 'sw-extension-store.buy-modal.rent.monthly.finalPrice';
+        },
+
+        recommendedVariants() {
+            return this.extensionStoreService.orderVariantsByRentDuration(this.extension.variants);
+        },
+
+        selectedVariant() {
+            return this.extension.variants.find((variant) => {
+                return variant.id === this.selectedVariantId;
+            });
+        },
+
+        dateFilter() {
+            return Utils.format.date;
         },
 
         purchaseButtonLabel() {
-            switch (this.selectedVariant.type) {
-                case this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.FREE:
-                    return this.$t('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.free');
-
-                case this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.RENT:
-                    return this.$t('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.rent');
-
-                case this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.BUY:
-                default:
-                    return this.$t('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.buy');
+            if (this.isVariantOfTypeFree(this.selectedVariant)) {
+                return this.$t('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.free');
             }
+
+            if (this.isVariantOfTypeRent(this.selectedVariant)) {
+                return this.$t('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.rent');
+            }
+
+            return this.$t('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.buy');
         },
 
         vatIncludedClasses() {
             return {
-                'is--hidden': this.selectedVariant.type === this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.FREE,
+                'is--hidden': this.isVariantOfTypeFree(this.selectedVariant),
             };
+        },
+
+        renewalDate() {
+            const date = new Date();
+
+            if (this.isRentDurationMonthly(this.selectedVariant)) {
+                date.setMonth(date.getMonth() + 1);
+            } else {
+                date.setMonth(date.getMonth() + 12);
+            }
+
+            return date;
         },
 
         renewalDateClasses() {
             return {
-                'is--hidden': this.selectedVariant.type !== this.shopwareExtensionService.EXTENSION_VARIANT_TYPES.RENT,
+                'is--hidden': false === this.isVariantOfTypeRent(this.selectedVariant),
             };
         },
 
@@ -255,6 +286,107 @@ export default {
             this.$emit('modal-close');
         },
 
+        getDiscountClasses(variant) {
+            return {
+                'is--discounted': this.hasActiveDiscount(variant),
+            };
+        },
+
+        getVariantPrice(variant) {
+            return this.extensionStoreService.getCalculatedPrice(variant);
+        },
+
+        getVariantPriceSnippet(variant) {
+            return this.extensionStoreService.getPriceSnippetForVariant(variant);
+        },
+
+        getVariantDiscountInformationSnippet(variant) {
+            if (this.isRentDurationYearly(variant)) {
+                return 'sw-extension-store.buy-modal.rent.yearly.discountInformation';
+            }
+
+            return 'sw-extension-store.buy-modal.rent.monthly.discountInformation';
+        },
+
+        getVariantCancellationInformationSnippet(variant) {
+            if (this.isRentDurationYearly(variant)) {
+                return 'sw-extension-store.buy-modal.rent.yearly.cancellationInformation';
+            }
+
+            return 'sw-extension-store.buy-modal.rent.monthly.cancellationInformation';
+        },
+
+        getVariantClasses(variant) {
+            return {
+                'is--monthly': this.isRentDurationMonthly(variant),
+                'is--yearly': this.isRentDurationYearly(variant),
+            };
+        },
+
+        getVariantBadgeClasses(variant) {
+            return {
+                'sw-extension-buy-modal__variants-card-badge-discounted': this.hasActiveDiscount(variant),
+                'is--monthly': this.isRentDurationMonthly(variant),
+                'is--yearly': this.isRentDurationYearly(variant),
+            };
+        },
+
+        getVariantBadgeSavings(variant) {
+            const monthlyVariant = this.extension.variants.find((v) => {
+                return this.extensionStoreService.isRentDurationMonthly(v);
+            });
+
+            if (!monthlyVariant) {
+                return 0;
+            }
+
+            const monthlyNetPrice = monthlyVariant.netPrice;
+            const variantNetPrice = variant.netPrice;
+            const variantDuration = variant.duration;
+
+            const hasSaving = variantNetPrice !== (monthlyNetPrice * variantDuration);
+            const hasDiscount = this.hasActiveDiscount(variant);
+
+            let savingsPercentage = 0;
+
+            if (hasSaving && false === hasDiscount) {
+                savingsPercentage = 100 * (1 - variantNetPrice / (monthlyNetPrice * variantDuration));
+            } else if (false === hasSaving && hasDiscount) {
+                savingsPercentage = 100 * (1 - variant.discountCampaign.discountedPrice / variant.netPrice);
+            } else if (hasSaving && hasDiscount) {
+                const savingPercentage = 100 * (1 - variantNetPrice / (monthlyNetPrice * variantDuration));
+                const discountPercentage = 100 * (1 - variant.discountCampaign.discountedPrice / (monthlyNetPrice * variantDuration));
+
+                savingsPercentage = discountPercentage - savingPercentage;
+            }
+
+            return savingsPercentage.toFixed(2).replace(/\.00$/, '');
+        },
+
+        hasActiveDiscount(variant) {
+            return this.extensionStoreService.isVariantDiscounted(variant);
+        },
+
+        isRentDurationMonthly(variant) {
+            return this.extensionStoreService.isRentDurationMonthly(variant);
+        },
+
+        isRentDurationYearly(variant) {
+            return this.extensionStoreService.isRentDurationYearly(variant);
+        },
+
+        isVariantOfTypeFree(variant) {
+            return this.extensionStoreService.isVariantOfTypeFree(variant);
+        },
+
+        isVariantOfTypeBuy(variant) {
+            return this.extensionStoreService.isVariantOfTypeBuy(variant);
+        },
+
+        isVariantOfTypeRent(variant) {
+            return this.extensionStoreService.isVariantOfTypeRent(variant);
+        },
+
         setSelectedVariantId(variantId) {
             if (this.isLoading) {
                 return;
@@ -271,10 +403,6 @@ export default {
 
         onChangeVariantSelection(variant) {
             this.setSelectedVariantId(variant.id);
-        },
-
-        variantRecommendation(variant) {
-            return this.shopwareExtensionService.mapVariantToRecommendation(variant);
         },
 
         async purchaseExtension() {
@@ -325,39 +453,16 @@ export default {
             }
         },
 
-        getDiscountClasses(variant) {
-            return {
-                'is--discounted': this.hasDiscount(variant),
-            };
-        },
-
-        hasDiscount(variant) {
-            const campaign = variant.discountCampaign;
-            return campaign
-                && new Date(Date.parse(campaign.startDate)) < (new Date())
-                && new Date(Date.parse(campaign.endDate)) >= (new Date());
-        },
-
         renderPrice(price) {
             return Utils.format.currency(price, 'EUR');
         },
 
         renderBuyPrice(variant) {
-            if (this.hasDiscount(variant)) {
+            if (this.hasActiveDiscount(variant)) {
                 return this.renderPrice(variant.discountCampaign.discountedPrice);
             }
 
             return this.renderPrice(variant.netPrice);
-        },
-
-        getDiscountPrice(variant) {
-            return variant.discountCampaign ? this.renderPrice(variant.discountCampaign.discountedPrice) : this.trialPrice;
-        },
-
-        getDiscountEnds(variant) {
-            return Utils.format.date(
-                variant.discountCampaign ? new Date(Date.parse(variant.discountCampaign.endDate)) : null,
-            );
         },
 
         handleErrors(error) {
@@ -407,17 +512,6 @@ export default {
                         message: e.detail,
                     });
                 });
-            });
-        },
-
-        legalTextForVariant(variant) {
-            if (!variant || !variant.legalText) {
-                return null;
-            }
-
-            return this.$sanitize(variant.legalText, {
-                ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'br', 'strong', 'p', 'br'],
-                ALLOWED_ATTR: ['href', 'target', 'rel'],
             });
         },
 

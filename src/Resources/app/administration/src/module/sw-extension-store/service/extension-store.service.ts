@@ -5,6 +5,11 @@ import type ShopwareExtensionService from 'src/module/sw-extension/service/shopw
 const { Utils } = Shopware;
 
 export default class ExtensionStoreService {
+    public readonly EXTENSION_RENT_DURATIONS = {
+        MONTHLY: 1,
+        YEARLY: 12,
+    };
+
     constructor(
         private readonly discountCampaignService: ShopwareDiscountCampaignService,
         private readonly extensionService: ShopwareExtensionService,
@@ -20,6 +25,20 @@ export default class ExtensionStoreService {
         });
     }
 
+    public orderVariantsByRentDuration(variants: ExtensionVariant[]): ExtensionVariant[] {
+        if (variants.length === 1) {
+            return variants;
+        }
+
+        return variants.sort((first, second) => {
+            if (!first.duration || !second.duration) {
+                return 0;
+            }
+
+            return first.duration - second.duration;
+        });
+    }
+
     public getCalculatedPrice(variant: ExtensionVariant): string {
         const perMonth = this.isVariantOfTypeRent(variant);
         const price = this.getPriceFromVariant(variant, perMonth);
@@ -28,14 +47,18 @@ export default class ExtensionStoreService {
     }
 
     public getCalculatedPriceSnippet(variants: ExtensionVariant[]): string {
-        const recommendedVariant = this.getRecommendedVariant(variants);
-
-        if (recommendedVariant && this.isVariantOfTypeBuy(recommendedVariant)) {
-            return 'sw-extension-store.general.labelPriceOneTime';
-        }
-
         if (variants.length > 1) {
             return 'sw-extension-store.general.labelFromPricePerMonth';
+        }
+
+        const recommendedVariant = this.getRecommendedVariant(variants);
+
+        return this.getPriceSnippetForVariant(recommendedVariant);
+    }
+
+    public getPriceSnippetForVariant(variant: ExtensionVariant): string {
+        if (this.isVariantOfTypeBuy(variant)) {
+            return 'sw-extension-store.general.labelPriceOneTime';
         }
 
         return 'sw-extension-store.general.labelPricePerMonth';
@@ -97,5 +120,13 @@ export default class ExtensionStoreService {
 
     public isVariantOfTypeRent(variant: ExtensionVariant): boolean {
         return variant?.type === this.extensionService.EXTENSION_VARIANT_TYPES.RENT;
+    }
+
+    public isRentDurationMonthly(variant: ExtensionVariant): boolean {
+        return variant?.duration === this.EXTENSION_RENT_DURATIONS.MONTHLY;
+    }
+
+    public isRentDurationYearly(variant: ExtensionVariant): boolean {
+        return variant?.duration === this.EXTENSION_RENT_DURATIONS.YEARLY;
     }
 }

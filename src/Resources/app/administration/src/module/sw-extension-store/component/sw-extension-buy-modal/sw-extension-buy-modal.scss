@@ -9,56 +9,51 @@ $padding-summary-card: 22px;
     }
 
     &__variants-selection {
-        padding: $padding-summary-card;
-        border: 1px solid $color-gray-300;
-        border-bottom: 0 none;
-        border-radius: $border-radius-default $border-radius-default 0 0;
-
-        .sw-extension-buy-modal__variants-card:not(:last-child) {
+        .sw-extension-buy-modal__variants-card {
             margin-bottom: 16px;
-        }
-
-        &.sw-extension-buy-modal__variants-selection-single-entry {
-            .sw-extension-buy-modal__variants-card {
-                border: none;
-                grid-column-gap: 0;
-                background-color: transparent;
-                padding: 0;
-                cursor: default;
-
-                label {
-                    cursor: default;
-                }
-            }
-
-            .sw-field--radio {
-                display: none;
-            }
         }
     }
 
     &__extension-summary {
         display: grid;
-        grid-template-columns: 72px 1fr;
-        grid-column-gap: 12px;
-        align-items: center;
+        justify-items: center;
         margin-bottom: 24px;
     }
 
     .sw-extension-icon {
-        width: 64px;
-        height: 64px;
+        margin-bottom: 16px;
+        width: 72px;
+        height: 72px;
     }
 
     &__extension-summary-name {
+        color: var(--color-text-primary-default);
         margin-bottom: 0;
         font-weight: $font-weight-semi-bold;
-        font-size: $font-size-s;
+        font-size: $font-size-l;
+    }
+
+    &__extension-summary-trial-phase {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: $font-size-xs;
+        margin-top: 8px;
+
+        .mt-icon {
+            color: $color-shopware-brand-900;
+        }
+    }
+
+    &__extension-summary-disclaimer {
+        color: var(--color-text-secondary-default);
+        font-size: $font-size-xs;
+        margin-top: 16px;
     }
 
     &__variants-card {
         display: grid;
-        grid-template-columns: auto 1fr;
+        grid-template-columns: auto 1fr auto;
         grid-column-gap: 12px;
         grid-row-gap: 5px;
         border: 1px solid $color-gray-300;
@@ -81,13 +76,37 @@ $padding-summary-card: 22px;
         }
 
         .sw-extension-buy-modal__rent {
+            color: var(--color-text-secondary-default);
             line-height: $line-height-md;
+
+            strong {
+                color: var(--color-text-primary-default);
+            }
         }
     }
 
     &__variants-card-input {
         align-self: center;
         grid-column: 1;
+    }
+
+    &__variants-card-badge {
+        background-color: #6c87ac;
+        border-radius: $border-radius-pill;
+        color: $color-white;
+        display: inline-block;
+        font-size: $font-size-xxs;
+        font-weight: $font-weight-medium;
+        grid-column: 3;
+        grid-row: 1;
+        height: $line-height-xs;
+        line-height: $line-height-xs;
+        margin-right: 2px;
+        padding: 0 5px;
+
+        &.sw-extension-buy-modal__variants-card-badge-discounted {
+            background-color: $color-crimson-400;
+        }
     }
 
     &__variant-description {
@@ -118,30 +137,39 @@ $padding-summary-card: 22px;
 
     &__variant-summary {
         margin-bottom: 16px;
-        padding: $padding-summary-card;
-        background: $color-module-blue-50;
-        border: 1px solid $color-shopware-brand-500;
-        border-radius: 0 0 $border-radius-default $border-radius-default;
+        border-bottom: 1px solid $color-gray-300;
         color: $color-gray-500;
         font-size: $font-size-xs;
+        padding: 16px 0;
         text-align: right;
 
         .sw-extension-buy-modal__variant-summary-price-subline {
-            font-size: $font-size-xxs;
+            font-size: $font-size-xs;
             color: $color-darkgray-200;
+            line-height: var(--font-line-height-xs);
         }
     }
 
     &__variant-summary-price {
         display: flex;
+        font-size: $font-size-l;
         justify-content: space-between;
         align-items: flex-end;
         color: $color-darkgray-500;
-        font-weight: $font-weight-semi-bold;
+        margin-bottom: 4px;
     }
 
     &__variant-summary-actual-price {
-        font-size: $font-size-m;
+        font-size: $font-size-l;
+        font-weight: $font-weight-bold;
+    }
+
+    &__plus-vat,
+    &__general-text-block {
+        font-size: $font-size-xxs;
+        color: $color-darkgray-200;
+        line-height: $line-height-xs;
+        margin-bottom: var(--scale-size-16);
     }
 
     &__content-installed {
@@ -190,13 +218,6 @@ $padding-summary-card: 22px;
                 }
             }
         }
-    }
-
-    &__general-text-block {
-        font-size: $font-size-xs;
-        line-height: 22px;
-        margin-bottom: 21px;
-        margin-top: 5px;
     }
 
     &__variant-text-block {
