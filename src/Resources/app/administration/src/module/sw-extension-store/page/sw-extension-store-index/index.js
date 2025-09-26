@@ -7,7 +7,8 @@ import './sw-extension-store-index.scss';
 export default {
     template,
 
-    inject: ['extensionStoreActionService', 'shopwareExtensionService', 'feature'],
+    // we have to add the extensionStoreLicensesService for the checkout example
+    inject: ['extensionStoreActionService', 'shopwareExtensionService', 'feature', 'extensionStoreLicensesService'],
 
     props: {
         id: {
@@ -44,6 +45,10 @@ export default {
 
             return isTheme ? 'themes' : 'apps';
         },
+        // returns the iframe DOM element, currently we can not select it by an ID because we are using the sw-iframe-renderer component
+        getIframe() {
+            return document.querySelector('iframe');
+        }
     },
 
     watch: {
@@ -61,9 +66,36 @@ export default {
 
     created() {
         this.createdComponent();
+
+        // register an event listener on initialization to listen for messages from the iframe
+        window.addEventListener('message', this.checkout);
     },
 
     methods: {
+        // proof of a working checkout with data from our extension store storefront
+        async checkout(event) {
+            // we only want to handle purchase messages from our iframe
+            if (event.data.action === 'purchase-event') {
+                // from the event we now get the uuid of the product and option id of the variant which is also a uuid
+                console.log(event.data.optionId, event.data.productId);
+
+                // card request and order request in a row, in a real world scenario you would probably want to handle errors and edge cases
+                const cartResponse = await this.extensionStoreLicensesService.newCart(
+                  event.data.productId,
+                  event.data.optionId
+                );
+
+                const orderResponse = await this.extensionStoreLicensesService.orderCart(cartResponse.data);
+                console.log(orderResponse);
+
+                // respond back to the iframe that everything was successful - in a real world scenario you would also want to handle errors here
+                this.getIframe.contentWindow.postMessage({
+                    action: 'purchase-response',
+                    success: true,
+                }, '*')
+            }
+        },
+
         createdComponent() {
             this.checkStoreUpdates();
         },

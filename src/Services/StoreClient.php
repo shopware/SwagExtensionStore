@@ -140,7 +140,9 @@ class StoreClient
         return json_decode((string) $response->getBody(), true);
     }
 
-    public function createCart(int $extensionId, int $variantId, Context $context): CartStruct
+    // also here typing is changed regarding the uuid usage
+    // extensionId is now the productUuid and variantId is the optionId of the variant of our extensionStore
+    public function createCart(int|string $extensionId, int|string $variantId, Context $context): CartStruct
     {
         try {
             $response = $this->client->request(
@@ -156,6 +158,8 @@ class StoreClient
                                 'variantId' => $variantId,
                             ],
                         ],
+                        // we add a mode so that the SBP API can handle the different use case with the uuids from the extension store later on
+                        'mode' => 'newStore'
                     ],
                 ],
             );

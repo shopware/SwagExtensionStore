@@ -32,18 +32,20 @@ class LicenseController
     #[Route('/api/_action/extension-store/cart/new', name: 'api.extension.create_new_cart', methods: ['POST'])]
     public function createCart(Request $request, Context $context): JsonResponse
     {
+        // the extensionId is now the productUuid and the variantId is the optionId of the variant of our extensionStore
         $extensionId = $request->request->get('extensionId');
         $variantId = $request->request->get('variantId');
 
-        if (!is_numeric($extensionId)) {
-            throw ExtensionStoreException::invalidExtensionId();
-        }
+        // because we have now string UUIDs, we cannot validate them as numeric anymore
+//        if (!is_numeric($extensionId)) {
+//            throw ExtensionStoreException::invalidExtensionId();
+//        }
+//
+//        if (!is_numeric($variantId)) {
+//            throw ExtensionStoreException::invalidVariantId();
+//        }
 
-        if (!is_numeric($variantId)) {
-            throw ExtensionStoreException::invalidVariantId();
-        }
-
-        $cart = $this->licenseService->createCart((int) $extensionId, (int) $variantId, $context);
+        $cart = $this->licenseService->createCart($extensionId, $variantId, $context);
 
         return new JsonResponse($cart);
     }
