@@ -17,15 +17,30 @@ export type InAppPurchase = {
     serviceConditions?: string | null;
     websiteGtc?: string | null;
     priceModels: Array<InAppPurchasePriceModel>;
+    priceModel: InAppPurchasePriceModel;
+    preselectedVariant: string;
 };
 
-export type InAppPurchaseCartPositions = {
+export type InAppSubscriptionChange = {
+    id: string;
+    type: 'upgrade' | 'downgrade';
+    currentNetPrice: number;
+    currentFeatureVariant: string;
+    currentFeature: InAppPurchase;
+    pendingDowngrade: string;
+};
+
+export type InAppPurchaseCartPosition = {
     feature: InAppPurchase;
     priceModel: InAppPurchasePriceModel;
     netPrice: number;
     grossPrice: number;
     taxRate: number;
     taxValue: number;
+    nextBookingDate: null | Date;
+    subscriptionChange: null | InAppSubscriptionChange;
+    proratedNetPrice: null | number;
+    variant: 'non-consumable' | 'service' | 'monthly' | 'yearly';
 };
 
 export type InAppPurchaseCart = {
@@ -33,7 +48,7 @@ export type InAppPurchaseCart = {
     grossPrice: number;
     taxRate: number;
     taxValue: number;
-    positions: Array<InAppPurchaseCartPositions>;
+    positions: Array<InAppPurchaseCartPosition>;
 };
 
 export type InAppPurchaseCollection = Array<InAppPurchase>;

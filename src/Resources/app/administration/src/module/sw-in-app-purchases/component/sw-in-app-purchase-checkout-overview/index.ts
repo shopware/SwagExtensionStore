@@ -27,30 +27,51 @@ export default Shopware.Component.wrapComponentConfig({
             type: String,
             required: true,
         },
+        cart: {
+            type: Object as PropType<IAP.InAppPurchaseCart>,
+            required: true,
+        },
+        variant: {
+            type: String,
+            required: true,
+        },
     },
 
     data(): {
         showConditionsModal: boolean;
-        priceModel: IAP.InAppPurchasePriceModel;
     } {
         return {
             showConditionsModal: false,
-            priceModel: this.purchase.priceModels[0],
         };
     },
 
-    created() {
-        this.setPriceModel();
+    watch: {
+        priceModel: {
+            immediate: true,
+            handler() {
+                this.onGtcAcceptedChange(this.priceModel.conditionsType === null);
+            },
+        },
     },
 
     computed: {
-        purchaseOptions(): Array<{ value: IAP.InAppPurchasePriceModel; name: string }> {
-            return this.purchase.priceModels.map((priceModel): { value: IAP.InAppPurchasePriceModel; name: string } => {
+        purchaseOptions(): Array<{ value: string; name: string }> {
+            return this.purchase.priceModels.map((priceModel): { value: string; name: string } => {
                 return {
-                    value: priceModel,
+                    value: priceModel.variant,
                     name: `€${priceModel.price}* /${this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`)}`,
                 };
             });
+        },
+
+        priceModel(): IAP.InAppPurchasePriceModel {
+            return this.purchase.priceModels.find(
+                (pm: IAP.InAppPurchasePriceModel) => this.cart.positions[0].variant === pm.variant,
+            ) || this.purchase.priceModels[0];
+        },
+
+        subscriptionChange() {
+            return this.cart.positions.find(position => position.subscriptionChange !== null);
         },
     },
 
@@ -71,13 +92,10 @@ export default Shopware.Component.wrapComponentConfig({
             this.$emit('update:gtc-accepted', value);
         },
 
-        setPriceModel(priceModel?: IAP.InAppPurchasePriceModel) {
-            if (!priceModel) {
-                priceModel = this.purchase.priceModels[0];
+        updateVariant(variant : string) {
+            if (this.variant !== variant) {
+                this.$emit('update:variant', variant);
             }
-            this.priceModel = priceModel;
-            this.onGtcAcceptedChange(priceModel.conditionsType === null);
-            this.$emit('update:variant', priceModel.variant);
         },
     },
 });

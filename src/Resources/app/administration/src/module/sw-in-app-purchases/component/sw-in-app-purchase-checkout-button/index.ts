@@ -1,5 +1,6 @@
 import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout-button.html.twig';
+import './sw-in-app-purchase-checkout-button.scss';
 
 /**
  * @private
