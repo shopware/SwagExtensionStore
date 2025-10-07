@@ -15,6 +15,7 @@ use SwagExtensionStore\Exception\ExtensionStoreException;
 use SwagExtensionStore\Struct\InAppPurchaseCartPositionStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
+use SwagExtensionStore\Struct\InAppPurchaseStruct;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -30,7 +31,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @phpstan-type ExtensionReview array<string, mixed>
  * @phpstan-type PaymentMethod array{id: positive-int, type: 'paypal'|'creditCard'|'directDebit', label: string, default: bool}
  *
- * @phpstan-import-type InAppPurchaseCartPosition from InAppPurchaseCartPositionStruct
+ * @phpstan-import-type InAppPurchaseCartItem from InAppPurchaseCartPositionStruct
  */
 #[Package('checkout')]
 class StoreClient
@@ -233,7 +234,7 @@ class StoreClient
     }
 
     /**
-     * @param array<int, InAppPurchaseCartPosition> $positions
+     * @param array<int, InAppPurchaseCartItem> $positions
      */
     public function orderInAppPurchaseCart(float $taxRate, array $positions, Context $context): JsonResponse
     {
@@ -273,5 +274,23 @@ class StoreClient
         }
 
         return InAppPurchaseCollection::fromArray(json_decode((string) $response->getBody(), true));
+    }
+
+    public function getInAppPurchase(string $extensionName, string $inAppPurchase, Context $context): InAppPurchaseStruct
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                \sprintf($this->endpoints['iap_details'], $extensionName, $inAppPurchase),
+                [
+                    'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
+                    'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
+                ],
+            );
+        } catch (ClientException $e) {
+            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+        }
+
+        return InAppPurchaseStruct::fromArray(json_decode((string) $response->getBody(), true));
     }
 }

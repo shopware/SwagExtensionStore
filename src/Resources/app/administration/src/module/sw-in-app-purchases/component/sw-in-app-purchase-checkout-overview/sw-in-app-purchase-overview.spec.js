@@ -19,16 +19,28 @@ async function createWrapper() {
                     price: 0.99,
                     duration: 1,
                     variant: 'monthly',
-                    conditionsType: null
-                }]
+                    conditionsType: null,
+                }],
             },
             tosAccepted: false,
             gtcAccepted: false,
-            producer: 'shopware'
+            producer: 'shopware',
+            variant: 'monthly',
+            cart: {
+                netPrice: 1,
+                grossPrice: 2.99,
+                taxPrice: 2.99,
+                taxValue: 4,
+                positions: [{
+                    variant: 1,
+                    subscriptionChange: null,
+                }],
+            },
         },
         global: {
             stubs: {
                 'sw-in-app-purchase-price-box': true,
+                'sw-in-app-purchase-checkout-subscription-change': true,
                 'sw-gtc-checkbox': true,
                 'sw-radio-field': true,
                 'sw-button': true
@@ -79,29 +91,21 @@ describe('sw-in-app-purchase-checkout-overview', () => {
         expect(wrapper.vm.showConditionsModal).toBe(false);
     });
 
-    it('should set the priceModel and emit update:variant when setPriceModel is called', async () => {
-        // when the component is created, the first price model is set emitting this data
-        // setPriceModel is called during the component creation, therefor we don't need to explicitly test it
-        expect(wrapper.vm.priceModel).toStrictEqual(wrapper.vm.purchase.priceModels[0]);
-        expect(wrapper.emitted('update:gtc-accepted')).toBeTruthy();
-        expect(wrapper.emitted('update:gtc-accepted')[0]).toEqual([true]);
-        expect(wrapper.emitted('update:variant')).toBeTruthy();
-        expect(wrapper.emitted('update:variant')[0]).toStrictEqual(['monthly']);
 
-        const priceModel = {
-            type: 'rent',
-            price: 10.99,
-            duration: 12,
-            variant: 'yearly',
-            conditionsType: null
-        };
+    it('should render not subscription change card', async () => {
+        expect(wrapper.find('sw-in-app-purchase-checkout-subscription-change-stub').exists()).toBeFalsy();
+    });
 
-        // now we call it with a different price model, to see if it updates and emits accordingly
-        wrapper.vm.setPriceModel(priceModel);
-        expect(wrapper.vm.priceModel).toStrictEqual(priceModel);
-        expect(wrapper.emitted('update:gtc-accepted')).toBeTruthy();
-        expect(wrapper.emitted('update:gtc-accepted')[1]).toEqual([true]);
-        expect(wrapper.emitted('update:variant')).toBeTruthy();
-        expect(wrapper.emitted('update:variant')[1]).toStrictEqual(['yearly']);
+    it('should render subscription change card', async () => {
+        await wrapper.setProps({
+            cart: {
+                positions: [{
+                    variant: 1,
+                    subscriptionChange: 'upgrade',
+                }],
+            },
+        });
+
+        expect(wrapper.find('sw-in-app-purchase-checkout-subscription-change-stub')).toBeTruthy();
     });
 });

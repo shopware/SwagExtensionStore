@@ -1,7 +1,7 @@
 <sw-alert class="sw-in-app-purchase-price-box" :show-icon="false">
     <span class="sw-in-app-purchase-price-box__price_container">
         <span class="sw-in-app-purchase-price-box__price">
-            € {{ String(priceModel?.price) }}*
+            {{ currencyFilter(String(priceModel?.price), "EUR", 2) }}*
         </span>
 
         <span v-if="rentDuration" class="sw-in-app-purchase-price-box__duration">

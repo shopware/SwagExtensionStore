@@ -16,7 +16,7 @@ use SwagExtensionStore\Services\StoreClient;
 use SwagExtensionStore\Struct\InAppPurchaseCartPositionStruct;
 
 /**
- * @phpstan-import-type InAppPurchaseCartPosition from InAppPurchaseCartPositionStruct
+ * @phpstan-import-type InAppPurchaseCartItem from InAppPurchaseCartPositionStruct
  */
 class StoreClientTest extends TestCase
 {
@@ -163,7 +163,7 @@ class StoreClientTest extends TestCase
     }
 
     /**
-     * @return array<int, InAppPurchaseCartPosition> $positions
+     * @return array<int, InAppPurchaseCartItem>
      */
     private function buildPositions(): array
     {
@@ -175,6 +175,7 @@ class StoreClientTest extends TestCase
                 'taxValue' => 1.90,
                 'grossPrice' => 11.89,
                 'taxRate' => 19.0,
+                'variant' => 'monthly',
             ],
         ];
     }

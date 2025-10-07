@@ -13,6 +13,7 @@ use Shopware\Core\Framework\Struct\Collection;
  * @template-extends Collection<InAppPurchaseCartPositionStruct>
  *
  * @phpstan-import-type InAppPurchaseCartPosition from InAppPurchaseCartPositionStruct
+ * @phpstan-import-type InAppPurchaseCartItem from InAppPurchaseCartPositionStruct
  */
 #[Package('checkout')]
 class InAppPurchaseCartPositionCollection extends Collection
@@ -28,7 +29,7 @@ class InAppPurchaseCartPositionCollection extends Collection
     }
 
     /**
-     * @return array<int, InAppPurchaseCartPosition>
+     * @return array<int, InAppPurchaseCartItem>
      */
     public function toCart(): array
     {

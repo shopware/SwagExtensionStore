@@ -71,10 +71,32 @@ export default Shopware.Component.wrapComponentConfig({
             });
         },
 
+        createCart(variant: string) {
+            if (!this.store.extension || !this.store.entry || !variant) {
+                this.reset();
+                return;
+            }
+
+            this.variant = variant;
+            this.state = 'loading';
+
+            this.inAppPurchasesService.createCart(
+                this.store.extension,
+                this.store.entry.identifier,
+                variant,
+            ).then((cart) => {
+                this.inAppPurchaseCart = cart;
+                this.state = 'purchase';
+            }).catch ((errorResponse: ErrorResponse) => {
+                Shopware.Utils.debug.error("checkout-iap", errorResponse);
+                this.errorMessage = this.getError(errorResponse);
+                this.state = 'error';
+            });
+        },
+
         async requestFeature() {
             if (!this.store.extension || !this.store.entry) {
                 this.reset();
-
                 return;
             }
 
@@ -84,37 +106,35 @@ export default Shopware.Component.wrapComponentConfig({
                 this.inAppPurchasesService.getExtension(this.store.extension),
                 this.inAppPurchasesService.getPriceModels(this.store.extension, this.store.entry.identifier)
             ]).then(([extension, purchase]) => {
-                this.purchase = purchase;
                 this.extension = extension;
-                this.state = 'purchase';
-            }).catch((errorResponse: ErrorResponse) => {
-                Shopware.Utils.debug.error(errorResponse);
+                this.purchase = purchase;
+
+                if (!this.purchase) {
+                    throw new Error('No in-app purchase foud');
+                }
+
+                return this.createCart(this.purchase.preselectedVariant);
+            }).catch ((errorResponse: ErrorResponse)=> {
+                Shopware.Utils.debug.error("checkout-iap", errorResponse);
                 this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
             });
         },
 
         onPurchaseFeature() {
-            if (!this.store.extension || !this.store.entry || !this.variant) {
+            if (!this.inAppPurchaseCart || !this.extension) {
                 this.reset();
-
                 return;
             }
 
-            this.inAppPurchasesService.createCart(
-                this.store.extension,
-                this.store.entry.identifier,
-                this.variant
-            ).then((inAppPurchaseCart) => {
-                return this.inAppPurchasesService.orderCart(
-                    inAppPurchaseCart?.taxRate,
-                    inAppPurchaseCart?.positions,
-                    this.extension?.name
-                );
-            }).then(() => {
+            this.inAppPurchasesService.orderCart(
+                this.inAppPurchaseCart.taxRate,
+                this.inAppPurchaseCart.positions,
+                this.extension.name,
+            ).then(() => {
                 this.state = 'success';
             }).catch((errorResponse: ErrorResponse) => {
-                Shopware.Utils.debug.error(errorResponse);
+                Shopware.Utils.debug.error("checkout-iap", errorResponse);
                 this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
             });
