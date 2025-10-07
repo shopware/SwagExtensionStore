@@ -1,8 +1,6 @@
 import template from './sw-extension-listing-card.html.twig';
 import './sw-extension-listing-card.scss';
 
-const { Utils, Filter } = Shopware;
-
 /**
  * @private
  */
@@ -10,7 +8,7 @@ export default {
     template,
 
     inject: [
-        'shopwareExtensionService'
+        'extensionStoreService'
     ],
 
     props: {
@@ -21,51 +19,24 @@ export default {
     },
 
     computed: {
-        previewMedia() {
-            const image = Utils.get(this.extension, 'images[0]', null);
-
-            if (!image) {
-                const previewImage = this.assetFilter('/administration/static/img/theme/default_theme_preview.jpg');
-                return {
-                    'background-image': `url('${previewImage}')`
-                };
-            }
-
-            return {
-                'background-image': `url('${image.remoteLink}')`,
-                'background-size': 'cover'
-            };
-        },
-
-        recommendedVariant() {
-            return this.shopwareExtensionService.orderVariantsByRecommendation(this.extension.variants)[0];
-        },
-
-        hasActiveDiscount() {
-            return this.shopwareExtensionService.isVariantDiscounted(this.recommendedVariant);
-        },
-
-        discountClass() {
-            return {
-                'sw-extension-listing-card__info-price-discounted': this.hasActiveDiscount
-            };
+        assetFilter() {
+            return Shopware.Filter.getByName('asset');
         },
 
         calculatedPrice() {
-            if (!this.recommendedVariant) {
-                return null;
-            }
+            return this.extensionStoreService.getCalculatedPrice(this.recommendedVariant);
+        },
 
-            return this.$tc(
-                'sw-extension-store.general.labelPrice',
-                this.shopwareExtensionService.mapVariantToRecommendation(this.recommendedVariant),
-                {
-                    price: Utils.format.currency(
-                        this.shopwareExtensionService.getPriceFromVariant(this.recommendedVariant),
-                        'EUR'
-                    )
-                }
-            );
+        calculatedPriceSnippet() {
+            return this.extensionStoreService.getCalculatedPriceSnippet(this.extension.variants);
+        },
+
+        hasActiveDiscount() {
+            return this.extensionStoreService.isExtensionDiscounted(this.extension.variants);
+        },
+
+        isFree() {
+            return this.extensionStoreService.isVariantOfTypeFree(this.recommendedVariant);
         },
 
         isInstalled() {
@@ -85,8 +56,14 @@ export default {
             return !!extension.storeLicense;
         },
 
-        assetFilter() {
-            return Filter.getByName('asset');
+        priceClass() {
+            return {
+                'sw-extension-listing-card__info-price-discounted': this.hasActiveDiscount
+            };
+        },
+
+        recommendedVariant() {
+            return this.extensionStoreService.getRecommendedVariant(this.extension.variants);
         }
     },
 
