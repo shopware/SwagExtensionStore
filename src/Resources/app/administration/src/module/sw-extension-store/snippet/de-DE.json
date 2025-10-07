@@ -1,9 +1,14 @@
 {
     "sw-extension-store": {
         "general": {
-            "labelPrice": "Kostenlos | {price}/Monat | {price}",
+            "labelPriceFirstMonth": "{price} / 1. Monat",
+            "labelPriceOneTime": "{price}",
+            "labelPricePerMonth": "{price} /Monat",
+            "labelPricePerYear": "{price} /Jahr",
+            "labelFromPricePerMonth": "ab {price} /Monat",
             "labelFree": "Kostenlos",
-            "labelRentSuffix": "/ Monat*",
+            "labelSale": "% Sale",
+            "labelSavings": "{percentage}% Rabatt",
             "labelDiscountedPrice": "Kostenlos | <s>{price}</s> <strong>{discountedPrice}</strong>/Monat | <s>{price}</s> <strong>{discountedPrice}</strong>",
             "title": "Store",
             "taxNotice": "* Alle Preise verstehen sich zzgl. Mehrwertsteuer"
@@ -60,12 +65,24 @@
             "rent": {
                 "priceDisplay": "{priceDisplay}/Monat",
                 "freeTrial": "30-Tage-Testversion",
-                "disclaimer": "Es können zusätzliche Kosten anfallen."
+                "disclaimer": "Es können zusätzliche Kosten anfallen.",
+                "followingDiscount": "anschließend {price} /Monat für {months} Monate,",
+                "monthly": {
+                  "discountInformation": "Für {months} Monate, dann {price} /Monat",
+                  "cancellationInformation": "Monatlich kündbar",
+                  "finalPrice": "dann {price} /Monat"
+                },
+                "yearly": {
+                  "discountInformation": "Für 12 Monate, dann {price} /Jahr",
+                  "cancellationInformation": "Jährlich kündbar",
+                  "finalPrice": "dann {price} /Jahr"
+                }
             },
             "warnings": {
                 "paymentMeansRequiredText": "Um diese App zu kaufen, musst Du",
                 "paymentMeansRequiredLinkText": "eine Zahlungsmethode hinzufügen"
-            }
+            },
+            "plusVat": "* Alle Preise verstehen sich ohne die gesetzliche Mehrwertsteuer. Bei gebuchten Mieten inkl. Probemonat entstehen Kosten nach automatischer Verlängerung."
         },
         "in-app-purchases": {
             "onceOff": "einmalig"

@@ -1,8 +1,6 @@
 import template from './sw-extension-listing-card.html.twig';
 import './sw-extension-listing-card.scss';
 
-const { Utils } = Shopware;
-
 /**
  * @private
  */
@@ -10,7 +8,7 @@ export default {
     template,
 
     inject: [
-        'shopwareExtensionService',
+        'extensionStoreService',
     ],
 
     props: {
@@ -25,51 +23,20 @@ export default {
             return Shopware.Filter.getByName('asset');
         },
 
-        previewMedia() {
-            const image = Utils.get(this.extension, 'images[0]', null);
-
-            if (!image) {
-                const previewImage = this.assetFilter('/swagextensionstore/administration/static/img/theme/default_theme_preview.jpg');
-                return {
-                    'background-image': `url('${previewImage}')`,
-                };
-            }
-
-            return {
-                'background-image': `url('${image.remoteLink}')`,
-                'background-size': 'cover',
-            };
+        calculatedPrice() {
+            return this.extensionStoreService.getCalculatedPrice(this.recommendedVariant);
         },
 
-        recommendedVariant() {
-            return this.shopwareExtensionService.orderVariantsByRecommendation(this.extension.variants)[0];
+        calculatedPriceSnippet() {
+            return this.extensionStoreService.getCalculatedPriceSnippet(this.extension.variants);
         },
 
         hasActiveDiscount() {
-            return this.shopwareExtensionService.isVariantDiscounted(this.recommendedVariant);
+            return this.extensionStoreService.isExtensionDiscounted(this.extension.variants);
         },
 
-        discountClass() {
-            return {
-                'sw-extension-listing-card__info-price-discounted': this.hasActiveDiscount,
-            };
-        },
-
-        calculatedPrice() {
-            if (!this.recommendedVariant) {
-                return null;
-            }
-
-            return this.$t(
-                'sw-extension-store.general.labelPrice',
-                {
-                    price: Utils.format.currency(
-                        this.shopwareExtensionService.getPriceFromVariant(this.recommendedVariant),
-                        'EUR',
-                    ),
-                },
-                this.shopwareExtensionService.mapVariantToRecommendation(this.recommendedVariant),
-            );
+        isFree() {
+            return this.extensionStoreService.isVariantOfTypeFree(this.recommendedVariant);
         },
 
         isInstalled() {
@@ -87,6 +54,16 @@ export default {
             }
 
             return !!extension.storeLicense;
+        },
+
+        priceClass() {
+            return {
+                'sw-extension-listing-card__info-price-discounted': this.hasActiveDiscount,
+            };
+        },
+
+        recommendedVariant() {
+            return this.extensionStoreService.getRecommendedVariant(this.extension.variants);
         },
     },
 

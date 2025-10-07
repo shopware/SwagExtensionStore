@@ -1,3 +1,4 @@
+import ExtensionStoreService from './service/extension-store.service';
 import ExtensionStoreDataService from './service/extension-store-data.service';
 import ExtensionLicenseService from './service/extension-store-licenses.service';
 
@@ -18,6 +19,13 @@ Shopware.Component.register('sw-extension-store-accessibility', () => import('./
 Shopware.Component.register('sw-extension-store-statistics-promotion', () => import('./component/sw-extension-store-statistics-promotion'));
 Shopware.Component.register('sw-extension-store-in-app-purchases-listing-modal', () => import('./component/sw-extension-store-in-app-purchases-listing-modal'));
 
+
+Shopware.Application.addServiceProvider('extensionStoreService', () => {
+    return new ExtensionStoreService(
+        Shopware.Service('shopwareDiscountCampaignService'),
+        Shopware.Service('shopwareExtensionService'),
+    );
+});
 
 Shopware.Application.addServiceProvider('extensionStoreDataService', () => {
     return new ExtensionStoreDataService(

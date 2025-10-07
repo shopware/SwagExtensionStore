@@ -1,9 +1,14 @@
 {
     "sw-extension-store": {
         "general": {
-            "labelPrice": "Free | {price}/month | {price}",
+            "labelPriceFirstMonth": "{price} / 1. month",
+            "labelPriceOneTime": "{price}",
+            "labelPricePerMonth": "{price} /month",
+            "labelPricePerYear": "{price} /year",
+            "labelFromPricePerMonth": "from {price} /month",
             "labelFree": "Free",
-            "labelRentSuffix": "/ month*",
+            "labelSale": "% Sale",
+            "labelSavings": "{percentage}% discount",
             "labelDiscountedPrice": "Free | <s>{price}</s> <strong>{discountedPrice}</strong>/month | <s>{price}</s> <strong>{discountedPrice}</strong>",
             "title": "Store",
             "taxNotice": "* All prices are exclusive of VAT"
@@ -59,13 +64,25 @@
             },
             "rent": {
                 "priceDisplay": "{priceDisplay}/month",
-                "freeTrial": "30-day free trial.",
-                "disclaimer": "Additional charges may apply."
+                "freeTrial": "30-day free trial",
+                "disclaimer": "Additional charges may apply.",
+                "followingDiscount": "following {price} /month for {months} months,",
+                "monthly": {
+                  "discountInformation": "For {months} months, then {price} /month",
+                  "cancellationInformation": "Cancelable monthly",
+                  "finalPrice": "then {price} /month"
+                },
+                "yearly": {
+                  "discountInformation": "For 12 months, then {price} /year",
+                  "cancellationInformation": "Cancelable annually",
+                  "finalPrice": "then {price} /year"
+                }
             },
             "warnings": {
                 "paymentMeansRequiredText": "In order to purchase this app you'll have to",
                 "paymentMeansRequiredLinkText": "add a payment method"
-            }
+            },
+            "plusVat": "* All prices are quoted net of the statutory value-added tax. With booked rents incl. trial month costs will apply upon automatic renewal."
         },
         "in-app-purchases": {
             "onceOff": "one-time"

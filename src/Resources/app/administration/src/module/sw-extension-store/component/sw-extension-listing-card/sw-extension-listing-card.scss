@@ -19,13 +19,6 @@
         }
     }
 
-    .sw-extension-listing-card__preview {
-        width: 100%;
-        aspect-ratio: 4 / 3;
-        position: relative;
-        border-bottom: 1px solid rgba(0, 0, 0, 8%);
-    }
-
     &__extension-type-label {
         position: absolute;
         bottom: 8px;
@@ -37,13 +30,24 @@
         padding: 16px;
         display: grid;
         grid-template-columns: auto 1fr;
-        grid-template-rows: auto 1fr auto;
+        grid-template-rows: auto auto auto auto 1fr;
         grid-row-gap: 4px;
         grid-template-areas:
-            "name name"
-            "description description"
-            "rating price"
-            "label-display label-display";
+            "icon"
+            "name"
+            "rating"
+            "label-display"
+            "description"
+            "price";
+        height: 254px;
+
+        .sw-extension-listing-card__info-icon {
+            border-radius: 8px;
+            grid-area: icon;
+            height: 56px;
+            margin-bottom: 16px;
+            width: 56px;
+        }
 
         .sw-extension-listing-card__info-name {
             grid-area: name;
@@ -54,30 +58,6 @@
             transition: color .15s ease;
 
             @include truncate;
-        }
-
-        .sw-extension-listing-card__info-description {
-            $line-height-description: $line-height-xs;
-
-            grid-area: description;
-            font-size: $font-size-xxs;
-            line-height: $line-height-description;
-            color: $color-gray-500;
-            height: calc($line-height-description * 2);
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 4px;
-
-            &::after {
-                content: '';
-                display: block;
-                height: $line-height-description;
-                background: linear-gradient(90deg, rgba($color-white, 0), $color-white);
-                width: 40%;
-                position: absolute;
-                right: 0;
-                bottom: 0;
-            }
         }
 
         .sw-extension-listing-card__info-rating {
@@ -100,25 +80,63 @@
             }
         }
 
-        .sw-extension-listing-card__info-price {
-            grid-area: price;
-            justify-self: end;
+        .sw-extension-listing-card__label-display {
+            grid-area: label-display;
+            margin-bottom: 4px;
+            margin-top: 4px;
+        }
+
+        .sw-extension-listing-card__info-description {
+            $line-height-description: $line-height-xs;
+
+            grid-area: description;
             font-size: $font-size-xxs;
-            font-weight: $font-weight-semi-bold;
-            text-align: right;
+            line-height: $line-height-description;
+            height: calc($line-height-description * 2);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 4px;
 
-            .sw-extension-listing-card__info-price-discounted {
-                color: $color-crimson-400;
-
-                s {
-                    margin-left: 4px;
-                }
+            &::after {
+                content: '';
+                display: block;
+                height: $line-height-description;
+                background: linear-gradient(90deg, rgba($color-white, 0), $color-white);
+                width: 40%;
+                position: absolute;
+                right: 0;
+                bottom: 0;
             }
         }
 
-        .sw-extension-listing-card__label-display {
-            grid-area: label-display;
-            margin-top: 4px;
+        .sw-extension-listing-card__info-price {
+            color: var(--color-text-secondary-default);
+            grid-area: price;
+            font-size: $font-size-xxs;
+
+            strong {
+                color: var(--color-text-primary-default);
+                font-size: $font-size-xs;
+                font-weight: $font-weight-semi-bold;
+            }
+
+            &-badge-sale {
+                background-color: $color-crimson-400;
+                border-radius: $border-radius-pill;
+                color: $color-white;
+                display: inline-block;
+                font-weight: $font-weight-medium;
+                height: $line-height-xs;
+                line-height: $line-height-xs;
+                margin-right: 2px;
+                padding: 0 5px;
+            }
+
+            &-discounted {
+                strong {
+                    color: $color-crimson-400;
+                }
+            }
         }
     }
 }
