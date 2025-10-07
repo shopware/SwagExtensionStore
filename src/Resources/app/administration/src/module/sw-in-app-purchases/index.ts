@@ -18,7 +18,7 @@ Shopware.Component.register(
 );
 Shopware.Component.register(
     'sw-in-app-purchase-checkout-subscription-change',
-    () => import('./component/sw-in-app-purchase-checkout-subscription-change'),
+    () => import('./component/sw-in-app-purchase-checkout-subscription-change')
 );
 Shopware.Component.register(
     'sw-in-app-purchase-price-box',

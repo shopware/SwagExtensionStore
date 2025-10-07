@@ -19,8 +19,8 @@ async function createWrapper() {
                     price: 0.99,
                     duration: 1,
                     variant: 'monthly',
-                    conditionsType: null,
-                }],
+                    conditionsType: null
+                }]
             },
             tosAccepted: false,
             gtcAccepted: false,
@@ -33,9 +33,9 @@ async function createWrapper() {
                 taxValue: 4,
                 positions: [{
                     variant: 1,
-                    subscriptionChange: null,
-                }],
-            },
+                    subscriptionChange: null
+                }]
+            }
         },
         global: {
             stubs: {
@@ -101,9 +101,9 @@ describe('sw-in-app-purchase-checkout-overview', () => {
             cart: {
                 positions: [{
                     variant: 1,
-                    subscriptionChange: 'upgrade',
-                }],
-            },
+                    subscriptionChange: 'upgrade'
+                }]
+            }
         });
 
         expect(wrapper.find('sw-in-app-purchase-checkout-subscription-change-stub')).toBeTruthy();

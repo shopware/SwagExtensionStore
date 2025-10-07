@@ -1,5 +1,5 @@
-import type * as IAP from "SwagExtensionStore/module/sw-in-app-purchases/types";
-import template from "./sw-in-app-purchase-checkout-subscription-change.html.twig";
+import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
+import template from './sw-in-app-purchase-checkout-subscription-change.html.twig';
 import './sw-in-app-purchase-checkout-subscription-change.scss';
 
 export default Shopware.Component.wrapComponentConfig({
@@ -8,18 +8,18 @@ export default Shopware.Component.wrapComponentConfig({
     props: {
         purchase: {
             type: Object as PropType<IAP.InAppPurchase>,
-            required: true,
+            required: true
         },
         cart: {
             type: Object as PropType<IAP.InAppPurchaseCart>,
-            required: true,
-        },
+            required: true
+        }
     },
 
     computed: {
         locale() {
-            const local = String(Shopware.Store.get('session').currentLocale ??
-                Shopware.Store.get('context').app?.fallbackLocale ?? 'en-GB');
+            const local = String(Shopware.State.get('session').currentLocale ??
+                Shopware.State.get('context').app?.fallbackLocale ?? 'en-GB');
 
             return new Intl.Locale(local);
         },
@@ -30,19 +30,19 @@ export default Shopware.Component.wrapComponentConfig({
 
         formattedStartingDate(): string {
             const date = new Date(this.cartPosition.nextBookingDate ?? '');
-            return date.toLocaleDateString(this.locale, { month: "numeric", day: "numeric" });
+            return date.toLocaleDateString(this.locale, { month: 'numeric', day: 'numeric' });
         },
 
         infoHint(): string {
             const today = new Date().toLocaleDateString(this.locale, {
                 month: 'long',
-                day: 'numeric',
+                day: 'numeric'
             });
 
             const nextBookingDate = this.cartPosition?.nextBookingDate
                 ? new Date(this.cartPosition.nextBookingDate).toLocaleDateString(this.locale, {
                     month: 'long',
-                    day: 'numeric',
+                    day: 'numeric'
                 })
                 : '';
 
@@ -51,7 +51,7 @@ export default Shopware.Component.wrapComponentConfig({
                 price: this.currencyFilter(this.cartPosition?.proratedNetPrice, 'EUR', 2),
                 variant: this.cartPosition?.variant ?? '',
                 fee: this.currencyFilter(this.cart.netPrice, 'EUR', 2),
-                start: nextBookingDate,
+                start: nextBookingDate
             });
         },
 
@@ -64,6 +64,6 @@ export default Shopware.Component.wrapComponentConfig({
                 ?.find((priceModel) => priceModel.variant === this.cartPosition.variant)?.price;
 
             return String(this.currencyFilter(price, 'EUR', 2));
-        },
-    },
+        }
+    }
 });

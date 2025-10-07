@@ -83,12 +83,12 @@ export default Shopware.Component.wrapComponentConfig({
             this.inAppPurchasesService.createCart(
                 this.store.extension,
                 this.store.entry.identifier,
-                variant,
+                variant
             ).then((cart) => {
                 this.inAppPurchaseCart = cart;
                 this.state = 'purchase';
-            }).catch ((errorResponse: ErrorResponse) => {
-                Shopware.Utils.debug.error("checkout-iap", errorResponse);
+            }).catch((errorResponse: ErrorResponse) => {
+                Shopware.Utils.debug.error('checkout-iap', errorResponse);
                 this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
             });
@@ -114,8 +114,8 @@ export default Shopware.Component.wrapComponentConfig({
                 }
 
                 return this.createCart(this.purchase.preselectedVariant);
-            }).catch ((errorResponse: ErrorResponse)=> {
-                Shopware.Utils.debug.error("checkout-iap", errorResponse);
+            }).catch((errorResponse: ErrorResponse) => {
+                Shopware.Utils.debug.error('checkout-iap', errorResponse);
                 this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
             });
@@ -130,11 +130,11 @@ export default Shopware.Component.wrapComponentConfig({
             this.inAppPurchasesService.orderCart(
                 this.inAppPurchaseCart.taxRate,
                 this.inAppPurchaseCart.positions,
-                this.extension.name,
+                this.extension.name
             ).then(() => {
                 this.state = 'success';
             }).catch((errorResponse: ErrorResponse) => {
-                Shopware.Utils.debug.error("checkout-iap", errorResponse);
+                Shopware.Utils.debug.error('checkout-iap', errorResponse);
                 this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
             });

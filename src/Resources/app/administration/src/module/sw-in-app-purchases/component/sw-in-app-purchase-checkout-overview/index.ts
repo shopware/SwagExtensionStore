@@ -25,23 +25,23 @@ export default Shopware.Component.wrapComponentConfig({
         },
         producer: {
             type: String,
-            required: true,
+            required: true
         },
         cart: {
             type: Object as PropType<IAP.InAppPurchaseCart>,
-            required: true,
+            required: true
         },
         variant: {
             type: String,
-            required: true,
-        },
+            required: true
+        }
     },
 
     data(): {
         showConditionsModal: boolean;
     } {
         return {
-            showConditionsModal: false,
+            showConditionsModal: false
         };
     },
 
@@ -50,8 +50,8 @@ export default Shopware.Component.wrapComponentConfig({
             immediate: true,
             handler() {
                 this.onGtcAcceptedChange(this.priceModel.conditionsType === null);
-            },
-        },
+            }
+        }
     },
 
     computed: {
@@ -59,20 +59,20 @@ export default Shopware.Component.wrapComponentConfig({
             return this.purchase.priceModels.map((priceModel): { value: string; name: string } => {
                 return {
                     value: priceModel.variant,
-                    name: `€${priceModel.price}* /${this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`)}`,
+                    name: `€${priceModel.price}* /${this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`)}`
                 };
             });
         },
 
         priceModel(): IAP.InAppPurchasePriceModel {
             return this.purchase.priceModels.find(
-                (pm: IAP.InAppPurchasePriceModel) => this.cart.positions[0].variant === pm.variant,
+                (pm: IAP.InAppPurchasePriceModel) => this.cart.positions[0].variant === pm.variant
             ) || this.purchase.priceModels[0];
         },
 
         subscriptionChange() {
             return this.cart.positions.find(position => position.subscriptionChange !== null);
-        },
+        }
     },
 
     methods: {
@@ -96,6 +96,6 @@ export default Shopware.Component.wrapComponentConfig({
             if (this.variant !== variant) {
                 this.$emit('update:variant', variant);
             }
-        },
-    },
+        }
+    }
 });
