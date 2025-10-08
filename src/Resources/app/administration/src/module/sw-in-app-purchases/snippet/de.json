@@ -23,7 +23,26 @@
     "successTitle": "In-App Kauf war erfolgreich!",
     "successSubtitle": "Du kannst jetzt dein neues Feature erleben.",
     "errors": {
-        "the-extension-provider-disallowed-your-purchase-please-contact-the-extension-provider": "Der Anbieter der Erweiterung hat Ihren Kauf abgelehnt. Bitte kontaktieren Sie den Anbieter."
+       "the-extension-provider-disallowed-your-purchase-please-contact-the-extension-provider": "Der Anbieter der Erweiterung hat Ihren Kauf abgelehnt. Bitte kontaktieren Sie den Anbieter.",
+        "shopwareplatformexception-87": "Ungültiges In-App-Feature",
+        "shopwareplatformexception-88": "In-App-Feature nicht gefunden",
+        "shopwareplatformexception-89": "In-App-Feature bereits gekauft",
+        "shopwareplatformexception-90": "In-App-Feature nicht kaufbar",
+        "shopwareplatformexception-91": "Änderung des In-App-Feature-Abos nicht erlaubt",
+        "shopwareplatformexception-92": "In-App-Feature bereits zur Herabstufung vorgemerkt",
+        "shopwareplatformexception-93": "Ungültige Bestellung",
+        "shopwareplatformexception-94": "Unzureichendes Guthaben",
+        "shopwareplatformexception-95": "AGB nicht akzeptiert",
+        "shopwareplatformexception-96": "In-App-Lizenz nicht gefunden",
+        "cloudadminexception-43": "In-App-Feature nicht gefunden",
+        "cloudadminexception-44": "In-App-Feature bereits gekauft",
+        "cloudadminexception-45": "In-App-Feature nicht kaufbar",
+        "cloudadminexception-46": "Ungültige Bestellung",
+        "cloudadminexception-49": "Änderung des In-App-Feature-Abos nicht erlaubt",
+        "cloudadminexception-47": "Unzureichendes Guthaben",
+        "cloudadminexception-48": "AGB nicht akzeptiert",
+        "cloudadminexception-50": "In-App-Lizenz nicht gefunden",
+        "Cloudadminexception-51": "In-App-Feature bereits zur Herabstufung vorgemerkt"
     }
   },
   "sw-in-app-purchase-price-box": {

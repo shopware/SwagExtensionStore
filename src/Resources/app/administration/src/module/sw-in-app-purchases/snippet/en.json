@@ -23,7 +23,26 @@
     "successTitle": "In-App Purchase was successful!",
     "successSubtitle": "You can now experience your new feature.",
     "errors": {
-      "the-extension-provider-disallowed-your-purchase-please-contact-the-extension-provider": "The extension provider disallowed your purchase. Please contact the extension provider."
+      "the-extension-provider-disallowed-your-purchase-please-contact-the-extension-provider": "The extension provider disallowed your purchase. Please contact the extension provider.",
+      "shopwareplatformexception-87": "Invalid in-app feature",
+      "shopwareplatformexception-88": "In-app feature not found",
+      "shopwareplatformexception-89": "In-app feature already purchased",
+      "shopwareplatformexception-90": "In-app feature not purchasable",
+      "shopwareplatformexception-91": "In-app feature subscription change not allowed",
+      "shopwareplatformexception-92": "In-app feature already pending downgrade",
+      "shopwareplatformexception-93": "Invalid order",
+      "shopwareplatformexception-94": "Insufficient balance",
+      "shopwareplatformexception-95": "GTC not accepted",
+      "shopwareplatformexception-96": "In-app license not found",
+      "cloudadminexception-43": "In-app feature not found",
+      "cloudadminexception-44": "In-app feature already purchased",
+      "cloudadminexception-45": "In-app feature not purchasable",
+      "cloudadminexception-46": "Invalid order",
+      "cloudadminexception-49": "In-app feature subscription change not allowed",
+      "cloudadminexception-47": "Insufficient balance",
+      "cloudadminexception-48": "GTC not accepted",
+      "cloudadminexception-50": "In-app license not found",
+      "Cloudadminexception-51": "In-app feature already pending downgrade"
     }
   },
   "sw-in-app-purchase-price-box": {

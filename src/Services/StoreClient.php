@@ -61,7 +61,7 @@ class StoreClient
                 ],
             );
         } catch (ClientException $e) {
-            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+            throw ExtensionStoreException::createInAppPurchaseApiExceptionFromClientError($e);
         }
 
         return [
@@ -87,7 +87,7 @@ class StoreClient
                 ],
             );
         } catch (ClientException $e) {
-            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+            throw ExtensionStoreException::createInAppPurchaseApiExceptionFromClientError($e);
         }
 
         return json_decode((string) $response->getBody(), true);
@@ -108,7 +108,7 @@ class StoreClient
                 ],
             );
         } catch (ClientException $e) {
-            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+            throw ExtensionStoreException::createInAppPurchaseApiExceptionFromClientError($e);
         }
 
         return json_decode((string) $response->getBody(), true);
@@ -135,7 +135,7 @@ class StoreClient
                 ],
             );
         } catch (ClientException $e) {
-            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+            throw ExtensionStoreException::createInAppPurchaseApiExceptionFromClientError($e);
         }
 
         return json_decode((string) $response->getBody(), true);
@@ -161,7 +161,7 @@ class StoreClient
                 ],
             );
         } catch (ClientException $e) {
-            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+            throw ExtensionStoreException::createInAppPurchaseApiExceptionFromClientError($e);
         }
 
         return CartStruct::fromArray(json_decode((string) $response->getBody(), true));
@@ -180,7 +180,7 @@ class StoreClient
                 ],
             );
         } catch (ClientException $e) {
-            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+            throw ExtensionStoreException::createInAppPurchaseApiExceptionFromClientError($e);
         }
     }
 
@@ -201,7 +201,7 @@ class StoreClient
 
             return json_decode((string) $response->getBody(), true);
         } catch (ClientException $e) {
-            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+            throw ExtensionStoreException::createInAppPurchaseApiExceptionFromClientError($e);
         }
     }
 
@@ -222,7 +222,7 @@ class StoreClient
                 ],
             );
         } catch (ClientException $e) {
-            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+            throw ExtensionStoreException::createInAppPurchaseApiExceptionFromClientError($e);
         }
 
         $inAppPurchaseCart = InAppPurchaseCartStruct::fromArray(json_decode((string) $response->getBody(), true));
@@ -252,7 +252,7 @@ class StoreClient
                 ],
             );
         } catch (ClientException $e) {
-            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+            throw ExtensionStoreException::createInAppPurchaseApiExceptionFromClientError($e);
         }
 
         return new JsonResponse(null, 201);
@@ -270,7 +270,7 @@ class StoreClient
                 ],
             );
         } catch (ClientException $e) {
-            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+            throw ExtensionStoreException::createInAppPurchaseApiExceptionFromClientError($e);
         }
 
         return InAppPurchaseCollection::fromArray(json_decode((string) $response->getBody(), true));
@@ -288,7 +288,7 @@ class StoreClient
                 ],
             );
         } catch (ClientException $e) {
-            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+            throw ExtensionStoreException::createInAppPurchaseApiExceptionFromClientError($e);
         }
 
         return InAppPurchaseStruct::fromArray(json_decode((string) $response->getBody(), true));

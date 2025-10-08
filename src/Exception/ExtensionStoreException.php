@@ -9,15 +9,14 @@ use Shopware\Core\Framework\HttpException;
 use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Store\Exception\InvalidExtensionIdException;
 use Shopware\Core\Framework\Store\Exception\InvalidVariantIdException;
-use Shopware\Core\Framework\Store\Exception\StoreApiException;
 use Symfony\Component\HttpFoundation\Response;
 
 #[Package('checkout')]
 class ExtensionStoreException extends HttpException
 {
-    public static function createStoreApiExceptionFromClientError(ClientException $clientException): StoreApiException
+    public static function createInAppPurchaseApiExceptionFromClientError(ClientException $clientException): InAppPurchaseApiException
     {
-        return new StoreApiException($clientException);
+        return new InAppPurchaseApiException($clientException);
     }
 
     public static function invalidExtensionId(): InvalidExtensionIdException

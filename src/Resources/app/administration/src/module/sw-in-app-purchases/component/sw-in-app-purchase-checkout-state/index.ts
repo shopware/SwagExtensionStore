@@ -19,15 +19,6 @@ export default Shopware.Component.wrapComponentConfig({
         },
     },
 
-    data() {
-        return {
-            allowedErrors: [
-                'The requested in-app feature has already been purchased',
-                'Das angefragte In-App Feature wurde bereits erworben',
-            ],
-        };
-    },
-
     computed: {
         classes() {
             return {
@@ -86,13 +77,7 @@ export default Shopware.Component.wrapComponentConfig({
                 return this.$t(`sw-in-app-purchase-checkout-state.${slugifiedSnippet}`);
             }
 
-            // if it does not exist in the allowedErrors return the default error message
-            if (!this.allowedErrors.includes(this.error)) {
-                return this.$t('sw-in-app-purchase-checkout-state.errorSubtitle');
-            }
-
-            // if it exists in the allowedErrors it comes from SBP and is already translated
-            return this.error;
+            return this.$t('sw-in-app-purchase-checkout-state.errorSubtitle');
         },
     },
 });
