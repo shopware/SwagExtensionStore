@@ -23,7 +23,7 @@ export default class ExtensionStoreService {
     }
 
     public orderVariantsByPricePerMonth(variants: ExtensionVariant[]): ExtensionVariant[] {
-        return variants.sort((first, second) => {
+        return variants.toSorted((first, second) => {
             const firstPrice = this.getPriceFromVariant(first, true);
             const secondPrice = this.getPriceFromVariant(second, true);
 
@@ -36,7 +36,7 @@ export default class ExtensionStoreService {
             return variants;
         }
 
-        return variants.sort((first, second) => {
+        return variants.toSorted((first, second) => {
             if (!first.duration || !second.duration) {
                 return 0;
             }
