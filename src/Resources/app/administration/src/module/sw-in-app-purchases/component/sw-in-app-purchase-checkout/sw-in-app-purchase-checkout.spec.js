@@ -46,13 +46,14 @@ async function createWrapper() {
                         return Promise.resolve();
                     },
                     getPriceModels: () => {
-                        return Promise.resolve([{
+                        return Promise.resolve({
                             type: 'rent',
                             price: 0.99,
                             duration: 1,
                             variant: 'monthly',
-                            conditionsType: null
-                        }]);
+                            conditionsType: null,
+                            preselectedVariant: 'monthly'
+                        });
                     }
                 }
             },
@@ -205,6 +206,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
     });
 
     it('catches error if createCart fails', async () => {
+        Shopware.Utils.debug.error = jest.fn();
+
         wrapper.vm.inAppPurchasesService.createCart = () => {
             return Promise.reject(new Error('Test error'));
         };
@@ -223,7 +226,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         wrapper.vm.variant = 'service';
         wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
 
-        wrapper.vm.onPurchaseFeature();
+        wrapper.vm.createCart('monthly');
         expect(wrapper.vm.state).toBe('loading');
 
         await flushPromises();
@@ -250,8 +253,8 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 active: true
             }
         };
-        wrapper.vm.variant = 'service';
-        wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
+        wrapper.vm.inAppPurchaseCart = 'Dummy card';
+        wrapper.vm.extension = 'Dummy extension';
 
         wrapper.vm.onPurchaseFeature();
         expect(wrapper.vm.state).toBe('loading');

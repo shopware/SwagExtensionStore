@@ -9,17 +9,24 @@
         </p>
     </div>
 
+    <sw-in-app-purchase-checkout-subscription-change
+        v-if="subscriptionChange"
+        :purchase="purchase"
+        :cart="cart"
+    />
+
     <sw-in-app-purchase-price-box
-        v-if="purchase.priceModels.length === 1"
+        v-else-if="purchase.priceModels.length === 1"
         :price-model="priceModel"
     />
 
     <sw-radio-field
         v-else
         block
+        :value="variant"
         :options="purchaseOptions"
         class="sw-in-app-purchase-checkout-purchase__feature__choices"
-        @update:value="setPriceModel"
+        @update:value="updateVariant"
     />
 
     <div class="sw-in-app-purchase-checkout-purchase__subtext">

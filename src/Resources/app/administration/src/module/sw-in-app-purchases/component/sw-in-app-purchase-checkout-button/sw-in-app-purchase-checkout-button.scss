@@ -1,4 +1,8 @@
 .sw-in-app-purchase-checkout {
+    .mt-button {
+      width: 100%;
+    }
+
     .sw-modal {
         &__footer {
             grid-template-columns: 1fr;

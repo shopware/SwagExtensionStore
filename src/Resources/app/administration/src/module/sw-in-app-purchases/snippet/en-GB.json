@@ -31,5 +31,12 @@
       "monthly": "monthly",
       "yearly": "yearly"
     }
+  },
+  "sw-in-app-purchase-checkout-subscription-change": {
+    "current-plan": "Current plan",
+    "new-plan": "New plan",
+    "starting": "Starting",
+    "due-today": "Due today",
+    "info-lint": "Based on today’s date {today}, your prorated upgrade charge is {price}. Your regular {variant} charge of {fee} will start on {start}."
   }
 }

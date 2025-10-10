@@ -1,0 +1,36 @@
+<div class="sw-in-app-purchase-checkout-subscription-change">
+    <div class="sw-in-app-purchase-checkout-subscription-change__item">
+        <p class="sw-in-app-purchase-checkout-subscription-change__plan-name">
+            {{ $t('sw-in-app-purchase-checkout-subscription-change.current-plan') }}
+        </p>
+        <p class="sw-in-app-purchase-checkout-subscription-change__plan-price">
+            {{ getCurrentPrice }}*/{{ $t('sw-in-app-purchase-price-box.duration.' + cartPosition.variant) }}
+        </p>
+    </div>
+    <div class="sw-in-app-purchase-checkout-subscription-change__item">
+        <p class="sw-in-app-purchase-checkout-subscription-change__plan-name">
+            {{ $t('sw-in-app-purchase-checkout-subscription-change.new-plan') }}
+            <span class="sw-in-app-purchase-checkout-subscription-change__note">
+                ({{ $t('sw-in-app-purchase-checkout-subscription-change.starting') }} {{ formattedStartingDate }})
+            </span>
+        </p>
+        <p class="sw-in-app-purchase-checkout-subscription-change__plan-price">
+            {{ currencyFilter(cart.netPrice, 'EUR', 2) }}*/{{ $t('sw-in-app-purchase-price-box.duration.' + cartPosition.variant) }}
+        </p>
+    </div>
+
+    <div class="sw-in-app-purchase-checkout-subscription-change__divider" />
+
+    <div class="sw-in-app-purchase-checkout-subscription-change__item">
+        <p class="sw-in-app-purchase-checkout-subscription-change__due-day">
+            {{ $t('sw-in-app-purchase-checkout-subscription-change.due-today') }}
+        </p>
+        <p class="sw-in-app-purchase-checkout-subscription-change__due-day">
+            {{ currencyFilter(cartPosition.proratedNetPrice, 'EUR', 2) }}*
+        </p>
+    </div>
+
+    <p class="sw-in-app-purchase-checkout-subscription-change__info-hint">
+{{ infoHint }}
+</p>
+</div>

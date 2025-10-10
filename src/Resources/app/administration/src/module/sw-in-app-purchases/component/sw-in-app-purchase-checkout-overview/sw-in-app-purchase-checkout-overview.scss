@@ -6,13 +6,13 @@
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-xs);
 
+    .sw-field--checkbox {
+        margin-bottom: 0;
+    }
+
     .sw-gtc-checkbox {
         .sw-field__label {
             color: var(--color-text-primary-default);
-        }
-
-        .sw-field--checkbox {
-            margin-bottom: 0;
         }
     }
 
@@ -40,7 +40,7 @@
                     padding: 25px 19px;
 
                     .sw-field__radio-input {
-                        margin-top: var(--scale-size-4);
+                        margin-top: 4px;
                     }
 
                     .sw-field__radio-option-label {

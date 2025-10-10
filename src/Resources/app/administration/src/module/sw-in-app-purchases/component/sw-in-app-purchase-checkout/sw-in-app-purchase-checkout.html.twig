@@ -29,6 +29,8 @@
         v-model:variant="variant"
         :purchase="purchase"
         :producer="extension.producerName"
+        :cart="inAppPurchaseCart"
+        @update:variant="createCart"
     />
 
     <sw-in-app-purchase-checkout-state
