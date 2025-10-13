@@ -14,9 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 #[Package('checkout')]
 class ExtensionStoreException extends HttpException
 {
-    public static function createInAppPurchaseApiExceptionFromClientError(ClientException $clientException): InAppPurchaseApiException
+    public static function createStoreApiExceptionFromClientError(ClientException $clientException): ExtensionStoreApiException
     {
-        return new InAppPurchaseApiException($clientException);
+        return new ExtensionStoreApiException($clientException);
     }
 
     public static function invalidExtensionId(): InvalidExtensionIdException

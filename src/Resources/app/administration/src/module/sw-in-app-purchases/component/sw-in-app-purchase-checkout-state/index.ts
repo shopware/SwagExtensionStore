@@ -62,19 +62,12 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         errorSnippet(): string {
-            // if snippet is null, return the default error message
             if (!this.error) {
                 return this.$t('sw-in-app-purchase-checkout-state.errorSubtitle');
             }
 
-            const slugifiedSnippet = 'errors.' + this.error
-                .toLowerCase()
-                .replace(/[^a-zA-Z0-9_ -]/g, '') // remove all non-alphanumeric characters except underscores and spaces
-                .replace(/[\s_]+/g, '-'); // replace spaces and underscores with hyphens
-
-            // if snippet slug exists in translation file, it comes from the extension store and must be translated
-            if (this.$te(`sw-in-app-purchase-checkout-state.${slugifiedSnippet}`)) {
-                return this.$t(`sw-in-app-purchase-checkout-state.${slugifiedSnippet}`);
+            if (this.$te(`sw-in-app-purchase-checkout-state.errors.${this.error}`)) {
+                return this.$t(`sw-in-app-purchase-checkout-state.errors.${this.error}`);
             }
 
             return this.$t('sw-in-app-purchase-checkout-state.errorSubtitle');

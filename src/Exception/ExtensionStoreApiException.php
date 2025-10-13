@@ -7,7 +7,7 @@ use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Store\Exception\StoreApiException;
 
 #[Package('checkout')]
-class InAppPurchaseApiException extends StoreApiException
+class ExtensionStoreApiException extends StoreApiException
 {
     protected string $apiCode;
 
