@@ -18,7 +18,7 @@
             "themes": "Themes"
         },
         "listing":  {
-            "placeholderSearchBar": "Finde Erweiterungen..."
+            "placeholderSearchBar": "Finde Erweiterungen ..."
         },
         "updateWarning": {
             "headline": "Wir haben den Shopware Store aktualisiert.<br>Nimm Dir einen Moment Zeit, um auf die neueste Version zu aktualisieren.",
@@ -48,7 +48,7 @@
             "cloud": "Cloud"
         },
         "buy-modal": {
-            "paymentSelectionPlaceholder": "Wähle eine Zahlungsmethode...",
+            "paymentSelectionPlaceholder": "Wähle eine Zahlungsmethode ...",
             "checkboxes": {
                 "permissionsAndAppProvider": {
                     "introText": "Ich bin mir bewusst, dass diese App weitere",
