@@ -71,6 +71,6 @@ export default Shopware.Component.wrapComponentConfig({
             }
 
             return this.$t('sw-in-app-purchase-checkout-state.errorSubtitle');
-        },
-    },
+        }
+    }
 });
