@@ -170,7 +170,7 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         getError(errorResponse: ErrorResponse): string | null {
-            return errorResponse?.response?.data.errors[0]?.detail ?? null;
+            return errorResponse?.response?.data.errors[0]?.apiCode ?? null;
         },
 
         reset() {

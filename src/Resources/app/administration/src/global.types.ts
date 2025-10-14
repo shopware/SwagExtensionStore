@@ -9,5 +9,5 @@ declare global {
         inAppPurchasesService: InAppPurchasesService;
     }
 
-    type ErrorResponse = AxiosError<{ errors: Array<ShopwareHttpError> }>;
+    type ErrorResponse = AxiosError<{ errors: Array<ShopwareHttpError & { apiCode: string }> }>;
 }
