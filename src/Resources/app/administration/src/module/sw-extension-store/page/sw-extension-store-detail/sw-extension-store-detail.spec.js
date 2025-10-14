@@ -1,4 +1,7 @@
 import { mount } from '@vue/test-utils';
+import ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
+import ShopwareDiscountCampaignService from 'src/app/service/discount-campaign.service';
+import ExtensionStoreService from 'SwagExtensionStore/module/sw-extension-store/service/extension-store.service';
 
 Shopware.Component.register(
     'sw-extension-store-detail',
@@ -49,6 +52,7 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAp
         global: {
             renderStubDefaultSlot: true,
             stubs: {
+                'i18n-t': true,
                 'sw-meteor-page': await wrapTestComponent('sw-meteor-page'),
                 'sw-search-bar': {
                     template: '<div class="sw-search-bar"></div>'
@@ -76,6 +80,14 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAp
                     orderVariantsByRecommendation: () => [],
                     getOpenLink: () => (canBeOpened ? 'open-link' : null)
                 },
+                extensionStoreService: new ExtensionStoreService(
+                    new ShopwareDiscountCampaignService(),
+                    new ShopwareExtensionService(
+                        undefined,
+                        undefined,
+                        new ShopwareDiscountCampaignService()
+                    )
+                ),
                 extensionStoreDataService: {
                     getDetail: () => {
                         return testExtension;
@@ -182,6 +194,95 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
         expect(extensionHelperService.downloadAndActivateExtension).toHaveBeenCalledTimes(1);
         expect(cacheApiService.clear).not.toHaveBeenCalled();
         expect(window.location.reload).toHaveBeenCalledTimes(1);
+    });
+
+    describe('verify smart bar price', () => {
+        beforeEach(() => {
+            Shopware.State.get('shopwareExtensions').myExtensions = {
+                data: [{
+                    active: true,
+                    name: 'SomeOtherExtension',
+                    storeLicense: { variants: [{}] },
+                    id: 555
+                }]
+            };
+        });
+
+        it('should render "free" when extension is not licensed and free', async () => {
+            const wrapper = await createWrapper({
+                variants: [{ type: 'free' }],
+                storeLicense: null
+            });
+            await flushPromises();
+
+            expect(wrapper.get('.sw-extension-store-detail__price-free').html())
+                .toContain('sw-extension-store.general.labelFree');
+        });
+
+        it('should render monthly price when extension is not licensed', async () => {
+            const wrapper = await createWrapper({
+                variants: [{
+                    type: 'rent',
+                    netPrice: 10,
+                    netPricePerMonth: 10,
+                    duration: 1
+                }],
+                storeLicense: null
+            });
+            await flushPromises();
+
+            expect(wrapper.get('.sw-extension-store-detail__price').html())
+                .toContain('sw-extension-store.general.labelPricePerMonth');
+        });
+
+        it('should render monthly from price when extension is not licensed', async () => {
+            const wrapper = await createWrapper({
+                variants: [{
+                    type: 'rent',
+                    netPrice: 10,
+                    netPricePerMonth: 10,
+                    duration: 1
+                }, {
+                    type: 'rent',
+                    netPrice: 96,
+                    netPricePerMonth: 8,
+                    duration: 12
+                }],
+                storeLicense: null
+            });
+            await flushPromises();
+
+            expect(wrapper.get('.sw-extension-store-detail__price').html())
+                .toContain('sw-extension-store.general.labelFromPricePerMonth');
+        });
+
+        it('should render sale badge when extension is not licensed and has active discount', async () => {
+            const wrapper = await createWrapper({
+                variants: [{
+                    type: 'rent',
+                    netPrice: 10,
+                    netPricePerMonth: 10,
+                    duration: 1,
+                    discountCampaign: {
+                        discountedPrice: 6,
+                        discountedPricePerMonth: 6,
+                        discountAppliesForMonths: 3,
+                        startDate: '2021-01-27T00:01:00+01:00',
+                        endDate: '2121-01-28T00:01:00+01:00'
+                    }
+                }, {
+                    type: 'rent',
+                    netPrice: 96,
+                    netPricePerMonth: 8,
+                    duration: 12
+                }],
+                storeLicense: null
+            });
+            await flushPromises();
+
+            expect(wrapper.get('.sw-extension-store-detail__price').text())
+                .toContain('sw-extension-store.general.labelSale');
+        });
     });
 
     describe('verify smart bar primary action buttons', () => {
@@ -319,6 +420,26 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
 
             expect(wrapper.get('.sw-extension-store-detail__action-enterprise-contact').text())
                 .toBe('sw-extension-store.detail.enterpriseContactLinkText');
+        });
+
+        it('should render "free" when extension is not licensed and free', async () => {
+            Shopware.State.get('shopwareExtensions').myExtensions = {
+                data: [{
+                    active: true,
+                    name: 'SomeOtherExtension',
+                    storeLicense: { variants: [{}] },
+                    id: 555
+                }]
+            };
+
+            const wrapper = await createWrapper({
+                variants: [{ type: 'free' }],
+                storeLicense: null
+            });
+            await flushPromises();
+
+            expect(wrapper.get('.sw-extension-store-detail__price-free').html())
+                .toContain('sw-extension-store.general.labelFree');
         });
 
         /* eslint-disable-next-line max-len */

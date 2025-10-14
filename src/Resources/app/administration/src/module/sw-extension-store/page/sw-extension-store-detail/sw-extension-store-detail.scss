@@ -134,9 +134,32 @@
             margin: 0 0 10px 0;
         }
 
-        .sw-extension-store-detail__net-price,
-        .sw-extension-store-detail__rent-suffix {
-            font-weight: $font-weight-semi-bold;
+        .sw-extension-store-detail__price {
+            color: var(--color-text-secondary-default);
+
+            strong {
+                color: var(--color-text-primary-default);
+            }
+
+            &-badge-sale {
+                background-color: $color-crimson-400;
+                border-radius: $border-radius-pill;
+                color: $color-white;
+                display: inline-block;
+                font-size: $font-size-xxs;
+                font-weight: $font-weight-medium;
+                height: $line-height-xs;
+                line-height: $line-height-xs;
+                margin-right: 4px;
+                padding: 0 5px;
+                vertical-align: bottom;
+            }
+
+            &-discounted {
+                strong {
+                    color: $color-crimson-400;
+                }
+            }
         }
 
         .sw-extension-store-detail__in-app-purchases__badge {
@@ -148,25 +171,9 @@
             margin-bottom: 0;
         }
 
-        .is--discounted {
-            color: $color-crimson-400;
-            text-align: right;
-
-            > .sw-extension-store-detail__net-price {
-                text-decoration: line-through;
-            }
-
-            > .sw-extension-store-detail__discounted-price {
-                margin-left: 4px;
-                font-weight: bolder;
-                font-size: $font-size-m;
-            }
-        }
-
         .sw-extension-store-detail__discounted-price-info {
-            color: $color-gray-500;
+            color: var(--color-text-secondary-default);
             font-size: $font-size-xxs;
-            font-weight: $font-weight-semi-bold;
             margin-top: 0;
             text-align: right;
         }

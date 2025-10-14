@@ -6,6 +6,7 @@ import ShopwareExtensionService from 'src/module/sw-extension/service/shopware-e
 import ExtensionStoreActionService from 'src/module/sw-extension/service/extension-store-action.service';
 import ShopwareDiscountCampaignService from 'src/app/service/discount-campaign.service';
 import StoreApiService from 'src/core/service/api/store.api.service';
+import ExtensionStoreService from 'SwagExtensionStore/module/sw-extension-store/service/extension-store.service';
 import ExtensionStoreLicensesService from
     'SwagExtensionStore/module/sw-extension-store/service/extension-store-licenses.service';
 
@@ -52,6 +53,11 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
 
         const extensionStoreLicensesService = new ExtensionStoreLicensesService(httpClient, loginService);
 
+        const extensionStoreService = new ExtensionStoreService(
+            new ShopwareDiscountCampaignService(),
+            shopwareExtensionService
+        );
+
         const wrapper = mount(await Shopware.Component.build('sw-extension-buy-modal'), {
             props: {
                 extension: provideTestExtension(overrides)
@@ -63,9 +69,11 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
                 ],
                 provide: {
                     shopwareExtensionService,
-                    extensionStoreLicensesService
+                    extensionStoreLicensesService,
+                    extensionStoreService
                 },
                 stubs: {
+                    'i18n-t': true,
                     'sw-modal': {
                         template: `<div class="sw-modal">
                                    <slot name="default"></slot>
@@ -362,5 +370,433 @@ describe('src/module/sw-extension/component/sw-extension-buy-modal', () => {
         await wrapper.getComponent('sw-extension-adding-success-stub').trigger('close');
 
         expect(wrapper.emitted('modal-close')).toBeTruthy();
+    });
+
+    it('renders free variant', async () => {
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78674,
+                type: 'free',
+                netPrice: 0,
+                discountCampaign: null
+            }]
+        });
+
+        const badgeEl = wrapper.find('.sw-extension-buy-modal__variants-card-badge');
+
+        expect(badgeEl.exists()).toBe(false);
+    });
+
+    it('renders monthly rent variant', async () => {
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78673,
+                type: 'rent',
+                duration: 1,
+                netPrice: 10,
+                netPricePerMonth: 10,
+                discountCampaign: null
+            }]
+        });
+
+        const variantEl = wrapper.find('.sw-extension-buy-modal__rent.is--monthly');
+
+        expect(variantEl.exists()).toBe(true);
+        expect(variantEl.html())
+            .toContain('sw-extension-store.general.labelPricePerMonth');
+        expect(variantEl.text())
+            .toContain('sw-extension-store.buy-modal.rent.monthly.cancellationInformation');
+    });
+
+    it('renders monthly rent variant with discount campaign', async () => {
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78673,
+                type: 'rent',
+                duration: 1,
+                netPrice: 10,
+                netPricePerMonth: 10,
+                discountCampaign: {
+                    discountedPrice: 7,
+                    discountedPricePerMonth: 7,
+                    discountAppliesForMonths: 3,
+                    startDate: '2021-01-27T00:01:00+01:00',
+                    endDate: '2121-01-28T00:01:00+01:00'
+                }
+            }]
+        });
+
+        const variantEl = wrapper.find('.sw-extension-buy-modal__rent.is--monthly');
+        const badgeEl = wrapper.find('.sw-extension-buy-modal__variants-card-badge.is--monthly');
+
+        expect(variantEl.exists()).toBe(true);
+        expect(variantEl.html())
+            .toContain('sw-extension-store.general.labelPricePerMonth');
+        expect(variantEl.text())
+            .toContain('sw-extension-store.buy-modal.rent.monthly.cancellationInformation');
+        expect(variantEl.html())
+            .toContain('sw-extension-store.buy-modal.rent.monthly.discountInformation');
+        expect(badgeEl.text())
+            .toBe('sw-extension-store.general.labelSavings');
+    });
+
+    it('renders yearly rent variant', async () => {
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78673,
+                type: 'rent',
+                duration: 1,
+                netPrice: 10,
+                netPricePerMonth: 10,
+                discountCampaign: null
+            }, {
+                id: 78674,
+                type: 'rent',
+                duration: 12,
+                netPrice: 100,
+                netPricePerMonth: 8.33,
+                discountCampaign: null
+            }]
+        });
+
+        const variantEl = wrapper.find('.sw-extension-buy-modal__rent.is--yearly');
+        const badgeEl = wrapper.find('.sw-extension-buy-modal__variants-card-badge.is--yearly');
+
+        expect(variantEl.exists()).toBe(true);
+        expect(variantEl.html())
+            .toContain('sw-extension-store.general.labelPricePerYear');
+        expect(variantEl.text())
+            .toContain('sw-extension-store.buy-modal.rent.yearly.cancellationInformation');
+        expect(badgeEl.text())
+            .toBe('sw-extension-store.general.labelSavings');
+    });
+
+    it('renders multiple variants', async () => {
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78672,
+                type: 'free',
+                netPrice: 0,
+                discountCampaign: null
+            }, {
+                id: 78673,
+                type: 'rent',
+                duration: 1,
+                netPrice: 10,
+                netPricePerMonth: 10,
+                discountCampaign: null
+            }, {
+                id: 78674,
+                type: 'rent',
+                duration: 12,
+                netPrice: 100,
+                netPricePerMonth: 8.33,
+                discountCampaign: null
+            }, {
+                id: 78675,
+                type: 'buy',
+                netPrice: 100,
+                discountCampaign: null
+            }]
+        });
+
+        const variantFreeEl = wrapper.find('.sw-extension-buy-modal__free');
+        const variantMonthlyEl = wrapper.find('.sw-extension-buy-modal__rent.is--monthly');
+        const variantYearlyEl = wrapper.find('.sw-extension-buy-modal__rent.is--yearly');
+        const variantBuyEl = wrapper.find('.sw-extension-buy-modal__buy');
+
+        expect(variantFreeEl.exists()).toBe(true);
+        expect(variantMonthlyEl.exists()).toBe(true);
+        expect(variantYearlyEl.exists()).toBe(true);
+        expect(variantBuyEl.exists()).toBe(true);
+    });
+
+    it('renders yearly rent variant with discount campaign', async () => {
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78673,
+                type: 'rent',
+                duration: 1,
+                netPrice: 10,
+                netPricePerMonth: 10,
+                discountCampaign: null
+            }, {
+                id: 78674,
+                type: 'rent',
+                duration: 12,
+                netPrice: 100,
+                netPricePerMonth: 8.33,
+                discountCampaign: {
+                    discountedPrice: 70,
+                    discountedPricePerMonth: 5.83,
+                    discountAppliesForMonths: null,
+                    startDate: '2021-01-27T00:01:00+01:00',
+                    endDate: '2121-01-28T00:01:00+01:00'
+                }
+            }]
+        });
+
+        const variantEl = wrapper.find('.sw-extension-buy-modal__rent.is--yearly');
+        const badgeEl = wrapper.find('.sw-extension-buy-modal__variants-card-badge.is--yearly');
+
+        expect(variantEl.exists()).toBe(true);
+        expect(variantEl.html())
+            .toContain('sw-extension-store.general.labelPricePerYear');
+        expect(variantEl.text())
+            .toContain('sw-extension-store.buy-modal.rent.yearly.cancellationInformation');
+        expect(variantEl.html())
+            .toContain('sw-extension-store.buy-modal.rent.yearly.discountInformation');
+        expect(badgeEl.text())
+            .toBe('sw-extension-store.general.labelSavings');
+    });
+
+    it('renders actual price for monthly rent variant', async () => {
+        const httpClient = {
+            get: () => Promise.resolve(),
+            post: (route) => {
+                if (route === '/_action/extension-store/cart/new') {
+                    return Promise.resolve({
+                        data: {
+                            bookingShop: {},
+                            grossPrice: 11.9,
+                            licenseShop: {},
+                            positions: [{
+                                netPrice: 10,
+                                firstMonthFree: false
+                            }]
+                        }
+                    });
+                }
+
+                if (route === '/_action/store/checklogin') {
+                    return Promise.resolve({
+                        data: {
+                            userInfo: { email: 'j.doe@shopware.com' }
+                        }
+                    });
+                }
+
+                return Promise.resolve();
+            }
+        };
+
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78673,
+                type: 'rent',
+                duration: 1,
+                netPrice: 10,
+                netPricePerMonth: 10,
+                discountCampaign: null,
+                trialPhaseIncluded: true
+            }]
+        }, httpClient);
+
+        await flushPromises();
+
+        const actualPrice = wrapper.find('.sw-extension-buy-modal__variant-summary-actual-price');
+
+        expect(actualPrice.html())
+            .toContain('sw-extension-store.general.labelPricePerMonth');
+    });
+
+    it('renders actual price for monthly rent variant with trial phase', async () => {
+        const httpClient = {
+            get: () => Promise.resolve(),
+            post: (route) => {
+                if (route === '/_action/extension-store/cart/new') {
+                    return Promise.resolve({
+                        data: {
+                            bookingShop: {},
+                            grossPrice: 11.9,
+                            licenseShop: {},
+                            positions: [{
+                                netPrice: 10,
+                                firstMonthFree: true
+                            }]
+                        }
+                    });
+                }
+
+                if (route === '/_action/store/checklogin') {
+                    return Promise.resolve({
+                        data: {
+                            userInfo: { email: 'j.doe@shopware.com' }
+                        }
+                    });
+                }
+
+                return Promise.resolve();
+            }
+        };
+
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78673,
+                type: 'rent',
+                duration: 1,
+                netPrice: 10,
+                netPricePerMonth: 10,
+                discountCampaign: null,
+                trialPhaseIncluded: true
+            }]
+        }, httpClient);
+
+        await flushPromises();
+
+        const actualPrice = wrapper.find('.sw-extension-buy-modal__variant-summary-actual-price');
+        const finalPrice = wrapper.find('.sw-extension-buy-modal__variant-summary-price-subline.is--final-price');
+
+        expect(actualPrice.html())
+            .toContain('sw-extension-store.general.labelPriceFirstMonth');
+        expect(finalPrice.exists()).toBe(true);
+        expect(finalPrice.html())
+            .toContain('sw-extension-store.buy-modal.rent.monthly.finalPrice');
+    });
+
+    it('renders actual price for yearly rent variant', async () => {
+        const httpClient = {
+            get: () => Promise.resolve(),
+            post: (route) => {
+                if (route === '/_action/extension-store/cart/new') {
+                    return Promise.resolve({
+                        data: {
+                            bookingShop: {},
+                            grossPrice: 119.00,
+                            licenseShop: {},
+                            positions: [{
+                                netPrice: 100,
+                                firstMonthFree: false
+                            }]
+                        }
+                    });
+                }
+
+                if (route === '/_action/store/checklogin') {
+                    return Promise.resolve({
+                        data: {
+                            userInfo: { email: 'j.doe@shopware.com' }
+                        }
+                    });
+                }
+
+                return Promise.resolve();
+            }
+        };
+
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78674,
+                type: 'rent',
+                duration: 12,
+                netPrice: 100,
+                netPricePerMonth: 8.33,
+                discountCampaign: null,
+                trialPhaseIncluded: true
+            }]
+        }, httpClient);
+
+        await flushPromises();
+
+        const actualPrice = wrapper.find('.sw-extension-buy-modal__variant-summary-actual-price');
+
+        expect(actualPrice.html())
+            .toContain('sw-extension-store.general.labelPricePerYear');
+    });
+
+    it('renders actual price for yearly rent variant with trial phase', async () => {
+        const httpClient = {
+            get: () => Promise.resolve(),
+            post: (route) => {
+                if (route === '/_action/extension-store/cart/new') {
+                    return Promise.resolve({
+                        data: {
+                            bookingShop: {},
+                            grossPrice: 119.00,
+                            licenseShop: {},
+                            positions: [{
+                                netPrice: 100,
+                                firstMonthFree: true
+                            }]
+                        }
+                    });
+                }
+
+                if (route === '/_action/store/checklogin') {
+                    return Promise.resolve({
+                        data: {
+                            userInfo: { email: 'j.doe@shopware.com' }
+                        }
+                    });
+                }
+
+                return Promise.resolve();
+            }
+        };
+
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78674,
+                type: 'rent',
+                duration: 12,
+                netPrice: 100,
+                netPricePerMonth: 8.33,
+                discountCampaign: null,
+                trialPhaseIncluded: true
+            }]
+        }, httpClient);
+
+        await flushPromises();
+
+        const actualPrice = wrapper.find('.sw-extension-buy-modal__variant-summary-actual-price');
+        const finalPrice = wrapper.find('.sw-extension-buy-modal__variant-summary-price-subline.is--final-price');
+
+        expect(actualPrice.html())
+            .toContain('sw-extension-store.general.labelPriceFirstMonth');
+        expect(finalPrice.exists()).toBe(true);
+        expect(finalPrice.html())
+            .toContain('sw-extension-store.buy-modal.rent.yearly.finalPrice');
+    });
+
+    it('renders purchase button label for free variant', async () => {
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78674,
+                type: 'free',
+                netPrice: 0,
+                discountCampaign: null
+            }]
+        });
+
+        expect(wrapper.find('.sw-extension-buy-modal__purchase-button').text())
+            .toBe('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.free');
+    });
+
+    it('renders purchase button label for rent variant', async () => {
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78674,
+                type: 'rent',
+                netPrice: 100,
+                discountCampaign: null
+            }]
+        });
+
+        expect(wrapper.find('.sw-extension-buy-modal__purchase-button').text())
+            .toBe('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.rent');
+    });
+
+    it('renders purchase button label for buy variant', async () => {
+        const wrapper = await createWrapper({
+            variants: [{
+                id: 78674,
+                type: 'buy',
+                netPrice: 100,
+                discountCampaign: null
+            }]
+        });
+
+        expect(wrapper.find('.sw-extension-buy-modal__purchase-button').text())
+            .toBe('sw-extension-store.component.sw-extension-buy-modal.purchaseButtonsLabels.buy');
     });
 });
