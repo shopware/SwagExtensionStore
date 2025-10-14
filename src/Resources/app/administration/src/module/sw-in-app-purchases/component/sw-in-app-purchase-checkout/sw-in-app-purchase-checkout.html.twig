@@ -36,7 +36,7 @@
     <sw-in-app-purchase-checkout-state
         v-if="['loading', 'success', 'error'].includes(state)"
         :state="state"
-        :error-snippet="errorMessage"
+        :error="errorMessage"
     />
 
     <template #modal-footer>

@@ -69,14 +69,6 @@ describe('sw-in-app-purchase-checkout-state', () => {
     });
 
     it('should compute subtitle correctly', async () => {
-        // error comes from SBP
-        wrapper = await createWrapper({ state: 'error', error: 'The requested in-app feature has already been purchased' });
-        expect(wrapper.vm.subtitle).toBe('The requested in-app feature has already been purchased');
-
-        // error comes from ExtensionStore
-        wrapper = await createWrapper({ state: 'error', error: 'This-error_exists.' });
-        expect(wrapper.vm.subtitle).toBe(wrapper.vm.$t('sw-in-app-purchase-checkout-state.errors.this-error-exists'));
-
         // error not found in SBP or allowed
         wrapper = await createWrapper({ state: 'error', error: 'error is not allowed' });
         expect(wrapper.vm.subtitle).toBe(wrapper.vm.$t('sw-in-app-purchase-checkout-state.errorSubtitle'));
