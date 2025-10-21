@@ -1,5 +1,6 @@
 import template from './sw-extension-store-index.html.twig';
 import './sw-extension-store-index.scss';
+import { handle } from '@shopware-ag/meteor-admin-sdk/es/channel';
 
 /**
  * @private
@@ -45,10 +46,6 @@ export default {
 
             return isTheme ? 'themes' : 'apps';
         },
-        // returns the iframe DOM element, currently we can not select it by an ID because we are using the sw-iframe-renderer component
-        getIframe() {
-            return document.querySelector('iframe');
-        }
     },
 
     watch: {
@@ -67,35 +64,43 @@ export default {
     created() {
         this.createdComponent();
 
-        // register an event listener on initialization to listen for messages from the iframe
-        window.addEventListener('message', this.checkout);
-    },
+        handle('swag-extension-store-channel', async (data) => {
+            if (data.action === 'handshake') {
+                const extensions = (await this.extensionStoreActionService.getMyExtensions()).map((extension) => extension.name);
+                await this.shopwareExtensionService.checkLogin();
+                const shopwareVersion = Shopware.Context.app.config.version;
+                const language = Shopware.Context.app.fallbackLocale;
+                const isLoggedIn = Shopware.Store.get('shopwareExtensions').userInfo !== null;
 
-    methods: {
-        // proof of a working checkout with data from our extension store storefront
-        async checkout(event) {
-            // we only want to handle purchase messages from our iframe
-            if (event.data.action === 'purchase-event') {
-                // from the event we now get the uuid of the product and option id of the variant which is also a uuid
-                console.log(event.data.optionId, event.data.productId);
 
-                // card request and order request in a row, in a real world scenario you would probably want to handle errors and edge cases
+                return {
+                    shopwareVersion: shopwareVersion,
+                    owningExtensions: extensions,
+                    sessionToken: data.sessionToken,
+                    language: language,
+                    isLoggedIn: isLoggedIn,
+                    success: true,
+                };
+            }
+            if (data.action === 'routeTo') {
+                this.$router.push({ name: data.route });
+            }
+            if (data.action === 'purchase') {
                 const cartResponse = await this.extensionStoreLicensesService.newCart(
-                  event.data.productId,
-                  event.data.optionId
+                  data.productId,
+                  data.variantId
                 );
 
-                const orderResponse = await this.extensionStoreLicensesService.orderCart(cartResponse.data);
-                console.log(orderResponse);
+                await this.extensionStoreLicensesService.orderCart(cartResponse.data);
 
-                // respond back to the iframe that everything was successful - in a real world scenario you would also want to handle errors here
-                this.getIframe.contentWindow.postMessage({
-                    action: 'purchase-response',
+                return {
+                    sessionToken: data.sessionToken,
                     success: true,
-                }, '*')
+                }
             }
-        },
-
+        });
+    },
+    methods: {
         createdComponent() {
             this.checkStoreUpdates();
         },
