@@ -1,30 +1,17 @@
 import { mount } from '@vue/test-utils';
-import ExtensionErrorService from 'src/module/sw-extension/service/extension-error.service';
 import 'src/app/component/meteor/sw-meteor-page';
 
 Shopware.Component.register(
     'sw-extension-store-index',
     () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-index'),
 );
-Shopware.Component.register(
-    'sw-extension-store-detail',
-    () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-detail'),
-);
 
-const myExtensionsMock = jest.fn(() => Promise.resolve([{
-    name: 'SwagExtensionStore',
-    latestVersion: null,
-    version: '1.3.0',
-}]));
-
-Shopware.Application.addServiceProvider('extensionErrorService', () => {
-    return new ExtensionErrorService({}, {
-        title: 'global.default.error',
-        message: 'global.notification.unspecifiedSaveErrorMessage',
-    });
-});
-
-async function createWrapper() {
+async function createWrapper(channelService = null) {
+    if (channelService === null) {
+        channelService = {
+            register: jest.fn(),
+        };
+    }
     return mount(await Shopware.Component.build('sw-extension-store-index'), {
         props: {},
         global: {
@@ -38,162 +25,28 @@ async function createWrapper() {
                 }),
             },
             stubs: {
-                /* sw-meteor-page */
-                'sw-meteor-page': await wrapTestComponent('sw-meteor-page'),
-                'sw-notification-center': true,
-                'sw-help-center-v2': true,
-                'sw-meteor-page-context': true,
-                'sw-meteor-navigation': true,
-                'sw-tabs': true,
-                'sw-extension-component-section': true,
-                'sw-app-topbar-button': true,
-                'sw-search-bar': {
-                    template: '<div class="sw-search-bar"></div>',
-                },
-                /* sw-meteor-page */
-
-                'sw-loader': true,
-                'sw-tabs-item': true,
-                'router-view': true,
-                'sw-extension-store-error-card': true,
-                'sw-extension-store-update-warning': true,
-                'sw-help-center': true,
-                'sw-app-topbar-sidebar': true,
+                'sw-iframe-renderer': true,
             },
             provide: {
-                extensionStoreActionService: {
-                    getMyExtensions: myExtensionsMock,
-                },
-                shopwareExtensionService: {
-                    updateExtensionData: jest.fn(),
-                },
-                extensionErrorService: Shopware.Service('extensionErrorService'),
+                extensionStoreChannelService: channelService,
             },
         },
     });
 }
 
-const setSearchValueMock = jest.fn();
 describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-index', () => {
-    beforeAll(async () => {
-        Shopware.Store.register({
-            id: 'shopwareExtensions',
-            state: () => ({
-                search: {
-                    filter: {},
-                },
-            }),
-            actions: {
-                setSearchValue: setSearchValueMock,
-            },
-        });
-    });
-
-    beforeEach(async () => {
-        Shopware.Store.get('shopwareExtensions').search.filter = {};
-        setSearchValueMock.mockClear();
-        myExtensionsMock.mockClear();
-    });
-
     it('should be a Vue.JS component', async () => {
         const wrapper = await createWrapper();
 
         expect(wrapper.vm).toBeTruthy();
     });
 
-    it('should commit the search value to the store', async () => {
-        const wrapper = await createWrapper();
-        await flushPromises();
-
-        expect(setSearchValueMock).toHaveBeenCalledTimes(1);
-        expect(setSearchValueMock).toHaveBeenCalledWith({
-            key: 'page',
-            value: 1,
-        });
-        setSearchValueMock.mockClear();
-
-        const searchBar = wrapper.getComponent('.sw-search-bar');
-        await searchBar.vm.$emit('search', 'Nice theme');
-
-        expect(setSearchValueMock).toHaveBeenCalledWith({
-            key: 'term',
-            value: 'Nice theme',
-        });
-    });
-
-    it('should filter to only app extensions', async () => {
-        await createWrapper();
-
-        const filter = Shopware.Store.get('shopwareExtensions').search.filter;
-
-        expect(filter).toEqual({
-            group: 'apps',
-        });
-    });
-
-    it('should filter to only theme extensions', async () => {
-        const wrapper = await createWrapper();
-
-        wrapper.vm.$route.name = 'sw.extension.store.listing.theme';
-        await flushPromises();
-
-        const filter = Shopware.Store.get('shopwareExtensions').search.filter;
-
-        expect(filter).toEqual({
-            group: 'themes',
-        });
-    });
-
-    it('should show update message when newer version is available', async () => {
-        // Mock higher `latestVersion` to show update card
-        myExtensionsMock.mockImplementationOnce(() => Promise.resolve([{
-            name: 'SwagExtensionStore',
-            latestVersion: '1.4.0',
-            version: '1.3.0',
-        }]));
-
-        const wrapper = await createWrapper();
-
-        // Wait for loader to disappear
-        await flushPromises();
-
-        expect(wrapper.get('sw-extension-store-update-warning-stub').exists()).toBe(true);
-    });
-
-    it('should show listing errors on listing errors event', async () => {
-        const wrapper = await createWrapper();
-
-        // Wait for loader to disappear
-        await flushPromises();
-
-        // Mock listing error response
-        const listingError = new Error();
-        listingError.response = {
-            data: {
-                errors: [
-                    {
-                        code: 'FRAMEWORK__STORE_ERROR',
-                        detail: 'The given Shopware version is unknown, please contact our customer service',
-                        meta: {
-                            documentationLink: 'https://docs.shopware.com',
-                        },
-                        status: '500',
-                        title: 'Shopware version is unknown',
-                    },
-                ],
-            },
+    it('should use the register service method', async () => {
+        const channelService = {
+            register: jest.fn(),
         };
+        await createWrapper(channelService);
 
-        // Emit listing error on router view
-        await wrapper.getComponent('router-view-stub').vm.$emit('extension-listing-errors', listingError);
-
-        expect(wrapper.get('sw-extension-store-error-card-stub').attributes().title)
-            .toBe('Shopware version is unknown');
-
-        expect(wrapper.get('sw-extension-store-error-card-stub').attributes().variant)
-            .toBe('danger');
-
-        expect(wrapper.get('sw-extension-store-error-card-stub').text())
-            .toBe('The given Shopware version is unknown, please contact our customer service');
+        expect(channelService.register).toBeCalled();
     });
 });
