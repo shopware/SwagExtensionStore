@@ -1,11 +1,12 @@
 import ExtensionStoreService from './service/extension-store.service';
 import ExtensionStoreDataService from './service/extension-store-data.service';
 import ExtensionLicenseService from './service/extension-store-licenses.service';
+import {
+    ExtensionStoreChannelService,
+} from "SwagExtensionStore/module/sw-extension-store/service/extension-store-channel.service";
 
 
 Shopware.Component.register('sw-extension-store-index', () => import('./page/sw-extension-store-index'));
-Shopware.Component.register('sw-extension-store-listing', () => import('./page/sw-extension-store-listing'));
-Shopware.Component.register('sw-extension-store-detail', () => import('./page/sw-extension-store-detail'));
 Shopware.Component.register('sw-extension-store-slider', () => import('./component/sw-extension-store-slider'));
 Shopware.Component.register('sw-extension-store-listing-filter', () => import('./component/sw-extension-store-listing-filter'));
 Shopware.Component.register('sw-extension-buy-modal', () => import('./component/sw-extension-buy-modal'));
@@ -24,6 +25,15 @@ Shopware.Application.addServiceProvider('extensionStoreService', () => {
     return new ExtensionStoreService(
         Shopware.Service('shopwareDiscountCampaignService'),
         Shopware.Service('shopwareExtensionService')
+    );
+});
+
+Shopware.Application.addServiceProvider('extensionStoreChannelService', () => {
+    return new ExtensionStoreChannelService(
+        Shopware.Service('extensionStoreActionService'),
+        Shopware.Service('shopwareExtensionService'),
+        Shopware.Service('extensionStoreLicensesService'),
+        Shopware.Application.view.router,
     );
 });
 
@@ -48,62 +58,12 @@ Shopware.Module.register('sw-extension-store', {
     routePrefixPath: 'sw/extension',
     routes: {
         store: {
-            path: 'store',
-            redirect: {
-                name: 'sw.extension.store.listing'
-            },
+            path: 'store*',
             meta: {
                 privilege: 'system.extension_store'
             },
             component: 'sw-extension-store-index',
-            children: {
-                listing: {
-                    path: 'listing',
-                    component: 'sw-extension-store-listing',
-                    redirect: {
-                        name: 'sw.extension.store.listing.app'
-                    },
-                    meta: {
-                        privilege: 'system.extension_store'
-                    },
-                    children: {
-                        app: {
-                            path: 'app',
-                            component: 'sw-extension-store-listing',
-                            propsData: {
-                                isTheme: false
-                            },
-                            meta: {
-                                privilege: 'system.extension_store'
-                            }
-                        },
-                        theme: {
-                            path: 'theme',
-                            component: 'sw-extension-store-listing',
-                            propsData: {
-                                isTheme: true
-                            },
-                            meta: {
-                                privilege: 'system.extension_store'
-                            }
-                        }
-                    }
-                }
-            }
         },
-        'store.detail': {
-            component: 'sw-extension-store-detail',
-            path: 'store/detail/:id',
-            meta: {
-                parentPath: 'sw.extension.store',
-                privilege: 'system.extension_store'
-            },
-            props: {
-                default: (route) => {
-                    return { id: route.params.id };
-                }
-            }
-        }
     },
 
     /**
