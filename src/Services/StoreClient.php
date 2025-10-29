@@ -141,7 +141,7 @@ class StoreClient
         return json_decode((string) $response->getBody(), true);
     }
 
-    public function createCart(int $extensionId, int $variantId, Context $context): CartStruct
+    public function createCart(int|string $extensionId, int|string $variantId, Context $context): CartStruct
     {
         try {
             $response = $this->client->request(
@@ -157,6 +157,7 @@ class StoreClient
                                 'variantId' => $variantId,
                             ],
                         ],
+                        'mode' => 'newStore',
                     ],
                 ],
             );
