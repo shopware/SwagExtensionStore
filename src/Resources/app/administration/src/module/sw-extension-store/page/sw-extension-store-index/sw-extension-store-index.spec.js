@@ -6,12 +6,20 @@ Shopware.Component.register(
     () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-index'),
 );
 
-async function createWrapper(channelService = null) {
+async function createWrapper(channelService = null, systemConfigService = null) {
     if (channelService === null) {
         channelService = {
             register: jest.fn(),
         };
     }
+    if (systemConfigService === null) {
+        systemConfigService = {
+            getValues: jest.fn().mockResolvedValue({
+                'SwagExtensionStore.config.iframeUrl': 'https://store.shopware.com',
+            }),
+        };
+    }
+
     return mount(await Shopware.Component.build('sw-extension-store-index'), {
         props: {},
         global: {
@@ -29,6 +37,7 @@ async function createWrapper(channelService = null) {
             },
             provide: {
                 extensionStoreChannelService: channelService,
+                systemConfigApiService: systemConfigService,
             },
         },
     });
@@ -48,5 +57,15 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
         await createWrapper(channelService);
 
         expect(channelService.register).toBeCalled();
+    });
+
+    it ('should fetch the store URL from system config', async () => {
+        const systemConfigService = {
+            getValues: jest.fn(),
+        };
+
+        await createWrapper(null, systemConfigService);
+
+        expect(systemConfigService.getValues).toBeCalledWith('SwagExtensionStore.config');
     });
 });
