@@ -8,15 +8,28 @@ export default {
     template,
 
     // we have to add the extensionStoreLicensesService for the checkout example
-    inject: ['extensionStoreChannelService'],
+    inject: [
+        'extensionStoreChannelService',
+        'systemConfigApiService',
+    ],
 
     data() {
         return {
-
+            storeUrl: null,
         };
     },
 
-    created() {
+    async created() {
         this.extensionStoreChannelService.register();
+
+        try {
+            // TODO: find other way to store the iframe URL
+            const config = await this.systemConfigApiService.getValues('SwagExtensionStore.config');
+
+            this.storeUrl = config['SwagExtensionStore.config.iframeUrl'];
+
+        } catch (e) {
+            // Fallback to default store URL if config fetch fails
+        }
     },
 };
