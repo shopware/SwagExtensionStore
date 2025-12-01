@@ -1,3 +1,7 @@
 {% block sw_extension_store_index %}
-    <sw-iframe-renderer style="height: 100%;" src="http://localhost:3000" location-id="" />
+    <sw-iframe-renderer
+            style="height: 100%;"
+            :src="storeUrl"
+            location-id=""
+    />
 {% endblock %}
