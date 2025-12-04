@@ -123,7 +123,8 @@ export class ExtensionStoreChannelService {
         const extensions = (await this.extensionStoreActionService.getMyExtensions()).map((extension) => extension.name);
         await this.shopwareExtensionService.checkLogin();
         const shopwareVersion = Shopware.Context.app.config.version ?? '';
-        const language = Shopware.Context.app.fallbackLocale ?? '';
+        const rawLocale: unknown = Shopware.Store.get('session')?.currentLocale;
+        const language: string = typeof rawLocale === 'string' ? rawLocale : 'en-GB';
         const isLoggedIn = Shopware.Store.get('shopwareExtensions').userInfo !== null;
 
         return {
