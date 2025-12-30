@@ -10,6 +10,7 @@ async function createWrapper(channelService = null, systemConfigService = null) 
     if (channelService === null) {
         channelService = {
             register: jest.fn(),
+            unregister: jest.fn(),
         };
     }
     if (systemConfigService === null) {
@@ -53,6 +54,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
     it('should use the register service method', async () => {
         const channelService = {
             register: jest.fn(),
+            unregister: jest.fn(),
         };
         await createWrapper(channelService);
 
@@ -62,6 +64,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
     it ('should fetch the store URL from system config', async () => {
         const systemConfigService = {
             getValues: jest.fn(),
+            unregister: jest.fn(),
         };
 
         await createWrapper(null, systemConfigService);

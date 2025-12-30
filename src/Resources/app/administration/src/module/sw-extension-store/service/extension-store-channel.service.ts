@@ -5,7 +5,7 @@ import type ExtensionStoreLicensesService from './extension-store-licenses.servi
 import type { Router } from 'vue-router';
 import type { ShopwareMessageTypes } from '@shopware-ag/meteor-admin-sdk/es/message-types';
 
-type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase';
+type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate';
 
 type StoreChannelActionData = {
     action: StoreChannelAction;
@@ -17,6 +17,10 @@ type HandshakeActionData = StoreChannelActionData & {
 
 type RouteToActionData = StoreChannelActionData & {
     route: string;
+};
+
+type RouterUpdateActionData = StoreChannelActionData & {
+    urlSegments: string[];
 };
 
 type PurchaseActionData = StoreChannelActionData & {
@@ -32,6 +36,7 @@ type StoreContext = {
     language: string;
     isLoggedIn: boolean;
     success: boolean;
+    currentRoute: string;
 };
 
 type PurchaseResponse = {
@@ -40,6 +45,8 @@ type PurchaseResponse = {
 };
 
 export class ExtensionStoreChannelService {
+    private unsubscribeFunction?: () => void;
+
     constructor(
         private readonly extensionStoreActionService: ExtensionStoreActionService,
         private readonly shopwareExtensionService: ShopwareExtensionService,
@@ -48,7 +55,11 @@ export class ExtensionStoreChannelService {
     ) {}
 
     register(): void {
-        handle('swag-extension-store-channel' as keyof ShopwareMessageTypes, (data: unknown) => {
+        if (this.unsubscribeFunction) {
+            return;
+        }
+
+        this.unsubscribeFunction = handle('swag-extension-store-channel' as keyof ShopwareMessageTypes, (data: unknown) => {
             try {
                 return this.handleAction(data);
             } catch (err) {
@@ -57,6 +68,15 @@ export class ExtensionStoreChannelService {
                 };
             }
         });
+    }
+
+    unregister(): void {
+        if (!this.unsubscribeFunction) {
+            return;
+        }
+
+        this.unsubscribeFunction();
+        this.unsubscribeFunction = undefined;
     }
 
     private handleAction(data: unknown): Promise<StoreContext|PurchaseResponse> | void {
@@ -79,6 +99,11 @@ export class ExtensionStoreChannelService {
                     return;
                 }
                 return this.handlePurchase(data);
+            case 'routerUpdate':
+                if (!this.isRouterUpdateActionData(data)) {
+                    return;
+                }
+                return this.handleRouterUpdate(data);
         }
     }
 
@@ -119,6 +144,15 @@ export class ExtensionStoreChannelService {
         );
     }
 
+    private isRouterUpdateActionData(data: unknown): data is RouterUpdateActionData {
+        return (
+            this.isStoreChannelActionData(data)
+            && 'urlSegments' in data
+            && Array.isArray((data as { urlSegments: unknown }).urlSegments)
+            && (data as { urlSegments: unknown[] }).urlSegments.every((segment: unknown) => typeof segment === 'string')
+        );
+    }
+
     private async handleHandshake(data: HandshakeActionData): Promise<StoreContext> {
         const extensions = (await this.extensionStoreActionService.getMyExtensions()).map((extension) => extension.name);
         await this.shopwareExtensionService.checkLogin();
@@ -126,6 +160,7 @@ export class ExtensionStoreChannelService {
         const rawLocale: unknown = Shopware.Store.get('session')?.currentLocale;
         const language: string = typeof rawLocale === 'string' ? rawLocale : 'en-GB';
         const isLoggedIn = Shopware.Store.get('shopwareExtensions').userInfo !== null;
+        const currentRoute = Object.values(this.router.currentRoute.value.params.pathMatch || {}).join('/');
 
         return {
             shopwareVersion: shopwareVersion,
@@ -134,6 +169,7 @@ export class ExtensionStoreChannelService {
             language: language,
             isLoggedIn: isLoggedIn,
             success: true,
+            currentRoute: currentRoute,
         };
     }
 
@@ -153,5 +189,25 @@ export class ExtensionStoreChannelService {
             sessionToken: data.sessionToken,
             success: true,
         };
+    }
+
+    private handleRouterUpdate(data: RouterUpdateActionData): void {
+        const current = this.router.currentRoute.value;
+        let newPath = current.path;
+        if (current.params?.pathMatch?.length > 0) {
+            newPath = newPath.split('/').filter(segment => !current.params.pathMatch.includes(segment)).join('/');
+        }
+        if (data.urlSegments.length > 0) {
+            const segmentsToAdd = data.urlSegments.join('/');
+            newPath += `/${segmentsToAdd}`;
+        }
+
+        if (newPath !== current.path) {
+            this.router.replace({
+                path: newPath,
+                query: current.query,
+                hash: current.hash,
+            });
+        }
     }
 }

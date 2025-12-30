@@ -32,4 +32,8 @@ export default {
             // Fallback to default store URL if config fetch fails
         }
     },
+
+    beforeUnmount() {
+        this.extensionStoreChannelService.unregister();
+    },
 };
