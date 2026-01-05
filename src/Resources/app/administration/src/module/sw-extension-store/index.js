@@ -58,7 +58,8 @@ Shopware.Module.register('sw-extension-store', {
     routePrefixPath: 'sw/extension',
     routes: {
         store: {
-            path: 'store*',
+            path: 'store/:pathMatch(.*)*',
+            name: 'Store',
             meta: {
                 privilege: 'system.extension_store'
             },
