@@ -5,7 +5,7 @@ import type ExtensionStoreLicensesService from './extension-store-licenses.servi
 import type { Router } from 'vue-router';
 import type { ShopwareMessageTypes } from '@shopware-ag/meteor-admin-sdk/es/message-types';
 
-type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate';
+type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard';
 
 type StoreChannelActionData = {
     action: StoreChannelAction;
@@ -42,6 +42,10 @@ type StoreContext = {
 type PurchaseResponse = {
     sessionToken: string;
     success: boolean;
+};
+
+type CopyToClipboardActionData = StoreChannelActionData & {
+    text: string;
 };
 
 export class ExtensionStoreChannelService {
@@ -104,6 +108,11 @@ export class ExtensionStoreChannelService {
                     return;
                 }
                 return this.handleRouterUpdate(data);
+            case 'copyToClipboard':
+                if ((!this.isCopyToClipboardActionData(data))) {
+                    return;
+                }
+                return this.handleCopyToClipboard(data);
         }
     }
 
@@ -129,6 +138,14 @@ export class ExtensionStoreChannelService {
             this.isStoreChannelActionData(data)
       && 'route' in data
       && typeof data.route === 'string'
+        );
+    }
+
+    private isCopyToClipboardActionData(data: unknown): data is CopyToClipboardActionData {
+        return (
+            this.isStoreChannelActionData(data)
+      && 'text' in data
+      && typeof data.text === 'string'
         );
     }
 
@@ -209,5 +226,11 @@ export class ExtensionStoreChannelService {
                 hash: current.hash,
             });
         }
+    }
+
+    private handleCopyToClipboard(data: StoreChannelActionData & { text: string }): void {
+        navigator.clipboard.writeText(data.text).catch((err) => {
+            console.error('Failed to copy text to clipboard', err);
+        });
     }
 }
