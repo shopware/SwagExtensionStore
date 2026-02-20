@@ -35,6 +35,7 @@ async function createWrapper(channelService = null, systemConfigService = null) 
             },
             stubs: {
                 'sw-iframe-renderer': true,
+                'sw-extension-store-purchase-confirmation-modal': true,
             },
             provide: {
                 extensionStoreChannelService: channelService,

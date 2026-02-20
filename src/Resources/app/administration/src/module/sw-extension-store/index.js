@@ -10,6 +10,7 @@ Shopware.Component.register('sw-extension-store-index', () => import('./page/sw-
 Shopware.Component.register('sw-extension-store-slider', () => import('./component/sw-extension-store-slider'));
 Shopware.Component.register('sw-extension-store-listing-filter', () => import('./component/sw-extension-store-listing-filter'));
 Shopware.Component.register('sw-extension-buy-modal', () => import('./component/sw-extension-buy-modal'));
+Shopware.Component.register('sw-extension-store-purchase-confirmation-modal', () => import('./component/sw-extension-store-purchase-confirmation-modal'));
 Shopware.Component.register('sw-extension-listing-card', () => import('./component/sw-extension-listing-card'));
 Shopware.Component.register('sw-extension-store-update-warning', () => import('./component/sw-extension-store-update-warning'));
 Shopware.Component.register('sw-extension-label', () => import('./component/sw-extension-store-label'));
@@ -33,6 +34,8 @@ Shopware.Application.addServiceProvider('extensionStoreChannelService', () => {
         Shopware.Service('extensionStoreActionService'),
         Shopware.Service('shopwareExtensionService'),
         Shopware.Service('extensionStoreLicensesService'),
+        Shopware.Service('extensionHelperService'),
+        Shopware.Service('cacheApiService'),
         Shopware.Application.view.router,
     );
 });
