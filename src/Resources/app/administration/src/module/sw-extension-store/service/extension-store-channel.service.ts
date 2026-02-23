@@ -1,9 +1,13 @@
-import { handle } from '@shopware-ag/meteor-admin-sdk/es/channel';
+import { handle, publish } from '@shopware-ag/meteor-admin-sdk/es/channel';
 import type ExtensionStoreActionService from 'src/module/sw-extension/service/extension-store-action.service';
 import type ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
 import type ExtensionStoreLicensesService from './extension-store-licenses.service';
 import type { Router } from 'vue-router';
 import type { ShopwareMessageTypes } from '@shopware-ag/meteor-admin-sdk/es/message-types';
+import { purchaseConfirmationStore } from '../store/extension-store-purchase-confirmation.store';
+import type ExtensionHelperService from 'src/app/service/extension-helper.service';
+import type CacheApiService from 'src/core/service/api/cache.api.service';
+import type { ExtensionStoreBasket } from '../types/extension-store-basket.types';
 
 type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard';
 
@@ -42,6 +46,13 @@ type StoreContext = {
 type PurchaseResponse = {
     sessionToken: string;
     success: boolean;
+
+};
+
+type PurchaseResultData = {
+    action: 'purchaseResult';
+    sessionToken: string;
+    success: boolean;
 };
 
 type CopyToClipboardActionData = StoreChannelActionData & {
@@ -55,6 +66,8 @@ export class ExtensionStoreChannelService {
         private readonly extensionStoreActionService: ExtensionStoreActionService,
         private readonly shopwareExtensionService: ShopwareExtensionService,
         private readonly extensionStoreLicensesService: ExtensionStoreLicensesService,
+        private readonly extensionHelperService: ExtensionHelperService,
+        private readonly cacheApiService: CacheApiService,
         private readonly router: Router,
     ) {}
 
@@ -195,17 +208,43 @@ export class ExtensionStoreChannelService {
     }
 
     private async handlePurchase(data: PurchaseActionData): Promise<PurchaseResponse> {
-        const cartResponse = await this.extensionStoreLicensesService.newCart(
+        const cartData = (await this.extensionStoreLicensesService.newCart(
             data.productId,
             data.variantId,
+        )).data as ExtensionStoreBasket;
+
+        purchaseConfirmationStore.openModal(
+            cartData,
+            async () => {
+                await this.performPurchase(data, cartData);
+            },
+            () => {
+                this.publishPurchaseResult(data.sessionToken, false);
+            },
         );
 
-        await this.extensionStoreLicensesService.orderCart(cartResponse.data);
-
+        // Respond immediately to the iframe so the channel does not time out.
+        // The final purchase result is communicated via a separate published message.
         return {
             sessionToken: data.sessionToken,
             success: true,
         };
+    }
+
+    private publishPurchaseResult(
+        sessionToken: string,
+        success: boolean,
+    ): void {
+        const resultData: PurchaseResultData = {
+            action: 'purchaseResult',
+            sessionToken,
+            success,
+        };
+
+        publish(
+            'swag-extension-store-channel' as keyof ShopwareMessageTypes,
+            resultData,
+        );
     }
 
     private handleRouterUpdate(data: RouterUpdateActionData): void {
@@ -232,5 +271,47 @@ export class ExtensionStoreChannelService {
         navigator.clipboard.writeText(data.text).catch((err) => {
             console.error('Failed to copy text to clipboard', err);
         });
+    }
+
+    private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<void> {
+        try {
+            await this.extensionStoreLicensesService.orderCart(cartData);
+            this.publishPurchaseResult(data.sessionToken, true);
+        } catch {
+            this.publishPurchaseResult(data.sessionToken, false);
+            return;
+        }
+
+        await this.shopwareExtensionService.updateExtensionData();
+        await this.installExtension(cartData);
+    }
+
+    private async installExtension(cartData: ExtensionStoreBasket): Promise<void> {
+        const extension = cartData.positions[0].extension;
+        const snippetService = Shopware.Snippet as unknown as { tc: (key: string, params?: Record<string, string>) => string };
+
+        try {
+            await this.extensionHelperService.downloadAndActivateExtension(extension.name, extension.type);
+
+            if (extension.type === 'plugin') {
+                await this.cacheApiService.clear();
+            }
+
+            Shopware.Store.get('notification').createNotification({
+                variant: 'positive',
+                title: snippetService.tc('sw-extension-store.installation.successTitle'),
+                message: snippetService.tc('sw-extension-store.installation.successMessage', { name: String(extension.name) }),
+                growl: true,
+            });
+        } catch (error) {
+            console.error('Failed to install extension after purchase', error);
+
+            Shopware.Store.get('notification').createNotification({
+                variant: 'critical',
+                title: snippetService.tc('sw-extension-store.installation.errorTitle'),
+                message: snippetService.tc('sw-extension-store.installation.errorMessage', { name: String(extension.name) }),
+                growl: true,
+            });
+        }
     }
 }
