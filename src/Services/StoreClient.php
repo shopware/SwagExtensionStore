@@ -157,7 +157,7 @@ class StoreClient
                                 'variantId' => $variantId,
                             ],
                         ],
-                        'mode' => 'newStore',
+                        'identifierBase' => 'storeUuid',
                     ],
                 ],
             );
