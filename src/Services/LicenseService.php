@@ -6,8 +6,8 @@ namespace SwagExtensionStore\Services;
 
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Log\Package;
-use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Store\Struct\CartPositionStruct;
+use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Store\Struct\PermissionCollection;
 use Shopware\Core\Framework\Util\FloatComparator;
 
