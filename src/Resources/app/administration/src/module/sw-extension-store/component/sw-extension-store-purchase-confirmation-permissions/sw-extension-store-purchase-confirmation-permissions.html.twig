@@ -1,0 +1,159 @@
+{% block sw_extension_store_purchase_confirmation_permissions %}
+<div class="sw-extension-store-purchase-confirmation-permissions">
+    {% block sw_extension_store_purchase_confirmation_permissions_intro %}
+    <div class="sw-extension-store-purchase-confirmation-permissions__intro">
+        <div class="sw-extension-store-purchase-confirmation-permissions__intro-extension">
+            <div class="sw-extension-store-purchase-confirmation-permissions__intro-extension-icon">
+                <mt-icon
+                    name="solid-user-shield"
+                    size="24px"
+                    color="currentColor"
+                />
+            </div>
+            <div class="sw-extension-store-purchase-confirmation-permissions__intro-extension-title">
+                <span class="sw-extension-store-purchase-confirmation-permissions__intro-extension-title-name">
+                    {{ extension.label }}
+                </span>
+                <span class="sw-extension-store-purchase-confirmation-permissions__intro-extension-title-label">
+                    {{ $t('sw-extension-store.purchase-confirmation.permissions.intro.label') }}
+                </span>
+            </div>
+        </div>
+        <div class="sw-extension-store-purchase-confirmation-permissions__intro-description">
+            <p
+                v-if="permissions"
+            >
+                {{ $t('sw-extension-store.purchase-confirmation.permissions.intro.descriptionPermissions', {
+                    extensionLabel: extension.label,
+                }) }}
+            </p>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block sw_extension_store_purchase_confirmation_permissions_table %}
+    <table v-if="permissions" class="sw-extension-store-purchase-confirmation-permissions__table">
+        {% block sw_extension_store_purchase_confirmation_permissions_table_head %}
+        <thead class="sw-extension-store-purchase-confirmation-permissions__operations">
+            {% block sw_extension_store_purchase_confirmation_permissions_table_head_row %}
+            <tr class="sw-extension-store-purchase-confirmation-permissions__grid-columns">
+                <td />
+                <td
+                    v-for="operation in operations"
+                    :key="operation.label"
+                    class="sw-extension-store-purchase-confirmation-permissions__operation-header"
+                >
+                    {{ operation.label }}
+                </td>
+            </tr>
+            {% endblock %}
+        </thead>
+        {% endblock %}
+
+        {% block sw_extension_store_purchase_confirmation_permissions_table_body %}
+        <tbody>
+            {% block sw_extension_store_purchase_confirmation_permissions_table_permissions %}
+            <template
+                v-for="(permissionCategory, category) in permissions"
+                :key="`permission-${category}`"
+            >
+                {% block sw_extension_store_purchase_confirmation_permissions_permissions_category %}
+                <tr
+                    :id="`permission-${category}`"
+                    class="sw-extension-store-purchase-confirmation-permissions__category"
+                >
+                    <td>{{ categoryLabel(category) }}</td>
+                </tr>
+                {% endblock %}
+
+                {% block sw_extension_store_purchase_confirmation_permissions_permission_row %}
+                <tr
+                    v-for="(permissions, entity) in permissionCategory"
+                    :key="entity"
+                    class="sw-extension-store-purchase-confirmation-permissions__grid-columns"
+                >
+                    {% block sw_extension_store_purchase_confirmation_permissions_permission_entity %}
+                    <td class="sw-extension-store-purchase-confirmation-permissions__entity-label">
+                        {{ entityLabel(category, entity) }}
+                    </td>
+                    {% endblock %}
+
+                    {% block sw_extension_store_purchase_confirmation_permissions_permission_operation %}
+                    <td
+                        v-for="operation in operations"
+                        :key="operation.operation"
+                        class="sw-extension-store-purchase-confirmation-permissions__operation"
+                        :class="{
+                            'sw-extension-store-purchase-confirmation-permissions__operation-positive': permissions.includes(operation.operation),
+                            'sw-extension-store-purchase-confirmation-permissions__operation-negative': !permissions.includes(operation.operation) && category !== 'additional_privileges',
+                        }"
+                    >
+                        <mt-icon
+                            v-if="permissions.includes(operation.operation)"
+                            name="solid-checkmark-s"
+                            size="14px"
+                            color="currentColor"
+                        />
+
+                        <mt-icon
+                            v-else-if="category !== 'additional_privileges'"
+                            name="solid-times-s"
+                            size="10px"
+                            color="currentColor"
+                        />
+                    </td>
+                    {% endblock %}
+                </tr>
+                {% endblock %}
+            </template>
+            {% endblock %}
+        </tbody>
+        {% endblock %}
+    </table>
+    {% endblock %}
+
+    {% block sw_extension_store_purchase_confirmation_permissions_domains %}
+    <div v-if="domains.length > 0" class="sw-extension-store-purchase-confirmation-permissions__domains">
+        {% block sw_extension_store_purchase_confirmation_permissions_domains_label %}
+        <div class="sw-extension-store-purchase-confirmation-permissions__domains-label">
+            {{ $t('sw-extension-store.purchase-confirmation.permissions.domains.label') }}
+        </div>
+        {% endblock %}
+
+        {% block sw_extension_store_purchase_confirmation_permissions_domains_description %}
+        <div class="sw-extension-store-purchase-confirmation-permissions__domains-description">
+            <p>{{ $t('sw-extension-store.purchase-confirmation.permissions.domains.description') }}</p>
+        </div>
+        {% endblock %}
+
+        {% block sw_extension_store_purchase_confirmation_permissions_domains_list %}
+        <div class="sw-extension-store-purchase-confirmation-permissions__domains-list">
+            <ul class="sw-extension-store-purchase-confirmation-permissions__domains-list-items">
+                {% block sw_extension_domains_modal_list_entry %}
+                <li
+                    v-for="(domain, i) in domains"
+                    :key="`domain-${i}`"
+                    class="sw-extension-store-purchase-confirmation-permissions__domains-list-item"
+                >
+                    {{ domain }}
+                </li>
+                {% endblock %}
+            </ul>
+        </div>
+        {% endblock %}
+    </div>
+    {% endblock %}
+
+    {% block sw_extension_store_purchase_confirmation_permissions_footer %}
+    <div class="sw-extension-store-purchase-confirmation-permissions__footer">
+        <mt-button
+            variant="secondary"
+            size="small"
+            @click="showCheckout"
+        >
+            {{ $t('sw-extension-store.purchase-confirmation.backToCheckout') }}
+        </mt-button>
+    </div>
+    {% endblock %}
+</div>
+{% endblock %}

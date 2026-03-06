@@ -88,10 +88,75 @@
             "onceOff": "einmalig"
         },
         "purchase-confirmation": {
+            "backToCheckout": "Zurück zur Kasse",
+            "closeWindow": "Fenster schließen",
             "modalTitle": "Kauf bestätigen",
-            "description": "Bitte überprüfe die Kaufdetails vor der Bestätigung:",
-            "buyButton": "Kaufen",
-            "cancelButton": "Abbrechen"
+            "checkout": {
+                "success": {
+                    "title": "Dein Kauf war erfolgreich!",
+                    "description": "Eine Bestätigungsemail wurde an dich gesendet. Die Erweiterungen sind nun in deinem Konto und im Admin deines Shops sichtbar."
+                },
+                "failed": {
+                    "title": "Etwas ist schiefgelaufen",
+                    "description": "Entschuldigung, dein Kauf konnte nicht abgeschlossen werden."
+                },
+                "overview": {
+                    "billingAddress": "Rechnungsadresse",
+                    "bookingDomain": "Buchungsdomain",
+                    "by": "von",
+                    "change": "ändern",
+                    "changeBillingAddressUrl": "https://account.shopware.com/settings/data",
+                    "paymentMethod": "Zahlungsmethode",
+                    "noPaymentMethod": "Keine Zahlungsmethode gespeichert",
+                    "addPaymentMethod": "Zahlungsmethode hinzufügen",
+                    "paymentMethodBanner": {
+                        "noPaymentMethod": {
+                            "title": "Bitte füge eine Zahlungsmethode hinzu, um fortzufahren",
+                            "description": "Um Erweiterungen in unserem Store zu kaufen, ist eine Zahlungsmethode erforderlich. Bitte füge eine Zahlungsmethode in deinem Konto hinzu. Um sie hinzuzufügen, klicke auf den Button unten.",
+                            "action": "Zahlungsmethode hinzufügen"
+                        },
+                        "change": {
+                            "title": "Zahlungsmethode ändern?",
+                            "description": "Die standardmäßige Zahlungsmethode, die in deinem Konto gespeichert ist, wird für diesen Kauf verwendet. Um sie zu ändern, klicke auf den Button unten.<br><br><b>Hinweis:</b> Nach dem Aktualisieren der standardmäßigen Zahlungsmethode in deinem Konto wird sie im Hintergrund aktualisiert und automatisch verwendet, wenn du diese Bestellung absendest. Kein Neuladen erforderlich.",
+                            "action": "Zahlungsmethode ändern"
+                        }
+                    }
+                },
+                "toc": {
+                    "title": "Nutzungsbedingungen",
+                    "checkboxes": {
+                        "gtc": {
+                            "text": "Ich habe die {link} gelesen und stimme ihnen zu.",
+                            "link": "Allgemeine Nutzungsbedingungen"
+                        }
+                    }
+                },
+                "order": {
+                    "firstMonth": "/1. Monat",
+                    "followingPerMonth": "Anschließend {price}** /Monat",
+                    "followingPerYear": "Anschließend {price}** /Jahr",
+                    "forMonths": "für {months} Monate",
+                    "forFirstYear": "für das erste Jahr",
+                    "perMonth": "/Monat",
+                    "perYear": "/Jahr",
+                    "submit": "Bestellung absenden",
+                    "then": "Dann"
+                },
+                "notes": {
+                    "tax": "* Alle Preise verstehen sich ohne die gesetzliche Mehrwertsteuer"
+                }
+            },
+            "permissions": {
+                "intro": {
+                    "label": "Berechtigungen",
+                    "descriptionPermissions": "{extensionLabel} wird Zugriff auf die Komponenten unten erhalten.",
+                    "descriptionDomains": "Einige Daten werden auch mit den Domains unten geteilt."
+                },
+                "domains": {
+                    "label": "Domains",
+                    "description": "Einige Daten werden auch mit den folgenden Domains geteilt."
+                }
+            }
         },
         "installation": {
             "successTitle": "Installation erfolgreich",

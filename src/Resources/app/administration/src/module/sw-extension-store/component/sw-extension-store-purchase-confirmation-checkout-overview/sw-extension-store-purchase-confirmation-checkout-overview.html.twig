@@ -1,0 +1,190 @@
+    {% block sw_extension_store_purchase_confirmation_checkout_overview %}
+    <div class="sw-extension-store-purchase-confirmation__checkout-overview">
+        {% block sw_extension_store_purchase_confirmation_checkout_overview_details %}
+        <div class="sw-extension-store-purchase-confirmation__checkout-overview-details">
+            <sw-extension-icon
+                class="sw-extension-store-purchase-confirmation__checkout-overview-details-icon"
+                :src="extension.icon"
+            />
+            <div class="sw-extension-store-purchase-confirmation__checkout-overview-details-info">
+                <div class="sw-extension-store-purchase-confirmation__checkout-overview-details-info-name">
+                    {{ extension.label }}
+                </div>
+                <div class="sw-extension-store-purchase-confirmation__checkout-overview-details-info-producer-name">
+                    <span>{{ $t('sw-extension-store.purchase-confirmation.checkout.overview.by') }}</span>
+                    <span v-if="producer.storeLink">
+                        <mt-link
+                            :to="producer.storeLink"
+                            target="_blank"
+                            type="external"
+                            as="a"
+                        >
+                            {{ producer.name }}
+                        </mt-link>
+                    </span>
+                    <span v-else>
+                        {{ producer.name }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+
+        {% block sw_extension_store_purchase_confirmation_checkout_overview_info %}
+        <div class="sw-extension-store-purchase-confirmation__checkout-overview-info">
+            {% block sw_extension_store_purchase_confirmation_checkout_overview_info_booking_domain %}
+            <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row">
+                <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-label">
+                    {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.bookingDomain') }}:
+                </div>
+                <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-value">
+                    <mt-link
+                        :to="bookingShopDomain"
+                        target="_blank"
+                        type="external"
+                        as="a"
+                    >
+                        {{ bookingShop.domain }}
+                    </mt-link>
+                </div>
+            </div>
+            {% endblock %}
+
+            {% block sw_extension_store_purchase_confirmation_checkout_overview_info_billing_address %}
+            <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row">
+                <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-label">
+                    {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.billingAddress') }}:
+                </div>
+                <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-value">
+                    <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-value-company-name">
+                        {{ billingAddress.companyName }}
+                    </div>
+                    <div v-if="cartHasBillingAddress" class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-value-address">
+                        <div v-if="billingAddress.fullName">
+                            {{ billingAddress.fullName }}
+                        </div>
+                        <div v-if="billingAddress.street && billingAddress.zip && billingAddress.city">
+                            {{ billingAddress.street.replace(',', '') }}, {{ billingAddress.zip }} {{ billingAddress.city }}
+                        </div>
+                        <div v-if="billingAddress.country">
+                            {{ billingAddress.country }}
+                        </div>
+                    </div>
+                </div>
+                <div v-if="editable" class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-action">
+                    <mt-link
+                        as="a"
+                        target="_blank"
+                        type="external"
+                        :to="$t('sw-extension-store.purchase-confirmation.checkout.overview.changeBillingAddressUrl')"
+                    >
+                        {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.change') }}
+                    </mt-link>
+                </div>
+            </div>
+            {% endblock %}
+
+            {% block sw_extension_store_purchase_confirmation_checkout_overview_info_payment_method %}
+            <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row">
+                <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-label">
+                    {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.paymentMethod') }}:
+                </div>
+                <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-value is--payment-method">
+                    <template v-if="hasNoPaymentMethodStoredError">
+                        <sw-label
+                            appearance="pill"
+                            size="small"
+                            variant="danger"
+                        >
+                            {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.noPaymentMethod') }}
+                        </sw-label>
+                    </template>
+                    <template v-else-if="defaultPaymentMean === null">
+                        <sw-label
+                            v-tooltip="{ message: payment.paymentText }"
+                            appearance="pill"
+                            size="small"
+                            variant="warning"
+                        >
+                            {{ payment.paymentTextLabel }}
+                        </sw-label>
+                    </template>
+                    <template v-else>
+                        <span class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-value-payment-method-label">
+                            {{ defaultPaymentMean.label }}
+                        </span>
+                    </template>
+                </div>
+                <div v-if="editable" class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-action">
+                    <template v-if="defaultPaymentMean === null">
+                        <mt-link
+                            as="a"
+                            target="_blank"
+                            type="external"
+                            :to="payment.registrationUrl"
+                        >
+                            {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.addPaymentMethod') }}
+                        </mt-link>
+                    </template>
+                    <template v-else>
+                        <mt-link
+                            as="button"
+                            @click="showPaymentMethodBanner = !showPaymentMethodBanner"
+                        >
+                            {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.change') }}
+                        </mt-link>
+                    </template>
+                </div>
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+
+        {% block sw_extension_store_purchase_confirmation_checkout_overview_payment_method_banner %}
+        <template v-if="hasNoPaymentMethodStoredError">
+            <div class="sw-extension-store-purchase-confirmation__checkout-overview-payment-method-banner">
+                <mt-banner
+                    variant="critical"
+                    :closable="false"
+                    :title="$t('sw-extension-store.purchase-confirmation.checkout.overview.paymentMethodBanner.noPaymentMethod.title')"
+                >
+                    <p v-html="$t('sw-extension-store.purchase-confirmation.checkout.overview.paymentMethodBanner.noPaymentMethod.description')" />
+                    <mt-button
+                        is="a"
+                        target="_blank"
+                        :link="payment.registrationUrl"
+                    >
+                        {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.paymentMethodBanner.noPaymentMethod.action') }}
+                        <template #iconBack>
+                            <mt-icon name="solid-external-link" size="12px" />
+                        </template>
+                    </mt-button>
+                </mt-banner>
+            </div>
+        </template>
+        <template v-else-if="showPaymentMethodBanner">
+            <div class="sw-extension-store-purchase-confirmation__checkout-overview-payment-method-banner">
+                <mt-banner
+                    variant="neutral"
+                    :closable="true"
+                    :hide-icon="true"
+                    :title="$t('sw-extension-store.purchase-confirmation.checkout.overview.paymentMethodBanner.change.title')"
+                    @close="showPaymentMethodBanner = false"
+                >
+                    <p v-html="$t('sw-extension-store.purchase-confirmation.checkout.overview.paymentMethodBanner.change.description')" />
+                    <mt-button
+                        is="a"
+                        target="_blank"
+                        :link="payment.registrationUrl"
+                    >
+                        {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.paymentMethodBanner.change.action') }}
+                        <template #iconBack>
+                            <mt-icon name="solid-external-link" size="12px" />
+                        </template>
+                    </mt-button>
+                </mt-banner>
+            </div>
+        </template>
+        {% endblock %}
+    </div>
+    {% endblock %}
