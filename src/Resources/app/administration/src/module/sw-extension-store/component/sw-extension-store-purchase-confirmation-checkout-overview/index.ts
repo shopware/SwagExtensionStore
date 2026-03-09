@@ -78,10 +78,10 @@ export default Shopware.Component.wrapComponentConfig({
 
         cartHasBillingAddress() {
             return this.billingAddress?.fullName
-                && this.billingAddress?.street
-                && this.billingAddress?.city
-                && this.billingAddress?.country
-                && this.billingAddress?.zip;
+                && this.billingAddress.street
+                && this.billingAddress.city
+                && this.billingAddress.country
+                && this.billingAddress.zip;
         },
 
         payment() {

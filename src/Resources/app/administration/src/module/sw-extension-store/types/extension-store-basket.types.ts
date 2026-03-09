@@ -1,10 +1,10 @@
 type ExtensionStoreBasketBillingAddress = {
     companyName: string;
     fullName?: string;
-    street?: string;
-    zip?: string;
-    city?: string;
-    country?: string;
+    street: string;
+    zip: string;
+    city: string;
+    country: string;
 };
 
 type ExtensionStoreBasketShop = {
@@ -13,6 +13,7 @@ type ExtensionStoreBasketShop = {
 };
 
 type ExtensionStoreBasketExtensionProducer = {
+    id: number;
     name: string;
     storeLink?: string;
 };
