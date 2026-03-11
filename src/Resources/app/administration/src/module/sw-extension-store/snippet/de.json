@@ -128,6 +128,10 @@
                         "gtc": {
                             "text": "Ich habe die {link} gelesen und stimme ihnen zu.",
                             "link": "Allgemeine Nutzungsbedingungen"
+                        },
+                        "permissions": {
+                            "text": "Ich bin mir bewusst, dass diese Erweiterung weitere Berechtigungen benötigt.",
+                            "link": "Berechtigungen anzeigen"
                         }
                     }
                 },

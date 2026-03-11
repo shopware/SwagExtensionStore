@@ -20,7 +20,6 @@
             </mt-banner>
             <sw-extension-store-purchase-confirmation-checkout-overview
                 :cart="cart"
-                :payment-means="paymentMeans"
                 :default-payment-mean="defaultPaymentMean"
                 :editable="false"
             />
@@ -56,9 +55,8 @@
         {% block sw_extension_store_purchase_confirmation_checkout_overview %}
         <sw-extension-store-purchase-confirmation-checkout-overview
             :cart="cart"
-            :payment-means="paymentMeans"
             :default-payment-mean="defaultPaymentMean"
-            :has-no-payment-method-stored-error="hasNoPaymentMethodStoredError"
+            :has-payment-method-error="hasPaymentMethodError"
         />
         {% endblock %}
 
@@ -101,12 +99,15 @@
                         @update:model-value="onPermissionsAcceptedChange"
                     >
                         <template #label>
-                            {{ $t('sw-extension-store.component.sw-extension-buy-modal.labelAcceptPermissions') }}
+                            {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.text') }}
+                            <mt-link
+                                as="a"
+                                @click="showPermissions"
+                            >
+                                {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.link') }}
+                            </mt-link>
                         </template>
                     </mt-checkbox>
-                    <mt-link as="a" @click="showPermissions">
-                        {{ $t('sw-extension-store.detail.labelButtonShowPermissions') }}
-                    </mt-link>
                 </div>
             </div>
             {% endblock %}

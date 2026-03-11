@@ -14,6 +14,8 @@ export default Shopware.Component.wrapComponentConfig({
         return {
             view: 'checkout' as ModalView,
             store: purchaseConfirmationStore,
+            tocAccepted: false,
+            permissionsAccepted: false,
         };
     },
 
@@ -46,6 +48,8 @@ export default Shopware.Component.wrapComponentConfig({
     methods: {
         resetModal() {
             this.view = 'checkout';
+            this.tocAccepted = false;
+            this.permissionsAccepted = false;
         },
 
         onModalChange(value: boolean) {

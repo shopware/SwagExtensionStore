@@ -21,17 +21,25 @@ export default Shopware.Component.wrapComponentConfig({
             type: Object as PropType<ExtensionStorePaymentMean[]>,
             required: true,
         },
+        tocAccepted: {
+            type: Boolean,
+            required: true,
+        },
+        permissionsAccepted: {
+            type: Boolean,
+            required: true,
+        },
     },
 
     emits: [
-        'modal-change-view',
+        'update:modal-view',
+        'update:toc-accepted',
+        'update:permissions-accepted',
     ],
 
     data() {
         return {
             store: purchaseConfirmationStore,
-            tocAccepted: false,
-            permissionsAccepted: false,
         };
     },
 
@@ -72,31 +80,30 @@ export default Shopware.Component.wrapComponentConfig({
             return this.position?.extension;
         },
 
-        defaultPaymentMean() {
-            return this.paymentMeans?.find((paymentMean) => paymentMean.default);
+        permissions() {
+            return this.extension?.permissions;
         },
 
-        hasNoPaymentMethodStoredError() {
-            const payment = this.cart?.payment;
+        domains() {
+            return this.extension?.domains.filter((domain) => domain !== null);
+        },
 
-            return payment?.paymentMeanRequired
-                || (
-                    this.defaultPaymentMean === null
-                        && payment?.paymentText === null
-                        && payment?.paymentTextLabel === null
-                );
+        defaultPaymentMean() {
+            const cartPaymentMeanId = this.cart?.payment?.paymentMean?.id;
+
+            return this.paymentMeans?.find((paymentMean) => paymentMean.id === cartPaymentMeanId);
+        },
+
+        extensionHasPermissions() {
+            return !!Object.keys(this.permissions ?? {}).length;
+        },
+
+        extensionHasDomains() {
+            return (this.domains?.length ?? 0) > 0;
         },
 
         extensionHasPermissionsOrDomains() {
             return this.extensionHasPermissions || this.extensionHasDomains;
-        },
-
-        extensionHasPermissions() {
-            return !!Object.keys(this.extension?.permissions ?? {}).length;
-        },
-
-        extensionHasDomains() {
-            return (this.extension?.domains?.length ?? 0) > 0;
         },
 
         isDiscounted() {
@@ -175,48 +182,37 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         userCanBuyFromStore() {
-            // Trigger for recompute value
-            const _trigger = this.tocAccepted;
-
             return Shopware.Store.get('shopwareExtensions').userInfo !== null;
+        },
+
+        hasPaymentMethodError() {
+            return (this.paymentMeans || []).length <= 0 &&
+                this.cart && this.cart.payment && this.cart.payment.paymentMeanRequired;
         },
 
         canConfirmPurchase() {
             return this.userCanBuyFromStore
-                && !this.hasNoPaymentMethodStoredError
                 && this.tocAccepted
-                && (!this.extensionHasPermissionsOrDomains || this.permissionsAccepted);
-        },
-    },
-
-    watch: {
-        isOpen(value: boolean) {
-            if (!value) {
-                this.reset();
-            }
+                && (!this.extensionHasPermissionsOrDomains || this.permissionsAccepted)
+                && !this.hasPaymentMethodError;
         },
     },
 
     methods: {
-        reset() {
-            this.tocAccepted = false;
-            this.permissionsAccepted = false;
-        },
-
         formatCurrency(price: number) {
             return Utils.format.currency(price, 'EUR', 2);
         },
 
         onTocAcceptedChange(value: boolean) {
-            this.tocAccepted = value;
+            this.$emit('update:toc-accepted', value);
         },
 
         onPermissionsAcceptedChange(value: boolean) {
-            this.permissionsAccepted = value;
+            this.$emit('update:permissions-accepted', value);
         },
 
         showPermissions() {
-            this.$emit('modal-change-view', 'permissions');
+            this.$emit('update:modal-view', 'permissions');
         },
 
         closeModal() {

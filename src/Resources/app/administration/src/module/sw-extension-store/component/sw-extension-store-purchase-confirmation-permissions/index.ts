@@ -17,7 +17,7 @@ export default Shopware.Component.wrapComponentConfig({
     },
 
     emits: [
-        'modal-change-view',
+        'update:modal-view',
     ],
 
     computed: {
@@ -85,7 +85,7 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         domains() {
-            return this.extension.domains;
+            return this.extension.domains.filter((domain) => domain !== null);
         },
     },
 
@@ -103,7 +103,7 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         showCheckout() {
-            this.$emit('modal-change-view', 'checkout');
+            this.$emit('update:modal-view', 'checkout');
         },
     },
 });

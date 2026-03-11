@@ -11,15 +11,19 @@
         {% block sw_extension_store_purchase_confirmation_modal_content %}
         <div class="sw-extension-store-purchase-confirmation-modal__content">
             <sw-extension-store-purchase-confirmation-checkout
-                v-show="view === 'checkout'"
+                v-if="view === 'checkout'"
                 :cart="cart"
                 :payment-means="paymentMeans"
-                @modal-change-view="view = $event"
+                :permissions-accepted="permissionsAccepted"
+                :toc-accepted="tocAccepted"
+                @update:modal-view="view = $event"
+                @update:toc-accepted="tocAccepted = $event"
+                @update:permissions-accepted="permissionsAccepted = $event"
             />
             <sw-extension-store-purchase-confirmation-permissions
-                v-show="view === 'permissions'"
+                v-if="view === 'permissions'"
                 :cart="cart"
-                @modal-change-view="view = $event"
+                @update:modal-view="view = $event"
             />
         </div>
         {% endblock %}

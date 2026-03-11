@@ -128,6 +128,10 @@
                         "gtc": {
                             "text": "I have read the {link} and agree with them.",
                             "link": "General Terms and Conditions"
+                        },
+                        "permissions": {
+                            "text": "I am aware that this extension needs additional permissions.",
+                            "link": "Show permissions"
                         }
                     }
                 },

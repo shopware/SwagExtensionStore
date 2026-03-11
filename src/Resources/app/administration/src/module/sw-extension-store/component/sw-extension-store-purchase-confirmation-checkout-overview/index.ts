@@ -14,10 +14,6 @@ export default Shopware.Component.wrapComponentConfig({
             type: Object as PropType<ExtensionStoreBasket>,
             required: true,
         },
-        paymentMeans: {
-            type: Object as PropType<ExtensionStorePaymentMean[]>,
-            required: true,
-        },
         defaultPaymentMean: {
             type: Object as PropType<ExtensionStorePaymentMean>,
             required: true,
@@ -27,7 +23,7 @@ export default Shopware.Component.wrapComponentConfig({
             required: false,
             default: true,
         },
-        hasNoPaymentMethodStoredError: {
+        hasPaymentMethodError: {
             type: Boolean,
             required: false,
             default: false,
@@ -36,7 +32,7 @@ export default Shopware.Component.wrapComponentConfig({
 
     data() {
         return {
-            showPaymentMethodBanner: this.hasNoPaymentMethodStoredError,
+            showPaymentMethodBanner: this.hasPaymentMethodError,
         };
     },
 
