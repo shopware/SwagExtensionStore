@@ -2,6 +2,8 @@ import { purchaseConfirmationStore } from '../../store/extension-store-purchase-
 import template from './sw-extension-store-purchase-confirmation-modal.html.twig';
 import './sw-extension-store-purchase-confirmation-modal.scss';
 
+type ModalView = 'checkout' | 'permissions';
+
 /**
  * @private
  */
@@ -10,7 +12,10 @@ export default Shopware.Component.wrapComponentConfig({
 
     data() {
         return {
+            view: 'checkout' as ModalView,
             store: purchaseConfirmationStore,
+            tocAccepted: false,
+            permissionsAccepted: false,
         };
     },
 
@@ -23,18 +28,34 @@ export default Shopware.Component.wrapComponentConfig({
             return this.store.state.isLoading;
         },
 
-        cartData() {
+        cart() {
             return this.store.state.cartData;
+        },
+
+        paymentMeans() {
+            return this.store.state.paymentMeansData;
+        },
+    },
+
+    watch: {
+        isOpen(value: boolean) {
+            if (!value) {
+                this.resetModal();
+            }
         },
     },
 
     methods: {
-        async onConfirmPurchase() {
-            await this.store.confirm();
+        resetModal() {
+            this.view = 'checkout';
+            this.tocAccepted = false;
+            this.permissionsAccepted = false;
         },
 
-        onCancelPurchase() {
-            this.store.cancel();
+        onModalChange(value: boolean) {
+            if (!value) {
+                this.store.cancel();
+            }
         },
     },
 });
