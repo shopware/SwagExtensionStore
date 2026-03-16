@@ -7,7 +7,7 @@ import type { ShopwareMessageTypes } from '@shopware-ag/meteor-admin-sdk/es/mess
 import { purchaseConfirmationStore } from '../store/extension-store-purchase-confirmation.store';
 import type ExtensionHelperService from 'src/app/service/extension-helper.service';
 import type CacheApiService from 'src/core/service/api/cache.api.service';
-import type { ExtensionStoreBasket } from '../types/extension-store-basket.types';
+import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
 
 type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard';
 
@@ -208,15 +208,19 @@ export class ExtensionStoreChannelService {
     }
 
     private async handlePurchase(data: PurchaseActionData): Promise<PurchaseResponse> {
-        const cartData = (await this.extensionStoreLicensesService.newCart(
-            data.productId,
-            data.variantId,
-        )).data as ExtensionStoreBasket;
+        const [cartData, paymentMeansData] = await Promise.all([
+            (await this.extensionStoreLicensesService.newCart(
+                data.productId,
+                data.variantId,
+            )).data as ExtensionStoreBasket,
+            (await this.extensionStoreLicensesService.getPaymentMeans()).data as ExtensionStorePaymentMean[],
+        ]);
 
         purchaseConfirmationStore.openModal(
             cartData,
+            paymentMeansData,
             async () => {
-                await this.performPurchase(data, cartData);
+                return await this.performPurchase(data, cartData);
             },
             () => {
                 this.publishPurchaseResult(data.sessionToken, false);
@@ -273,17 +277,19 @@ export class ExtensionStoreChannelService {
         });
     }
 
-    private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<void> {
+    private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<boolean> {
         try {
             await this.extensionStoreLicensesService.orderCart(cartData);
             this.publishPurchaseResult(data.sessionToken, true);
         } catch {
             this.publishPurchaseResult(data.sessionToken, false);
-            return;
+            return false;
         }
 
         await this.shopwareExtensionService.updateExtensionData();
         await this.installExtension(cartData);
+
+        return true;
     }
 
     private async installExtension(cartData: ExtensionStoreBasket): Promise<void> {
