@@ -21,22 +21,18 @@ jobs:
           shopwareVersion: trunk
           install-admin: true
 
-      - name: Jest Unit Tests
-        shell: bash
-        working-directory: custom/plugins/SwagExtensionStore/src/Resources/app/administration
-        run: npm run unit -- --coverage
-
-      - name: Upload Coverage
-        uses: codecov/codecov-action@v4
+      - uses: shopware/github-actions/admin-jest@main
+        with:
+          extensionName: SwagExtensionStore
+          uploadCoverage: 'true'
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        with:
-          root_dir: ${{ github.workspace }}/custom/plugins/SwagExtensionStore
-          working-directory: ${{ github.workspace }}/custom/plugins/SwagExtensionStore
-          directory: ${{ github.workspace }}/custom/plugins/SwagExtensionStore/src/Resources/app/administration
+
   lint:
     name: ESLint
-    uses: shopware/github-actions/.github/workflows/admin-eslint.yml@main
-    with:
-      extensionName: ${{ github.event.repository.name }}
-      shopwareVersion: trunk
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shopware/github-actions/eslint@main
+        with:
+          extensionName: SwagExtensionStore
+          shopwareVersion: trunk

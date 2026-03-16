@@ -6,6 +6,9 @@ on:
       - trunk
 jobs:
   build:
-    uses: shopware/github-actions/.github/workflows/build-zip.yml@main
-    with:
-      extensionName: ${{ github.event.repository.name }}
+    name: Build and Validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shopware/github-actions/build-zip@main
+        with:
+          extensionName: ${{ github.event.repository.name }}
