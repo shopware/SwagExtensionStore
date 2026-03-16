@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - '**/*.php'
+      - 'phpstan.neon.dist'
       - .github/workflows/php.yml
   push:
     paths:
@@ -14,22 +15,42 @@ on:
     - cron: '0 3 * * *'
 jobs:
   cs:
-    uses: shopware/github-actions/.github/workflows/cs-fixer.yml@main
-    with:
-      rules: ''
+    name: Check Style
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shopware/github-actions/cs-fixer@main
+        with:
+          rules: ''
 
   phpstan:
-    uses: shopware/github-actions/.github/workflows/phpstan.yml@main
-    with:
-      extensionName: ${{ github.event.repository.name }}
-      shopwareVersion: trunk
+    name: Static Analyse
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup extension
+        uses: shopware/github-actions/setup-extension@main
+        with:
+          extensionName: SwagExtensionStore
+          shopwareVersion: trunk
+          install: true
+
+      - uses: shopware/github-actions/phpstan@main
+        with:
+          extensionName: SwagExtensionStore
 
   phpunit:
-    uses: shopware/github-actions/.github/workflows/phpunit.yml@main
-    with:
-      extensionName: ${{ github.event.repository.name }}
-      shopwareVersion: trunk
-      uploadCoverage: true
-      filterName: swagextensionstore-testsuite
-    secrets:
-      codecovToken: ${{ secrets.CODECOV_TOKEN }}
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup extension
+        uses: shopware/github-actions/setup-extension@main
+        with:
+          extensionName: SwagExtensionStore
+          shopwareVersion: trunk
+
+      - uses: shopware/github-actions/phpunit@main
+        with:
+          extensionName: SwagExtensionStore
+          uploadCoverage: 'true'
+          filterName: swagextensionstore-testsuite
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
