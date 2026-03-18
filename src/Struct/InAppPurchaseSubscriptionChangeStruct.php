@@ -9,18 +9,20 @@ use Shopware\Core\Framework\Struct\Struct;
  * @codeCoverageIgnore
  *
  * @phpstan-import-type InAppPurchase from InAppPurchaseStruct
+ * @phpstan-import-type InAppPurchasePendingDowngrade from InAppPurchasePendingDowngradeStruct
  *
- * @phpstan-type InAppPurchaseSubscriptionChange array{currentFeature: InAppPurchase, type: string, currentFeatureVariant: string, currentNetPrice: string, pendingDowngrade: string}
+ * @phpstan-type InAppPurchaseSubscriptionChange array{currentFeature: InAppPurchase, type: string, currentFeatureVariant: string, currentNetPrice: float, pendingDowngrade: InAppPurchasePendingDowngrade|null, isIncludedInPluginLicense: bool}
  */
 #[Package('checkout')]
 class InAppPurchaseSubscriptionChangeStruct extends Struct
 {
     private function __construct(
         protected InAppPurchaseStruct $currentFeature,
+        protected ?InAppPurchasePendingDowngradeStruct $pendingDowngrade = null,
         protected string $type = '',
         protected string $currentFeatureVariant = '',
-        protected string $currentNetPrice = '',
-        protected string $pendingDowngrade = '',
+        protected float $currentNetPrice = 0.0,
+        protected bool $isIncludedInPluginLicense = false,
     ) {
     }
 
@@ -29,7 +31,10 @@ class InAppPurchaseSubscriptionChangeStruct extends Struct
      */
     public static function fromArray(array $data): self
     {
-        return (new self(InAppPurchaseStruct::fromArray($data['currentFeature'])))->assign($data);
+        $currentFeature = InAppPurchaseStruct::fromArray($data['currentFeature']);
+        $pendingDowngrade = isset($data['pendingDowngrade']) ? InAppPurchasePendingDowngradeStruct::fromArray($data['pendingDowngrade']) : null;
+
+        return (new self($currentFeature, $pendingDowngrade))->assign($data);
     }
 
     /**
@@ -73,23 +78,33 @@ class InAppPurchaseSubscriptionChangeStruct extends Struct
         $this->currentFeatureVariant = $currentFeatureVariant;
     }
 
-    public function getCurrentNetPrice(): string
+    public function getCurrentNetPrice(): float
     {
         return $this->currentNetPrice;
     }
 
-    public function setCurrentNetPrice(string $currentNetPrice): void
+    public function setCurrentNetPrice(float $currentNetPrice): void
     {
         $this->currentNetPrice = $currentNetPrice;
     }
 
-    public function getPendingDowngrade(): string
+    public function getPendingDowngrade(): ?InAppPurchasePendingDowngradeStruct
     {
         return $this->pendingDowngrade;
     }
 
-    public function setPendingDowngrade(string $pendingDowngrade): void
+    public function setPendingDowngrade(?InAppPurchasePendingDowngradeStruct $pendingDowngrade): void
     {
         $this->pendingDowngrade = $pendingDowngrade;
+    }
+
+    public function isIncludedInPluginLicense(): bool
+    {
+        return $this->isIncludedInPluginLicense;
+    }
+
+    public function setIncludedInPluginLicense(bool $isIncludedInPluginLicense): void
+    {
+        $this->isIncludedInPluginLicense = $isIncludedInPluginLicense;
     }
 }

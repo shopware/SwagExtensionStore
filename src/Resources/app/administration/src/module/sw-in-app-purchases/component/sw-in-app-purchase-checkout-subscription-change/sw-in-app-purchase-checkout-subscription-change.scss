@@ -33,4 +33,14 @@
   &__divider {
     border-bottom: 1px solid var(--color-shopware-brand-900);
   }
+
+  &__access-grant-hint.mt-banner {
+    width: 100%;
+    padding: var(--scale-size-16);
+    margin: 0;
+
+    strong {
+      font-weight: var(--font-weight-semibold);
+    }
+  }
 }
