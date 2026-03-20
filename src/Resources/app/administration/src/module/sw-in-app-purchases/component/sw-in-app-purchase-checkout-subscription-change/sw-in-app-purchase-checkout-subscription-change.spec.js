@@ -18,8 +18,14 @@ const defaultCart = {
         variant: 'monthly',
         proratedNetPrice: 3.50,
         nextBookingDate: '2026-04-01',
+        feature: {
+            name: 'Pro Plan',
+        },
         subscriptionChange: {
+            type: 'upgrade',
             isIncludedInPluginLicense: false,
+            currentFeatureVariant: 'monthly',
+            currentNetPrice: 2.99,
             currentFeature: {
                 name: 'Basic Plan',
                 priceModels: [{
@@ -95,16 +101,112 @@ describe('sw-in-app-purchase-checkout-subscription-change', () => {
         expect(wrapper.vm.isIncludedInPluginLicense).toBe(true);
     });
 
-    it('should compute getCurrentPrice from matching variant price model', () => {
-        expect(wrapper.vm.getCurrentPrice).toContain('2.99');
+    it('should compute currentPrice from current net price', () => {
+        expect(wrapper.vm.currentPrice).toContain('2.99');
     });
 
-    it('should compute getCurrentPlanName from current feature', () => {
-        expect(wrapper.vm.getCurrentPlanName).toBe('Basic Plan');
+    it('should compute currentPlanName from current feature', () => {
+        expect(wrapper.vm.currentPlanName).toBe('Basic Plan');
     });
 
-    it('should compute formattedStartingDate from nextBookingDate', () => {
-        expect(wrapper.vm.formattedStartingDate).toBeTruthy();
+    it('should compute currentPlanDuration from currentFeatureVariant', () => {
+        expect(wrapper.vm.currentPlanDuration).toBe('sw-in-app-purchase-price-box.duration.monthly');
+    });
+
+    it('should return null for currentPlanDuration when currentFeatureVariant is missing', async () => {
+        wrapper = await createWrapper({
+            cart: {
+                ...defaultCart,
+                positions: [{
+                    ...defaultCart.positions[0],
+                    subscriptionChange: {
+                        ...defaultCart.positions[0].subscriptionChange,
+                        currentFeatureVariant: undefined,
+                    },
+                }],
+            },
+        });
+
+        expect(wrapper.vm.currentPlanDuration).toBeNull();
+    });
+
+    it('should compute newPlanName from feature name', () => {
+        expect(wrapper.vm.newPlanName).toBe('Pro Plan');
+    });
+
+    it('should compute newPlanDuration from variant', () => {
+        expect(wrapper.vm.newPlanDuration).toBe('sw-in-app-purchase-price-box.duration.monthly');
+    });
+
+    it('should return null for newPlanDuration when variant is missing', async () => {
+        wrapper = await createWrapper({
+            cart: {
+                ...defaultCart,
+                positions: [{
+                    ...defaultCart.positions[0],
+                    variant: undefined,
+                }],
+            },
+        });
+
+        expect(wrapper.vm.newPlanDuration).toBeNull();
+    });
+
+    it('should compute proratedNetPrice for upgrade', () => {
+        expect(wrapper.vm.proratedNetPrice).toContain('3.50');
+    });
+
+    it('should return zero proratedNetPrice for downgrade', async () => {
+        wrapper = await createWrapper({
+            cart: {
+                ...defaultCart,
+                positions: [{
+                    ...defaultCart.positions[0],
+                    subscriptionChange: {
+                        ...defaultCart.positions[0].subscriptionChange,
+                        type: 'downgrade',
+                    },
+                }],
+            },
+        });
+
+        expect(wrapper.vm.proratedNetPrice).toContain('0.00');
+    });
+
+    it('should compute isNextBookingDateInDifferentYear as false for same year', () => {
+        expect(wrapper.vm.isNextBookingDateInDifferentYear).toBe(false);
+    });
+
+    it('should compute isNextBookingDateInDifferentYear as true for different year', async () => {
+        wrapper = await createWrapper({
+            cart: {
+                ...defaultCart,
+                positions: [{
+                    ...defaultCart.positions[0],
+                    nextBookingDate: '2099-01-01',
+                }],
+            },
+        });
+
+        expect(wrapper.vm.isNextBookingDateInDifferentYear).toBe(true);
+    });
+
+    it('should include year in yearFormat when next booking date is in different year', async () => {
+        wrapper = await createWrapper({
+            cart: {
+                ...defaultCart,
+                positions: [{
+                    ...defaultCart.positions[0],
+                    nextBookingDate: '2099-01-01',
+                }],
+            },
+        });
+
+        expect(wrapper.vm.yearFormat).toBe('numeric');
+    });
+
+    it('should return undefined yearFormat when next booking date is in same year', () => {
+        expect(wrapper.vm.yearFormat).toBeUndefined();
     });
 
     it('should not render access-grant-hint banner when not included in plugin license', () => {
@@ -137,8 +239,26 @@ describe('sw-in-app-purchase-checkout-subscription-change', () => {
         expect(wrapper.find('.sw-in-app-purchase-checkout-subscription-change__divider').exists()).toBe(true);
     });
 
-    it('should render the info hint', () => {
+    it('should render the info hint for upgrade', () => {
         expect(wrapper.find('.sw-in-app-purchase-checkout-subscription-change__info-hint').exists()).toBe(true);
-        expect(wrapper.find('.sw-in-app-purchase-checkout-subscription-change__info-hint').text()).toBeTruthy();
+        expect(wrapper.vm.infoHint).toBeTruthy();
+    });
+
+    it('should render the info hint for downgrade', async () => {
+        wrapper = await createWrapper({
+            cart: {
+                ...defaultCart,
+                positions: [{
+                    ...defaultCart.positions[0],
+                    subscriptionChange: {
+                        ...defaultCart.positions[0].subscriptionChange,
+                        type: 'downgrade',
+                    },
+                }],
+            },
+        });
+
+        expect(wrapper.find('.sw-in-app-purchase-checkout-subscription-change__info-hint').exists()).toBe(true);
+        expect(wrapper.vm.infoHint).toBeTruthy();
     });
 });

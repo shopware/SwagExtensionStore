@@ -21,12 +21,29 @@
     line-height: var(--font-line-height-m);
   }
 
+  &__plan-name {
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-flex;
+    gap: var(--scale-size-4);
+    align-items: center;
+    flex: 1;
+  }
+
+  &__current-plan, &__new-plan {
+    color: var(--color-text-secondary-default);
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
   &__due-day {
     margin-top: var(--scale-size-16);
     font-weight: var(--font-weight-semibold);
   }
 
-  &__note, &__info-hin {
+  &__note, &__info-hint {
     color: var(--color-text-secondary-default);
   }
 

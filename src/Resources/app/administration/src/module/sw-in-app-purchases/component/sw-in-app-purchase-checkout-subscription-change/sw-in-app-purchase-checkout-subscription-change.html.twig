@@ -2,25 +2,30 @@
     <div class="sw-in-app-purchase-checkout-subscription-change__item">
         <p class="sw-in-app-purchase-checkout-subscription-change__plan-name">
             {{ $t('sw-in-app-purchase-checkout-subscription-change.current-plan') }}
+            <span class="sw-in-app-purchase-checkout-subscription-change__current-plan">({{ currentPlanName }})</span>
         </p>
         <p class="sw-in-app-purchase-checkout-subscription-change__plan-price">
             <template v-if="isIncludedInPluginLicense">
                 {{ $t('sw-in-app-purchase-checkout-subscription-change.free') }}
             </template>
             <template v-else>
-                {{ getCurrentPrice }}*/{{ $t('sw-in-app-purchase-price-box.duration.' + cartPosition.variant) }}
+                {{ currentPrice }}*
+                <template v-if="currentPlanDuration">
+                    /{{ currentPlanDuration }}
+                </template>
             </template>
         </p>
     </div>
     <div class="sw-in-app-purchase-checkout-subscription-change__item">
         <p class="sw-in-app-purchase-checkout-subscription-change__plan-name">
             {{ $t('sw-in-app-purchase-checkout-subscription-change.new-plan') }}
-            <span class="sw-in-app-purchase-checkout-subscription-change__note">
-                ({{ $t('sw-in-app-purchase-checkout-subscription-change.starting') }} {{ formattedStartingDate }})
-            </span>
+            <span class="sw-in-app-purchase-checkout-subscription-change__new-plan">({{ newPlanName }})</span>
         </p>
         <p class="sw-in-app-purchase-checkout-subscription-change__plan-price">
-            {{ currencyFilter(cart.netPrice, 'EUR', 2) }}*/{{ $t('sw-in-app-purchase-price-box.duration.' + cartPosition.variant) }}
+            {{ currencyFilter(cart.netPrice, 'EUR', 2) }}*
+            <template v-if="newPlanDuration">
+                /{{ newPlanDuration }}
+            </template>
         </p>
     </div>
 
@@ -31,11 +36,11 @@
             {{ $t('sw-in-app-purchase-checkout-subscription-change.due-today') }}
         </p>
         <p class="sw-in-app-purchase-checkout-subscription-change__due-day">
-            {{ currencyFilter(cartPosition.proratedNetPrice, 'EUR', 2) }}*
+            {{ proratedNetPrice }}*
         </p>
     </div>
 
-    <p class="sw-in-app-purchase-checkout-subscription-change__info-hint">
+    <p v-if="infoHint" class="sw-in-app-purchase-checkout-subscription-change__info-hint">
         {{ infoHint }}
     </p>
 
@@ -47,7 +52,7 @@
     >
         <strong>{{ $t('sw-in-app-purchase-checkout-subscription-change.attention') }}</strong>
         <span>
-            {{ $t('sw-in-app-purchase-checkout-subscription-change.access-grant-hint', { plan: getCurrentPlanName }) }}
+            {{ $t('sw-in-app-purchase-checkout-subscription-change.access-grant-hint', { plan: currentPlanName }) }}
         </span>
     </mt-banner>
 </div>
