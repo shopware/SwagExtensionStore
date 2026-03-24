@@ -3,6 +3,7 @@ import template from './sw-extension-store-purchase-confirmation-checkout.html.t
 import './sw-extension-store-purchase-confirmation-checkout.scss';
 
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../../types/extension-store-basket.types';
+import { trackExtensionStoreEvent } from '../../util/extension-store-tracking';
 
 const { Utils } = Shopware;
 
@@ -213,6 +214,12 @@ export default Shopware.Component.wrapComponentConfig({
 
         showPermissions() {
             this.$emit('update:modal-view', 'permissions');
+
+            trackExtensionStoreEvent('purchase_show_permissions', {
+                extension_id: this.extension?.id ?? null,
+                extension_name: this.extension?.name ?? null,
+                net_price: this.position?.netPrice ?? null,
+            });
         },
 
         closeModal() {

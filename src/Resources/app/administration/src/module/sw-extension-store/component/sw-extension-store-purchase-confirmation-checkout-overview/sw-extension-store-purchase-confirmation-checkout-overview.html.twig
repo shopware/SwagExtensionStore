@@ -18,6 +18,7 @@
                             target="_blank"
                             type="external"
                             as="a"
+                            data-analytics-source="extension_store"
                         >
                             {{ producer.name }}
                         </mt-link>
@@ -43,6 +44,7 @@
                         target="_blank"
                         type="external"
                         as="a"
+                        data-analytics-source="extension_store"
                     >
                         {{ bookingShop.domain }}
                     </mt-link>
@@ -77,6 +79,7 @@
                         target="_blank"
                         type="external"
                         :to="$t('sw-extension-store.purchase-confirmation.checkout.overview.changeBillingAddressUrl')"
+                        data-analytics-source="extension_store"
                     >
                         {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.change') }}
                     </mt-link>
@@ -129,6 +132,7 @@
                         target="_blank"
                         type="external"
                         :to="payment.registrationUrl"
+                        data-analytics-source="extension_store"
                     >
                         {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.addPaymentMethod') }}
                     </mt-link>
@@ -151,6 +155,7 @@
                         is="a"
                         target="_blank"
                         :link="payment.registrationUrl"
+                        data-analytics-source="extension_store"
                     >
                         {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.paymentMethodBanner.noPaymentMethod.action') }}
                         <template #iconBack>
@@ -174,6 +179,7 @@
                         is="a"
                         target="_blank"
                         :link="payment.registrationUrl"
+                        data-analytics-source="extension_store"
                     >
                         {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.paymentMethodBanner.change.action') }}
                         <template #iconBack>

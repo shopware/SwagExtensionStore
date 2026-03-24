@@ -8,8 +8,10 @@ import { purchaseConfirmationStore } from '../store/extension-store-purchase-con
 import type ExtensionHelperService from 'src/app/service/extension-helper.service';
 import type CacheApiService from 'src/core/service/api/cache.api.service';
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
+import { trackExtensionStoreEvent } from '../util/extension-store-tracking';
+import type { TrackableType } from 'src/core/telemetry/types';
 
-type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard';
+type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent';
 
 type StoreChannelActionData = {
     action: StoreChannelAction;
@@ -25,6 +27,8 @@ type RouteToActionData = StoreChannelActionData & {
 
 type RouterUpdateActionData = StoreChannelActionData & {
     urlSegments: string[];
+    from: string | null;
+    to: string | null;
 };
 
 type PurchaseActionData = StoreChannelActionData & {
@@ -57,6 +61,11 @@ type PurchaseResultData = {
 
 type CopyToClipboardActionData = StoreChannelActionData & {
     text: string;
+};
+
+type TrackActionData = StoreChannelActionData & {
+    eventName: string;
+    [key: string]: TrackableType;
 };
 
 export class ExtensionStoreChannelService {
@@ -126,6 +135,11 @@ export class ExtensionStoreChannelService {
                     return;
                 }
                 return this.handleCopyToClipboard(data);
+            case 'trackEvent':
+                if (!this.isTrackActionData(data)) {
+                    return;
+                }
+                return this.handleTrack(data);
         }
     }
 
@@ -180,6 +194,14 @@ export class ExtensionStoreChannelService {
             && 'urlSegments' in data
             && Array.isArray((data as { urlSegments: unknown }).urlSegments)
             && (data as { urlSegments: unknown[] }).urlSegments.every((segment: unknown) => typeof segment === 'string')
+        );
+    }
+
+    private isTrackActionData(data: unknown): data is TrackActionData {
+        return (
+            this.isStoreChannelActionData(data)
+            && 'eventName' in data
+            && typeof data.eventName === 'string'
         );
     }
 
@@ -268,6 +290,11 @@ export class ExtensionStoreChannelService {
                 query: current.query,
                 hash: current.hash,
             });
+
+            trackExtensionStoreEvent('page_viewed', {
+                from: data.from,
+                to: data.to,
+            });
         }
     }
 
@@ -275,6 +302,10 @@ export class ExtensionStoreChannelService {
         navigator.clipboard.writeText(data.text).catch((err) => {
             console.error('Failed to copy text to clipboard', err);
         });
+    }
+
+    private handleTrack({ action: _, eventName, ...data }: TrackActionData): void {
+        trackExtensionStoreEvent(eventName, data);
     }
 
     private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<boolean> {

@@ -1,5 +1,6 @@
 import { reactive } from 'vue';
-import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
+import type { ExtensionStoreBasket, ExtensionStoreBasketPosition, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
+import { trackExtensionStoreEvent } from '../util/extension-store-tracking';
 
 type OnConfirmCallback = () => Promise<boolean>;
 type OnCancelCallback = () => void;
@@ -26,6 +27,17 @@ const state = reactive<PurchaseConfirmationState>({
     onCancel: null,
 });
 
+const trackExtensionStorePurchaseEvent = (eventName: string) => {
+    const position = state.cartData?.positions[0] as ExtensionStoreBasketPosition;
+    const extension = position?.extension;
+
+    trackExtensionStoreEvent(`purchase_${eventName}`, {
+        extension_id: extension?.id ?? null,
+        extension_name: extension?.name ?? null,
+        net_price: position?.netPrice ?? null,
+    });
+};
+
 export const purchaseConfirmationStore = {
     get state() {
         return state;
@@ -42,6 +54,8 @@ export const purchaseConfirmationStore = {
         state.onConfirm = onConfirm;
         state.onCancel = onCancel;
         state.isOpen = true;
+
+        trackExtensionStorePurchaseEvent('initiated');
     },
 
     async confirm(): Promise<void> {
@@ -59,6 +73,8 @@ export const purchaseConfirmationStore = {
         if (success) {
             state.onCancel = null;
             state.onConfirm = null;
+
+            trackExtensionStorePurchaseEvent('successful');
         }
 
         state.isLoading = false;
@@ -68,6 +84,11 @@ export const purchaseConfirmationStore = {
         if (state.onCancel) {
             state.onCancel();
         }
+
+        if (!state.isSuccessful) {
+            trackExtensionStorePurchaseEvent('cancelled');
+        }
+
         this.closeModal();
     },
 

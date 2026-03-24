@@ -83,6 +83,7 @@
                                         :to="$t('global.sw-gtc-checkbox.url')"
                                         target="_blank"
                                         type="external"
+                                        data-analytics-source="extension_store"
                                     >
                                         {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.gtc.link') }}
                                     </mt-link>
@@ -101,7 +102,7 @@
                         <template #label>
                             {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.text') }}
                             <mt-link
-                                as="a"
+                                as="button"
                                 @click="showPermissions"
                             >
                                 {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.link') }}
@@ -150,6 +151,7 @@
                     variant="primary"
                     size="large"
                     block
+                    data-analytics-id="sw-extension-store-purchase-confirmation-checkout.confirm-purchase"
                     @click="confirmPurchase"
                 >
                     {{ $t('sw-extension-store.purchase-confirmation.checkout.order.submit') }}
