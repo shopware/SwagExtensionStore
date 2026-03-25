@@ -21,13 +21,19 @@ export type InAppPurchase = {
     preselectedVariant: string;
 };
 
+export type InAppPendingDowngrade = {
+    feature: InAppPurchase;
+    netPrice: number;
+};
+
 export type InAppSubscriptionChange = {
     id: string;
     type: 'upgrade' | 'downgrade';
     currentNetPrice: number;
     currentFeatureVariant: string;
     currentFeature: InAppPurchase;
-    pendingDowngrade: string;
+    pendingDowngrade: null | InAppPendingDowngrade;
+    isIncludedInPluginLicense: boolean;
 };
 
 export type InAppPurchaseCartPosition = {
