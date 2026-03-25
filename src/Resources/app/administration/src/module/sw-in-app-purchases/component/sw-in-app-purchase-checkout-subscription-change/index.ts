@@ -59,11 +59,19 @@ export default Shopware.Component.wrapComponentConfig({
             return this.cart.positions[0];
         },
 
+        isIncludedInPluginLicense() {
+            return this.cartPosition?.subscriptionChange?.isIncludedInPluginLicense ?? false;
+        },
+
         getCurrentPrice() {
             const price = this.cartPosition?.subscriptionChange?.currentFeature?.priceModels
                 ?.find((priceModel) => priceModel.variant === this.cartPosition.variant)?.price;
 
             return String(this.currencyFilter(price, 'EUR', 2));
+        },
+
+        getCurrentPlanName() {
+            return this.cartPosition?.subscriptionChange?.currentFeature?.name;
         },
     },
 });
