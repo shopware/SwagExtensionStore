@@ -8,7 +8,7 @@
     "tryAgainButton": "Erneut versuchen"
   },
   "sw-in-app-purchase-checkout-overview": {
-    "billHint": "Die Kosten werden auf Ihrer Shopware-Rechnung ausgewiesen. Stornierung jederzeit in Ihrem Shopware-Konto.",
+    "billHint": "Die Kosten werden auf deiner Shopware-Rechnung ausgewiesen. Kündigung jederzeit in deinem Shopware Account.",
     "excludeVat": "* Alle Preise exklusive Mehrwertsteuer",
     "partner": {
       "accept": "Ich akzeptiere die",
@@ -47,8 +47,8 @@
   },
   "sw-in-app-purchase-price-box": {
     "duration": {
-      "monthly": "monatlich",
-      "yearly": "jährlich"
+      "monthly": "Monat",
+      "yearly": "Jahr"
     }
   },
   "sw-in-app-purchase-checkout-subscription-change": {
@@ -56,9 +56,14 @@
     "new-plan": "Neuer Plan",
     "starting": "Beginn",
     "due-today": "Heute fällig",
-    "info-lint": "Basierend auf dem heutigen Datum {today} beträgt Ihre anteilige Upgrade-Gebühr {price}. Ihre reguläre {variant} Gebühr von {fee} beginnt am {start}.",
+    "upgrade-hint": "Basierend auf dem heutigen Datum {today} beträgt deine anteilige Upgrade-Gebühr {price}. Du erhältst sofort Zugriff auf deinen neuen Plan. Deine reguläre {variant} Gebühr von {fee} beginnt am {start}.",
+    "downgrade-hint": "Ab dem {start} beträgt die reguläre {variant} Gebühr {fee}. Bis dahin hast du weiterhin Zugriff auf deinen aktuellen Plan.",
     "attention": "Bitte beachte:",
     "access-grant-hint": "du wirst dauerhaft den kostenlosen Zugriff auf deinen aktuellen Plan \"{plan}\" verlieren.",
-    "free": "kostenlos"
+    "free": "kostenlos",
+    "variant": {
+      "monthly": "monatliche",
+      "yearly": "jährliche"
+    }
   }
 }

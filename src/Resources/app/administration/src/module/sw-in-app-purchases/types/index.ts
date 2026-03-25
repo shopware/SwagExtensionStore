@@ -1,11 +1,13 @@
 export type { Extension } from 'src/module/sw-extension/service/extension-store-action.service';
 
+export type InAppPurchaseVariant = 'non-consumable' | 'consumable' | 'service' | 'monthly' | 'yearly';
+
 export type InAppPurchasePriceModel<Type extends 'rent' | 'buy' = 'rent' | 'buy'> = {
     type: Type;
     price: number;
     duration: Type extends 'rent' ? number : undefined | null;
     oneTimeOnly: null;
-    variant: 'non-consumable' | 'service' | 'monthly' | 'yearly';
+    variant: InAppPurchaseVariant;
     conditionsType: Type extends 'buy' ? string : undefined | null;
 };
 
@@ -30,7 +32,7 @@ export type InAppSubscriptionChange = {
     id: string;
     type: 'upgrade' | 'downgrade';
     currentNetPrice: number;
-    currentFeatureVariant: string;
+    currentFeatureVariant: InAppPurchaseVariant;
     currentFeature: InAppPurchase;
     pendingDowngrade: null | InAppPendingDowngrade;
     isIncludedInPluginLicense: boolean;
@@ -43,10 +45,10 @@ export type InAppPurchaseCartPosition = {
     grossPrice: number;
     taxRate: number;
     taxValue: number;
-    nextBookingDate: null | Date;
+    nextBookingDate: null | string;
     subscriptionChange: null | InAppSubscriptionChange;
     proratedNetPrice: null | number;
-    variant: 'non-consumable' | 'service' | 'monthly' | 'yearly';
+    variant: InAppPurchaseVariant;
 };
 
 export type InAppPurchaseCart = {

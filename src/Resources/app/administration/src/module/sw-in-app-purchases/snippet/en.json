@@ -8,7 +8,7 @@
     "tryAgainButton": "Try again"
   },
   "sw-in-app-purchase-checkout-overview": {
-    "billHint": "Costs will be added to your shopware bill. Cancellation at any time in your shopware account.",
+    "billHint": "Costs will be added to your Shopware bill. Cancellation at any time in your Shopware Account.",
     "excludeVat": "* All prices are exclusive of VAT",
     "partner": {
       "accept": "I accept",
@@ -47,8 +47,8 @@
   },
   "sw-in-app-purchase-price-box": {
     "duration": {
-      "monthly": "monthly",
-      "yearly": "yearly"
+      "monthly": "month",
+      "yearly": "year"
     }
   },
   "sw-in-app-purchase-checkout-subscription-change": {
@@ -56,9 +56,14 @@
     "new-plan": "New plan",
     "starting": "Starting",
     "due-today": "Due today",
-    "info-lint": "Based on today’s date {today}, your prorated upgrade charge is {price}. Your regular {variant} charge of {fee} will start on {start}.",
+    "upgrade-hint": "Based on today’s date {today}, your prorated upgrade charge is {price}. You will immediately have access to your new plan. Your regular {variant} charge of {fee} will start on {start}.",
+    "downgrade-hint": "Your regular {variant} charge of {fee} will start on {start}. Until then you will still have access to your current plan.",
     "attention": "Please note:",
     "access-grant-hint": "you'll permanently lose free access to your current plan '{plan}'.",
-    "free": "free"
+    "free": "free",
+    "variant": {
+      "monthly": "monthly",
+      "yearly": "yearly"
+    }
   }
 }

@@ -55,11 +55,17 @@ export default Shopware.Component.wrapComponentConfig({
     },
 
     computed: {
+        currencyFilter() {
+            return Shopware.Filter.getByName('currency');
+        },
+
         purchaseOptions(): Array<{ value: string; name: string }> {
             return this.purchase.priceModels.map((priceModel): { value: string; name: string } => {
+                const price = String(this.currencyFilter(priceModel.price, 'EUR', 2));
+                const duration = this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`);
                 return {
                     value: priceModel.variant,
-                    name: `€${priceModel.price}* /${this.$t(`sw-in-app-purchase-price-box.duration.${priceModel.variant}`)}`,
+                    name: `${price}* /${duration}`,
                 };
             });
         },
