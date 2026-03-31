@@ -56,6 +56,9 @@
     "new-plan": "Neuer Plan",
     "starting": "Beginn",
     "due-today": "Heute fällig",
-    "info-lint": "Basierend auf dem heutigen Datum {today} beträgt Ihre anteilige Upgrade-Gebühr {price}. Ihre reguläre {variant} Gebühr von {fee} beginnt am {start}."
+    "info-lint": "Basierend auf dem heutigen Datum {today} beträgt Ihre anteilige Upgrade-Gebühr {price}. Ihre reguläre {variant} Gebühr von {fee} beginnt am {start}.",
+    "attention": "Bitte beachte:",
+    "access-grant-hint": "du wirst dauerhaft den kostenlosen Zugriff auf deinen aktuellen Plan \"{plan}\" verlieren.",
+    "free": "kostenlos"
   }
 }
