@@ -10,7 +10,8 @@ module.exports = {
     preset: '@shopware-ag/jest-preset-sw6-admin',
     globals: {
         // required, e.g. /www/sw6/platform/src/Administration/Resources/app/administration
-        adminPath
+        adminPath,
+        __SWAG_EXTENSION_STORE_VERSION__: '0.0.0',
     },
 
     setupFilesAfterEnv: [
