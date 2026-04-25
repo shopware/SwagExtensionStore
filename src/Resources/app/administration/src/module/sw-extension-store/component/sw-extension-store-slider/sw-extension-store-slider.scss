@@ -40,12 +40,12 @@
             border: 0;
             padding: 10px 5px;
             background: none;
-            color: $color-gray-500;
+            color: var(--color-icon-secondary-default);
             outline: none;
             cursor: pointer;
 
             &:disabled {
-                color: $color-gray-300;
+                color: var(--color-icon-primary-disabled);
                 cursor: not-allowed;
             }
         }
@@ -69,7 +69,7 @@
         position: relative;
 
         .sw-extension-store-slider__slide-item {
-            background: #fff;
+            background: var(--color-elevation-surface-raised);
             transition: all 0.3s ease-in-out;
             height: 100%;
             width: 100%;

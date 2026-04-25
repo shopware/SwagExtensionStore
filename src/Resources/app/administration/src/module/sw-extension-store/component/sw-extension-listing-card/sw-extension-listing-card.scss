@@ -12,10 +12,10 @@
     @include drop-shadow-default;
 
     &:hover {
-        box-shadow: 0 3px 4px rgba(0, 0, 0, 8%), 0 2px 1px rgba(0, 0, 0, 6%), 0 1px 6px rgba(0, 0, 0, 10%);
+        box-shadow: 0 3px 6px 0 var(--color-elevation-shadow-default);
 
         .sw-extension-listing-card__info-name {
-            color: $color-shopware-brand-500;
+            color: var(--color-text-brand-default);
         }
     }
 
@@ -26,7 +26,7 @@
     }
 
     .sw-extension-listing-card__info-grid {
-        background: #fff;
+        background: var(--color-elevation-surface-raised);
         padding: 16px;
         display: grid;
         grid-template-columns: auto 1fr;
@@ -75,7 +75,7 @@
             }
 
             &-count {
-                color: $color-gray-500;
+                color: var(--color-text-secondary-default);
                 margin-top: 2px;
             }
         }
@@ -101,7 +101,7 @@
                 content: '';
                 display: block;
                 height: $line-height-description;
-                background: linear-gradient(90deg, rgba($color-white, 0), $color-white);
+                background: linear-gradient(90deg, transparent, var(--color-elevation-surface-raised));
                 width: 40%;
                 position: absolute;
                 right: 0;
@@ -121,9 +121,9 @@
             }
 
             &-badge-sale {
-                background-color: $color-crimson-400;
+                background-color: var(--color-background-critical-default);
                 border-radius: $border-radius-pill;
-                color: $color-white;
+                color: var(--color-text-critical-default);
                 display: inline-block;
                 font-weight: $font-weight-medium;
                 height: $line-height-xs;
@@ -134,7 +134,7 @@
 
             &-discounted {
                 strong {
-                    color: $color-crimson-400;
+                    color: var(--color-text-critical-default);
                 }
             }
         }

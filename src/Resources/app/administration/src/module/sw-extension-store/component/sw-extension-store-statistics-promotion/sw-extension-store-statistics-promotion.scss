@@ -1,8 +1,13 @@
-@import '~scss/variables';
+@import "~scss/variables";
 
 .sw-extension-store-statistics-promotion {
     container-type: inline-size;
-    background: linear-gradient(#003075, #0156D0);
+    background:
+        linear-gradient(
+            135deg,
+            var(--color-interaction-primary-pressed),
+            var(--color-interaction-primary-default)
+        );
     padding: 16px 20px;
     border-radius: $border-radius-lg;
 
@@ -13,7 +18,7 @@
     }
 
     &__app {
-        color: white;
+        color: var(--color-text-static-default);
         float: left;
         margin-right: 10px;
         display: grid;
@@ -33,7 +38,7 @@
             margin-top: 5px;
 
             &-name {
-                color: white;
+                color: var(--color-text-static-default);
                 margin-bottom: 4px;
             }
 
