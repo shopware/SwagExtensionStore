@@ -83,6 +83,7 @@
                                         :to="$t('global.sw-gtc-checkbox.url')"
                                         target="_blank"
                                         type="external"
+                                        data-analytics-source="SwagExtensionStore"
                                     >
                                         {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.gtc.link') }}
                                     </mt-link>
@@ -101,7 +102,7 @@
                         <template #label>
                             {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.text') }}
                             <mt-link
-                                as="a"
+                                as="button"
                                 @click="showPermissions"
                             >
                                 {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.link') }}
