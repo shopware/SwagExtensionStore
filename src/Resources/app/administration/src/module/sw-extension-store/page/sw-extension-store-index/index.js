@@ -1,5 +1,6 @@
 import template from './sw-extension-store-index.html.twig';
 import './sw-extension-store-index.scss';
+import { trackExtensionStoreEvent } from "SwagExtensionStore/util/telemetry";
 
 /**
  * @private
@@ -20,6 +21,7 @@ export default {
     },
 
     async created() {
+        trackExtensionStoreEvent('extension_store_entered');
         this.extensionStoreChannelService.register();
 
         try {
@@ -34,6 +36,7 @@ export default {
     },
 
     beforeUnmount() {
+        trackExtensionStoreEvent('extension_store_left');
         this.extensionStoreChannelService.unregister();
     },
 };

@@ -8,8 +8,12 @@ import { purchaseConfirmationStore } from '../store/extension-store-purchase-con
 import type ExtensionHelperService from 'src/app/service/extension-helper.service';
 import type CacheApiService from 'src/core/service/api/cache.api.service';
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
+import extensionStoreContextStore
+    from "SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store";
+import { trackExtensionStoreEvent } from "SwagExtensionStore/util/telemetry";
+import type { TrackableType } from "src/core/telemetry/types";
 
-type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard';
+type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent';
 
 type StoreChannelActionData = {
     action: StoreChannelAction;
@@ -17,6 +21,7 @@ type StoreChannelActionData = {
 
 type HandshakeActionData = StoreChannelActionData & {
     sessionToken: string;
+    version: string;
 };
 
 type RouteToActionData = StoreChannelActionData & {
@@ -25,6 +30,9 @@ type RouteToActionData = StoreChannelActionData & {
 
 type RouterUpdateActionData = StoreChannelActionData & {
     urlSegments: string[];
+    from: string | null;
+    to: string | null;
+    query: string | null;
 };
 
 type PurchaseActionData = StoreChannelActionData & {
@@ -59,8 +67,14 @@ type CopyToClipboardActionData = StoreChannelActionData & {
     text: string;
 };
 
+type TrackActionData = StoreChannelActionData & {
+    eventName: string;
+    [key: string]: TrackableType;
+};
+
 export class ExtensionStoreChannelService {
     private unsubscribeFunction?: () => void;
+    private registeredAt?: number;
 
     constructor(
         private readonly extensionStoreActionService: ExtensionStoreActionService,
@@ -76,6 +90,8 @@ export class ExtensionStoreChannelService {
             return;
         }
 
+        this.registeredAt = performance.now();
+
         this.unsubscribeFunction = handle('swag-extension-store-channel' as keyof ShopwareMessageTypes, (data: unknown) => {
             try {
                 return this.handleAction(data);
@@ -88,12 +104,10 @@ export class ExtensionStoreChannelService {
     }
 
     unregister(): void {
-        if (!this.unsubscribeFunction) {
-            return;
-        }
-
-        this.unsubscribeFunction();
+        extensionStoreContextStore().resetSkyBridgeStoreVersion();
+        this.unsubscribeFunction?.();
         this.unsubscribeFunction = undefined;
+        this.registeredAt = undefined;
     }
 
     private handleAction(data: unknown): Promise<StoreContext|PurchaseResponse> | void {
@@ -126,51 +140,58 @@ export class ExtensionStoreChannelService {
                     return;
                 }
                 return this.handleCopyToClipboard(data);
+            case 'trackEvent':
+                if (!this.isTrackActionData(data)) {
+                    return;
+                }
+                return this.handleTrack(data);
         }
     }
 
     private isStoreChannelActionData(data: unknown): data is StoreChannelActionData {
         return (
             data !== null
-      && typeof data === 'object'
-      && 'action' in data
-      && typeof data.action === 'string'
+            && typeof data === 'object'
+            && 'action' in data
+            && typeof data.action === 'string'
         );
     }
 
     private isHandshakeActionData(data: unknown): data is HandshakeActionData {
         return (
             this.isStoreChannelActionData(data)
-      && 'sessionToken' in data
-      && typeof data.sessionToken === 'string'
+            && 'sessionToken' in data
+            && 'version' in data
+            && typeof data.sessionToken === 'string'
+            && typeof data.version === 'string'
         );
     }
 
     private isRouteToActionData(data: unknown): data is RouteToActionData {
         return (
             this.isStoreChannelActionData(data)
-      && 'route' in data
-      && typeof data.route === 'string'
+            && 'route' in data
+            && typeof data.route === 'string'
         );
     }
 
     private isCopyToClipboardActionData(data: unknown): data is CopyToClipboardActionData {
         return (
             this.isStoreChannelActionData(data)
-      && 'text' in data
-      && typeof data.text === 'string'
+            && 'text' in data
+            && typeof data.text === 'string'
         );
     }
 
     private isPurchaseActionData(data: unknown): data is PurchaseActionData {
         return (
             this.isStoreChannelActionData(data)
-      && 'productId' in data
-      && 'variantId' in data
-      && 'sessionToken' in data
-      && typeof data.productId === 'string'
-      && typeof data.variantId === 'string'
-      && typeof data.sessionToken === 'string'
+              && 'productId' in data
+              && 'variantId' in data
+              && 'sessionToken' in data
+              && typeof data.productId === 'string'
+              && typeof data.variantId === 'string'
+              && typeof data.sessionToken === 'string'
         );
     }
 
@@ -178,8 +199,19 @@ export class ExtensionStoreChannelService {
         return (
             this.isStoreChannelActionData(data)
             && 'urlSegments' in data
+            && 'from' in data
+            && 'to' in data
+            && 'query' in data
             && Array.isArray((data as { urlSegments: unknown }).urlSegments)
             && (data as { urlSegments: unknown[] }).urlSegments.every((segment: unknown) => typeof segment === 'string')
+        );
+    }
+
+    private isTrackActionData(data: unknown): data is TrackActionData {
+        return (
+            this.isStoreChannelActionData(data)
+            && 'eventName' in data
+            && typeof data.eventName === 'string'
         );
     }
 
@@ -191,6 +223,11 @@ export class ExtensionStoreChannelService {
         const language: string = typeof rawLocale === 'string' ? rawLocale : 'en-GB';
         const isLoggedIn = Shopware.Store.get('shopwareExtensions').userInfo !== null;
         const currentRoute = Object.values(this.router.currentRoute.value.params.pathMatch || {}).join('/');
+
+        extensionStoreContextStore().updateSkyBridgeStoreVersion(data.version);
+        trackExtensionStoreEvent('extension_store_connected', {
+            loading_duration_ms: this.registeredAt ? performance.now() - this.registeredAt : -1,
+        });
 
         return {
             shopwareVersion: shopwareVersion,
@@ -253,6 +290,7 @@ export class ExtensionStoreChannelService {
 
     private handleRouterUpdate(data: RouterUpdateActionData): void {
         const current = this.router.currentRoute.value;
+        const currentPath = current.path;
         let newPath = current.path;
         if (current.params?.pathMatch?.length > 0) {
             newPath = newPath.split('/').filter(segment => !current.params.pathMatch.includes(segment)).join('/');
@@ -262,19 +300,37 @@ export class ExtensionStoreChannelService {
             newPath += `/${segmentsToAdd}`;
         }
 
-        if (newPath !== current.path) {
-            this.router.replace({
+        if (newPath === currentPath) {
+            return;
+        }
+
+        this.router
+            .replace({
                 path: newPath,
                 query: current.query,
                 hash: current.hash,
+            })
+            .then(() => {
+                // Currently, this is firing a separate page_viewed event to track our own route names & add our own source.
+                // In the background, the Admin itself tracks every route change, so it's essentially duplicated.
+                trackExtensionStoreEvent('page_viewed', {
+                    sw_route_from_href: currentPath,
+                    sw_route_to_href: newPath,
+                    ...(data.from ? { sw_route_from_name: `sw.extension.store.${data.from}` } : {}),
+                    ...(data.to ? { sw_route_to_name: `sw.extension.store.${data.to}` } : {}),
+                    ...(data.query ? { sw_route_to_query: data.query } : {}),
+                });
             });
-        }
     }
 
     private handleCopyToClipboard(data: StoreChannelActionData & { text: string }): void {
         navigator.clipboard.writeText(data.text).catch((err) => {
             console.error('Failed to copy text to clipboard', err);
         });
+    }
+
+    private handleTrack({ action: _, eventName, ...data }: TrackActionData): void {
+        trackExtensionStoreEvent(eventName, data);
     }
 
     private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<boolean> {

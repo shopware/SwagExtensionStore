@@ -1,5 +1,6 @@
 import { reactive } from 'vue';
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
+import { trackExtensionStoreEvent } from "SwagExtensionStore/util/telemetry";
 
 type OnConfirmCallback = () => Promise<boolean>;
 type OnCancelCallback = () => void;
@@ -26,6 +27,25 @@ const state = reactive<PurchaseConfirmationState>({
     onCancel: null,
 });
 
+const trackExtensionStorePurchaseEvent = (
+    name: 'initiated' | 'confirmed' | 'successful' | 'failed' | 'cancelled',
+): void => {
+    const [position] = state.cartData?.positions ?? [];
+    if (!position) {
+        return;
+    }
+
+    trackExtensionStoreEvent(`extension_purchase_${name}`, {
+        extension_id: position.extension.id,
+        extension_name: position.extension.name,
+        net_price: position.netPrice,
+        tax_rate: position.taxRate,
+        is_first_month_free: position.firstMonthFree,
+        discount_applies_for_months: position.discountAppliesForMonths,
+        pseudo_price: position.pseudoPrice,
+    });
+};
+
 export const purchaseConfirmationStore = {
     get state() {
         return state;
@@ -42,12 +62,16 @@ export const purchaseConfirmationStore = {
         state.onConfirm = onConfirm;
         state.onCancel = onCancel;
         state.isOpen = true;
+
+        trackExtensionStorePurchaseEvent('initiated');
     },
 
     async confirm(): Promise<void> {
         if (!state.onConfirm) {
             return;
         }
+
+        trackExtensionStorePurchaseEvent('confirmed');
 
         state.isSubmitted = true;
         state.isLoading = true;
@@ -59,6 +83,10 @@ export const purchaseConfirmationStore = {
         if (success) {
             state.onCancel = null;
             state.onConfirm = null;
+
+            trackExtensionStorePurchaseEvent('successful');
+        } else {
+            trackExtensionStorePurchaseEvent('failed');
         }
 
         state.isLoading = false;
@@ -68,6 +96,11 @@ export const purchaseConfirmationStore = {
         if (state.onCancel) {
             state.onCancel();
         }
+
+        if (!state.isSuccessful) {
+            trackExtensionStorePurchaseEvent('cancelled');
+        }
+
         this.closeModal();
     },
 
