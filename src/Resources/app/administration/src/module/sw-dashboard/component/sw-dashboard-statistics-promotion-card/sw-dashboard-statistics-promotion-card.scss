@@ -18,12 +18,7 @@
     }
 
     &__advertisement {
-        background:
-            linear-gradient(
-                135deg,
-                var(--color-interaction-primary-pressed),
-                var(--color-interaction-primary-default)
-            );
+        background: linear-gradient(#003075, #0156d0);
         border-radius: var(--border-radius-card) var(--border-radius-card) 0 0;
         display: grid;
         margin: -1px; // grow over mt-card border
