@@ -41,7 +41,7 @@ $padding-summary-card: 22px;
         margin-top: 8px;
 
         .mt-icon {
-            color: $color-shopware-brand-900;
+            color: var(--color-icon-brand-default);
         }
     }
 
@@ -56,14 +56,14 @@ $padding-summary-card: 22px;
         grid-template-columns: auto 1fr auto;
         grid-column-gap: 12px;
         grid-row-gap: 5px;
-        border: 1px solid $color-gray-300;
+        border: 1px solid var(--color-border-primary-default);
         border-radius: $border-radius-default;
         padding: 16px;
         cursor: pointer;
 
         &.is--selected {
-            border: 1px solid $color-shopware-brand-500;
-            background: $color-module-blue-50;
+            border: 1px solid var(--color-border-brand-default);
+            background: var(--color-background-brand-default);
         }
 
         label {
@@ -91,9 +91,9 @@ $padding-summary-card: 22px;
     }
 
     &__variants-card-badge {
-        background-color: #6c87ac;
+        background-color: var(--color-background-tertiary-default);
         border-radius: $border-radius-pill;
-        color: $color-white;
+        color: var(--color-text-primary-default);
         display: inline-block;
         font-size: $font-size-xxs;
         font-weight: $font-weight-medium;
@@ -105,7 +105,7 @@ $padding-summary-card: 22px;
         padding: 0 5px;
 
         &.sw-extension-buy-modal__variants-card-badge-discounted {
-            background-color: $color-crimson-400;
+            background-color: var(--color-background-critical-default);
         }
     }
 
@@ -120,7 +120,7 @@ $padding-summary-card: 22px;
     }
 
     .is--discounted {
-        color: $color-crimson-400;
+        color: var(--color-text-critical-default);
 
          .sw-extension-buy-modal__list-price {
              text-decoration: line-through;
@@ -137,15 +137,15 @@ $padding-summary-card: 22px;
 
     &__variant-summary {
         margin-bottom: 16px;
-        border-bottom: 1px solid $color-gray-300;
-        color: $color-gray-500;
+        border-bottom: 1px solid var(--color-border-primary-default);
+        color: var(--color-text-secondary-default);
         font-size: $font-size-xs;
         padding: 16px 0;
         text-align: right;
 
         .sw-extension-buy-modal__variant-summary-price-subline {
             font-size: $font-size-xs;
-            color: $color-darkgray-200;
+            color: var(--color-text-secondary-default);
             line-height: var(--font-line-height-xs);
         }
     }
@@ -155,7 +155,7 @@ $padding-summary-card: 22px;
         font-size: $font-size-l;
         justify-content: space-between;
         align-items: flex-end;
-        color: $color-darkgray-500;
+        color: var(--color-text-primary-default);
         margin-bottom: 4px;
     }
 
@@ -167,7 +167,7 @@ $padding-summary-card: 22px;
     &__plus-vat,
     &__general-text-block {
         font-size: $font-size-xxs;
-        color: $color-darkgray-200;
+        color: var(--color-text-secondary-default);
         line-height: $line-height-xs;
         margin-bottom: var(--scale-size-16);
     }
@@ -184,7 +184,7 @@ $padding-summary-card: 22px;
         }
 
         p {
-            color: $color-gray-500;
+            color: var(--color-text-secondary-default);
         }
 
         .mt-button {
@@ -211,7 +211,7 @@ $padding-summary-card: 22px;
                     border: none;
                     padding: 0;
                     margin-bottom: 4px;
-                    color: $color-shopware-brand-500;
+                    color: var(--color-text-brand-default);
                     font-weight: $font-weight-regular;
                     text-decoration: underline;
                     line-height: inherit;
@@ -231,7 +231,7 @@ $padding-summary-card: 22px;
     }
 
     &__external-link {
-        color: $color-shopware-brand-500;
+        color: var(--color-text-brand-default);
 
         .sw-icon {
             height: 10px;

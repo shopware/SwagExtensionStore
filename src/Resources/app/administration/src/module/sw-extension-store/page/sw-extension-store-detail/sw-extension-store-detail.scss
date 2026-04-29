@@ -4,7 +4,7 @@
     width: 960px;
     max-width: 100%;
     height: 450px;
-    background-color: $color-white;
+    background-color: var(--color-elevation-surface-raised);
     margin: 72px auto 0 auto;
     display: flex;
     justify-content: center;
@@ -30,7 +30,7 @@
     }
 
     p {
-        color: $color-darkgray-200;
+        color: var(--color-text-secondary-default);
         font-size: $font-size-xs;
         max-width: 325px;
         margin-bottom: 1.5rem;
@@ -66,7 +66,7 @@
         }
 
         a {
-            color: $color-shopware-brand-500;
+            color: var(--color-text-brand-default);
         }
     }
 
@@ -94,7 +94,7 @@
                 }
 
                 .sw-meteor-page__smart-bar-meta {
-                    color: $color-gray-500;
+                    color: var(--color-text-secondary-default);
                     font-size: $font-size-xxs;
                     display: flex;
                     flex-wrap: wrap;
@@ -106,7 +106,7 @@
             }
 
             .sw-meteor-page__smart-bar-description {
-                color: $color-gray-500;
+                color: var(--color-text-secondary-default);
                 font-size: $font-size-xs;
 
                 .sw-extension-store-detail__label-and-rating-overview {
@@ -128,7 +128,7 @@
                         a:visited {
                             font-size: $font-size-xxs;
                             font-weight: $font-weight-medium;
-                            color: $color-shopware-brand-500;
+                            color: var(--color-text-brand-default);
                             margin-top: 2px;
                             transition: color .2s ease;
 
@@ -136,7 +136,7 @@
                             &:focus,
                             &:focus-visible,
                             &:focus-within {
-                                color: $color-shopware-brand-700;
+                                color: var(--color-text-brand-hover);
                             }
                         }
 
@@ -156,7 +156,7 @@
     }
 
     .sw-extension-type-label__cloud-label {
-        background-color: rgba(41, 51, 61, 0.5) !important;
+        background-color: var(--color-background-tertiary-default) !important;
     }
 
     .sw-extension-store-detail__producer-link {
@@ -168,7 +168,7 @@
         .sw-extension-store-detail__trial-info {
             font-size: $font-size-xs;
             font-weight: $font-weight-regular;
-            color: $color-shopware-brand-500;
+            color: var(--color-text-brand-default);
             padding: 0;
             border: none;
             background: none;
@@ -185,9 +185,9 @@
             }
 
             &-badge-sale {
-                background-color: $color-crimson-400;
+                background-color: var(--color-background-critical-default);
                 border-radius: $border-radius-pill;
-                color: $color-white;
+                color: var(--color-text-critical-default);
                 display: inline-block;
                 font-size: $font-size-xxs;
                 font-weight: $font-weight-medium;
@@ -200,7 +200,7 @@
 
             &-discounted {
                 strong {
-                    color: $color-crimson-400;
+                    color: var(--color-text-critical-default);
                 }
             }
         }
@@ -276,7 +276,7 @@
     .sw-extension-store-detail__changelog-entry:not(:last-child) {
         margin-bottom: 32px;
         padding-bottom: 32px;
-        border-bottom: 1px dashed $color-gray-300;
+        border-bottom: 1px dashed var(--color-border-primary-default);
     }
 
     .sw-extension-store-detail__changelog-version {
@@ -293,7 +293,7 @@
         text-align: right;
         font-size: $font-size-xxs;
         font-weight: $font-weight-medium;
-        color: $color-gray-500;
+        color: var(--color-text-secondary-default);
     }
 
     .sw-extension-store-detail__changelog-text {

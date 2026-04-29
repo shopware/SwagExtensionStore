@@ -1,4 +1,4 @@
-@import '~scss/variables';
+@import "~scss/variables";
 
 .sw-dashboard-statistics-promotion-banner {
     .mt-card {
@@ -18,22 +18,22 @@
     }
 
     &__advertisement {
-        background: linear-gradient(#003075, #0156D0);
+        background: linear-gradient(#003075, #0156d0);
         border-radius: var(--border-radius-card) var(--border-radius-card) 0 0;
         display: grid;
         margin: -1px; // grow over mt-card border
 
         &-details {
-            color: white;
+            color: var(--color-text-static-default);
             padding: 40px 24px;
             grid-column: 1;
 
             &-badge {
-                color: black;
+                color: var(--color-text-positive-default);
                 font-size: $font-size-xxs;
                 line-height: $line-height-xs;
                 font-weight: $font-weight-semi-bold;
-                background-color: #e1ffe0;
+                background-color: var(--color-background-positive-default);
                 display: inline-block;
                 padding: 4px 8px;
                 border-radius: 6px;
@@ -41,19 +41,19 @@
 
                 @media (prefers-reduced-motion: no-preference) {
                     opacity: 0;
-                    animation: fadeMoveIn .8s ease forwards;
+                    animation: fadeMoveIn 0.8s ease forwards;
                     will-change: opacity, transform;
                 }
             }
 
             &-title {
-                color: white;
+                color: var(--color-text-static-default);
                 margin-bottom: 10px;
 
                 @media (prefers-reduced-motion: no-preference) {
                     opacity: 0;
-                    animation: fadeMoveIn .8s ease forwards;
-                    animation-delay: .2s;
+                    animation: fadeMoveIn 0.8s ease forwards;
+                    animation-delay: 0.2s;
                     will-change: opacity, transform;
                 }
             }
@@ -64,8 +64,8 @@
 
                 @media (prefers-reduced-motion: no-preference) {
                     opacity: 0;
-                    animation: fadeMoveIn .8s ease forwards;
-                    animation-delay: .3s;
+                    animation: fadeMoveIn 0.8s ease forwards;
+                    animation-delay: 0.3s;
                     will-change: opacity, transform;
                 }
             }
@@ -135,7 +135,7 @@
                 margin-block: auto;
 
                 &-name {
-                    color: black;
+                    color: var(--color-text-primary-default);
                     margin-bottom: 4px;
                 }
 
@@ -151,9 +151,6 @@
         }
 
         @container (max-width: 525px) {
-            &-app {
-            }
-
             &-go-to-app {
                 float: left;
             }

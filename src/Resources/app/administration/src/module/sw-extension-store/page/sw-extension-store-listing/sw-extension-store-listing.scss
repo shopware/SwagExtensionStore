@@ -9,7 +9,7 @@
         margin-bottom: 40px;
         cursor: pointer;
         border-radius: 8px;
-        box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 4px 0 var(--color-elevation-shadow-default);
         overflow: hidden;
         display: flex;
 
@@ -36,7 +36,7 @@
     }
 
     .sw-loader {
-        background: #{$color-gray-50}b3; // 'b3' means 70% opacity ('b3' as hex value is 179, which is 70% of 255)
+        background: var(--color-elevation-surface-raised);
         min-height: 300px;
 
         .sw-loader__container {

@@ -33,7 +33,7 @@
     }
 
     p {
-        color: $color-darkgray-200;
+        color: var(--color-text-secondary-default);
         font-size: $font-size-xs;
         max-width: 325px;
         margin-bottom: 1.5rem;
