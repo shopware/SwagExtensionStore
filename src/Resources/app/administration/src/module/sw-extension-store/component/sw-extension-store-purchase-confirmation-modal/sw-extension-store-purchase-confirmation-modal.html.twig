@@ -4,29 +4,36 @@
     @change="onModalChange"
 >
     <mt-modal
-        :ref="(el) => el?.$el.classList?.add('sw-extension-store-purchase-confirmation-modal')"
         :inset="true"
         :title="$t('sw-extension-store.purchase-confirmation.modalTitle')"
     >
-        {% block sw_extension_store_purchase_confirmation_modal_content %}
-        <div class="sw-extension-store-purchase-confirmation-modal__content">
-            <sw-extension-store-purchase-confirmation-checkout
-                v-if="view === 'checkout'"
-                :cart="cart"
-                :payment-means="paymentMeans"
-                :permissions-accepted="permissionsAccepted"
-                :toc-accepted="tocAccepted"
-                @update:modal-view="view = $event"
-                @update:toc-accepted="tocAccepted = $event"
-                @update:permissions-accepted="permissionsAccepted = $event"
-            />
-            <sw-extension-store-purchase-confirmation-permissions
-                v-if="view === 'permissions'"
-                :cart="cart"
-                @update:modal-view="view = $event"
-            />
-        </div>
-        {% endblock %}
+        <template #default>
+            {% block sw_extension_store_purchase_confirmation_modal_content %}
+            <div class="sw-extension-store-purchase-confirmation-modal__content">
+                <sw-extension-store-purchase-confirmation-checkout
+                    v-if="view === 'checkout'"
+                    :cart="cart"
+                    :payment-means="paymentMeans"
+                    :permissions-accepted="permissionsAccepted"
+                    :toc-accepted="tocAccepted"
+                    @update:modal-view="view = $event"
+                    @update:toc-accepted="tocAccepted = $event"
+                    @update:permissions-accepted="permissionsAccepted = $event"
+                />
+                <sw-extension-store-purchase-confirmation-permissions
+                    v-if="view === 'permissions'"
+                    :cart="cart"
+                    @update:modal-view="view = $event"
+                />
+            </div>
+            {% endblock %}
+        </template>
+
+        <template #footer>
+            {% block sw_extension_store_purchase_confirmation_modal_footer %}
+            <div class="sw-extension-store-purchase-confirmation-modal__footer" />
+            {% endblock %}
+        </template>
     </mt-modal>
 </mt-modal-root>
 {% endblock %}
