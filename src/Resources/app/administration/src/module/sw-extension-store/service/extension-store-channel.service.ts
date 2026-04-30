@@ -9,9 +9,9 @@ import type ExtensionHelperService from 'src/app/service/extension-helper.servic
 import type CacheApiService from 'src/core/service/api/cache.api.service';
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
 import extensionStoreContextStore
-    from "SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store";
-import { trackExtensionStoreEvent } from "SwagExtensionStore/util/telemetry";
-import type { TrackableType } from "src/core/telemetry/types";
+    from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store';
+import { trackExtensionStoreEvent } from 'SwagExtensionStore/util/telemetry';
+import type { TrackableType } from 'src/core/telemetry/types';
 
 type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent';
 
@@ -33,6 +33,8 @@ type RouterUpdateActionData = StoreChannelActionData & {
     from: string | null;
     to: string | null;
     query: string | null;
+    listingQuery: Record<string, string | string[] | null | undefined>;
+    queryProperties: string[];
 };
 
 type PurchaseActionData = StoreChannelActionData & {
@@ -49,6 +51,7 @@ type StoreContext = {
     isLoggedIn: boolean;
     success: boolean;
     currentRoute: string;
+    currentRouteQuery: Record<string, string | string[] | null | undefined>;
 };
 
 type PurchaseResponse = {
@@ -83,7 +86,8 @@ export class ExtensionStoreChannelService {
         private readonly extensionHelperService: ExtensionHelperService,
         private readonly cacheApiService: CacheApiService,
         private readonly router: Router,
-    ) {}
+    ) {
+    }
 
     register(): void {
         if (this.unsubscribeFunction) {
@@ -110,7 +114,7 @@ export class ExtensionStoreChannelService {
         this.registeredAt = undefined;
     }
 
-    private handleAction(data: unknown): Promise<StoreContext|PurchaseResponse> | void {
+    private handleAction(data: unknown): Promise<StoreContext | PurchaseResponse> | void {
         if (!this.isStoreChannelActionData(data)) {
             return;
         }
@@ -186,24 +190,42 @@ export class ExtensionStoreChannelService {
     private isPurchaseActionData(data: unknown): data is PurchaseActionData {
         return (
             this.isStoreChannelActionData(data)
-              && 'productId' in data
-              && 'variantId' in data
-              && 'sessionToken' in data
-              && typeof data.productId === 'string'
-              && typeof data.variantId === 'string'
-              && typeof data.sessionToken === 'string'
+            && 'productId' in data
+            && 'variantId' in data
+            && 'sessionToken' in data
+            && typeof data.productId === 'string'
+            && typeof data.variantId === 'string'
+            && typeof data.sessionToken === 'string'
         );
+    }
+
+    private isListingQueryValue(value: unknown): value is string | string[] | null | undefined {
+        return value === null
+      || value === undefined
+      || typeof value === 'string'
+      || (Array.isArray(value) && value.every((item: unknown) => typeof item === 'string'));
+    }
+
+    private isListingQuery(value: unknown): value is Record<string, string | string[] | null | undefined> {
+        return typeof value === 'object'
+      && value !== null
+      && !Array.isArray(value)
+      && Object.values(value).every((entry: unknown) => this.isListingQueryValue(entry));
     }
 
     private isRouterUpdateActionData(data: unknown): data is RouterUpdateActionData {
         return (
-            this.isStoreChannelActionData(data)
-            && 'urlSegments' in data
+            this.isStoreChannelActionData(data) && 'urlSegments' in data
             && 'from' in data
             && 'to' in data
             && 'query' in data
+            && 'listingQuery' in data
+            && 'queryProperties' in data
             && Array.isArray((data as { urlSegments: unknown }).urlSegments)
             && (data as { urlSegments: unknown[] }).urlSegments.every((segment: unknown) => typeof segment === 'string')
+            && this.isListingQuery((data as { listingQuery: unknown }).listingQuery)
+            && Array.isArray((data as { queryProperties: unknown }).queryProperties)
+            && (data as { queryProperties: unknown[] }).queryProperties.every((property: unknown) => typeof property === 'string')
         );
     }
 
@@ -223,6 +245,7 @@ export class ExtensionStoreChannelService {
         const language: string = typeof rawLocale === 'string' ? rawLocale : 'en-GB';
         const isLoggedIn = Shopware.Store.get('shopwareExtensions').userInfo !== null;
         const currentRoute = Object.values(this.router.currentRoute.value.params.pathMatch || {}).join('/');
+        const query = this.router.currentRoute.value.query || {};
 
         extensionStoreContextStore().updateSkyBridgeStoreVersion(data.version);
         trackExtensionStoreEvent('extension_store_connected', {
@@ -237,6 +260,7 @@ export class ExtensionStoreChannelService {
             isLoggedIn: isLoggedIn,
             success: true,
             currentRoute: currentRoute,
+            currentRouteQuery: query,
         };
     }
 
@@ -292,35 +316,48 @@ export class ExtensionStoreChannelService {
         const current = this.router.currentRoute.value;
         const currentPath = current.path;
         let newPath = current.path;
+
         if (current.params?.pathMatch?.length > 0) {
-            newPath = newPath.split('/').filter(segment => !current.params.pathMatch.includes(segment)).join('/');
+            newPath = newPath
+                .split('/')
+                .filter(segment => !current.params.pathMatch.includes(segment))
+                .join('/');
         }
+
         if (data.urlSegments.length > 0) {
-            const segmentsToAdd = data.urlSegments.join('/');
-            newPath += `/${segmentsToAdd}`;
+            newPath += `/${data.urlSegments.join('/')}`;
         }
 
-        if (newPath === currentPath) {
-            return;
+        const newQuery: Record<string, string | string[] | null | undefined> = { ...current.query };
+
+        for (const key of data.queryProperties) {
+            const listingQueryValue = data.listingQuery[key];
+            if (listingQueryValue !== undefined && listingQueryValue !== null) {
+                newQuery[key] = listingQueryValue;
+            } else {
+                delete newQuery[key];
+            }
         }
 
-        this.router
-            .replace({
-                path: newPath,
-                query: current.query,
-                hash: current.hash,
-            })
-            .then(() => {
-                // Currently, this is firing a separate page_viewed event to track our own route names & add our own source.
-                // In the background, the Admin itself tracks every route change, so it's essentially duplicated.
-                trackExtensionStoreEvent('page_viewed', {
-                    sw_route_from_href: currentPath,
-                    sw_route_to_href: newPath,
-                    ...(data.from ? { sw_route_from_name: `sw.extension.store.${data.from}` } : {}),
-                    ...(data.to ? { sw_route_to_name: `sw.extension.store.${data.to}` } : {}),
-                    ...(data.query ? { sw_route_to_query: data.query } : {}),
-                });
+        this.router.replace({
+            path: newPath,
+            query: newQuery,
+            hash: current.hash,
+        }).then(() => {
+            if (newPath === currentPath) {
+                return;
+            }
+
+            // Currently, this is firing a separate page_viewed event to track our own route names & add our own source.
+            // In the background, the Admin itself tracks every route change, so it's essentially duplicated.
+            trackExtensionStoreEvent('page_viewed', {
+                sw_route_from_href: currentPath,
+                sw_route_to_href: newPath,
+                ...(data.from ? { sw_route_from_name: `sw.extension.store.${data.from}` } : {}),
+                ...(data.to ? { sw_route_to_name: `sw.extension.store.${data.to}` } : {}),
+                ...(data.query ? { sw_route_to_query: data.query } : {}),
             });
+        });
     }
 
     private handleCopyToClipboard(data: StoreChannelActionData & { text: string }): void {
@@ -350,7 +387,9 @@ export class ExtensionStoreChannelService {
 
     private async installExtension(cartData: ExtensionStoreBasket): Promise<void> {
         const extension = cartData.positions[0].extension;
-        const snippetService = Shopware.Snippet as unknown as { tc: (key: string, params?: Record<string, string>) => string };
+        const snippetService = Shopware.Snippet as unknown as {
+            tc: (key: string, params?: Record<string, string>) => string;
+        };
 
         try {
             await this.extensionHelperService.downloadAndActivateExtension(extension.name, extension.type);
