@@ -40,7 +40,7 @@ class InAppPurchaseCartPositionStruct extends Struct
     {
         $subscriptionChange = null;
 
-        if (!empty($data['subscriptionChange'])) {
+        if (isset($data['subscriptionChange']) && $data['subscriptionChange'] !== []) {
             $subscriptionChange = InAppPurchaseSubscriptionChangeStruct::fromArray($data['subscriptionChange']);
         }
 
