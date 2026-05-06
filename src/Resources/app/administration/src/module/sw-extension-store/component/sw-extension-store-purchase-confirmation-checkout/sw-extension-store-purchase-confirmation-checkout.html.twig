@@ -32,8 +32,11 @@
         <div class="sw-extension-store-purchase-confirmation__checkout-failed">
             <mt-empty-state
                 centered
-                :description="$t('sw-extension-store.purchase-confirmation.checkout.failed.description')"
-                :headline="$t('sw-extension-store.purchase-confirmation.checkout.failed.title')"
+                :description="errorDescription ?? $t('sw-extension-store.purchase-confirmation.checkout.failed.description')"
+                :headline="errorTitle ?? $t('sw-extension-store.purchase-confirmation.checkout.failed.title')"
+                :link-href="errorDocumentationLink"
+                :link-text="$t('sw-extension-store.purchase-confirmation.checkout.failed.documentationLink')"
+                :link-type="'external'"
                 icon="solid-exclamation-circle"
             >
                 <template #button>
