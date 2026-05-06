@@ -98,7 +98,8 @@
                 },
                 "failed": {
                     "title": "Something went wrong",
-                    "description": "Sorry, your purchase could not be completed."
+                    "description": "Sorry, your purchase could not be completed.",
+                    "documentationLink": "See documentation"
                 },
                 "overview": {
                     "billingAddress": "Billing address",

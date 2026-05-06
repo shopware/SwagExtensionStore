@@ -11,6 +11,8 @@ class ExtensionStoreApiException extends StoreApiException
 {
     protected string $apiCode;
 
+    protected string $description;
+
     public function __construct(ClientException $exception)
     {
         $data = json_decode($exception->getResponse()->getBody()->getContents(), true);
@@ -18,6 +20,9 @@ class ExtensionStoreApiException extends StoreApiException
         parent::__construct($exception);
 
         $this->apiCode = $data['code'] ?? '';
+        $this->description = $data['description'] ?? '';
+        $this->title = $data['title'] ?? '';
+        $this->documentationLink = $data['documentationLink'] ?? '';
     }
 
     public function getErrors(bool $withTrace = false): \Generator
@@ -28,6 +33,7 @@ class ExtensionStoreApiException extends StoreApiException
             yield [
                 ...$error,
                 'apiCode' => $this->apiCode,
+                'description' => $this->description,
             ];
         }
     }

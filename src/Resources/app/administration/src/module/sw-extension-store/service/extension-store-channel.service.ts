@@ -75,6 +75,22 @@ type TrackActionData = StoreChannelActionData & {
     [key: string]: TrackableType;
 };
 
+type StoreApiErrorItem = {
+    title?: string;
+    description?: string;
+    meta?: {
+        documentationLink?: string;
+    };
+};
+
+type StoreApiErrorResponse = {
+    response?: {
+        data?: {
+            errors?: StoreApiErrorItem[];
+        };
+    };
+};
+
 export class ExtensionStoreChannelService {
     private unsubscribeFunction?: () => void;
     private registeredAt?: number;
@@ -269,24 +285,31 @@ export class ExtensionStoreChannelService {
     }
 
     private async handlePurchase(data: PurchaseActionData): Promise<PurchaseResponse> {
-        const [cartData, paymentMeansData] = await Promise.all([
-            (await this.extensionStoreLicensesService.newCart(
-                data.productId,
-                data.variantId,
-            )).data as ExtensionStoreBasket,
-            (await this.extensionStoreLicensesService.getPaymentMeans()).data as ExtensionStorePaymentMean[],
-        ]);
+        try {
+            const [cartData, paymentMeansData] = await Promise.all([
+                (await this.extensionStoreLicensesService.newCart(
+                    data.productId,
+                    data.variantId,
+                )).data as ExtensionStoreBasket,
+                (await this.extensionStoreLicensesService.getPaymentMeans()).data as ExtensionStorePaymentMean[],
+            ]);
 
-        purchaseConfirmationStore.openModal(
-            cartData,
-            paymentMeansData,
-            async () => {
-                return await this.performPurchase(data, cartData);
-            },
-            () => {
+            purchaseConfirmationStore.openModal(
+                cartData,
+                paymentMeansData,
+                async () => {
+                    return await this.performPurchase(data, cartData);
+                },
+                () => {
+                    this.publishPurchaseResult(data.sessionToken, false);
+                },
+            );
+        } catch (error) {
+            const errorDetails = this.getErrorDetails(error);
+            purchaseConfirmationStore.openErrorModal(errorDetails.title, errorDetails.description, errorDetails.documentationLink, () => {
                 this.publishPurchaseResult(data.sessionToken, false);
-            },
-        );
+            });
+        }
 
         // Respond immediately to the iframe so the channel does not time out.
         // The final purchase result is communicated via a separate published message.
@@ -370,19 +393,31 @@ export class ExtensionStoreChannelService {
         trackExtensionStoreEvent(eventName, data);
     }
 
-    private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<boolean> {
+    private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<{ result: boolean; title?: string; description?: string; documentationLink?: string }> {
         try {
             await this.extensionStoreLicensesService.orderCart(cartData);
             this.publishPurchaseResult(data.sessionToken, true);
-        } catch {
+        } catch (e) {
+            const errorDetails = this.getErrorDetails(e);
             this.publishPurchaseResult(data.sessionToken, false);
-            return false;
+            return { result: false, ...errorDetails };
         }
 
         await this.shopwareExtensionService.updateExtensionData();
         await this.installExtension(cartData);
 
-        return true;
+        return { result: true };
+    }
+
+    private getErrorDetails(error: unknown): { title: string; description: string; documentationLink: string } {
+        const maybeError = error as StoreApiErrorResponse;
+        const errorDetails = maybeError.response?.data?.errors?.at(-1);
+
+        return {
+            title: errorDetails?.title ?? '',
+            description: errorDetails?.description ?? '',
+            documentationLink: errorDetails?.meta?.documentationLink ?? '',
+        };
     }
 
     private async installExtension(cartData: ExtensionStoreBasket): Promise<void> {
