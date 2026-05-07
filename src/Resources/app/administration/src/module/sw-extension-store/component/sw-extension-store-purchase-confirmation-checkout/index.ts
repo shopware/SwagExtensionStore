@@ -53,6 +53,10 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         step() {
+            if (this.store.state.isFailedOnBasketCreation) {
+                return this.steps.FAILED;
+            }
+
             if (this.isSubmitted && !this.isLoading) {
                 return this.store.state.isSuccessful ? this.steps.SUCCESS : this.steps.FAILED;
             }
@@ -71,7 +75,15 @@ export default Shopware.Component.wrapComponentConfig({
         isSubmitted() {
             return this.store.state.isSubmitted;
         },
-
+        errorTitle() {
+            return this.store.state.errorTitle;
+        },
+        errorDescription() {
+            return this.store.state.errorDescription;
+        },
+        errorDocumentationLink() {
+            return this.store.state.errorDocumentationLink;
+        },
         position() {
             return this.cart?.positions?.[0];
         },

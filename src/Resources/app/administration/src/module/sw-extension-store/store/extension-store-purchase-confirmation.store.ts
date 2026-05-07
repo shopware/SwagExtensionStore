@@ -2,10 +2,11 @@ import { reactive } from 'vue';
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
 import { trackExtensionStoreEvent } from "SwagExtensionStore/util/telemetry";
 
-type OnConfirmCallback = () => Promise<boolean>;
+type OnConfirmCallback = () => Promise<{ result: boolean; title?: string; description?: string }>;
 type OnCancelCallback = () => void;
 
 type PurchaseConfirmationState = {
+    isFailedOnBasketCreation: boolean;
     isOpen: boolean;
     isLoading: boolean;
     isSubmitted: boolean;
@@ -14,9 +15,13 @@ type PurchaseConfirmationState = {
     paymentMeansData: ExtensionStorePaymentMean[] | null;
     onConfirm: OnConfirmCallback | null;
     onCancel: OnCancelCallback | null;
+    errorTitle: string | null;
+    errorDescription: string | null;
+    errorDocumentationLink: string | null;
 };
 
 const state = reactive<PurchaseConfirmationState>({
+    isFailedOnBasketCreation: false,
     isOpen: false,
     isLoading: false,
     isSubmitted: false,
@@ -25,6 +30,9 @@ const state = reactive<PurchaseConfirmationState>({
     paymentMeansData: null,
     onConfirm: null,
     onCancel: null,
+    errorTitle: null,
+    errorDescription: null,
+    errorDocumentationLink: null,
 });
 
 const trackExtensionStorePurchaseEvent = (
@@ -76,16 +84,18 @@ export const purchaseConfirmationStore = {
         state.isSubmitted = true;
         state.isLoading = true;
 
-        const success = await state.onConfirm();
+        const response = await state.onConfirm();
 
-        state.isSuccessful = success ?? false;
+        state.isSuccessful = response.result ?? false;
 
-        if (success) {
+        if (response.result) {
             state.onCancel = null;
             state.onConfirm = null;
 
             trackExtensionStorePurchaseEvent('successful');
         } else {
+            state.errorTitle = response.title;
+            state.errorDescription = response.description;
             trackExtensionStorePurchaseEvent('failed');
         }
 
@@ -109,9 +119,22 @@ export const purchaseConfirmationStore = {
         state.isLoading = false;
         state.isSubmitted = false;
         state.isSuccessful = false;
+        state.isFailedOnBasketCreation =false;
         state.cartData = null;
         state.paymentMeansData = null;
         state.onConfirm = null;
         state.onCancel = null;
+        state.errorTitle = null;
+        state.errorDescription = null;
+        state.errorDocumentationLink = null;
+    },
+
+    openErrorModal(errorTitle: string, errorDescription: string, errorDocumentationLink: string, onCancel: OnCancelCallback): void {
+        state.onCancel = onCancel;
+        state.errorTitle = errorTitle;
+        state.errorDescription = errorDescription;
+        state.errorDocumentationLink = errorDocumentationLink;
+        state.isFailedOnBasketCreation = true;
+        state.isOpen = true;
     },
 };

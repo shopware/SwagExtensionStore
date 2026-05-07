@@ -98,7 +98,8 @@
                 },
                 "failed": {
                     "title": "Etwas ist schiefgelaufen",
-                    "description": "Entschuldigung, dein Kauf konnte nicht abgeschlossen werden."
+                    "description": "Entschuldigung, dein Kauf konnte nicht abgeschlossen werden.",
+                    "documentationLink": "Siehe Dokumentation"
                 },
                 "overview": {
                     "billingAddress": "Rechnungsadresse",
