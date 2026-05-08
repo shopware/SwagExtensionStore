@@ -1,6 +1,6 @@
 import type { TrackableType } from 'src/core/telemetry/types';
 import extensionStoreContextStore
-    from "SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store";
+    from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store';
 
 const collectDefaultEventData = (): Record<string, TrackableType> => {
     const eventData: Record<string, TrackableType> = {
@@ -11,6 +11,10 @@ const collectDefaultEventData = (): Record<string, TrackableType> => {
     const contextStore = extensionStoreContextStore();
     if (contextStore.skyBridgeStoreVersion !== null) {
         eventData['sky_bridge_store_version'] = contextStore.skyBridgeStoreVersion;
+    }
+
+    if (contextStore.licenseHost !== null) {
+        eventData['license_host'] = contextStore.licenseHost;
     }
 
     return eventData;
