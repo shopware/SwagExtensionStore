@@ -14,6 +14,7 @@ import { trackExtensionStoreEvent } from 'SwagExtensionStore/util/telemetry';
 import type { TrackableType } from 'src/core/telemetry/types';
 import type ExtensionStorePreferencesService
     from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-preferences.service';
+import type { UserInfo } from 'src/core/service/api/store.api.service';
 
 type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent';
 
@@ -50,7 +51,7 @@ type StoreContext = {
     owningExtensions: string[];
     sessionToken: string;
     language: string;
-    isLoggedIn: boolean;
+    userInfo: UserInfo | null;
     success: boolean;
     currentRoute: string;
     currentRouteQuery: Record<string, string | string[] | null | undefined>;
@@ -262,7 +263,7 @@ export class ExtensionStoreChannelService {
         const shopwareVersion = Shopware.Context.app.config.version ?? '';
         const rawLocale: unknown = Shopware.Store.get('session')?.currentLocale;
         const language: string = typeof rawLocale === 'string' ? rawLocale : 'en-GB';
-        const isLoggedIn = Shopware.Store.get('shopwareExtensions').userInfo !== null;
+        const userInfo = Shopware.Store.get('shopwareExtensions').userInfo;
         const currentRoute = Object.values(this.router.currentRoute.value.params.pathMatch || {}).join('/');
         const query = this.router.currentRoute.value.query || {};
 
@@ -276,7 +277,7 @@ export class ExtensionStoreChannelService {
             owningExtensions: extensions,
             sessionToken: data.sessionToken,
             language: language,
-            isLoggedIn: isLoggedIn,
+            userInfo: userInfo,
             success: true,
             currentRoute: currentRoute,
             currentRouteQuery: query,
