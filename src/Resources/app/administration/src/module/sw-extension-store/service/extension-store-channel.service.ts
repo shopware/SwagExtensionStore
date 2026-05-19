@@ -2,7 +2,7 @@ import { handle, publish } from '@shopware-ag/meteor-admin-sdk/es/channel';
 import type ExtensionStoreActionService from 'src/module/sw-extension/service/extension-store-action.service';
 import type ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
 import type ExtensionStoreLicensesService from './extension-store-licenses.service';
-import type { Router } from 'vue-router';
+import type { LocationQuery, Router } from 'vue-router';
 import type { ShopwareMessageTypes } from '@shopware-ag/meteor-admin-sdk/es/message-types';
 import { purchaseConfirmationStore } from '../store/extension-store-purchase-confirmation.store';
 import type ExtensionHelperService from 'src/app/service/extension-helper.service';
@@ -38,6 +38,12 @@ type RouterUpdateActionData = StoreChannelActionData & {
     queryProperties: string[];
 };
 
+type RouterSyncData = {
+    action: 'routerSync';
+    currentRoute: string;
+    currentRouteQuery: LocationQuery;
+};
+
 type PurchaseActionData = StoreChannelActionData & {
     productId: string;
     variantId: string;
@@ -52,7 +58,7 @@ type StoreContext = {
     userInfo: UserInfo | null;
     success: boolean;
     currentRoute: string;
-    currentRouteQuery: Record<string, string | string[] | null | undefined>;
+    currentRouteQuery: LocationQuery;
 };
 
 type PurchaseResponse = {
@@ -122,12 +128,18 @@ export class ExtensionStoreChannelService {
                 };
             }
         });
+
+        window.addEventListener('popstate', () => this.publishRouterSync());
     }
 
     unregister(): void {
         extensionStoreContextStore().resetSkyBridgeStoreVersion();
+
         this.unsubscribeFunction?.();
         this.unsubscribeFunction = undefined;
+
+        window.removeEventListener('popstate', () => this.publishRouterSync());
+
         this.registeredAt = undefined;
     }
 
@@ -261,8 +273,8 @@ export class ExtensionStoreChannelService {
         const rawLocale: unknown = Shopware.Store.get('session')?.currentLocale;
         const language: string = typeof rawLocale === 'string' ? rawLocale : 'en-GB';
         const userInfo = Shopware.Store.get('shopwareExtensions').userInfo;
-        const currentRoute = Object.values(this.router.currentRoute.value.params.pathMatch || {}).join('/');
-        const query = this.router.currentRoute.value.query || {};
+        const currentRoute = this.getCurrentRoute();
+        const currentRouteQuery = this.getCurrentRouteQuery();
 
         extensionStoreContextStore().updateSkyBridgeStoreVersion(data.version);
         trackExtensionStoreEvent('extension_store_connected', {
@@ -277,7 +289,7 @@ export class ExtensionStoreChannelService {
             userInfo: userInfo,
             success: true,
             currentRoute: currentRoute,
-            currentRouteQuery: query,
+            currentRouteQuery: currentRouteQuery,
         };
     }
 
@@ -336,6 +348,21 @@ export class ExtensionStoreChannelService {
         );
     }
 
+    private publishRouterSync(): void {
+        const currentRoute = this.getCurrentRoute();
+        const currentRouteQuery = this.getCurrentRouteQuery();
+        const data: RouterSyncData = {
+            action: 'routerSync',
+            currentRoute,
+            currentRouteQuery,
+        };
+
+        publish(
+            'swag-extension-store-channel' as keyof ShopwareMessageTypes,
+            data,
+        );
+    }
+
     private handleRouterUpdate(data: RouterUpdateActionData): void {
         const current = this.router.currentRoute.value;
         const currentPath = current.path;
@@ -352,7 +379,7 @@ export class ExtensionStoreChannelService {
             newPath += `/${data.urlSegments.join('/')}`;
         }
 
-        const newQuery: Record<string, string | string[] | null | undefined> = { ...current.query };
+        const newQuery: LocationQuery = { ...current.query };
 
         for (const key of data.queryProperties) {
             const listingQueryValue = data.listingQuery[key];
@@ -363,7 +390,7 @@ export class ExtensionStoreChannelService {
             }
         }
 
-        this.router.replace({
+        this.router.push({
             path: newPath,
             query: newQuery,
             hash: current.hash,
@@ -408,6 +435,14 @@ export class ExtensionStoreChannelService {
         await this.installExtension(cartData);
 
         return { result: true };
+    }
+
+    private getCurrentRoute(): string {
+        return Object.values(this.router.currentRoute.value.params.pathMatch || {}).join('/');
+    }
+
+    private getCurrentRouteQuery(): LocationQuery {
+        return this.router.currentRoute.value.query || {};
     }
 
     private getErrorDetails(error: unknown): { title: string; description: string; documentationLink: string } {
