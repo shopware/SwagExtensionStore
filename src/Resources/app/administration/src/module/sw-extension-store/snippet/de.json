@@ -142,9 +142,11 @@
                     "followingPerYear": "Anschließend {price}** /Jahr",
                     "forMonths": "für {months} Monate",
                     "forFirstYear": "für das erste Jahr",
+                    "install": "Erweiterung nach dem Kauf automatisch installieren",
                     "perMonth": "/Monat",
                     "perYear": "/Jahr",
                     "submit": "Bestellung absenden",
+                    "submit-and-install": "Bestellung absenden und installieren",
                     "then": "Dann"
                 },
                 "notes": {

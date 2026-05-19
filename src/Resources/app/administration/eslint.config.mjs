@@ -91,6 +91,7 @@ export default tseslint.config(
             'stylistic/quote-props': ['error', 'as-needed'],
             'stylistic/no-extra-semi': ['error'],
             'stylistic/comma-dangle': ['error', 'always-multiline'],
+            'stylistic/quotes': ['error', 'single'],
             /* stylistic rules */
 
             /* typescript rules */

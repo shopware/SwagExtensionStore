@@ -12,6 +12,8 @@ import extensionStoreContextStore
     from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store';
 import { trackExtensionStoreEvent } from 'SwagExtensionStore/util/telemetry';
 import type { TrackableType } from 'src/core/telemetry/types';
+import type ExtensionStorePreferencesService
+    from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-preferences.service';
 
 type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent';
 
@@ -102,6 +104,7 @@ export class ExtensionStoreChannelService {
         private readonly extensionHelperService: ExtensionHelperService,
         private readonly cacheApiService: CacheApiService,
         private readonly router: Router,
+        private readonly extensionStorePreferencesService: ExtensionStorePreferencesService,
     ) {
     }
 
@@ -404,7 +407,10 @@ export class ExtensionStoreChannelService {
         }
 
         await this.shopwareExtensionService.updateExtensionData();
-        await this.installExtension(cartData);
+
+        if (this.extensionStorePreferencesService.state.installAfterPurchase) {
+            await this.installExtension(cartData);
+        }
 
         return { result: true };
     }

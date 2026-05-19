@@ -253,7 +253,7 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
                 active: true,
             },
         };
-        wrapper.vm.inAppPurchaseCart = "Dummy card";
+        wrapper.vm.inAppPurchaseCart = 'Dummy card';
         wrapper.vm.extension = 'Dummy extension';
 
         wrapper.vm.onPurchaseFeature();

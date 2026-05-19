@@ -75,7 +75,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.inAppPurchaseCart = cart;
                 this.state = 'purchase';
             }).catch ((errorResponse: ErrorResponse) => {
-                Shopware.Utils.debug.error("checkout-iap", errorResponse);
+                Shopware.Utils.debug.error('checkout-iap', errorResponse);
                 this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
             });
@@ -102,7 +102,7 @@ export default Shopware.Component.wrapComponentConfig({
 
                 return this.createCart(this.purchase.preselectedVariant);
             }).catch ((errorResponse: ErrorResponse)=> {
-                Shopware.Utils.debug.error("checkout-iap", errorResponse);
+                Shopware.Utils.debug.error('checkout-iap', errorResponse);
                 this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
             });
@@ -121,7 +121,7 @@ export default Shopware.Component.wrapComponentConfig({
             ).then(() => {
                 this.state = 'success';
             }).catch((errorResponse: ErrorResponse) => {
-                Shopware.Utils.debug.error("checkout-iap", errorResponse);
+                Shopware.Utils.debug.error('checkout-iap', errorResponse);
                 this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
             });

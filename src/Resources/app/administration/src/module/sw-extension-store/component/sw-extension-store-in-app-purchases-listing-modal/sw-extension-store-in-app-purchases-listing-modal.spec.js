@@ -14,11 +14,11 @@ async function createWrapper(propsData = {}) {
         global: {
             stubs: {
                 'sw-modal': {
-                    template: `<div class="sw-modal"><slot></slot><slot name="modal-footer"></slot></div>`,
+                    template: '<div class="sw-modal"><slot></slot><slot name="modal-footer"></slot></div>',
                 },
                 'mt-icon': true,
                 'sw-collapse': {
-                    template: `<div class="sw-collapse"><slot name="header"></slot><slot name="content"></slot></div>`,
+                    template: '<div class="sw-collapse"><slot name="header"></slot><slot name="content"></slot></div>',
                 },
             },
         },
