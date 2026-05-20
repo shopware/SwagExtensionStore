@@ -147,6 +147,17 @@
             </div>
             {% endblock %}
 
+            {% block sw_extension_store_purchase_confirmation_checkout_order_install %}
+            <div class="sw-extension-store-purchase-confirmation__checkout-order-install">
+                <mt-switch
+                    :disabled="isLoading"
+                    :model-value="installAfterPurchase"
+                    :label="$t('sw-extension-store.purchase-confirmation.checkout.order.install')"
+                    @update:model-value="onInstallAfterPurchaseChange"
+                />
+            </div>
+            {% endblock %}
+
             {% block sw_extension_store_purchase_confirmation_checkout_order_submit %}
             <div class="sw-extension-store-purchase-confirmation__checkout-order-submit">
                 <mt-button
@@ -156,7 +167,12 @@
                     block
                     @click="confirmPurchase"
                 >
-                    {{ $t('sw-extension-store.purchase-confirmation.checkout.order.submit') }}
+                    <template v-if="installAfterPurchase">
+                        {{ $t('sw-extension-store.purchase-confirmation.checkout.order.submit-and-install') }}
+                    </template>
+                    <template v-else>
+                        {{ $t('sw-extension-store.purchase-confirmation.checkout.order.submit') }}
+                    </template>
                 </mt-button>
             </div>
             {% endblock %}

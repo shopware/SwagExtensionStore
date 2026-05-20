@@ -29,12 +29,17 @@ export default Shopware.Component.wrapComponentConfig({
             type: Boolean,
             required: true,
         },
+        installAfterPurchase: {
+            type: Boolean,
+            required: true,
+        },
     },
 
     emits: [
         'update:modal-view',
         'update:toc-accepted',
         'update:permissions-accepted',
+        'update:install-after-purchase',
     ],
 
     data() {
@@ -174,7 +179,7 @@ export default Shopware.Component.wrapComponentConfig({
 
             if (this.isFirstMonthFree) {
                 const price = this.formatCurrency(this.position?.netPrice ?? 0);
-                
+
                 if (duration === 12) {
                     snippet = this.$t('sw-extension-store.purchase-confirmation.checkout.order.followingPerYear', {
                         price: price,
@@ -225,6 +230,10 @@ export default Shopware.Component.wrapComponentConfig({
 
         showPermissions() {
             this.$emit('update:modal-view', 'permissions');
+        },
+
+        onInstallAfterPurchaseChange(value: boolean) {
+            this.$emit('update:install-after-purchase', value);
         },
 
         closeModal() {
