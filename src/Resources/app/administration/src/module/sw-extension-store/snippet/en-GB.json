@@ -142,9 +142,11 @@
                     "followingPerYear": "Following {price}** /year",
                     "forMonths": "for {months} months",
                     "forFirstYear": "for the first year",
+                    "install": "Install extension automatically after purchase",
                     "perMonth": "/month",
                     "perYear": "/year",
                     "submit": "Submit order",
+                    "submit-and-install": "Submit order and install",
                     "then": "Then"
                 },
                 "notes": {

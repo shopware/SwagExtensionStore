@@ -3,7 +3,8 @@ import ExtensionStoreDataService from './service/extension-store-data.service';
 import ExtensionLicenseService from './service/extension-store-licenses.service';
 import {
     ExtensionStoreChannelService,
-} from "SwagExtensionStore/module/sw-extension-store/service/extension-store-channel.service";
+} from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-channel.service';
+import ExtensionStorePreferencesService from './service/extension-store-preferences.service';
 
 
 Shopware.Component.register('sw-extension-store-index', () => import('./page/sw-extension-store-index'));
@@ -40,6 +41,7 @@ Shopware.Application.addServiceProvider('extensionStoreChannelService', () => {
         Shopware.Service('extensionHelperService'),
         Shopware.Service('cacheApiService'),
         Shopware.Application.view.router,
+        Shopware.Service('extensionStorePreferencesService'),
     );
 });
 
@@ -54,6 +56,12 @@ Shopware.Application.addServiceProvider('extensionStoreLicensesService', () => {
     return new ExtensionLicenseService(
         Shopware.Application.getContainer('init').httpClient,
         Shopware.Service('loginService')
+    );
+});
+
+Shopware.Application.addServiceProvider('extensionStorePreferencesService', () => {
+    return new ExtensionStorePreferencesService(
+        Shopware.Service('userConfigService'),
     );
 });
 

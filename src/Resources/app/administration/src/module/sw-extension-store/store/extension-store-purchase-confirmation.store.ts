@@ -1,6 +1,6 @@
 import { reactive } from 'vue';
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
-import { trackExtensionStoreEvent } from "SwagExtensionStore/util/telemetry";
+import { trackExtensionStoreEvent } from 'SwagExtensionStore/util/telemetry';
 
 type OnConfirmCallback = () => Promise<{ result: boolean; title?: string; description?: string }>;
 type OnCancelCallback = () => void;

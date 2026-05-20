@@ -92,7 +92,7 @@ async function createWrapper() {
                                         {
                                             name: 'category',
                                             value: 'ValentinesDaySale',
-                                            label: "Valentine's Day Sale",
+                                            label: 'Valentine\'s Day Sale',
                                             position: 0,
                                             parent: 'Extensions'
                                         },

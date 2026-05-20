@@ -16,9 +16,11 @@
                     :payment-means="paymentMeans"
                     :permissions-accepted="permissionsAccepted"
                     :toc-accepted="tocAccepted"
+                    :install-after-purchase="installAfterPurchase"
                     @update:modal-view="view = $event"
                     @update:toc-accepted="tocAccepted = $event"
                     @update:permissions-accepted="permissionsAccepted = $event"
+                    @update:install-after-purchase="updateInstallAfterPurchase"
                 />
                 <sw-extension-store-purchase-confirmation-permissions
                     v-if="view === 'permissions'"

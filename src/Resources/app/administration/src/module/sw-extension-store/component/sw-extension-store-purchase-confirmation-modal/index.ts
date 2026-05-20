@@ -10,6 +10,8 @@ type ModalView = 'checkout' | 'permissions';
 export default Shopware.Component.wrapComponentConfig({
     template,
 
+    inject: ['extensionStorePreferencesService'],
+
     data() {
         return {
             view: 'checkout' as ModalView,
@@ -35,6 +37,10 @@ export default Shopware.Component.wrapComponentConfig({
         paymentMeans() {
             return this.store.state.paymentMeansData;
         },
+
+        installAfterPurchase() {
+            return this.extensionStorePreferencesService.state.installAfterPurchase;
+        },
     },
 
     watch: {
@@ -56,6 +62,10 @@ export default Shopware.Component.wrapComponentConfig({
             if (!value) {
                 this.store.cancel();
             }
+        },
+
+        updateInstallAfterPurchase(value: boolean) {
+            this.extensionStorePreferencesService.update({ installAfterPurchase: value });
         },
     },
 });
