@@ -77,8 +77,7 @@ class InAppPurchasesControllerTest extends TestCase
             $this->createMock(EntityRepository::class),
         );
 
-        $this->expectException(ExtensionStoreException::class);
-        $this->expectExceptionMessage('The extension with technical name "otherExtension" is not known.');
+        $this->expectExceptionObject(ExtensionStoreException::unknownExtension('otherExtension'));
 
         $controller->getInAppPurchaseDetails('otherExtension', Context::createDefaultContext());
     }
@@ -206,8 +205,7 @@ class InAppPurchasesControllerTest extends TestCase
 
     public function testOrderCartWithInvalidItem(): void
     {
-        $this->expectException(ExtensionStoreException::class);
-        $this->expectExceptionMessage('The extension provider disallowed your purchase. Please contact the extension provider.');
+        $this->expectExceptionObject(ExtensionStoreException::invalidInAppPurchase());
 
         $service = $this->createMock(InAppPurchasesService::class);
         $service->expects(static::never())
