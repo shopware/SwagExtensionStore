@@ -52,6 +52,8 @@
                     type="external"
                     as="a"
                     :href="purchase.websiteGtc"
+                    data-analytics-id="sw-in-app-purchase-checkout.partner-gtc.open-gtc-link"
+                    data-analytics-source="SwagExtensionStore"
                 >
                     {{ $t('sw-in-app-purchase-checkout-overview.partner.gtc', { partner: producer }, 0) }}
                 </mt-link>
@@ -59,6 +61,8 @@
                     v-else-if="priceModel.conditionsType === 'detailed'"
                     type="internal"
                     as="button"
+                    data-analytics-id="sw-in-app-purchase-checkout.partner-gtc.open-conditions-modal"
+                    data-analytics-source="SwagExtensionStore"
                     @click="openConditionsModal()"
                 >
                     {{ $t('sw-in-app-purchase-checkout-overview.partner.conditions', { partner: producer }, 0) }}
