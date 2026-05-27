@@ -10,4 +10,6 @@ declare global {
     }
 
     type ErrorResponse = AxiosError<{ errors: Array<ShopwareHttpError & { apiCode: string }> }>;
+
+    const __SWAG_EXTENSION_STORE_VERSION__: string;
 }

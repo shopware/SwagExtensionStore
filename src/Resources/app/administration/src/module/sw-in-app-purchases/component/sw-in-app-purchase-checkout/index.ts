@@ -1,6 +1,7 @@
 import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
 import template from './sw-in-app-purchase-checkout.html.twig';
 import './sw-in-app-purchase-checkout.scss';
+import { trackExtensionStoreEvent } from 'SwagExtensionStore/util/telemetry';
 
 /**
  * @private
@@ -74,6 +75,7 @@ export default Shopware.Component.wrapComponentConfig({
             ).then((cart) => {
                 this.inAppPurchaseCart = cart;
                 this.state = 'purchase';
+                this.trackCheckoutEvent('initiated');
             }).catch ((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error("checkout-iap", errorResponse);
                 this.errorMessage = this.getError(errorResponse);
@@ -97,7 +99,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.purchase = purchase;
 
                 if (!this.purchase) {
-                    throw new Error('No in-app purchase foud');
+                    throw new Error('No in-app purchase found');
                 }
 
                 return this.createCart(this.purchase.preselectedVariant);
@@ -114,16 +116,20 @@ export default Shopware.Component.wrapComponentConfig({
                 return;
             }
 
+            this.trackCheckoutEvent('confirmed');
+
             this.inAppPurchasesService.orderCart(
                 this.inAppPurchaseCart.taxRate,
                 this.inAppPurchaseCart.positions,
                 this.extension.name,
             ).then(() => {
                 this.state = 'success';
+                this.trackCheckoutEvent('successful');
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error("checkout-iap", errorResponse);
                 this.errorMessage = this.getError(errorResponse);
                 this.state = 'error';
+                this.trackCheckoutEvent('failed');
             });
         },
 
@@ -161,6 +167,10 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         reset() {
+            if (this.state !== 'success') {
+                this.trackCheckoutEvent('cancelled');
+            }
+
             this.store.dismiss();
             this.inAppPurchaseCart = null;
             this.extension = null;
@@ -170,6 +180,26 @@ export default Shopware.Component.wrapComponentConfig({
             this.variant = null;
             this.tosAccepted = false;
             this.gtcAccepted = false;
+        },
+
+        trackCheckoutEvent(name: string) {
+            const [position] = this.inAppPurchaseCart?.positions ?? [];
+            if (!position || !this.extension) {
+                return;
+            }
+
+            trackExtensionStoreEvent(`iap_checkout_${name}`, {
+                extension_id: this.extension.id,
+                extension_name: this.extension.name,
+                feature_identifier: position.feature.identifier,
+                feature_variant: position.variant,
+                net_price: position.netPrice,
+                tax_rate: position.taxRate,
+                pseudo_price: position.feature.price,
+                prorated_net_price: position.proratedNetPrice,
+                next_booking_date: position.nextBookingDate,
+                subscription_change: position.subscriptionChange?.type ?? null,
+            });
         },
     },
 });
