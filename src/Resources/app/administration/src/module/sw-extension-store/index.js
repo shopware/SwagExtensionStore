@@ -5,6 +5,7 @@ import {
     ExtensionStoreChannelService,
 } from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-channel.service';
 import ExtensionStorePreferencesService from './service/extension-store-preferences.service';
+import extensionStoreContextStore from './store/extension-store-context.store';
 
 
 Shopware.Component.register('sw-extension-store-index', () => import('./page/sw-extension-store-index'));
@@ -81,16 +82,18 @@ Shopware.Module.register('sw-extension-store', {
         },
     },
 
-    /**
-     * Add routeMiddleware to add a redirect to the landing page
-     */
     routeMiddleware(next, currentRoute) {
         if (currentRoute.name === 'sw.extension.store.landing-page') {
             currentRoute.redirect = {
-                name: 'sw.extension.store.listing',
+                name: 'sw.extension.store',
             };
         }
 
         next(currentRoute);
     },
+});
+
+// Pre-fetch & cache iframe URL to speed up the initial loading of the admin store.
+void Shopware.Application.viewInitialized.then(() => {
+    void extensionStoreContextStore().loadIframeUrl();
 });
