@@ -2,7 +2,7 @@ import type { TrackableType } from 'src/core/telemetry/types';
 import extensionStoreContextStore
     from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store';
 
-const collectDefaultEventData = (): Record<string, TrackableType> => {
+const collectDefaultEventData = async (): Promise<Record<string, TrackableType>> => {
     const eventData: Record<string, TrackableType> = {
         source: 'SwagExtensionStore',
         extension_store_version: __SWAG_EXTENSION_STORE_VERSION__,
@@ -13,8 +13,9 @@ const collectDefaultEventData = (): Record<string, TrackableType> => {
         eventData['sky_bridge_store_version'] = contextStore.skyBridgeStoreVersion;
     }
 
-    if (contextStore.licenseHost !== null) {
-        eventData['license_host'] = contextStore.licenseHost;
+    const licenseHost = await contextStore.loadLicenseHost();
+    if (licenseHost !== null) {
+        eventData['license_host'] = licenseHost;
     }
 
     return eventData;
@@ -25,9 +26,11 @@ export const trackExtensionStoreEvent = (eventName: string, data: Record<string,
         return;
     }
 
-    Shopware.Telemetry.track({
-        ...data,
-        ...collectDefaultEventData(),
-        eventName,
+    void collectDefaultEventData().then((defaultEventData) => {
+        Shopware.Telemetry.track({
+            ...data,
+            ...defaultEventData,
+            eventName,
+        });
     });
 };
