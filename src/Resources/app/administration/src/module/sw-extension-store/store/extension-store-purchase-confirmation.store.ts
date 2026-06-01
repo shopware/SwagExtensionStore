@@ -94,8 +94,8 @@ export const purchaseConfirmationStore = {
 
             trackExtensionStorePurchaseEvent('successful');
         } else {
-            state.errorTitle = response.title;
-            state.errorDescription = response.description;
+            state.errorTitle = response.title ?? null;
+            state.errorDescription = response.description ?? null;
             trackExtensionStorePurchaseEvent('failed');
         }
 
