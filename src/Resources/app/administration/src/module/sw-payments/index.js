@@ -1,5 +1,3 @@
-import './acl';
-
 const MODULE_ID = 'sw-payments';
 
 if (!Shopware.Module.getModuleRegistry().has(MODULE_ID)) {
@@ -26,7 +24,6 @@ if (!Shopware.Module.getModuleRegistry().has(MODULE_ID)) {
                 color: '#FFBC51',
                 icon: 'regular-credit-card',
                 position: 35,
-                privilege: 'sw-payments.viewer',
             },
         ],
     });

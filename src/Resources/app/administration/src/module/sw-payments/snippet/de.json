@@ -11,12 +11,5 @@
             "mainMenuItemGeneral": "Shopware Payments",
             "description": "Verwalte Shopware Payments."
         }
-    },
-    "sw-privileges": {
-        "permissions": {
-            "sw-payments": {
-                "label": "Shopware Payments"
-            }
-        }
     }
 }
