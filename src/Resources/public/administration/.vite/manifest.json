@@ -1,0 +1,11 @@
+{
+  "main.js": {
+    "file": "js/swag-extension-store.js",
+    "name": "swag-extension-store",
+    "src": "main.js",
+    "isEntry": true,
+    "css": [
+      "css/swag-extension-store.css"
+    ]
+  }
+}
