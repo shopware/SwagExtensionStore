@@ -1,5 +1,5 @@
-import enSnippets from './snippet/en.json';
-import deSnippets from './snippet/de.json';
+import enSnippets from './snippet/en-GB.json';
+import deSnippets from './snippet/de-DE.json';
 
 const MODULE_ID = 'sw-payments';
 
