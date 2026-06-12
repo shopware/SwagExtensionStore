@@ -10,6 +10,16 @@
         "general": {
             "mainMenuItemGeneral": "Shopware Payments",
             "description": "Manage Shopware Payments."
+        },
+        "dashboardPromotion": {
+            "badge": "New",
+            "dismiss": "Dismiss Shopware Payments promotion",
+            "marketingAlt": "Shopware Payments supported payment methods",
+            "headline": "Shopware Payments now available",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ultricies est urna, ut imperdiet mauris venenatis vel.",
+            "activateNow": "Activate now",
+            "learnMore": "Learn more",
+            "learnMoreUrl": "https://www.shopware.com/products/shopware-payments/"
         }
     }
 }

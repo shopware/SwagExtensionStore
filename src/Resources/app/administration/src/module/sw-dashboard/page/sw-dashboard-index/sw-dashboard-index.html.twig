@@ -1,4 +1,10 @@
 {% block sw_dashboard_index_content_intro_card %}
     {% parent %}
+    <sw-payments-dashboard-promotion-card />
     <sw-dashboard-statistics-promotion-card />
+{% endblock %}
+
+{% block saas_rufus_dashboard_campaign_banner %}
+    <sw-payments-dashboard-promotion-card />
+    {% parent %}
 {% endblock %}

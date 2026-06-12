@@ -1,0 +1,78 @@
+.sw-payments-dashboard-promotion-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    &__dismiss {
+        position: absolute;
+        top: 9px;
+        right: 24px;
+        width: 10px;
+        height: 10px;
+    }
+
+    &__layout {
+        display: flex;
+        align-items: center;
+        align-self: stretch;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 16px;
+
+        > * {
+            flex: 1 1 0;
+            min-width: 0;
+        }
+    }
+
+    &__content,
+    &__copy {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__content {
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    &__copy {
+        gap: 8px;
+    }
+
+    &__headline,
+    &__description {
+        margin: 0;
+        font-family: var(--font-family-body, Inter);
+        font-size: var(--font-size-s, 16px);
+        font-style: normal;
+        line-height: var(--font-line-height-s, 26px);
+    }
+
+    &__headline {
+        color: var(--color-text-primary-default, #1e1e24);
+        font-weight: var(--font-weight-bold, 700);
+    }
+
+    &__description {
+        color: var(--color-text-secondary-default, #696a6e);
+        font-weight: var(--font-weight-regular, 400);
+    }
+
+    &__actions {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: var(--scale-size-16, 16px);
+    }
+
+    &__visual-column {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    &__visual {
+        display: block;
+        width: min(100%, 305px);
+        height: 228px;
+    }
+}
