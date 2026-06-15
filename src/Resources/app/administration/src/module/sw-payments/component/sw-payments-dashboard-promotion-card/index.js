@@ -1,9 +1,9 @@
 import template from './sw-payments-dashboard-promotion-card.html.twig';
 import './sw-payments-dashboard-promotion-card.scss';
+import { registerOnboardingStatusStore } from '../../service/onboarding-status.store';
 
 const SHOPWARE_PAYMENTS_APP_NAME = 'ShopwarePayments';
 const SHOPWARE_PAYMENTS_OVERVIEW_MODULE_NAME = 'sw-shopware-payments-overview';
-const SHOPWARE_PAYMENTS_ONBOARDING_STATUS_MESSAGE = 'shopware-payments-merchant-onboarding-status';
 const MINIMUM_SUPPORTED_VERSION = '6.5.7.0';
 const DISMISSAL_STORAGE_KEY = 'shopware-payments.dashboard-promotion.dismissed';
 
@@ -12,7 +12,6 @@ export default Shopware.Component.wrapComponentConfig({
 
     data() {
         return {
-            hasOnboardedMerchant: null,
             isDismissed: this.isDismissedInSession(),
             isInitialized: false,
         };
@@ -27,24 +26,18 @@ export default Shopware.Component.wrapComponentConfig({
             return Shopware.Store.get('extensions').extensionsState?.[SHOPWARE_PAYMENTS_APP_NAME] ?? null;
         },
 
+        onboardingStatusStore() {
+            return registerOnboardingStatusStore();
+        },
+
         isShopwarePaymentsInstalled() {
             return this.shopwarePaymentsExtension?.active === true;
         },
 
-        shopwarePaymentsOrigin() {
-            if (!this.shopwarePaymentsExtension?.baseUrl) {
-                return null;
-            }
-
-            try {
-                return new URL(this.shopwarePaymentsExtension.baseUrl).origin;
-            } catch {
-                return null;
-            }
-        },
-
         isSupportedShopwareVersion() {
-            return this.compareVersions(Shopware.Context.app.config.version ?? '', MINIMUM_SUPPORTED_VERSION) >= 0;
+            return (Shopware.Context.app.config.version ?? '')
+                .replace(/-.*/, '')
+                .localeCompare(MINIMUM_SUPPORTED_VERSION, undefined, { numeric: true }) >= 0;
         },
 
         showActivateButton() {
@@ -52,7 +45,7 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         hasNoOnboardedMerchant() {
-            return !this.isShopwarePaymentsInstalled || this.hasOnboardedMerchant === false;
+            return !this.isShopwarePaymentsInstalled || this.onboardingStatusStore.hasOnboardedMerchant === false;
         },
 
         showBanner() {
@@ -65,14 +58,6 @@ export default Shopware.Component.wrapComponentConfig({
 
     created() {
         this.createdComponent();
-    },
-
-    mounted() {
-        window.addEventListener('message', this.onShopwarePaymentsMessage);
-    },
-
-    beforeUnmount() {
-        window.removeEventListener('message', this.onShopwarePaymentsMessage);
     },
 
     methods: {
@@ -103,55 +88,8 @@ export default Shopware.Component.wrapComponentConfig({
             window.open(this.$t('sw-payments.dashboardPromotion.learnMoreUrl'), '_blank');
         },
 
-        onShopwarePaymentsMessage(event) {
-            if (!this.isShopwarePaymentsInstalled || !this.shopwarePaymentsOrigin) {
-                return;
-            }
-
-            if (event.origin !== this.shopwarePaymentsOrigin) {
-                return;
-            }
-
-            if (event.data?.type !== SHOPWARE_PAYMENTS_ONBOARDING_STATUS_MESSAGE) {
-                return;
-            }
-
-            if (typeof event.data.hasOnboardedMerchant !== 'boolean') {
-                return;
-            }
-
-            this.hasOnboardedMerchant = event.data.hasOnboardedMerchant;
-        },
-
         isDismissedInSession() {
             return sessionStorage.getItem(DISMISSAL_STORAGE_KEY) === 'true';
-        },
-
-        compareVersions(version, minimumVersion) {
-            const normalizedVersion = this.normalizeVersion(version);
-            const normalizedMinimumVersion = this.normalizeVersion(minimumVersion);
-
-            for (let i = 0; i < normalizedMinimumVersion.length; i += 1) {
-                if (normalizedVersion[i] > normalizedMinimumVersion[i]) {
-                    return 1;
-                }
-
-                if (normalizedVersion[i] < normalizedMinimumVersion[i]) {
-                    return -1;
-                }
-            }
-
-            return 0;
-        },
-
-        normalizeVersion(version) {
-            return version
-                .replace(/-.*/, '')
-                .split('.')
-                .map((part) => Number.parseInt(part, 10))
-                .map((part) => (Number.isNaN(part) ? 0 : part))
-                .concat([0, 0, 0, 0])
-                .slice(0, 4);
         },
     },
 });
