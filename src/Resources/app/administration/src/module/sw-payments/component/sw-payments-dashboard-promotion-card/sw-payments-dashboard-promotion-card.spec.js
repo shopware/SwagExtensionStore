@@ -1,7 +1,8 @@
 import { flushPromises, mount } from '@vue/test-utils';
 
 const SHOPWARE_PAYMENTS_APP_NAME = 'ShopwarePayments';
-const SANDBOX_TRACKING_ID = '00000000-0000-0000-0000-000000000000';
+const SHOPWARE_PAYMENTS_ORIGIN = 'https://payments.example.test';
+const SHOPWARE_PAYMENTS_ONBOARDING_STATUS_MESSAGE = 'shopware-payments-merchant-onboarding-status';
 const DISMISSAL_STORAGE_KEY = 'shopware-payments.dashboard-promotion.dismissed';
 const LEARN_MORE_URL = 'https://www.shopware.com/products/shopware-payments/';
 
@@ -18,28 +19,20 @@ describe('src/module/sw-payments/component/sw-payments-dashboard-promotion-card'
     async function createWrapper({
         version = '6.5.7.0',
         installed = false,
-        merchants = [],
-        fetchRejects = false,
     } = {}) {
         Shopware.Context.app.config.version = version;
         Shopware.Context.app.config.bundles = {};
+        Shopware.Store.get('extensions').extensionsState = {};
 
         if (installed) {
-            Shopware.Context.app.config.bundles[SHOPWARE_PAYMENTS_APP_NAME] = {
-                baseUrl: null,
-                css: [],
-                js: [],
+            Shopware.Store.get('extensions').extensionsState[SHOPWARE_PAYMENTS_APP_NAME] = {
+                name: SHOPWARE_PAYMENTS_APP_NAME,
+                baseUrl: `${SHOPWARE_PAYMENTS_ORIGIN}/admin`,
+                permissions: {},
                 type: 'app',
                 active: true,
             };
         }
-
-        global.fetch = fetchRejects
-            ? jest.fn(() => Promise.reject(new Error('Request failed')))
-            : jest.fn(() => Promise.resolve({
-                ok: true,
-                json: () => Promise.resolve(merchants),
-            }));
 
         const wrapper = mount(await Shopware.Component.build('sw-payments-dashboard-promotion-card'), {
             global: {
@@ -70,18 +63,27 @@ describe('src/module/sw-payments/component/sw-payments-dashboard-promotion-card'
         return wrapper;
     }
 
+    async function dispatchOnboardingStatus(hasOnboardedMerchant, origin = SHOPWARE_PAYMENTS_ORIGIN) {
+        window.dispatchEvent(new MessageEvent('message', {
+            origin,
+            data: {
+                type: SHOPWARE_PAYMENTS_ONBOARDING_STATUS_MESSAGE,
+                hasOnboardedMerchant,
+            },
+        }));
+
+        await flushPromises();
+    }
+
     beforeEach(() => {
         if (!Shopware.Context.app.config) {
             Shopware.Context.app.config = {};
         }
 
         sessionStorage.clear();
+        Shopware.Store.get('extensions').extensionsState = {};
         router.push.mockClear();
         global.window.open = jest.fn();
-    });
-
-    afterEach(() => {
-        delete global.fetch;
     });
 
     it('does not show the banner below Shopware 6.5.7.0', async () => {
@@ -109,7 +111,6 @@ describe('src/module/sw-payments/component/sw-payments-dashboard-promotion-card'
         expect(wrapper.text()).toContain('sw-payments.dashboardPromotion.description');
         expect(wrapper.text()).toContain('sw-payments.dashboardPromotion.learnMore');
         expect(wrapper.text()).not.toContain('sw-payments.dashboardPromotion.activateNow');
-        expect(global.fetch).toHaveBeenCalledTimes(0);
     });
 
     it('hides the banner after dismissing it for the current session', async () => {
@@ -129,49 +130,49 @@ describe('src/module/sw-payments/component/sw-payments-dashboard-promotion-card'
         expect(wrapper.find('.sw-payments-dashboard-promotion-card').exists()).toBe(false);
     });
 
-    it('does not show the banner when an onboarded account exists', async () => {
-        const wrapper = await createWrapper({
-            installed: true,
-            merchants: [
-                {
-                    trackingId: '2f6d5b2f-5eb2-4f43-b566-8216f2098b42',
-                    merchantId: 'merchant-123',
-                },
-            ],
-        });
+    it('does not show the banner while waiting for Shopware Payments onboarding status', async () => {
+        const wrapper = await createWrapper({ installed: true });
 
         expect(wrapper.find('.sw-payments-dashboard-promotion-card').exists()).toBe(false);
     });
 
-    it('shows the banner when merchants are empty, incomplete, or sandbox-only', async () => {
-        const wrapper = await createWrapper({
-            installed: true,
-            merchants: [
-                {
-                    trackingId: SANDBOX_TRACKING_ID,
-                    merchantId: 'sandbox-merchant',
-                },
-                {
-                    trackingId: '2f6d5b2f-5eb2-4f43-b566-8216f2098b42',
-                    merchantId: ' ',
-                },
-                {
-                    trackingId: 'bfe9c415-a16e-4472-ae05-1407594077b5',
-                    merchantId: null,
-                },
-            ],
-        });
+    it('does not show the banner when Shopware Payments reports an onboarded merchant', async () => {
+        const wrapper = await createWrapper({ installed: true });
+
+        await dispatchOnboardingStatus(true);
+
+        expect(wrapper.find('.sw-payments-dashboard-promotion-card').exists()).toBe(false);
+    });
+
+    it('shows the banner when Shopware Payments reports no onboarded merchant', async () => {
+        const wrapper = await createWrapper({ installed: true });
+
+        await dispatchOnboardingStatus(false);
 
         expect(wrapper.find('.sw-payments-dashboard-promotion-card').exists()).toBe(true);
     });
 
-    it('keeps the banner visible when merchant loading fails', async () => {
-        const wrapper = await createWrapper({
-            installed: true,
-            fetchRejects: true,
-        });
+    it('ignores onboarding status messages from another origin', async () => {
+        const wrapper = await createWrapper({ installed: true });
 
-        expect(wrapper.find('.sw-payments-dashboard-promotion-card').exists()).toBe(true);
+        await dispatchOnboardingStatus(false, 'https://example.com');
+
+        expect(wrapper.find('.sw-payments-dashboard-promotion-card').exists()).toBe(false);
+    });
+
+    it('ignores onboarding status messages without a boolean status', async () => {
+        const wrapper = await createWrapper({ installed: true });
+
+        window.dispatchEvent(new MessageEvent('message', {
+            origin: SHOPWARE_PAYMENTS_ORIGIN,
+            data: {
+                type: SHOPWARE_PAYMENTS_ONBOARDING_STATUS_MESSAGE,
+            },
+        }));
+
+        await flushPromises();
+
+        expect(wrapper.find('.sw-payments-dashboard-promotion-card').exists()).toBe(false);
     });
 
     it('shows the activate button only when Shopware Payments is installed', async () => {
@@ -179,11 +180,14 @@ describe('src/module/sw-payments/component/sw-payments-dashboard-promotion-card'
         expect(wrapperWithoutApp.find('.sw-payments-dashboard-promotion-card__activate').exists()).toBe(false);
 
         const wrapperWithApp = await createWrapper({ installed: true });
+        await dispatchOnboardingStatus(false);
+
         expect(wrapperWithApp.find('.sw-payments-dashboard-promotion-card__activate').exists()).toBe(true);
     });
 
     it('routes to the Shopware Payments app overview when activating', async () => {
         const wrapper = await createWrapper({ installed: true });
+        await dispatchOnboardingStatus(false);
 
         await wrapper.find('.sw-payments-dashboard-promotion-card__activate').trigger('click');
 

@@ -3,7 +3,7 @@ import './sw-payments-dashboard-promotion-card.scss';
 
 const SHOPWARE_PAYMENTS_APP_NAME = 'ShopwarePayments';
 const SHOPWARE_PAYMENTS_OVERVIEW_MODULE_NAME = 'sw-shopware-payments-overview';
-const SANDBOX_TRACKING_ID = '00000000-0000-0000-0000-000000000000';
+const SHOPWARE_PAYMENTS_ONBOARDING_STATUS_MESSAGE = 'shopware-payments-merchant-onboarding-status';
 const MINIMUM_SUPPORTED_VERSION = '6.5.7.0';
 const DISMISSAL_STORAGE_KEY = 'shopware-payments.dashboard-promotion.dismissed';
 
@@ -12,7 +12,7 @@ export default Shopware.Component.wrapComponentConfig({
 
     data() {
         return {
-            hasOnboardedAccount: false,
+            hasOnboardedMerchant: null,
             isDismissed: this.isDismissedInSession(),
             isInitialized: false,
         };
@@ -23,8 +23,24 @@ export default Shopware.Component.wrapComponentConfig({
             return Shopware.Filter.getByName('asset');
         },
 
+        shopwarePaymentsExtension() {
+            return Shopware.Store.get('extensions').extensionsState?.[SHOPWARE_PAYMENTS_APP_NAME] ?? null;
+        },
+
         isShopwarePaymentsInstalled() {
-            return !!Shopware.Context.app.config.bundles?.[SHOPWARE_PAYMENTS_APP_NAME];
+            return this.shopwarePaymentsExtension?.active === true;
+        },
+
+        shopwarePaymentsOrigin() {
+            if (!this.shopwarePaymentsExtension?.baseUrl) {
+                return null;
+            }
+
+            try {
+                return new URL(this.shopwarePaymentsExtension.baseUrl).origin;
+            } catch {
+                return null;
+            }
         },
 
         isSupportedShopwareVersion() {
@@ -35,11 +51,15 @@ export default Shopware.Component.wrapComponentConfig({
             return this.isShopwarePaymentsInstalled;
         },
 
+        hasNoOnboardedMerchant() {
+            return !this.isShopwarePaymentsInstalled || this.hasOnboardedMerchant === false;
+        },
+
         showBanner() {
             return this.isInitialized
                 && this.isSupportedShopwareVersion
                 && !this.isDismissed
-                && !this.hasOnboardedAccount;
+                && this.hasNoOnboardedMerchant;
         },
     },
 
@@ -47,41 +67,17 @@ export default Shopware.Component.wrapComponentConfig({
         this.createdComponent();
     },
 
+    mounted() {
+        window.addEventListener('message', this.onShopwarePaymentsMessage);
+    },
+
+    beforeUnmount() {
+        window.removeEventListener('message', this.onShopwarePaymentsMessage);
+    },
+
     methods: {
-        async createdComponent() {
-            if (!this.isSupportedShopwareVersion || this.isDismissed || !this.isShopwarePaymentsInstalled) {
-                this.isInitialized = true;
-
-                return;
-            }
-
-            try {
-                const merchants = await this.fetchMerchants();
-                this.hasOnboardedAccount = merchants.some((merchant) => {
-                    return merchant.trackingId !== SANDBOX_TRACKING_ID
-                        && typeof merchant.merchantId === 'string'
-                        && merchant.merchantId.trim() !== '';
-                });
-            } catch {
-                this.hasOnboardedAccount = false;
-            } finally {
-                this.isInitialized = true;
-            }
-        },
-
-        async fetchMerchants() {
-            const response = await fetch('/api/admin/shop-information/merchants', {
-                credentials: 'same-origin',
-                headers: {
-                    Accept: 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to load Shopware Payments merchants');
-            }
-
-            return response.json();
+        createdComponent() {
+            this.isInitialized = true;
         },
 
         dismiss() {
@@ -105,6 +101,26 @@ export default Shopware.Component.wrapComponentConfig({
 
         learnMore() {
             window.open(this.$t('sw-payments.dashboardPromotion.learnMoreUrl'), '_blank');
+        },
+
+        onShopwarePaymentsMessage(event) {
+            if (!this.isShopwarePaymentsInstalled || !this.shopwarePaymentsOrigin) {
+                return;
+            }
+
+            if (event.origin !== this.shopwarePaymentsOrigin) {
+                return;
+            }
+
+            if (event.data?.type !== SHOPWARE_PAYMENTS_ONBOARDING_STATUS_MESSAGE) {
+                return;
+            }
+
+            if (typeof event.data.hasOnboardedMerchant !== 'boolean') {
+                return;
+            }
+
+            this.hasOnboardedMerchant = event.data.hasOnboardedMerchant;
         },
 
         isDismissedInSession() {
