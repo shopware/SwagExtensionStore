@@ -66,7 +66,7 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         dismiss() {
-            sessionStorage.setItem(DISMISSAL_STORAGE_KEY, 'true');
+            localStorage.setItem(DISMISSAL_STORAGE_KEY, 'true');
             this.isDismissed = true;
         },
 
@@ -89,7 +89,7 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         isDismissedInSession() {
-            return sessionStorage.getItem(DISMISSAL_STORAGE_KEY) === 'true';
+            return localStorage.getItem(DISMISSAL_STORAGE_KEY) === 'true';
         },
     },
 });

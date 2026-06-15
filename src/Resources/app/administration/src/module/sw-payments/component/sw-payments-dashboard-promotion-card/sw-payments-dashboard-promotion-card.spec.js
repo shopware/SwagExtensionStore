@@ -73,7 +73,7 @@ describe('src/module/sw-payments/component/sw-payments-dashboard-promotion-card'
             Shopware.Context.app.config = {};
         }
 
-        sessionStorage.clear();
+        localStorage.clear();
         Shopware.Store.get('extensions').extensionsState = {};
         registerOnboardingStatusStore().setHasOnboardedMerchant(null);
         router.push.mockClear();
@@ -107,17 +107,17 @@ describe('src/module/sw-payments/component/sw-payments-dashboard-promotion-card'
         expect(wrapper.text()).not.toContain('sw-payments.dashboardPromotion.activateNow');
     });
 
-    it('hides the banner after dismissing it for the current session', async () => {
+    it('hides the banner after dismissing it', async () => {
         const wrapper = await createWrapper();
 
         await wrapper.find('.sw-payments-dashboard-promotion-card__dismiss').trigger('click');
 
-        expect(sessionStorage.getItem(DISMISSAL_STORAGE_KEY)).toBe('true');
+        expect(localStorage.getItem(DISMISSAL_STORAGE_KEY)).toBe('true');
         expect(wrapper.find('.sw-payments-dashboard-promotion-card').exists()).toBe(false);
     });
 
-    it('does not show the banner when it was already dismissed in the current session', async () => {
-        sessionStorage.setItem(DISMISSAL_STORAGE_KEY, 'true');
+    it('does not show the banner when it was already dismissed', async () => {
+        localStorage.setItem(DISMISSAL_STORAGE_KEY, 'true');
 
         const wrapper = await createWrapper();
 
