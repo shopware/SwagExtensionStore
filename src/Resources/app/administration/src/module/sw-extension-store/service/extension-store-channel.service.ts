@@ -61,6 +61,7 @@ type StoreContext = {
     success: boolean;
     currentRoute: string;
     currentRouteQuery: LocationQuery;
+    navigateToExtension?: string | number;
 };
 
 type PurchaseResponse = {
@@ -293,6 +294,7 @@ export class ExtensionStoreChannelService {
             success: true,
             currentRoute: currentRoute,
             currentRouteQuery: currentRouteQuery,
+            navigateToExtension: this.getNavigateToExtension(),
         };
     }
 
@@ -460,6 +462,14 @@ export class ExtensionStoreChannelService {
             description: errorDetails?.description ?? '',
             documentationLink: errorDetails?.meta?.documentationLink ?? '',
         };
+    }
+
+    private getNavigateToExtension(): string | number | undefined {
+        const state = window.history.state as unknown;
+
+        return state && typeof state === 'object' && 'extensionIdentifier' in state
+            ? state.extensionIdentifier as string | number
+            : undefined;
     }
 
     private async installExtension(cartData: ExtensionStoreBasket): Promise<void> {

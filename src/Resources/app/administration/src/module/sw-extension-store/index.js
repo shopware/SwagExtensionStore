@@ -54,18 +54,19 @@ Shopware.Module.register('sw-extension-store', {
         },
         // The Shopware Admin requires this exact route name (sw.extension.store.detail) to link to the details page in the Store.
         'store.detail': {
-            path: 'store/detail/:id',
+            path: 'store/extension/:id',
             meta: {
                 parentPath: 'sw.extension.store',
                 privilege: 'system.extension_store',
             },
-            // TODO(ECTO-2679): Implement deep linking to PDP.
-            component: 'sw-extension-store-index',
-            props: {
-                default: (route) => {
-                    return { id: route.params.id };
+            // Reuse the catch-all store route for initial rendering but forward the identifier.
+            // The identifier might be the extension's internal ID (int) or its technical name (str).
+            redirect: (route) => ({
+                name: 'sw.extension.store',
+                state: {
+                    extensionIdentifier: route.params.id,
                 },
-            },
+            }),
         },
     },
 
