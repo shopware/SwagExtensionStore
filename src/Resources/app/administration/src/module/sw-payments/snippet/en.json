@@ -16,10 +16,10 @@
             "dismiss": "Dismiss Shopware Payments promotion",
             "marketingAlt": "Shopware Payments supported payment methods",
             "headline": "Shopware Payments now available",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ultricies est urna, ut imperdiet mauris venenatis vel.",
+            "description": "Manage payments where you manage your business. Streamline payment operations while maintaining flexibility through an open architecture. Powered by PayPal's global payment infrastructure for reliable payments worldwide.",
             "activateNow": "Activate now",
             "learnMore": "Learn more",
-            "learnMoreUrl": "https://www.shopware.com/products/shopware-payments/"
+            "learnMoreUrl": "https://www.shopware.com/en/products/shopware-payments/"
         }
     }
 }
