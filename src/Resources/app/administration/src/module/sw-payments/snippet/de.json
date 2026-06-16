@@ -10,6 +10,16 @@
         "general": {
             "mainMenuItemGeneral": "Shopware Payments",
             "description": "Verwalte Shopware Payments."
+        },
+        "dashboardPromotion": {
+            "badge": "Neu",
+            "dismiss": "Shopware Payments Promotion ausblenden",
+            "marketingAlt": "Von Shopware Payments unterstützte Zahlungsarten",
+            "headline": "Shopware Payments jetzt verfügbar",
+            "description": "Verwalte Zahlungen direkt in Shopware. Optimiere deine Zahlungsprozesse und bewahre maximale Flexibilität dank offener Architektur. Unterstützt von PayPals globaler Zahlungsinfrastruktur für zuverlässige Zahlungen weltweit.",
+            "activateNow": "Jetzt aktivieren",
+            "learnMore": "Mehr erfahren",
+            "learnMoreUrl": "https://www.shopware.com/de/produkte/shopware-payments/"
         }
     }
 }

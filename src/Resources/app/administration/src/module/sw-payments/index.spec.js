@@ -59,6 +59,16 @@ describe('SwagExtensionStore/module/sw-payments', () => {
                 'general',
                 'description',
             ]);
+            expect(snippets).toHaveProperty([
+                'sw-payments',
+                'dashboardPromotion',
+                'headline',
+            ]);
+            expect(snippets).toHaveProperty([
+                'sw-payments',
+                'dashboardPromotion',
+                'learnMoreUrl',
+            ]);
         });
     });
 

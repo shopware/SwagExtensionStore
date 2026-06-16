@@ -1,7 +1,7 @@
 import './module/sw-extension';
 import './module/sw-extension-store';
+import './module/sw-payments';
 import './module/sw-dashboard';
 import './module/sw-in-app-purchases';
-import './module/sw-payments';
 
 import './init/translation.init';

@@ -1,4 +1,10 @@
+import { registerShopwarePaymentsOnboardingStatusListener } from './service/onboarding-status-listener.service';
+
 const MODULE_ID = 'sw-payments';
+
+registerShopwarePaymentsOnboardingStatusListener();
+
+Shopware.Component.register('sw-payments-dashboard-promotion-card', () => import('./component/sw-payments-dashboard-promotion-card'));
 
 if (!Shopware.Module.getModuleRegistry().has(MODULE_ID)) {
     Shopware.Module.register(MODULE_ID, {
