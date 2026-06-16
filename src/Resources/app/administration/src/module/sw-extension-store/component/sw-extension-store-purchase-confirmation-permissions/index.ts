@@ -12,12 +12,12 @@ export default Shopware.Component.wrapComponentConfig({
     props: {
         cart: {
             type: Object as PropType<ExtensionStoreBasket>,
-            required: true,
-        },
+            required: true
+        }
     },
 
     emits: [
-        'update:modal-view',
+        'update:modal-view'
     ],
 
     computed: {
@@ -33,20 +33,20 @@ export default Shopware.Component.wrapComponentConfig({
             return [
                 {
                     label: this.$tc('sw-extension-store.component.sw-extension-permissions-details-modal.operationRead'),
-                    operation: 'read',
+                    operation: 'read'
                 },
                 {
                     label: this.$tc('sw-extension-store.component.sw-extension-permissions-details-modal.operationUpdate'),
-                    operation: 'update',
+                    operation: 'update'
                 },
                 {
                     label: this.$tc('sw-extension-store.component.sw-extension-permissions-details-modal.operationCreate'),
-                    operation: 'create',
+                    operation: 'create'
                 },
                 {
                     label: this.$tc('sw-extension-store.component.sw-extension-permissions-details-modal.operationDelete'),
-                    operation: 'delete',
-                },
+                    operation: 'delete'
+                }
             ];
         },
 
@@ -60,7 +60,7 @@ export default Shopware.Component.wrapComponentConfig({
                 Object.entries(this.extension.permissions).map(
                     ([
                         category,
-                        permissions,
+                        permissions
                     ]) => {
                         const grouped = permissions.reduce<Record<string, string[]>>((acc, permission) => {
                             const entity = permission.entity;
@@ -77,16 +77,16 @@ export default Shopware.Component.wrapComponentConfig({
                         }, {});
                         return [
                             category,
-                            grouped,
+                            grouped
                         ];
-                    },
-                ),
+                    }
+                )
             );
         },
 
         domains() {
             return this.extension.domains.filter((domain) => domain !== null);
-        },
+        }
     },
 
     methods: {
@@ -104,6 +104,6 @@ export default Shopware.Component.wrapComponentConfig({
 
         showCheckout() {
             this.$emit('update:modal-view', 'checkout');
-        },
-    },
+        }
+    }
 });

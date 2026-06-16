@@ -1,4 +1,4 @@
-import { purchaseConfirmationStore } from '../../store/extension-store-purchase-confirmation.store';
+import extensionStorePurchaseConfirmationStore from '../../store/extension-store-purchase-confirmation.store';
 import template from './sw-extension-store-purchase-confirmation-checkout.html.twig';
 import './sw-extension-store-purchase-confirmation-checkout.scss';
 
@@ -15,79 +15,73 @@ export default Shopware.Component.wrapComponentConfig({
     props: {
         cart: {
             type: Object as PropType<ExtensionStoreBasket>,
-            required: true,
+            required: true
         },
         paymentMeans: {
             type: Object as PropType<ExtensionStorePaymentMean[]>,
-            required: true,
+            required: true
         },
         tocAccepted: {
             type: Boolean,
-            required: true,
+            required: true
         },
         permissionsAccepted: {
             type: Boolean,
-            required: true,
+            required: true
         },
         installAfterPurchase: {
             type: Boolean,
-            required: true,
-        },
+            required: true
+        }
     },
 
     emits: [
         'update:modal-view',
         'update:toc-accepted',
         'update:permissions-accepted',
-        'update:install-after-purchase',
+        'update:install-after-purchase'
     ],
-
-    data() {
-        return {
-            store: purchaseConfirmationStore,
-        };
-    },
 
     computed: {
         steps() {
             return Object.freeze({
                 CHECKOUT: null,
                 SUCCESS: 'success',
-                FAILED: 'failed',
+                FAILED: 'failed'
             });
         },
 
         step() {
-            if (this.store.state.isFailedOnBasketCreation) {
+            if (extensionStorePurchaseConfirmationStore().isFailedOnBasketCreation) {
                 return this.steps.FAILED;
             }
 
             if (this.isSubmitted && !this.isLoading) {
-                return this.store.state.isSuccessful ? this.steps.SUCCESS : this.steps.FAILED;
+                return extensionStorePurchaseConfirmationStore().isSuccessful ? this.steps.SUCCESS : this.steps.FAILED;
             }
 
             return this.steps.CHECKOUT;
         },
 
         isOpen() {
-            return this.store.state.isOpen;
+            return extensionStorePurchaseConfirmationStore().isOpen;
         },
 
         isLoading() {
-            return this.store.state.isLoading;
+            return extensionStorePurchaseConfirmationStore().isLoading;
         },
 
         isSubmitted() {
-            return this.store.state.isSubmitted;
+            return extensionStorePurchaseConfirmationStore().isSubmitted;
         },
         errorTitle() {
-            return this.store.state.errorTitle;
+            return extensionStorePurchaseConfirmationStore().errorTitle;
         },
         errorDescription() {
-            return this.store.state.errorDescription;
+            return extensionStorePurchaseConfirmationStore().errorDescription;
         },
         errorDocumentationLink() {
-            return this.store.state.errorDocumentationLink;
+            return extensionStorePurchaseConfirmationStore().errorDocumentationLink;
         },
         position() {
             return this.cart?.positions?.[0];
@@ -173,7 +167,7 @@ export default Shopware.Component.wrapComponentConfig({
                 const discountAppliesForMonths = this.position?.discountAppliesForMonths;
 
                 snippet += this.$t('sw-extension-store.purchase-confirmation.checkout.order.forMonths', {
-                    months: discountAppliesForMonths,
+                    months: discountAppliesForMonths
                 });
             }
 
@@ -181,13 +175,13 @@ export default Shopware.Component.wrapComponentConfig({
                 const price = this.formatCurrency(this.position?.netPrice ?? 0);
 
                 if (duration === 12) {
-                    snippet = this.$t('sw-extension-store.purchase-confirmation.checkout.order.followingPerYear', {
-                        price: price,
-                    }) + ' (' + snippet + ')';
+                    snippet = `${this.$t('sw-extension-store.purchase-confirmation.checkout.order.followingPerYear', {
+                        price: price
+                    })} (${snippet})`;
                 } else {
-                    snippet = this.$t('sw-extension-store.purchase-confirmation.checkout.order.followingPerMonth', {
-                        price: price,
-                    }) + ' ' + snippet;
+                    snippet = `${this.$t('sw-extension-store.purchase-confirmation.checkout.order.followingPerMonth', {
+                        price: price
+                    })} ${snippet}`;
                 }
             }
 
@@ -199,7 +193,7 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         userCanBuyFromStore() {
-            return Shopware.Store.get('shopwareExtensions').userInfo !== null;
+            return Shopware.State.get('shopwareExtensions').userInfo !== null;
         },
 
         hasPaymentMethodError() {
@@ -212,7 +206,7 @@ export default Shopware.Component.wrapComponentConfig({
                 && this.tocAccepted
                 && (!this.extensionHasPermissionsOrDomains || this.permissionsAccepted)
                 && !this.hasPaymentMethodError;
-        },
+        }
     },
 
     methods: {
@@ -237,15 +231,15 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         closeModal() {
-            this.store.closeModal();
+            extensionStorePurchaseConfirmationStore().closeModal();
         },
 
         cancelPurchase() {
-            this.store.cancel();
+            extensionStorePurchaseConfirmationStore().cancel();
         },
 
         async confirmPurchase() {
-            await this.store.confirm();
-        },
-    },
+            await extensionStorePurchaseConfirmationStore().confirm();
+        }
+    }
 });

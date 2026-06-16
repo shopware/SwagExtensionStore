@@ -1,4 +1,4 @@
-import { purchaseConfirmationStore } from '../../store/extension-store-purchase-confirmation.store';
+import extensionStorePurchaseConfirmationStore from '../../store/extension-store-purchase-confirmation.store';
 import template from './sw-extension-store-purchase-confirmation-modal.html.twig';
 import './sw-extension-store-purchase-confirmation-modal.scss';
 
@@ -15,40 +15,38 @@ export default Shopware.Component.wrapComponentConfig({
     data() {
         return {
             view: 'checkout' as ModalView,
-            store: purchaseConfirmationStore,
             tocAccepted: false,
             permissionsAccepted: false,
+            installAfterPurchase: true
         };
     },
 
     computed: {
         isOpen() {
-            return this.store.state.isOpen;
+            return extensionStorePurchaseConfirmationStore().isOpen;
         },
 
         isLoading() {
-            return this.store.state.isLoading;
+            return extensionStorePurchaseConfirmationStore().isLoading;
         },
 
         cart() {
-            return this.store.state.cartData;
+            return extensionStorePurchaseConfirmationStore().cartData;
         },
 
         paymentMeans() {
-            return this.store.state.paymentMeansData;
-        },
-
-        installAfterPurchase() {
-            return this.extensionStorePreferencesService.state.installAfterPurchase;
-        },
+            return extensionStorePurchaseConfirmationStore().paymentMeansData;
+        }
     },
 
     watch: {
         isOpen(value: boolean) {
             if (!value) {
                 this.resetModal();
+            } else {
+                this.installAfterPurchase = this.extensionStorePreferencesService.state.installAfterPurchase;
             }
-        },
+        }
     },
 
     methods: {
@@ -60,12 +58,13 @@ export default Shopware.Component.wrapComponentConfig({
 
         onModalChange(value: boolean) {
             if (!value) {
-                this.store.cancel();
+                extensionStorePurchaseConfirmationStore().cancel();
             }
         },
 
         updateInstallAfterPurchase(value: boolean) {
+            this.installAfterPurchase = value;
             this.extensionStorePreferencesService.update({ installAfterPurchase: value });
-        },
-    },
+        }
+    }
 });

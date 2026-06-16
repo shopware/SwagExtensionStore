@@ -7,7 +7,7 @@ export type ExtensionStoreContextState = {
 // TODO: Replace localhost with the actual prod URL.
 const FALLBACK_IFRAME_URL = 'http://localhost:3000';
 
-const isLoggedIn = () => Shopware.Store.get('shopwareExtensions').userInfo !== null;
+const isLoggedIn = () => Shopware.State.get('shopwareExtensions').userInfo !== null;
 
 let iframeUrlLoadPromise: Promise<string> | null = null;
 let licenseHostLoadPromise: Promise<string | null> | null = null;
@@ -16,7 +16,7 @@ export default Shopware.Store.register('extensionStoreContext', {
     state: (): ExtensionStoreContextState => ({
         licenseHost: null,
         skyBridgeStoreVersion: null,
-        iframeUrl: null,
+        iframeUrl: null
     }),
     actions: {
         loadLicenseHost(): Promise<string | null> {
@@ -81,6 +81,6 @@ export default Shopware.Store.register('extensionStoreContext', {
                 });
 
             return iframeUrlLoadPromise;
-        },
-    },
+        }
+    }
 });

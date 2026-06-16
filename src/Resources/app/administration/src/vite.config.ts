@@ -18,7 +18,7 @@ const isComposerManifest = (data: unknown): data is ComposerManifest => {
 const composerJsonPath = resolve(__dirname, '../../../../../composer.json');
 
 const parsedComposerJson: unknown = JSON.parse(
-    readFileSync(composerJsonPath, { encoding: 'utf8' }),
+    readFileSync(composerJsonPath, { encoding: 'utf8' })
 );
 
 const composerJson: ComposerManifest = isComposerManifest(parsedComposerJson) ? parsedComposerJson : {};
@@ -26,10 +26,10 @@ const composerJson: ComposerManifest = isComposerManifest(parsedComposerJson) ? 
 export default {
     resolve: {
         alias: {
-            SwagExtensionStore: __dirname,
-        },
+            SwagExtensionStore: __dirname
+        }
     },
     define: {
-        __SWAG_EXTENSION_STORE_VERSION__: JSON.stringify(composerJson.version ?? ''),
-    },
+        __SWAG_EXTENSION_STORE_VERSION__: JSON.stringify(composerJson.version ?? '')
+    }
 };

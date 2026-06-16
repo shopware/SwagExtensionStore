@@ -1,8 +1,14 @@
-.mt-modal__footer:has(.sw-extension-store-purchase-confirmation-modal__footer) {
-    display: none;
-}
-
 .sw-extension-store-purchase-confirmation-modal {
+    .sw-modal__title {
+        color: #303a4f;
+    }
+
+    // The child components manage their own padding (mimics the former mt-modal `inset`).
+    .sw-modal__body {
+        padding: 0;
+        color: #303a4f;
+    }
+
     &__content {
         display: flex;
         flex-direction: column;
@@ -65,16 +71,6 @@
 
                     &-producer-name {
                         color: var(--color-text-secondary-default);
-
-                        a.mt-link {
-                            color: var(--color-text-primary-default);
-                            font-weight: var(--font-weight-medium);
-                            text-decoration: none;
-
-                            &:hover {
-                                text-decoration: underline;
-                            }
-                        }
                     }
                 }
             }
@@ -106,18 +102,6 @@
                         }
                     }
 
-                    &-value {
-                        a.mt-link {
-                            color: var(--color-text-primary-default);
-                            font-weight: var(--font-weight-medium);
-                            text-decoration: none;
-
-                            &:hover {
-                                text-decoration: underline;
-                            }
-                        }
-                    }
-
                     &-action {
                         margin-left: auto;
                     }
@@ -146,15 +130,6 @@
                     align-items: center;
                     display: flex;
                     gap: 4px;
-
-                    a.mt-link {
-                        font-weight: var(--font-weight-medium);
-                        text-decoration: none;
-
-                        &:hover {
-                            text-decoration: underline;
-                        }
-                    }
 
                     .mt-field {
                         .mt-field__label {
@@ -202,6 +177,35 @@
                 font-size: var(--font-size-2xs);
                 line-height: var(--font-line-height-2xs);
             }
+        }
+    }
+
+    a[target=_blank]:not(.mt-button), :not(a).mt-external-link {
+        color: var(--color-text-brand-default);
+        text-decoration: none;
+        font-weight: var(--font-weight-medium);
+
+        &::after {
+            background-color: var(--color-text-brand-default);
+        }
+
+        &:has(.mt-icon, .sw-icon) {
+            white-space: nowrap;
+        }
+
+        &:hover {
+            color: var(--color-text-brand-hover);
+            text-decoration: underline;
+
+            &::after {
+                background-color: var(--color-text-brand-hover);
+            }
+        }
+    }
+
+    :not(a).mt-external-link {
+        .mt-icon {
+            display: none;
         }
     }
 }

@@ -13,15 +13,11 @@
                 <div class="sw-extension-store-purchase-confirmation__checkout-overview-details-info-producer-name">
                     <span>{{ $t('sw-extension-store.purchase-confirmation.checkout.overview.by') }}</span>
                     <span v-if="producer.storeLink">
-                        <mt-link
-                            :to="producer.storeLink"
-                            target="_blank"
-                            type="external"
-                            as="a"
-                            data-analytics-source="SwagExtensionStore"
+                        <sw-external-link
+                            :href="producer.storeLink"
                         >
                             {{ producer.name }}
-                        </mt-link>
+                        </sw-external-link>
                     </span>
                     <span v-else>
                         {{ producer.name }}
@@ -39,15 +35,11 @@
                     {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.bookingDomain') }}:
                 </div>
                 <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-value">
-                    <mt-link
-                        :to="bookingShopDomain"
-                        target="_blank"
-                        type="external"
-                        as="a"
-                        data-analytics-source="SwagExtensionStore"
+                    <sw-external-link
+                        :href="bookingShopDomain"
                     >
                         {{ bookingShop.domain }}
-                    </mt-link>
+                    </sw-external-link>
                 </div>
             </div>
             {% endblock %}
@@ -74,15 +66,11 @@
                     </div>
                 </div>
                 <div v-if="editable" class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-action">
-                    <mt-link
-                        as="a"
-                        target="_blank"
-                        type="external"
-                        :to="$t('sw-extension-store.purchase-confirmation.checkout.overview.changeBillingAddressUrl')"
-                        data-analytics-source="SwagExtensionStore"
+                    <sw-external-link
+                        :href="$t('sw-extension-store.purchase-confirmation.checkout.overview.changeBillingAddressUrl')"
                     >
                         {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.change') }}
-                    </mt-link>
+                    </sw-external-link>
                 </div>
             </div>
             {% endblock %}
@@ -118,24 +106,19 @@
                         </sw-label>
                     </template>
                 </div>
-                <div v-if="editable" class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-action">
-                    <mt-link
+                <div v-if="editable" :class="`sw-extension-store-purchase-confirmation__checkout-overview-info-row-action ${defaultPaymentMean ? 'has--default-payment-method' : ''}`">
+                    <mt-external-link
                         v-if="defaultPaymentMean"
-                        as="button"
                         @click="showPaymentMethodBanner = !showPaymentMethodBanner"
                     >
                         {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.change') }}
-                    </mt-link>
-                    <mt-link
+                    </mt-external-link>
+                    <sw-external-link
                         v-else
-                        as="a"
-                        target="_blank"
-                        type="external"
-                        :to="payment.registrationUrl"
-                        data-analytics-source="SwagExtensionStore"
+                        :href="payment.registrationUrl"
                     >
                         {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.addPaymentMethod') }}
-                    </mt-link>
+                    </sw-external-link>
                 </div>
             </div>
             {% endblock %}
@@ -155,7 +138,6 @@
                         is="a"
                         target="_blank"
                         :link="payment.registrationUrl"
-                        data-analytics-source="SwagExtensionStore"
                     >
                         {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.paymentMethodBanner.noPaymentMethod.action') }}
                         <template #iconBack>
@@ -179,7 +161,6 @@
                         is="a"
                         target="_blank"
                         :link="payment.registrationUrl"
-                        data-analytics-source="SwagExtensionStore"
                     >
                         {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.paymentMethodBanner.change.action') }}
                         <template #iconBack>

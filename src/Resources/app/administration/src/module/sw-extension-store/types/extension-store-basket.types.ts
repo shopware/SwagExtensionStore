@@ -92,5 +92,5 @@ export type {
     ExtensionStoreBasketPosition,
     ExtensionStoreBasketPayment,
     ExtensionStoreBasket,
-    ExtensionStorePaymentMean,
+    ExtensionStorePaymentMean
 };

@@ -30,16 +30,24 @@
     {% block sw_extension_store_purchase_confirmation_checkout_failed %}
     <template v-else-if="step === steps.FAILED">
         <div class="sw-extension-store-purchase-confirmation__checkout-failed">
-            <mt-empty-state
-                centered
-                :description="errorDescription ?? $t('sw-extension-store.purchase-confirmation.checkout.failed.description')"
-                :headline="errorTitle ?? $t('sw-extension-store.purchase-confirmation.checkout.failed.title')"
-                :link-href="errorDocumentationLink"
-                :link-text="$t('sw-extension-store.purchase-confirmation.checkout.failed.documentationLink')"
-                link-type="external"
+            <sw-empty-state
+                :title="errorTitle ?? $t('sw-extension-store.purchase-confirmation.checkout.failed.title')"
                 icon="solid-exclamation-circle"
+                autoHeight
+                :absolute="false"
             >
-                <template #button>
+                <p class="sw-extension-store-purchase-confirmation__checkout-failed-description">
+                    {{ errorDescription ?? $t('sw-extension-store.purchase-confirmation.checkout.failed.description') }}
+                </p>
+
+                <sw-external-link
+                    v-if="errorDocumentationLink"
+                    :href="errorDocumentationLink"
+                >
+                    {{ $t('sw-extension-store.purchase-confirmation.checkout.failed.documentationLink') }}
+                </sw-external-link>
+
+                <template #actions>
                     <mt-button
                         variant="secondary"
                         size="default"
@@ -48,7 +56,7 @@
                         {{ $t('sw-extension-store.purchase-confirmation.closeWindow') }}
                     </mt-button>
                 </template>
-            </mt-empty-state>
+            </sw-empty-state>
         </div>
     </template>
     {% endblock %}
@@ -76,42 +84,31 @@
                 <div class="sw-extension-store-purchase-confirmation__checkout-toc-checkboxes-item">
                     <mt-checkbox
                         :disabled="isLoading"
-                        :model-value="tocAccepted"
-                        @update:model-value="onTocAcceptedChange"
+                        :checked="tocAccepted"
+                        @update:checked="onTocAcceptedChange"
                     >
-                        <template #label>
-                            <i18n-t keypath="sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.gtc.text" tag="span">
-                                <template #link>
-                                    <mt-link
-                                        :to="$t('global.sw-gtc-checkbox.url')"
-                                        target="_blank"
-                                        type="external"
-                                        data-analytics-source="SwagExtensionStore"
-                                    >
-                                        {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.gtc.link') }}
-                                    </mt-link>
-                                </template>
-                            </i18n-t>
-                        </template>
                     </mt-checkbox>
+                    <i18n-t keypath="sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.gtc.text" tag="label">
+                        <template #link>
+                            <sw-external-link :href="$t('global.sw-gtc-checkbox.url')">
+                                {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.gtc.link') }}
+                            </sw-external-link>
+                        </template>
+                    </i18n-t>
                 </div>
 
-                <div v-if="extensionHasPermissionsOrDomains" class="sw-extension-store-purchase-confirmation__checkout-toc-checkboxes-item">
+                <div v-if="extensionHasPermissionsOrDomains" class="sw-extension-store-purchase-confirmation__checkout-toc-checkboxes-item has--permissions">
                     <mt-checkbox
                         :disabled="isLoading"
-                        :model-value="permissionsAccepted"
-                        @update:model-value="onPermissionsAcceptedChange"
-                    >
-                        <template #label>
-                            {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.text') }}
-                            <mt-link
-                                as="button"
-                                @click="showPermissions"
-                            >
-                                {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.link') }}
-                            </mt-link>
-                        </template>
-                    </mt-checkbox>
+                        :checked="permissionsAccepted"
+                        @update:checked="onPermissionsAcceptedChange"
+                    />
+                    <label>
+                        {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.text') }}
+                        <mt-external-link @click="showPermissions">
+                            {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.link') }}
+                        </mt-external-link>
+                    </label>
                 </div>
             </div>
             {% endblock %}
@@ -151,9 +148,9 @@
             <div class="sw-extension-store-purchase-confirmation__checkout-order-install">
                 <mt-switch
                     :disabled="isLoading"
-                    :model-value="installAfterPurchase"
+                    :checked="installAfterPurchase"
                     :label="$t('sw-extension-store.purchase-confirmation.checkout.order.install')"
-                    @update:model-value="onInstallAfterPurchaseChange"
+                    @change="onInstallAfterPurchaseChange"
                 />
             </div>
             {% endblock %}

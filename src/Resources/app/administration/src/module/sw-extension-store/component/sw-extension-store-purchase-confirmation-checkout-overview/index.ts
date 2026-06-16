@@ -12,27 +12,27 @@ export default Shopware.Component.wrapComponentConfig({
     props: {
         cart: {
             type: Object as PropType<ExtensionStoreBasket>,
-            required: true,
+            required: true
         },
         defaultPaymentMean: {
             type: Object as PropType<ExtensionStorePaymentMean>,
-            required: true,
+            required: true
         },
         editable: {
             type: Boolean,
             required: false,
-            default: true,
+            default: true
         },
         hasPaymentMethodError: {
             type: Boolean,
             required: false,
-            default: false,
-        },
+            default: false
+        }
     },
 
     data() {
         return {
-            showPaymentMethodBanner: this.hasPaymentMethodError,
+            showPaymentMethodBanner: this.hasPaymentMethodError
         };
     },
 
@@ -82,6 +82,6 @@ export default Shopware.Component.wrapComponentConfig({
 
         payment() {
             return this.cart?.payment;
-        },
-    },
+        }
+    }
 });

@@ -2,22 +2,23 @@ import { mount } from '@vue/test-utils';
 import 'src/app/component/meteor/sw-meteor-page';
 
 const mockStore = {
-    iframeUrl: null,
+    iframeUrl: null
 };
 
-jest.mock('SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store', () => jest.fn(() => mockStore));
-jest.mock('SwagExtensionStore/util/telemetry', () => ({ trackExtensionStoreEvent: jest.fn() }));
-
+jest.mock(
+    'SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store',
+    () => jest.fn(() => mockStore)
+);
 Shopware.Component.register(
     'sw-extension-store-index',
-    () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-index'),
+    () => import('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-index')
 );
 
 async function createWrapper(channelService = null) {
     if (channelService === null) {
         channelService = {
             register: jest.fn(),
-            unregister: jest.fn(),
+            unregister: jest.fn()
         };
     }
 
@@ -29,18 +30,18 @@ async function createWrapper(channelService = null) {
                 $route: Shopware.Vue.reactive({
                     name: 'sw.extension.store.listing.app',
                     meta: {
-                        $module: {},
-                    },
-                }),
+                        $module: {}
+                    }
+                })
             },
             stubs: {
                 'sw-iframe-renderer': true,
-                'sw-extension-store-purchase-confirmation-modal': true,
+                'sw-extension-store-purchase-confirmation-modal': true
             },
             provide: {
-                extensionStoreChannelService: channelService,
-            },
-        },
+                extensionStoreChannelService: channelService
+            }
+        }
     });
 }
 
@@ -58,7 +59,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
     it('should use the register service method', async () => {
         const channelService = {
             register: jest.fn(),
-            unregister: jest.fn(),
+            unregister: jest.fn()
         };
         await createWrapper(channelService);
 
@@ -68,7 +69,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-i
     it('should unregister the channel service on unmount', async () => {
         const channelService = {
             register: jest.fn(),
-            unregister: jest.fn(),
+            unregister: jest.fn()
         };
         const wrapper = await createWrapper(channelService);
 

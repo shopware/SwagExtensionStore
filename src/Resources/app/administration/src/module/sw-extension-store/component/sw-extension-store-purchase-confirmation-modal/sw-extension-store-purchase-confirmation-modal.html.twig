@@ -1,41 +1,30 @@
 {% block sw_extension_store_purchase_confirmation_modal %}
-<mt-modal-root
-    :is-open="isOpen"
-    @change="onModalChange"
+<sw-modal
+    v-if="isOpen"
+    class="sw-extension-store-purchase-confirmation-modal"
+    :title="$t('sw-extension-store.purchase-confirmation.modalTitle')"
+    @modal-close="onModalChange(false)"
 >
-    <mt-modal
-        :inset="true"
-        :title="$t('sw-extension-store.purchase-confirmation.modalTitle')"
-    >
-        <template #default>
-            {% block sw_extension_store_purchase_confirmation_modal_content %}
-            <div class="sw-extension-store-purchase-confirmation-modal__content">
-                <sw-extension-store-purchase-confirmation-checkout
-                    v-if="view === 'checkout'"
-                    :cart="cart"
-                    :payment-means="paymentMeans"
-                    :permissions-accepted="permissionsAccepted"
-                    :toc-accepted="tocAccepted"
-                    :install-after-purchase="installAfterPurchase"
-                    @update:modal-view="view = $event"
-                    @update:toc-accepted="tocAccepted = $event"
-                    @update:permissions-accepted="permissionsAccepted = $event"
-                    @update:install-after-purchase="updateInstallAfterPurchase"
-                />
-                <sw-extension-store-purchase-confirmation-permissions
-                    v-if="view === 'permissions'"
-                    :cart="cart"
-                    @update:modal-view="view = $event"
-                />
-            </div>
-            {% endblock %}
-        </template>
-
-        <template #footer>
-            {% block sw_extension_store_purchase_confirmation_modal_footer %}
-            <div class="sw-extension-store-purchase-confirmation-modal__footer" />
-            {% endblock %}
-        </template>
-    </mt-modal>
-</mt-modal-root>
+    {% block sw_extension_store_purchase_confirmation_modal_content %}
+    <div class="sw-extension-store-purchase-confirmation-modal__content">
+        <sw-extension-store-purchase-confirmation-checkout
+            v-if="view === 'checkout'"
+            :cart="cart"
+            :payment-means="paymentMeans"
+            :permissions-accepted="permissionsAccepted"
+            :toc-accepted="tocAccepted"
+            :install-after-purchase="installAfterPurchase"
+            @update:modal-view="view = $event"
+            @update:toc-accepted="tocAccepted = $event"
+            @update:permissions-accepted="permissionsAccepted = $event"
+            @update:install-after-purchase="updateInstallAfterPurchase"
+        />
+        <sw-extension-store-purchase-confirmation-permissions
+            v-if="view === 'permissions'"
+            :cart="cart"
+            @update:modal-view="view = $event"
+        />
+    </div>
+    {% endblock %}
+</sw-modal>
 {% endblock %}

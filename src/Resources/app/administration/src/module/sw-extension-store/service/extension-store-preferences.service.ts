@@ -6,7 +6,7 @@ export interface ExtensionStorePreferences {
 }
 
 const DEFAULTS: ExtensionStorePreferences = {
-    installAfterPurchase: true,
+    installAfterPurchase: true
 };
 
 class ExtensionStorePreferencesService {
@@ -29,8 +29,8 @@ class ExtensionStorePreferencesService {
             return this.loadPromise;
         }
 
-        this.loadPromise = this.userConfigService
-            .search([ExtensionStorePreferencesService.USER_CONFIG_KEY])
+        this.loadPromise = (this.userConfigService
+            .search([ExtensionStorePreferencesService.USER_CONFIG_KEY]) as Promise<{ data: Record<string, unknown[]> }>)
             .then((response) => {
                 if (!response) {
                     return;
@@ -62,8 +62,9 @@ class ExtensionStorePreferencesService {
         Object.assign(this._state, partial);
 
         try {
+            // @ts-expect-error - The signature of the UserConfigService.upsert method isn't correct.
             await this.userConfigService.upsert({
-                [ExtensionStorePreferencesService.USER_CONFIG_KEY]: [{ ...this._state }],
+                [ExtensionStorePreferencesService.USER_CONFIG_KEY]: [{ ...this._state }]
             });
         } catch {
             Object.assign(this._state, previous);

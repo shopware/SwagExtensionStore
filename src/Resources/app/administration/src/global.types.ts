@@ -3,7 +3,7 @@ import type { AxiosError } from 'axios';
 import type ExtensionStorePreferencesService
     from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-preferences.service';
 import type {
-    ExtensionStoreChannelService,
+    ExtensionStoreChannelService
 } from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-channel.service';
 import type InAppPurchasesService from 'SwagExtensionStore/module/sw-in-app-purchases/service/in-app-purchases.service';
 
