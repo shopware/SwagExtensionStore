@@ -57,6 +57,7 @@ type StoreContext = {
     owningExtensions: string[];
     sessionToken: string;
     language: string;
+    licenseHost: string|null;
     userInfo: UserInfo | null;
     success: boolean;
     currentRoute: string;
@@ -272,6 +273,9 @@ export class ExtensionStoreChannelService {
     private async handleHandshake(data: HandshakeActionData): Promise<StoreContext> {
         const extensions = (await this.extensionStoreActionService.getMyExtensions()).map((extension) => extension.name);
         await this.shopwareExtensionService.checkLogin();
+
+        const contextStore = extensionStoreContextStore();
+        const licenseHost = await contextStore.loadLicenseHost();
         const shopwareVersion = Shopware.Context.app.config.version ?? '';
         const rawLocale: unknown = Shopware.Store.get('session')?.currentLocale;
         const language: string = typeof rawLocale === 'string' ? rawLocale : 'en-GB';
@@ -289,6 +293,7 @@ export class ExtensionStoreChannelService {
             owningExtensions: extensions,
             sessionToken: data.sessionToken,
             language: language,
+            licenseHost,
             userInfo: userInfo,
             success: true,
             currentRoute: currentRoute,
