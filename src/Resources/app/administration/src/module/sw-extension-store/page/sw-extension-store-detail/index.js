@@ -1,4 +1,8 @@
 import template from './sw-extension-store-detail.html.twig';
+import {
+    getLegacyServicesExtensionRoute,
+    isLegacyServicesExtension,
+} from 'SwagExtensionStore/util/legacy-services-extension';
 import './sw-extension-store-detail.scss';
 
 const { Utils } = Shopware;
@@ -187,6 +191,14 @@ export default {
 
             return !!this.extension.addons.find(addon => addon === 'SW6_EnterpriseFeature');
         },
+
+        isLegacyServicesExtension() {
+            if (this.suspended) {
+                return false;
+            }
+
+            return isLegacyServicesExtension(this.extension.name);
+        },
     },
 
     watch: {
@@ -359,6 +371,12 @@ export default {
         },
 
         async handleInstallWithPermissionsModal() {
+            if (this.isLegacyServicesExtension) {
+                this.openLegacyServicesExtension();
+
+                return;
+            }
+
             if (Object.keys(this.extension.permissions).length) {
                 this.openAcceptPermissionsModal();
 
@@ -370,6 +388,12 @@ export default {
         },
 
         async installExtension() {
+            if (this.isLegacyServicesExtension) {
+                this.openLegacyServicesExtension();
+
+                return;
+            }
+
             this.isInstalling = true;
 
             try {
@@ -419,6 +443,14 @@ export default {
             }
 
             this.$router.push({ name: 'sw.extension.my-extensions.listing.app' });
+        },
+
+        openLegacyServicesExtension() {
+            const route = getLegacyServicesExtensionRoute(this.extension?.name);
+
+            if (route) {
+                this.$router.push(route);
+            }
         },
 
         checkDescriptionCollapsed() {

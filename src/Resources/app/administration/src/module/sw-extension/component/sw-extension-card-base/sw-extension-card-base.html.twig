@@ -9,6 +9,16 @@
             {{ $t('sw-extension.in-app-purchase.badge-label') }}
         </span>
     </section>
+
+    <button
+        v-if="!isInstalled && isLegacyServicesExtension"
+        class="sw-extension-card-base__open-services"
+        type="button"
+        @click="openLegacyServicesExtension"
+        @keydown.enter="openLegacyServicesExtension"
+    >
+        {{ $t('sw-extension-store.legacyServices.openServices') }}
+    </button>
 </div>
 {% endblock %}
 

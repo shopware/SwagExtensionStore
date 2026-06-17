@@ -16,6 +16,10 @@ const extensionHelperService = {
     downloadAndActivateExtension: jest.fn(() => Promise.resolve()),
 };
 
+const router = {
+    push: jest.fn(),
+};
+
 async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAppPurchases = true) {
     const testExtension = {
         id: 1337,
@@ -90,6 +94,9 @@ async function createWrapper(extensionCustomProps = {}, canBeOpened = true, inAp
                 'sw-external-link': true,
                 'sw-app-topbar-sidebar': true,
             },
+            mocks: {
+                $router: router,
+            },
             provide: {
                 shopwareExtensionService: {
                     updateExtensionData: jest.fn(),
@@ -137,6 +144,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
     });
 
     beforeEach(() => {
+        Shopware.Context.app.config.version = '6.6.9.9';
         Shopware.Store.get('session').languageId = 'b2c3d4';
         Shopware.Store.get('shopwareExtensions').myExtensions = {
             loading: false,
@@ -149,6 +157,10 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
         };
 
         setSearchValueMock.mockClear();
+        extensionHelperService.downloadAndActivateExtension.mockClear();
+        cacheApiService.clear.mockClear();
+        window.location.reload.mockClear();
+        router.push.mockClear();
     });
 
     afterEach(() => {
@@ -326,6 +338,119 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
             const wrapper = await createWrapper();
             await flushPromises();
 
+            expect(wrapper.get('.sw-extension-store-detail__action-install-extension').text())
+                .toBe('sw-extension-store.detail.labelButtonInstallExtension');
+        });
+
+        it('renders a Shopware Services handoff for licensed Shopware Payments on 6.7+', async () => {
+            Shopware.Context.app.config.version = '6.7.0.0';
+            Shopware.Store.get('shopwareExtensions').myExtensions = {
+                data: [{
+                    active: true,
+                    name: 'ShopwarePayments',
+                    storeLicense: { variants: [{}] },
+                    id: 1337,
+                }],
+            };
+
+            const wrapper = await createWrapper({
+                label: 'Shopware Payments',
+                name: 'ShopwarePayments',
+                type: 'app',
+            });
+            await flushPromises();
+
+            expect(wrapper.find('.sw-extension-store-detail__action-install-extension').exists()).toBe(false);
+            expect(wrapper.get('.sw-extension-store-detail__services-handoff-text').text())
+                .toBe('sw-extension-store.legacyServices.description');
+            expect(wrapper.get('.sw-extension-store-detail__action-open-services').text())
+                .toBe('sw-extension-store.legacyServices.openServices');
+        });
+
+        it('routes the Shopware Services handoff to the Shopware Payments administration module', async () => {
+            Shopware.Context.app.config.version = '6.7.0.0';
+            Shopware.Store.get('shopwareExtensions').myExtensions = {
+                data: [{
+                    active: true,
+                    name: 'ShopwarePayments',
+                    storeLicense: { variants: [{}] },
+                    id: 1337,
+                }],
+            };
+
+            const wrapper = await createWrapper({
+                label: 'Shopware Payments',
+                name: 'ShopwarePayments',
+                type: 'app',
+            });
+            await flushPromises();
+
+            await wrapper.get('.sw-extension-store-detail__action-open-services').trigger('click');
+
+            expect(router.push).toHaveBeenCalledWith({
+                name: 'sw.extension.module',
+                params: {
+                    appName: 'ShopwarePayments',
+                    moduleName: 'sw-shopware-payments-overview',
+                },
+            });
+        });
+
+        it('does not start the Store install flow for guarded Shopware Payments install methods on 6.7+', async () => {
+            Shopware.Context.app.config.version = '6.7.0.0';
+            Shopware.Store.get('shopwareExtensions').myExtensions = {
+                data: [{
+                    active: true,
+                    name: 'ShopwarePayments',
+                    storeLicense: { variants: [{}] },
+                    id: 1337,
+                }],
+            };
+
+            const wrapper = await createWrapper({
+                label: 'Shopware Payments',
+                name: 'ShopwarePayments',
+                type: 'app',
+            });
+            await flushPromises();
+
+            await wrapper.vm.handleInstallWithPermissionsModal();
+            await wrapper.vm.installExtension();
+
+            expect(extensionHelperService.downloadAndActivateExtension).not.toHaveBeenCalled();
+            expect(router.push).toHaveBeenCalledTimes(2);
+        });
+
+        it('keeps the regular install button for Shopware Payments below 6.7', async () => {
+            Shopware.Context.app.config.version = '6.6.9.9';
+            Shopware.Store.get('shopwareExtensions').myExtensions = {
+                data: [{
+                    active: true,
+                    name: 'ShopwarePayments',
+                    storeLicense: { variants: [{}] },
+                    id: 1337,
+                }],
+            };
+
+            const wrapper = await createWrapper({
+                label: 'Shopware Payments',
+                name: 'ShopwarePayments',
+                type: 'app',
+            });
+            await flushPromises();
+
+            expect(wrapper.find('.sw-extension-store-detail__services-handoff').exists()).toBe(false);
+            expect(wrapper.get('.sw-extension-store-detail__action-install-extension').text())
+                .toBe('sw-extension-store.detail.labelButtonInstallExtension');
+        });
+
+        it('keeps the regular install button for other licensed apps on 6.7+', async () => {
+            Shopware.Context.app.config.version = '6.7.0.0';
+
+            const wrapper = await createWrapper({ type: 'app' });
+            await flushPromises();
+
+            expect(wrapper.find('.sw-extension-store-detail__services-handoff').exists()).toBe(false);
             expect(wrapper.get('.sw-extension-store-detail__action-install-extension').text())
                 .toBe('sw-extension-store.detail.labelButtonInstallExtension');
         });

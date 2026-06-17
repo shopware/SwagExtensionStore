@@ -17,6 +17,10 @@ Shopware.Store.get('context').app = {
     },
 };
 
+const router = {
+    push: jest.fn(),
+};
+
 async function createWrapper(extensionCustomProps = {}) {
     const testExtension = {
         id: 1337,
@@ -67,6 +71,10 @@ async function createWrapper(extensionCustomProps = {}) {
                 'sw-internal-link': true,
                 'sw-extension-store-in-app-purchases-listing-modal': true,
                 'sw-time-ago': true,
+                'mt-switch': true,
+            },
+            mocks: {
+                $router: router,
             },
             provide: {
                 shopwareExtensionService: {
@@ -89,6 +97,11 @@ async function createWrapper(extensionCustomProps = {}) {
 }
 
 describe('SwagExtensionStore/module/sw-extension/component/sw-extension', () => {
+    beforeEach(() => {
+        Shopware.Context.app.config.version = '6.6.9.9';
+        router.push.mockClear();
+    });
+
     it('should be a Vue.js component', async () => {
         const wrapper = await createWrapper({ inAppFeaturesAvailable: true });
 
@@ -160,5 +173,76 @@ describe('SwagExtensionStore/module/sw-extension/component/sw-extension', () => 
             { id: 'purchase1', name: 'Purchase 1' },
             { id: 'purchase2', name: 'Purchase 2' },
         ]);
+    });
+
+    it('replaces the install action with a Shopware Services handoff for Shopware Payments on 6.7+', async () => {
+        Shopware.Context.app.config.version = '6.7.0.0';
+
+        const wrapper = await createWrapper({
+            label: 'Shopware Payments',
+            name: 'ShopwarePayments',
+            installedAt: null,
+            storeLicense: { creationDate: new Date(), variants: [{}] },
+            type: 'app',
+        });
+
+        expect(wrapper.find('.sw-extension-card-base__open-services').exists()).toBe(true);
+        expect(wrapper.find('.sw-extension-card-base__open-services').text())
+            .toBe('sw-extension-store.legacyServices.openServices');
+    });
+
+    it('routes to the Shopware Payments administration module from the services handoff', async () => {
+        Shopware.Context.app.config.version = '6.7.0.0';
+
+        const wrapper = await createWrapper({
+            label: 'Shopware Payments',
+            name: 'ShopwarePayments',
+            installedAt: null,
+            storeLicense: { creationDate: new Date(), variants: [{}] },
+            type: 'app',
+        });
+
+        await wrapper.find('.sw-extension-card-base__open-services').trigger('click');
+        await wrapper.find('.sw-extension-card-base__open-services').trigger('keydown.enter');
+
+        expect(router.push).toHaveBeenCalledTimes(2);
+        expect(router.push).toHaveBeenNthCalledWith(1, {
+            name: 'sw.extension.module',
+            params: {
+                appName: 'ShopwarePayments',
+                moduleName: 'sw-shopware-payments-overview',
+            },
+        });
+    });
+
+    it('keeps the regular install action for Shopware Payments below 6.7', async () => {
+        Shopware.Context.app.config.version = '6.6.9.9';
+
+        const wrapper = await createWrapper({
+            label: 'Shopware Payments',
+            name: 'ShopwarePayments',
+            installedAt: null,
+            storeLicense: { creationDate: new Date(), variants: [{}] },
+            type: 'app',
+        });
+
+        expect(wrapper.find('.sw-extension-card-base__open-services').exists()).toBe(false);
+        expect(wrapper.find('.sw-extension-card-base__open-extension').text())
+            .toBe('sw-extension-store.component.sw-extension-card-base.installExtensionLabel');
+    });
+
+    it('keeps the regular install action for other licensed apps on 6.7+', async () => {
+        Shopware.Context.app.config.version = '6.7.0.0';
+
+        const wrapper = await createWrapper({
+            name: 'SwagB2BPlatform',
+            installedAt: null,
+            storeLicense: { creationDate: new Date(), variants: [{}] },
+            type: 'app',
+        });
+
+        expect(wrapper.find('.sw-extension-card-base__open-services').exists()).toBe(false);
+        expect(wrapper.find('.sw-extension-card-base__open-extension').text())
+            .toBe('sw-extension-store.component.sw-extension-card-base.installExtensionLabel');
     });
 });

@@ -86,6 +86,10 @@
         },
         "in-app-purchases": {
             "onceOff": "one-time"
+        },
+        "legacyServices": {
+            "description": "This extension is now available as a Shopware Service.",
+            "openServices": "Open Shopware Payments"
         }
     },
     "sw-extension-store-statistics-promotion": {
