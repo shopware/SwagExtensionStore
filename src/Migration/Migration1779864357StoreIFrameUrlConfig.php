@@ -34,8 +34,7 @@ class Migration1779864357StoreIFrameUrlConfig extends MigrationStep
         $connection->insert('system_config', [
             'id' => Uuid::randomBytes(),
             'configuration_key' => $configurationKey,
-            // TODO: Replace localhost with the actual prod URL.
-            'configuration_value' => '{"_value": "http://localhost:3000"}',
+            'configuration_value' => '{"_value": "https://sky-bridge-store.production.shopware.in"}',
             'created_at' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ]);
     }

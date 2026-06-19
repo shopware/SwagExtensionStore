@@ -4,8 +4,7 @@ export type ExtensionStoreContextState = {
     iframeUrl: string | null;
 };
 
-// TODO: Replace localhost with the actual prod URL.
-const FALLBACK_IFRAME_URL = 'http://localhost:3000';
+const FALLBACK_IFRAME_URL = 'https://sky-bridge-store.production.shopware.in';
 
 const isLoggedIn = () => Shopware.Store.get('shopwareExtensions').userInfo !== null;
 
