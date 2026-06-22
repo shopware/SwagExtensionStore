@@ -38,6 +38,7 @@ type RouterUpdateActionData = StoreChannelActionData & {
     query: string | null;
     listingQuery: Record<string, string | string[] | null | undefined>;
     queryProperties: string[];
+    replaced: boolean;
 };
 
 type RouterSyncData = {
@@ -255,6 +256,7 @@ export class ExtensionStoreChannelService {
             && 'query' in data
             && 'listingQuery' in data
             && 'queryProperties' in data
+            && 'replaced' in data
             && Array.isArray((data as { urlSegments: unknown }).urlSegments)
             && (data as { urlSegments: unknown[] }).urlSegments.every((segment: unknown) => typeof segment === 'string')
             && this.isListingQuery((data as { listingQuery: unknown }).listingQuery)
@@ -404,6 +406,7 @@ export class ExtensionStoreChannelService {
             path: newPath,
             query: newQuery,
             hash: current.hash,
+            replace: data.replaced,
         }).then(() => {
             if (newPath === currentPath) {
                 return;
