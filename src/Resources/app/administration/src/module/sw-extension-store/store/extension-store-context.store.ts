@@ -11,7 +11,8 @@ const isLoggedIn = () => Shopware.State.get('shopwareExtensions').userInfo !== n
 let iframeUrlLoadPromise: Promise<string> | null = null;
 let licenseHostLoadPromise: Promise<string | null> | null = null;
 
-export default Shopware.Store.register('extensionStoreContext', {
+export default Shopware.Store.register({
+    id: 'extensionStoreContext',
     state: (): ExtensionStoreContextState => ({
         licenseHost: null,
         skyBridgeStoreVersion: null,

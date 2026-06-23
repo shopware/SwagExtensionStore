@@ -11,7 +11,6 @@ module.exports = {
     globals: {
         // required, e.g. /www/sw6/platform/src/Administration/Resources/app/administration
         adminPath,
-        __SWAG_EXTENSION_STORE_VERSION__: '0.0.0',
     },
 
     setupFilesAfterEnv: [
@@ -41,10 +40,7 @@ module.exports = {
             `${process.env.ADMIN_PATH}/node_modules/@shopware-ag/meteor-admin-sdk/umd/$1`,
         vue$: '<rootDir>/node_modules/@vue/compat/dist/vue.cjs.js',
         '@vue/test-utils': '<rootDir>/node_modules/@vue/test-utils',
-        '^src(.*)$': `${process.env.ADMIN_PATH}/src$1`,
-        '^@shopware-ag/meteor-component-library$': `${process.env.ADMIN_PATH}/node_modules/@shopware-ag/meteor-component-library/dist/common/index.js`,
-        '^@vue/test-utils$': `${process.env.ADMIN_PATH}/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js`,
-        '^lodash-es/(.*)$': 'lodash/$1',
+        '^lodash-es/(.*)$': 'lodash/$1'
     },
 
     transformIgnorePatterns: [

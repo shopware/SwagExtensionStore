@@ -21,8 +21,6 @@ class ExtensionStoreApiException extends StoreApiException
 
         $this->apiCode = $data['code'] ?? '';
         $this->description = $data['description'] ?? '';
-        $this->title = $data['title'] ?? '';
-        $this->documentationLink = $data['documentationLink'] ?? '';
     }
 
     public function getErrors(bool $withTrace = false): \Generator

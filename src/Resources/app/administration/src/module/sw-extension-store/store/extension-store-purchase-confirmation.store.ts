@@ -18,7 +18,8 @@ type PurchaseConfirmationState = {
     errorDocumentationLink: string | null;
 };
 
-export default Shopware.Store.register('extensionStorePurchaseConfirmationStore', {
+export default Shopware.Store.register({
+    id: 'extensionStorePurchaseConfirmationStore',
     state: (): PurchaseConfirmationState => ({
         isFailedOnBasketCreation: false,
         isOpen: false,
