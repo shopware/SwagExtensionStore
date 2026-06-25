@@ -2,11 +2,22 @@
 <div class="sw-extension-store-purchase-confirmation__checkout">
 
     {% block sw_extension_store_purchase_confirmation_checkout_loader %}
-    <mt-loader
-        v-if="isLoading"
-        class="sw-extension-store-purchase-confirmation__checkout-loader"
-        size="50px"
-    />
+    <div v-if="isLoading" class="sw-extension-store-purchase-confirmation__checkout-loading">
+        <mt-loader
+            :class="sw-extension-store-purchase-confirmation__checkout-loading-indicator"
+            size="50px"
+        />
+
+        <!-- Meteor Component Library >=5.1.0 supports loading title & description natively via props. -->
+        <div v-if="loadingTitle || loadingDescription" class="sw-extension-store-purchase-confirmation__checkout-loading-text">
+            <span v-if="loadingTitle" class="sw-extension-store-purchase-confirmation__checkout-loading-text-title">
+                {{ loadingTitle }}
+            </span>
+            <span v-if="loadingDescription" class="sw-extension-store-purchase-confirmation__checkout-loading-text-description">
+                {{ loadingDescription }}
+            </span>
+        </div>
+    </div>
     {% endblock %}
 
     {% block sw_extension_store_purchase_confirmation_checkout_success %}

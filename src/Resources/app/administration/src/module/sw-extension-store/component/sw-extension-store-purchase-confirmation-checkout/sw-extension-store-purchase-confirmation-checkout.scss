@@ -1,13 +1,48 @@
 .sw-extension-store-purchase-confirmation__checkout {
+    --checkout-padding: 24px;
+
     display: flex;
     flex-direction: column;
     gap: 24px;
-    padding: 24px;
+    padding: var(--checkout-padding);
     position: relative;
 
-    &-loader.mt-loader {
-        background-color: rgba(255, 255, 255, 0.65);
-        z-index: 10;
+    &-loading {
+        &-indicator.mt-loader {
+            transition: opacity ease-in 200ms;
+            background-color: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(5px);
+            opacity: 1;
+            z-index: 10;
+
+            .mt-loader__container {
+                top: calc(50% - 50px);
+            }
+        }
+
+        &-text {
+            z-index: 11;
+            position: absolute;
+            display: grid;
+            grid-auto-columns: auto;
+            text-align: center;
+            top: 50%;
+            width: calc(100% - (var(--checkout-padding) * 2));
+
+            &-title {
+                color: var(--color-text-primary-default);
+                font-size: var(--font-size-xl);
+                line-height: var(--font-line-height-xl);
+                font-weight: var(--font-weight-bold);
+            }
+
+            &-description {
+                color: var(--color-text-secondary-default);
+                font-size: var(--font-size-s);
+                line-height: var(--font-line-height-s);
+                font-weight: var(--font-weight-medium);
+            }
+        }
     }
 
     &-success,
