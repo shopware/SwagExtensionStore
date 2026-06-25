@@ -98,7 +98,6 @@ async function createWrapper(extensionCustomProps = {}) {
 
 describe('SwagExtensionStore/module/sw-extension/component/sw-extension', () => {
     beforeEach(() => {
-        Shopware.Context.app.config.version = '6.6.9.9';
         router.push.mockClear();
     });
 
@@ -175,9 +174,7 @@ describe('SwagExtensionStore/module/sw-extension/component/sw-extension', () => 
         ]);
     });
 
-    it('replaces the install action with a Shopware Services handoff for Shopware Payments on 6.7+', async () => {
-        Shopware.Context.app.config.version = '6.7.0.0';
-
+    it('replaces the install action with a Shopware Services handoff for Shopware Payments', async () => {
         const wrapper = await createWrapper({
             label: 'Shopware Payments',
             name: 'ShopwarePayments',
@@ -192,8 +189,6 @@ describe('SwagExtensionStore/module/sw-extension/component/sw-extension', () => 
     });
 
     it('routes to the Shopware Payments administration module from the services handoff', async () => {
-        Shopware.Context.app.config.version = '6.7.0.0';
-
         const wrapper = await createWrapper({
             label: 'Shopware Payments',
             name: 'ShopwarePayments',
@@ -215,25 +210,7 @@ describe('SwagExtensionStore/module/sw-extension/component/sw-extension', () => 
         });
     });
 
-    it('keeps the regular install action for Shopware Payments below 6.7', async () => {
-        Shopware.Context.app.config.version = '6.6.9.9';
-
-        const wrapper = await createWrapper({
-            label: 'Shopware Payments',
-            name: 'ShopwarePayments',
-            installedAt: null,
-            storeLicense: { creationDate: new Date(), variants: [{}] },
-            type: 'app',
-        });
-
-        expect(wrapper.find('.sw-extension-card-base__open-services').exists()).toBe(false);
-        expect(wrapper.find('.sw-extension-card-base__open-extension').text())
-            .toBe('sw-extension-store.component.sw-extension-card-base.installExtensionLabel');
-    });
-
-    it('keeps the regular install action for other licensed apps on 6.7+', async () => {
-        Shopware.Context.app.config.version = '6.7.0.0';
-
+    it('keeps the regular install action for other licensed apps', async () => {
         const wrapper = await createWrapper({
             name: 'SwagB2BPlatform',
             installedAt: null,

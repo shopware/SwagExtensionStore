@@ -144,7 +144,6 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
     });
 
     beforeEach(() => {
-        Shopware.Context.app.config.version = '6.6.9.9';
         Shopware.Store.get('session').languageId = 'b2c3d4';
         Shopware.Store.get('shopwareExtensions').myExtensions = {
             loading: false,
@@ -342,8 +341,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
                 .toBe('sw-extension-store.detail.labelButtonInstallExtension');
         });
 
-        it('renders a Shopware Services handoff for licensed Shopware Payments on 6.7+', async () => {
-            Shopware.Context.app.config.version = '6.7.0.0';
+        it('renders a Shopware Services handoff for licensed Shopware Payments', async () => {
             Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
                     active: true,
@@ -368,7 +366,6 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
         });
 
         it('routes the Shopware Services handoff to the Shopware Payments administration module', async () => {
-            Shopware.Context.app.config.version = '6.7.0.0';
             Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
                     active: true,
@@ -396,8 +393,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
             });
         });
 
-        it('does not start the Store install flow for guarded Shopware Payments install methods on 6.7+', async () => {
-            Shopware.Context.app.config.version = '6.7.0.0';
+        it('does not start the Store install flow for guarded Shopware Payments install methods', async () => {
             Shopware.Store.get('shopwareExtensions').myExtensions = {
                 data: [{
                     active: true,
@@ -421,32 +417,7 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
             expect(router.push).toHaveBeenCalledTimes(2);
         });
 
-        it('keeps the regular install button for Shopware Payments below 6.7', async () => {
-            Shopware.Context.app.config.version = '6.6.9.9';
-            Shopware.Store.get('shopwareExtensions').myExtensions = {
-                data: [{
-                    active: true,
-                    name: 'ShopwarePayments',
-                    storeLicense: { variants: [{}] },
-                    id: 1337,
-                }],
-            };
-
-            const wrapper = await createWrapper({
-                label: 'Shopware Payments',
-                name: 'ShopwarePayments',
-                type: 'app',
-            });
-            await flushPromises();
-
-            expect(wrapper.find('.sw-extension-store-detail__services-handoff').exists()).toBe(false);
-            expect(wrapper.get('.sw-extension-store-detail__action-install-extension').text())
-                .toBe('sw-extension-store.detail.labelButtonInstallExtension');
-        });
-
-        it('keeps the regular install button for other licensed apps on 6.7+', async () => {
-            Shopware.Context.app.config.version = '6.7.0.0';
-
+        it('keeps the regular install button for other licensed apps', async () => {
             const wrapper = await createWrapper({ type: 'app' });
             await flushPromises();
 
