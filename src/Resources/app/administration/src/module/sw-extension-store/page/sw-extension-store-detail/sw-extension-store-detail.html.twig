@@ -207,8 +207,25 @@
 
                         <template v-else-if="isLicensed">
                             {% block sw_extension_store_detail_smart_bar_actions_install %}
+                                <div
+                                    v-if="!isInstalled && isLegacyServicesExtension"
+                                    class="sw-extension-store-detail__services-handoff"
+                                >
+                                    <span class="sw-extension-store-detail__services-handoff-text">
+                                        {{ $t('sw-extension-store.legacyServices.description') }}
+                                    </span>
+
+                                    <mt-button
+                                        variant="primary"
+                                        class="sw-extension-store-detail__action-open-services"
+                                        @click="openLegacyServicesExtension"
+                                    >
+                                        {{ $t('sw-extension-store.legacyServices.openServices') }}
+                                    </mt-button>
+                                </div>
+
                                 <sw-button-process
-                                    v-if="!isInstalled"
+                                    v-else-if="!isInstalled"
                                     variant="primary"
                                     :is-loading="isInstalling"
                                     :process-success="isInstallSuccessful"

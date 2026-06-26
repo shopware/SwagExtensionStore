@@ -3,3 +3,21 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.sw-extension-card-base:has(.sw-extension-card-base__open-services) {
+    .sw-extension-card-base__main-action {
+        .sw-extension-card-base__open-extension {
+            display: none;
+        }
+    }
+}
+
+.sw-extension-card-base__open-services {
+    margin: 8px 0 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #189eff;
+    cursor: pointer;
+    font: inherit;
+}
