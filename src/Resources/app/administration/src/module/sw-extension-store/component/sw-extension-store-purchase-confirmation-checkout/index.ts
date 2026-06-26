@@ -206,6 +206,10 @@ export default Shopware.Component.wrapComponentConfig({
                 && this.tocAccepted
                 && (!this.extensionHasPermissionsOrDomains || this.permissionsAccepted)
                 && !this.hasPaymentMethodError;
+        },
+
+        isInstallable() {
+            return !this.isLoading && extensionStorePurchaseConfirmationStore().isCompatible;
         }
     },
 
@@ -240,6 +244,6 @@ export default Shopware.Component.wrapComponentConfig({
 
         async confirmPurchase() {
             await extensionStorePurchaseConfirmationStore().confirm();
-        }
-    }
+        },
+    },
 });

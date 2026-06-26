@@ -3,6 +3,7 @@ import type ExtensionStoreActionService from 'src/module/sw-extension/service/ex
 import type ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
 import type { LocationQuery, Router } from 'vue-router';
 import type { ShopwareMessageTypes } from '@shopware-ag/meteor-admin-sdk/es/message-types';
+import extensionStorePurchaseConfirmationStore from '../store/extension-store-purchase-confirmation.store';
 import type ExtensionHelperService from 'src/app/service/extension-helper.service';
 import type CacheApiService from 'src/core/service/api/cache.api.service';
 import extensionStoreContextStore
@@ -11,7 +12,6 @@ import type ExtensionStorePreferencesService
     from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-preferences.service';
 import type { UserInfo } from 'src/core/service/api/store.api.service';
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
-import extensionStorePurchaseConfirmationStore from '../store/extension-store-purchase-confirmation.store';
 import type ExtensionStoreLicensesService from './extension-store-licenses.service';
 
 type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent';
@@ -48,6 +48,7 @@ type RouterSyncData = {
 type PurchaseActionData = StoreChannelActionData & {
     productId: string;
     variantId: string;
+    isCompatible: boolean;
     sessionToken: string;
 };
 
@@ -210,9 +211,11 @@ export class ExtensionStoreChannelService {
             this.isStoreChannelActionData(data)
             && 'productId' in data
             && 'variantId' in data
+            && 'isCompatible' in data
             && 'sessionToken' in data
             && typeof data.productId === 'string'
             && typeof data.variantId === 'string'
+            && typeof data.isCompatible === 'boolean'
             && typeof data.sessionToken === 'string'
         );
     }
@@ -283,7 +286,7 @@ export class ExtensionStoreChannelService {
 
     private async handlePurchase(data: PurchaseActionData): Promise<PurchaseResponse> {
         try {
-            const [cartData, paymentMeansData] = await Promise.all([
+            const [cart, paymentMeans] = await Promise.all([
                 (await this.extensionStoreLicensesService.newCart(
                     data.productId,
                     data.variantId
@@ -291,16 +294,17 @@ export class ExtensionStoreChannelService {
                 (await this.extensionStoreLicensesService.getPaymentMeans()).data as ExtensionStorePaymentMean[]
             ]);
 
-            extensionStorePurchaseConfirmationStore().openModal(
-                cartData,
-                paymentMeansData,
-                async () => {
-                    return await this.performPurchase(data, cartData);
+            extensionStorePurchaseConfirmationStore().openModal({
+                cart,
+                paymentMeans,
+                isCompatible: data.isCompatible,
+                onConfirm: async () => {
+                    return await this.performPurchase(data, cart);
                 },
-                () => {
+                onCancel: () => {
                     this.publishPurchaseResult(data.sessionToken, false);
                 }
-            );
+            });
         } catch (error) {
             const errorDetails = this.getErrorDetails(error);
             extensionStorePurchaseConfirmationStore().openErrorModal(errorDetails.title, errorDetails.description, errorDetails.documentationLink, () => {
@@ -397,9 +401,9 @@ export class ExtensionStoreChannelService {
             return { result: false, ...errorDetails };
         }
 
-        await this.shopwareExtensionService.updateExtensionData();
+        await this.updateExtensionData();
 
-        if (this.extensionStorePreferencesService.state.installAfterPurchase) {
+        if (data.isCompatible && this.extensionStorePreferencesService.state.installAfterPurchase) {
             await this.installExtension(cartData);
         }
 
@@ -431,6 +435,14 @@ export class ExtensionStoreChannelService {
         return state && typeof state === 'object' && 'extensionIdentifier' in state
             ? state.extensionIdentifier as string | number
             : undefined;
+    }
+
+    private async updateExtensionData(): Promise<void> {
+        try {
+            await this.shopwareExtensionService.updateExtensionData();
+        } catch (error) {
+            console.error('Failed to update extension data', error);
+        }
     }
 
     private async installExtension(cartData: ExtensionStoreBasket): Promise<void> {

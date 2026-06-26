@@ -45,6 +45,11 @@
                         }
                     }
                 },
+                "install": {
+                  "title": "Installation",
+                  "label": "Install extension automatically after purchase",
+                  "hint": "Extension version is not marked as compatible with your shop version"
+                },
                 "toc": {
                     "title": "Terms and Conditions",
                     "checkboxes": {
@@ -64,7 +69,6 @@
                     "followingPerYear": "Following {price}** /year",
                     "forMonths": "for {months} months",
                     "forFirstYear": "for the first year",
-                    "install": "Install extension automatically after purchase",
                     "perMonth": "/month",
                     "perYear": "/year",
                     "submit": "Submit order",

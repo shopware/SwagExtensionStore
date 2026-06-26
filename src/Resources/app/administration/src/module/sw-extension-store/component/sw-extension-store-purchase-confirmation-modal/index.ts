@@ -36,7 +36,11 @@ export default Shopware.Component.wrapComponentConfig({
 
         paymentMeans() {
             return extensionStorePurchaseConfirmationStore().paymentMeansData;
-        }
+        },
+
+        installAfterPurchase() {
+            return extensionStorePurchaseConfirmationStore().isCompatible && this.extensionStorePreferencesService.state.installAfterPurchase;
+        },
     },
 
     watch: {

@@ -47,10 +47,73 @@
         }
     }
 
+    &-install {
+        display: flex;
+        padding: 12px 16px;
+        align-items: center;
+        gap: 8px;
+        align-self: stretch;
+        border-radius: $border-radius-sm;
+        border: 1px solid #e2e3e9;
+
+
+    }
+
+    &-install {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        &-title {
+            font-size: var(--font-size-xs);
+            line-height: var(--font-line-height-xs);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        &-switch {
+            display: flex;
+            padding: 12px 24px;
+            align-items: center;
+            gap: 8px;
+            align-self: stretch;
+            border-radius: $border-radius-md;
+            border: 1px solid #e2e3e9;
+
+            &.is--disabled {
+                background-color: var(--color-background-secondary-default);
+            }
+
+            .mt-switch {
+                margin: 0;
+
+                &__switch {
+                    min-width: 24px;
+                }
+
+                &__label {
+                    padding-left: 8px;
+                }
+            }
+        }
+
+        &-hint {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: var(--font-size-2xs);
+            line-height: var(--font-line-height-xs);
+            color: var(--color-orange-700);
+
+            .mt-icon {
+                color: var(--color-icon-attention-default);
+            }
+        }
+    }
+
     &-toc {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 4px;
 
         &-title {
             font-size: var(--font-size-xs);
@@ -103,35 +166,6 @@
                 color: var(--color-text-secondary-default);
                 font-size: var(--font-size-s);
                 line-height: var(--font-line-height-s);
-            }
-        }
-
-        &-install {
-            display: flex;
-            padding: 12px 16px;
-            align-items: center;
-            gap: 8px;
-            align-self: stretch;
-            border-radius: $border-radius-sm;
-            border: 1px solid #e2e3e9;
-
-            .mt-field {
-                &--switch {
-                    margin: 0;
-
-                    &__input {
-                        min-width: 24px;
-                        padding: 0 !important;
-                    }
-                }
-
-                &__label {
-                    padding-left: 8px;
-
-                    label {
-                        padding: 0 !important;
-                    }
-                }
             }
         }
     }

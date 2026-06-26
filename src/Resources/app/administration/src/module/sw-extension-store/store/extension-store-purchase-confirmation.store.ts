@@ -1,7 +1,15 @@
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
 
-type OnConfirmCallback = () => Promise<{ result: boolean; title?: string; description?: string }>;
-type OnCancelCallback = () => void;
+export type PurchaseConfirmationOnConfirmCallback = () => Promise<{ result: boolean; title?: string; description?: string }>;
+export type PurchaseConfirmationOnCancelCallback = () => void;
+
+export type PurchaseConfirmationModalData = {
+    cart: ExtensionStoreBasket;
+    paymentMeans: ExtensionStorePaymentMean[];
+    isCompatible: boolean;
+    onConfirm: PurchaseConfirmationOnConfirmCallback;
+    onCancel: PurchaseConfirmationOnCancelCallback;
+};
 
 type PurchaseConfirmationState = {
     isFailedOnBasketCreation: boolean;
@@ -11,8 +19,9 @@ type PurchaseConfirmationState = {
     isSuccessful: boolean;
     cartData: ExtensionStoreBasket | null;
     paymentMeansData: ExtensionStorePaymentMean[] | null;
-    onConfirm: OnConfirmCallback | null;
-    onCancel: OnCancelCallback | null;
+    isCompatible: boolean;
+    onConfirm: PurchaseConfirmationOnConfirmCallback | null;
+    onCancel: PurchaseConfirmationOnCancelCallback | null;
     errorTitle: string | null;
     errorDescription: string | null;
     errorDocumentationLink: string | null;
@@ -28,23 +37,21 @@ export default Shopware.Store.register({
         isSuccessful: false,
         cartData: null,
         paymentMeansData: null,
+        isCompatible: false,
         onConfirm: null,
         onCancel: null,
         errorTitle: null,
         errorDescription: null,
-        errorDocumentationLink: null
+        errorDocumentationLink: null,
     }),
+
     actions: {
-        openModal(
-            cartResponse: ExtensionStoreBasket,
-            paymentMeansResponse: ExtensionStorePaymentMean[],
-            onConfirm: OnConfirmCallback,
-            onCancel: OnCancelCallback
-        ): void {
-            this.cartData = cartResponse;
-            this.paymentMeansData = paymentMeansResponse;
-            this.onConfirm = onConfirm;
-            this.onCancel = onCancel;
+        openModal(data: PurchaseConfirmationModalData): void {
+            this.cartData = data.cart;
+            this.paymentMeansData = data.paymentMeans;
+            this.isCompatible = data.isCompatible;
+            this.onConfirm = data.onConfirm;
+            this.onCancel = data.onCancel;
             this.isOpen = true;
         },
 
@@ -84,7 +91,7 @@ export default Shopware.Store.register({
             this.isLoading = false;
             this.isSubmitted = false;
             this.isSuccessful = false;
-            this.isFailedOnBasketCreation = false;
+            this.isFailedOnBasketCreation =false;
             this.cartData = null;
             this.paymentMeansData = null;
             this.onConfirm = null;
@@ -94,13 +101,13 @@ export default Shopware.Store.register({
             this.errorDocumentationLink = null;
         },
 
-        openErrorModal(errorTitle: string, errorDescription: string, errorDocumentationLink: string, onCancel: OnCancelCallback): void {
+        openErrorModal(errorTitle: string, errorDescription: string, errorDocumentationLink: string, onCancel: PurchaseConfirmationOnCancelCallback): void {
             this.onCancel = onCancel;
             this.errorTitle = errorTitle;
             this.errorDescription = errorDescription;
             this.errorDocumentationLink = errorDocumentationLink;
             this.isFailedOnBasketCreation = true;
             this.isOpen = true;
-        }
-    }
+        },
+    },
 });
