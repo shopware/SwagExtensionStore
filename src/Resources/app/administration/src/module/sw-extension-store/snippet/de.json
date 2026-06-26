@@ -45,6 +45,11 @@
                         }
                     }
                 },
+                "install": {
+                  "title": "Installation",
+                  "label": "Erweiterung nach dem Kauf automatisch installieren",
+                  "hint": "Die Erweiterung ist nicht als kompatibel mit deiner Shop-Version gekennzeichnet."
+                },
                 "toc": {
                     "title": "Nutzungsbedingungen",
                     "checkboxes": {
@@ -64,7 +69,6 @@
                     "followingPerYear": "Anschließend {price}** /Jahr",
                     "forMonths": "für {months} Monate",
                     "forFirstYear": "für das erste Jahr",
-                    "install": "Erweiterung nach dem Kauf automatisch installieren",
                     "perMonth": "/Monat",
                     "perYear": "/Jahr",
                     "submit": "Bestellung absenden",

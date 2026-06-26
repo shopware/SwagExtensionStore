@@ -1,4 +1,4 @@
-import { purchaseConfirmationStore } from '../../store/extension-store-purchase-confirmation.store';
+import extensionStorePurchaseConfirmationStore from '../../store/extension-store-purchase-confirmation.store';
 import template from './sw-extension-store-purchase-confirmation-checkout.html.twig';
 import './sw-extension-store-purchase-confirmation-checkout.scss';
 
@@ -42,12 +42,6 @@ export default Shopware.Component.wrapComponentConfig({
         'update:install-after-purchase',
     ],
 
-    data() {
-        return {
-            store: purchaseConfirmationStore,
-        };
-    },
-
     computed: {
         steps() {
             return Object.freeze({
@@ -58,36 +52,36 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         step() {
-            if (this.store.state.isFailedOnBasketCreation) {
+            if (extensionStorePurchaseConfirmationStore().isFailedOnBasketCreation) {
                 return this.steps.FAILED;
             }
 
             if (this.isSubmitted && !this.isLoading) {
-                return this.store.state.isSuccessful ? this.steps.SUCCESS : this.steps.FAILED;
+                return extensionStorePurchaseConfirmationStore().isSuccessful ? this.steps.SUCCESS : this.steps.FAILED;
             }
 
             return this.steps.CHECKOUT;
         },
 
         isOpen() {
-            return this.store.state.isOpen;
+            return extensionStorePurchaseConfirmationStore().isOpen;
         },
 
         isLoading() {
-            return this.store.state.isLoading;
+            return extensionStorePurchaseConfirmationStore().isLoading;
         },
 
         isSubmitted() {
-            return this.store.state.isSubmitted;
+            return extensionStorePurchaseConfirmationStore().isSubmitted;
         },
         errorTitle() {
-            return this.store.state.errorTitle;
+            return extensionStorePurchaseConfirmationStore().errorTitle;
         },
         errorDescription() {
-            return this.store.state.errorDescription;
+            return extensionStorePurchaseConfirmationStore().errorDescription;
         },
         errorDocumentationLink() {
-            return this.store.state.errorDocumentationLink;
+            return extensionStorePurchaseConfirmationStore().errorDocumentationLink;
         },
         position() {
             return this.cart?.positions?.[0];
@@ -213,6 +207,10 @@ export default Shopware.Component.wrapComponentConfig({
                 && (!this.extensionHasPermissionsOrDomains || this.permissionsAccepted)
                 && !this.hasPaymentMethodError;
         },
+
+        isInstallable() {
+            return !this.isLoading && extensionStorePurchaseConfirmationStore().isCompatible;
+        },
     },
 
     methods: {
@@ -237,15 +235,15 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         closeModal() {
-            this.store.closeModal();
+            extensionStorePurchaseConfirmationStore().closeModal();
         },
 
         cancelPurchase() {
-            this.store.cancel();
+            extensionStorePurchaseConfirmationStore().cancel();
         },
 
         async confirmPurchase() {
-            await this.store.confirm();
+            await extensionStorePurchaseConfirmationStore().confirm();
         },
     },
 });

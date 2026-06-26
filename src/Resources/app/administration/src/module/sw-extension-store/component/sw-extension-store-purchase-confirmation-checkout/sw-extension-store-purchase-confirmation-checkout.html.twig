@@ -63,6 +63,34 @@
         />
         {% endblock %}
 
+        {% block sw_extension_store_purchase_confirmation_checkout_install %}
+        <div class="sw-extension-store-purchase-confirmation__checkout-install">
+            {% block sw_extension_store_purchase_confirmation_checkout_install_title %}
+            <div class="sw-extension-store-purchase-confirmation__checkout-install-title">
+                {{ $t('sw-extension-store.purchase-confirmation.checkout.install.title') }}
+            </div>
+            {% endblock %}
+
+            {% block sw_extension_store_purchase_confirmation_checkout_install_switch %}
+            <div :class="`sw-extension-store-purchase-confirmation__checkout-install-switch ${!isInstallable ? 'is--disabled' : ''}`">
+                <mt-switch
+                    :disabled="!isInstallable"
+                    :model-value="installAfterPurchase"
+                    :label="$t('sw-extension-store.purchase-confirmation.checkout.install.label')"
+                    @update:model-value="onInstallAfterPurchaseChange"
+                />
+            </div>
+            {% endblock %}
+
+            {% block sw_extension_store_purchase_confirmation_checkout_install_hint %}
+            <div v-if="!isInstallable" class="sw-extension-store-purchase-confirmation__checkout-install-hint">
+                <mt-icon name="solid-exclamation-circle" size="14px" />
+                {{ $t('sw-extension-store.purchase-confirmation.checkout.install.hint') }}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+
         {% block sw_extension_store_purchase_confirmation_checkout_toc %}
         <div class="sw-extension-store-purchase-confirmation__checkout-toc">
             {% block sw_extension_store_purchase_confirmation_checkout_toc_title %}
@@ -144,17 +172,6 @@
                         {{ durationIntervalSnippet }}
                     </span>
                 </div>
-            </div>
-            {% endblock %}
-
-            {% block sw_extension_store_purchase_confirmation_checkout_order_install %}
-            <div class="sw-extension-store-purchase-confirmation__checkout-order-install">
-                <mt-switch
-                    :disabled="isLoading"
-                    :model-value="installAfterPurchase"
-                    :label="$t('sw-extension-store.purchase-confirmation.checkout.order.install')"
-                    @update:model-value="onInstallAfterPurchaseChange"
-                />
             </div>
             {% endblock %}
 
