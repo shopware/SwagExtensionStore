@@ -1,7 +1,15 @@
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
 import { trackExtensionStoreEvent } from 'SwagExtensionStore/util/telemetry';
 
-export type PurchaseConfirmationOnConfirmCallback = () => Promise<{ result: boolean; title?: string; description?: string }>;
+export type PurchaseConfirmationCheckoutStep = 'order' | 'update' | 'install';
+
+export type PurchaseConfirmationOnConfirmCallbackResult = {
+    success: boolean;
+    title?: string;
+    description?: string;
+    documentationLink?: string;
+};
+export type PurchaseConfirmationOnConfirmCallback = () => Promise<PurchaseConfirmationOnConfirmCallbackResult>;
 export type PurchaseConfirmationOnCancelCallback = () => void;
 
 export type PurchaseConfirmationModalData = {
@@ -17,6 +25,7 @@ type PurchaseConfirmationState = {
     isOpen: boolean;
     isLoading: boolean;
     isSubmitted: boolean;
+    checkoutStep: PurchaseConfirmationCheckoutStep | null;
     isSuccessful: boolean;
     cartData: ExtensionStoreBasket | null;
     paymentMeansData: ExtensionStorePaymentMean[] | null;
@@ -54,6 +63,7 @@ export default Shopware.Store.register('extensionStorePurchaseConfirmation', {
         isOpen: false,
         isLoading: false,
         isSubmitted: false,
+        checkoutStep: null,
         isSuccessful: false,
         cartData: null,
         paymentMeansData: null,
@@ -87,18 +97,19 @@ export default Shopware.Store.register('extensionStorePurchaseConfirmation', {
             this.isSubmitted = true;
             this.isLoading = true;
 
-            const response = await this.onConfirm();
+            const result = await this.onConfirm().catch((): PurchaseConfirmationOnConfirmCallbackResult => ({
+                success: false,
+            }));
 
-            this.isSuccessful = response.result ?? false;
-
-            if (response.result) {
+            this.isSuccessful = result.success;
+            if (this.isSuccessful) {
                 this.onCancel = null;
                 this.onConfirm = null;
-
                 trackExtensionStorePurchaseEvent(this.cartData, 'successful');
             } else {
-                this.errorTitle = response.title ?? null;
-                this.errorDescription = response.description ?? null;
+                this.errorTitle = result.title ?? null;
+                this.errorDescription = result.description ?? null;
+                this.errorDocumentationLink = result.documentationLink ?? null;
                 trackExtensionStorePurchaseEvent(this.cartData, 'failed');
             }
 
@@ -121,6 +132,7 @@ export default Shopware.Store.register('extensionStorePurchaseConfirmation', {
             this.isOpen = false;
             this.isLoading = false;
             this.isSubmitted = false;
+            this.checkoutStep = null;
             this.isSuccessful = false;
             this.isFailedOnBasketCreation =false;
             this.cartData = null;
@@ -132,7 +144,12 @@ export default Shopware.Store.register('extensionStorePurchaseConfirmation', {
             this.errorDocumentationLink = null;
         },
 
-        openErrorModal(errorTitle: string, errorDescription: string, errorDocumentationLink: string, onCancel: PurchaseConfirmationOnCancelCallback): void {
+        openErrorModal(
+            errorTitle: string,
+            errorDescription: string,
+            errorDocumentationLink: string,
+            onCancel: PurchaseConfirmationOnCancelCallback,
+        ): void {
             this.onCancel = onCancel;
             this.errorTitle = errorTitle;
             this.errorDescription = errorDescription;

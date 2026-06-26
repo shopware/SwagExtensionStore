@@ -4,7 +4,7 @@ import type ShopwareExtensionService from 'src/module/sw-extension/service/shopw
 import type ExtensionStoreLicensesService from './extension-store-licenses.service';
 import type { LocationQuery, Router } from 'vue-router';
 import type { ShopwareMessageTypes } from '@shopware-ag/meteor-admin-sdk/es/message-types';
-import extensionStorePurchaseConfirmationStore from '../store/extension-store-purchase-confirmation.store';
+import extensionStorePurchaseConfirmationStore, { type PurchaseConfirmationOnConfirmCallbackResult } from '../store/extension-store-purchase-confirmation.store';
 import type ExtensionHelperService from 'src/app/service/extension-helper.service';
 import type CacheApiService from 'src/core/service/api/cache.api.service';
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
@@ -326,12 +326,8 @@ export class ExtensionStoreChannelService {
                 cart,
                 paymentMeans,
                 isCompatible: data.isCompatible,
-                onConfirm: async () => {
-                    return await this.performPurchase(data, cart);
-                },
-                onCancel: () => {
-                    this.publishPurchaseResult(data.sessionToken, false);
-                },
+                onConfirm: () => this.performPurchase(data, cart),
+                onCancel: () => this.publishPurchaseResult(data.sessionToken, false),
             });
         } catch (error) {
             const errorDetails = this.getErrorDetails(error);
@@ -438,23 +434,27 @@ export class ExtensionStoreChannelService {
         trackExtensionStoreEvent(eventName, data);
     }
 
-    private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<{ result: boolean; title?: string; description?: string; documentationLink?: string }> {
+    private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<PurchaseConfirmationOnConfirmCallbackResult> {
+        extensionStorePurchaseConfirmationStore().checkoutStep = 'order';
+
         try {
             await this.extensionStoreLicensesService.orderCart(cartData);
             this.publishPurchaseResult(data.sessionToken, true);
         } catch (e) {
             const errorDetails = this.getErrorDetails(e);
             this.publishPurchaseResult(data.sessionToken, false);
-            return { result: false, ...errorDetails };
+            return { success: false, ...errorDetails };
         }
 
+        extensionStorePurchaseConfirmationStore().checkoutStep = 'update';
         await this.updateExtensionData();
 
         if (data.isCompatible && this.extensionStorePreferencesService.state.installAfterPurchase) {
+            extensionStorePurchaseConfirmationStore().checkoutStep = 'install';
             await this.installExtension(cartData);
         }
 
-        return { result: true };
+        return { success: true };
     }
 
     private getCurrentRoute(): string {

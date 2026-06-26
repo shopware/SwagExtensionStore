@@ -208,8 +208,30 @@ export default Shopware.Component.wrapComponentConfig({
                 && !this.hasPaymentMethodError;
         },
 
+        isCompatible() {
+            return extensionStorePurchaseConfirmationStore().isCompatible;
+        },
+
         isInstallable() {
-            return !this.isLoading && extensionStorePurchaseConfirmationStore().isCompatible;
+            return !this.isLoading && this.isCompatible;
+        },
+
+        loadingTitle() {
+            const step = extensionStorePurchaseConfirmationStore().checkoutStep;
+            if (step === null) {
+                return undefined;
+            }
+
+            return this.$t(`sw-extension-store.purchase-confirmation.checkout.loading.title.${step}`);
+        },
+
+        loadingDescription() {
+            const step = extensionStorePurchaseConfirmationStore().checkoutStep;
+            if (step === null) {
+                return undefined;
+            }
+
+            return this.$t('sw-extension-store.purchase-confirmation.checkout.loading.description');
         },
     },
 
