@@ -77,6 +77,14 @@
                 },
                 "notes": {
                     "tax": "* Alle Preise verstehen sich ohne die gesetzliche Mehrwertsteuer"
+                },
+                "loading": {
+                  "title": {
+                    "order": "Deine Bestellung wird verarbeitet ...",
+                    "update": "Deine Erweiterungsdaten werden aktualisiert ...",
+                    "install": "Deine Erweiterung wird installiert ..."
+                  },
+                  "description": "Bitte warten, dies kann einige Sekunden dauern."
                 }
             },
             "permissions": {

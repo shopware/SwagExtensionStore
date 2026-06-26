@@ -77,6 +77,14 @@
                 },
                 "notes": {
                     "tax": "* All prices are quoted net of the statutory value-added tax"
+                },
+                "loading": {
+                    "title": {
+                        "order": "Processing your order...",
+                        "update": "Updating your extension data...",
+                        "install": "Installing your extension..."
+                    },
+                    "description": "Please wait. This can take a few seconds."
                 }
             },
             "permissions": {
