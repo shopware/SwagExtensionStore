@@ -52,12 +52,17 @@ type PurchaseActionData = StoreChannelActionData & {
     sessionToken: string;
 };
 
+type StoreContextOwnedExtension = {
+    name: string;
+    version: string | null;
+};
+
 type StoreContext = {
     shopwareVersion: string;
-    owningExtensions: string[];
+    owningExtensions: StoreContextOwnedExtension[];
     sessionToken: string;
     language: string;
-    licenseHost: string|null;
+    licenseHost: string | null;
     userInfo: UserInfo | null;
     success: boolean;
     currentRoute: string;
@@ -75,6 +80,7 @@ type PurchaseResultData = {
     action: 'purchaseResult';
     sessionToken: string;
     success: boolean;
+    extensionVersion?: string | null;
 };
 
 type CopyToClipboardActionData = StoreChannelActionData & {
@@ -252,7 +258,11 @@ export class ExtensionStoreChannelService {
     }
 
     private async handleHandshake(data: HandshakeActionData): Promise<StoreContext> {
-        const extensions = (await this.extensionStoreActionService.getMyExtensions()).map((extension) => extension.name);
+        const extensions = await this.extensionStoreActionService.getMyExtensions();
+        const owningExtensions = extensions.map((extension) => ({
+            name: extension.name,
+            version: extension.version ?? null,
+        }));
         await this.shopwareExtensionService.checkLogin();
 
         const contextStore = extensionStoreContextStore();
@@ -268,7 +278,7 @@ export class ExtensionStoreChannelService {
 
         return {
             shopwareVersion: shopwareVersion,
-            owningExtensions: extensions,
+            owningExtensions: owningExtensions,
             sessionToken: data.sessionToken,
             language: language,
             licenseHost,
@@ -318,12 +328,14 @@ export class ExtensionStoreChannelService {
 
     private publishPurchaseResult(
         sessionToken: string,
-        success: boolean
+        success: boolean,
+        extensionVersion?: string | null
     ): void {
         const resultData: PurchaseResultData = {
             action: 'purchaseResult',
             sessionToken,
-            success
+            success,
+            ...(extensionVersion !== undefined ? { extensionVersion } : {})
         };
 
         publish(
@@ -392,7 +404,6 @@ export class ExtensionStoreChannelService {
 
         try {
             await this.extensionStoreLicensesService.orderCart(cartData);
-            this.publishPurchaseResult(data.sessionToken, true);
         } catch (e) {
             const errorDetails = this.getErrorDetails(e);
             this.publishPurchaseResult(data.sessionToken, false);
@@ -402,12 +413,30 @@ export class ExtensionStoreChannelService {
         extensionStorePurchaseConfirmationStore().checkoutStep = 'update';
         await this.updateExtensionData();
 
-        if (data.isCompatible && this.extensionStorePreferencesService.state.installAfterPurchase) {
+        const shouldInstallExtension = data.isCompatible && this.extensionStorePreferencesService.state.installAfterPurchase;
+        if (shouldInstallExtension) {
             extensionStorePurchaseConfirmationStore().checkoutStep = 'install';
             await this.installExtension(cartData);
         }
 
+        const extensionVersion = shouldInstallExtension
+            ? await this.getInstalledExtensionVersion(cartData.positions[0].extension.name)
+            : null;
+        this.publishPurchaseResult(data.sessionToken, true, extensionVersion);
+
         return { success: true };
+    }
+
+    private async getInstalledExtensionVersion(extensionName: string): Promise<string | null> {
+        try {
+            const extensions = await this.extensionStoreActionService.getMyExtensions();
+
+            return extensions.find((extension) => extension.name === extensionName)?.version ?? null;
+        } catch (error) {
+            console.error('Failed to get installed extension version after purchase', error);
+
+            return null;
+        }
     }
 
     private getCurrentRoute(): string {
