@@ -212,10 +212,6 @@ export default Shopware.Component.wrapComponentConfig({
             return extensionStorePurchaseConfirmationStore().isCompatible;
         },
 
-        isInstallable() {
-            return !this.isLoading && this.isCompatible;
-        },
-
         loadingTitle() {
             const step = extensionStorePurchaseConfirmationStore().checkoutStep;
             if (step === null) {

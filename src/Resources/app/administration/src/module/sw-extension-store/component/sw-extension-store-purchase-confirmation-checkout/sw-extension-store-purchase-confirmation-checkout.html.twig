@@ -3,10 +3,7 @@
 
     {% block sw_extension_store_purchase_confirmation_checkout_loader %}
     <div v-if="isLoading" class="sw-extension-store-purchase-confirmation__checkout-loading">
-        <mt-loader
-            :class="sw-extension-store-purchase-confirmation__checkout-loading-indicator"
-            size="50px"
-        />
+        <mt-loader size="50px" />
 
         <!-- Meteor Component Library >=5.1.0 supports loading title & description natively via props. -->
         <div v-if="loadingTitle || loadingDescription" class="sw-extension-store-purchase-confirmation__checkout-loading-text">
@@ -91,18 +88,18 @@
             {% endblock %}
 
             {% block sw_extension_store_purchase_confirmation_checkout_install_switch %}
-            <div :class="`sw-extension-store-purchase-confirmation__checkout-install-switch ${!isInstallable ? 'is--disabled' : ''}`">
+            <div :class="`sw-extension-store-purchase-confirmation__checkout-install-switch ${!isCompatible ? 'is--disabled' : ''}`">
                 <mt-switch
-                    :disabled="!isInstallable"
+                    :disabled="isLoading || !isCompatible"
                     :checked="installAfterPurchase"
-                    :label="$t('sw-extension-store.purchase-confirmation.checkout.order.install')"
+                    :label="$t('sw-extension-store.purchase-confirmation.checkout.install.label')"
                     @change="onInstallAfterPurchaseChange"
                 />
             </div>
             {% endblock %}
 
             {% block sw_extension_store_purchase_confirmation_checkout_install_hint %}
-            <div v-if="!isInstallable" class="sw-extension-store-purchase-confirmation__checkout-install-hint">
+            <div v-if="!isCompatible" class="sw-extension-store-purchase-confirmation__checkout-install-hint">
                 <mt-icon name="solid-exclamation-circle" size="14px" />
                 {{ $t('sw-extension-store.purchase-confirmation.checkout.install.hint') }}
             </div>
