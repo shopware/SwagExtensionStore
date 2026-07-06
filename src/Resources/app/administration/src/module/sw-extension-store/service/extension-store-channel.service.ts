@@ -284,10 +284,12 @@ export class ExtensionStoreChannelService {
 
     private async handleHandshake(data: HandshakeActionData): Promise<StoreContext> {
         const extensions = await this.extensionStoreActionService.getMyExtensions();
-        const owningExtensions = extensions.map((extension) => ({
-            name: extension.name,
-            version: extension.version ?? null,
-        }));
+        const owningExtensions = extensions.filter(extension => !!extension.storeLicense)
+            .map((extension) => ({
+                name: extension.name,
+                version: extension.version ?? null,
+            }));
+
         await this.shopwareExtensionService.checkLogin();
 
         const contextStore = extensionStoreContextStore();
