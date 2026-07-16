@@ -163,7 +163,9 @@ export default {
         },
 
         orderedBinaries() {
-            return Utils.get(this.extension, 'binaries', []).slice().reverse();
+            return Utils.get(this.extension, 'binaries', []).slice().sort((a, b) => {
+                return String(b.version ?? '').localeCompare(String(a.version ?? ''), undefined, { numeric: true });
+            });
         },
 
         priceClass() {

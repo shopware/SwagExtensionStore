@@ -177,6 +177,22 @@ describe('SwagExtensionStore/module/sw-extension-store/page/sw-extension-store-d
         expect(wrapper.vm.extensionCategoryNames).toBe('Productivity, Admin, Storefront');
     });
 
+    it('should order changelog binaries by numeric version descending', async () => {
+        const wrapper = await createWrapper({
+            binaries: [
+                { version: '2.8.0' },
+                { version: '2.10.0' },
+                { version: '2.9.0' },
+            ],
+        });
+
+        expect(wrapper.vm.orderedBinaries.map((binary) => binary.version)).toEqual([
+            '2.10.0',
+            '2.9.0',
+            '2.8.0',
+        ]);
+    });
+
     it('should render alert box when extension is an enterprise feature', async () => {
         Shopware.Store.get('shopwareExtensions').myExtensions = {
             data: [{
