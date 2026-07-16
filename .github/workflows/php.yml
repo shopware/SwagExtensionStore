@@ -22,20 +22,22 @@ jobs:
         with:
           rules: ''
 
-  phpstan:
-    name: Static Analyse
+  verifier:
+    name: Verifier
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version-selection: [ 'lowest', 'highest']
     steps:
-      - name: Setup extension
-        uses: shopware/github-actions/setup-extension@main
+      - name: Checkout
+        uses: actions/checkout@v4
+    
+      - name: Run Check
+        uses: shopware/github-actions/extension-verifier@main
         with:
-          extensionName: SwagExtensionStore
-          shopwareVersion: trunk
-          install: true
-
-      - uses: shopware/github-actions/phpstan@main
-        with:
-          extensionName: SwagExtensionStore
+            action: check
+            check-against: ${{ matrix.version-selection }}
 
   phpunit:
     name: Tests
