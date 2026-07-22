@@ -23,6 +23,19 @@ parameters:
             message: '#Call to deprecated method set\(\) of class Shopware\\Core\\System\\SystemConfig\\SystemConfigService#'
             path: tests
 
+        -
+            message: '#Call to deprecated method scope\(\) of class Shopware\\Core\\Framework\\Context:#'
+            path: src/Controller/InAppPurchasesController.php
+
+        -
+            message: '#deprecated class Shopware\\Core\\Framework\\DataAbstractionLayer\\Search\\EntitySearchResult:#'
+            path: tests/Controller/InAppPurchasesControllerTest.php
+
+        -
+            message: '#Call to method getEntities\(\) of deprecated class Shopware\\Core\\Framework\\DataAbstractionLayer\\Search\\EntitySearchResult:#'
+            path: src/Controller/InAppPurchasesController.php
+
+
 rules:
     # Shopware core rules
     - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\DeprecatedMethodsThrowDeprecationRule
