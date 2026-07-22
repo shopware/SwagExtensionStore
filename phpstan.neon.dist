@@ -31,6 +31,10 @@ parameters:
             message: '#deprecated class Shopware\\Core\\Framework\\DataAbstractionLayer\\Search\\EntitySearchResult:#'
             path: tests/Controller/InAppPurchasesControllerTest.php
 
+        -
+            message: '#Call to method getEntities\(\) of deprecated class Shopware\\Core\\Framework\\DataAbstractionLayer\\Search\\EntitySearchResult:#'
+            path: src/Controller/InAppPurchasesController.php
+
 
 rules:
     # Shopware core rules
