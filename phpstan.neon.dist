@@ -20,14 +20,6 @@ parameters:
             path: tests
 
         -
-            message: '#Call to deprecated method set\(\) of class Shopware\\Core\\System\\SystemConfig\\SystemConfigService#'
-            path: tests
-
-        -
-            message: '#Call to deprecated method scope\(\) of class Shopware\\Core\\Framework\\Context:#'
-            path: src/Controller/InAppPurchasesController.php
-
-        -
             message: '#deprecated class Shopware\\Core\\Framework\\DataAbstractionLayer\\Search\\EntitySearchResult:#'
             path: tests/Controller/InAppPurchasesControllerTest.php
 
