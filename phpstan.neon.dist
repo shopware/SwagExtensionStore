@@ -19,13 +19,11 @@ parameters:
             message: '#Service ".*" is private#'
             path: tests
 
+        # EntitySearchResult::__construct is deprecated until v6.8 removes $entity and reorders params.
+        # Test fixtures still need the current signature on 6.7; silence until platform bumps.
         -
-            message: '#deprecated class Shopware\\Core\\Framework\\DataAbstractionLayer\\Search\\EntitySearchResult:#'
+            message: '#Call to deprecated method __construct\(\) of class Shopware\\Core\\Framework\\DataAbstractionLayer\\Search\\EntitySearchResult#'
             path: tests/Controller/InAppPurchasesControllerTest.php
-
-        -
-            message: '#Call to method getEntities\(\) of deprecated class Shopware\\Core\\Framework\\DataAbstractionLayer\\Search\\EntitySearchResult:#'
-            path: src/Controller/InAppPurchasesController.php
 
 
 rules:

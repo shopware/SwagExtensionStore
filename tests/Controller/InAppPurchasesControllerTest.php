@@ -13,6 +13,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
+use Shopware\Core\Framework\Feature;
 use Shopware\Core\Framework\Store\InAppPurchase\Services\InAppPurchaseUpdater;
 use Shopware\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Shopware\Core\Framework\Store\Struct\ExtensionCollection;
@@ -451,13 +452,14 @@ class InAppPurchasesControllerTest extends TestCase
         $app->setName('TestName');
         $app->setUniqueIdentifier(Uuid::randomHex());
 
-        return new EntitySearchResult(
-            'aoo',
+        // EntitySearchResult still accepts $entity on 6.7; removed in 6.8 (UPGRADE-6.8.md).
+        return Feature::silent('v6.8.0.0', static fn () => new EntitySearchResult(
+            'app',
             1,
             new EntityCollection([$app]),
             null,
             new Criteria(),
             Context::createDefaultContext(),
-        );
+        ));
     }
 }
