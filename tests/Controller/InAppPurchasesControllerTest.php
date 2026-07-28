@@ -452,7 +452,7 @@ class InAppPurchasesControllerTest extends TestCase
         $app->setUniqueIdentifier(Uuid::randomHex());
 
         return new EntitySearchResult(
-            'aoo',
+            'app',
             1,
             new EntityCollection([$app]),
             null,
