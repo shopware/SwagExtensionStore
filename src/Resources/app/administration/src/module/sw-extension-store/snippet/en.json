@@ -82,7 +82,8 @@
                     "title": {
                         "order": "Processing your order...",
                         "update": "Updating your extension data...",
-                        "install": "Installing your extension..."
+                        "install": "Installing your extension...",
+                        "reload": "Reloading your shop..."
                     },
                     "description": "Please wait. This can take a few seconds."
                 }

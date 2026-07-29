@@ -21,16 +21,27 @@ const collectDefaultEventData = async (): Promise<Record<string, TrackableType>>
     return eventData;
 };
 
-export const trackExtensionStoreEvent = (eventName: string, data: Record<string, TrackableType> = {}): void => {
+/**
+ * Resolves once the event has been handed over to the telemetry gateway. Callers that are
+ * about to tear down the page (e.g. a reload) should await this, everyone else can ignore it.
+ */
+export const trackExtensionStoreEvent = async (
+    eventName: string,
+    data: Record<string, TrackableType> = {},
+): Promise<void> => {
     if (!('Telemetry' in Shopware)) {
         return;
     }
 
-    void collectDefaultEventData().then((defaultEventData) => {
+    try {
+        const defaultEventData = await collectDefaultEventData();
+
         Shopware.Telemetry.track({
             ...data,
             ...defaultEventData,
             eventName,
         });
-    });
+    } catch (error) {
+        console.error(`Failed to track the ${eventName} event`, error);
+    }
 };
