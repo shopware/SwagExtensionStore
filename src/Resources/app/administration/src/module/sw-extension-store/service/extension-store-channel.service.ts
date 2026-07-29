@@ -480,18 +480,21 @@ export class ExtensionStoreChannelService {
         extensionStorePurchaseConfirmationStore().checkoutStep = 'update';
         await this.updateExtensionData();
 
-        const shouldInstallExtension = data.isCompatible && this.extensionStorePreferencesService.state.installAfterPurchase;
-        if (shouldInstallExtension) {
+        let isInstalled = false;
+        if (data.isCompatible && this.extensionStorePreferencesService.state.installAfterPurchase) {
             extensionStorePurchaseConfirmationStore().checkoutStep = 'install';
-            await this.installExtension(cartData);
+            isInstalled = await this.installExtension(cartData);
         }
 
-        const extensionVersion = shouldInstallExtension
-            ? await this.getInstalledExtensionVersion(cartData.positions[0].extension.name)
-            : null;
+        let extensionVersion: string | null = null;
+        if (isInstalled) {
+            extensionStorePurchaseConfirmationStore().checkoutStep = 'reload';
+            extensionVersion = await this.getInstalledExtensionVersion(cartData.positions[0].extension.name);
+        }
+
         this.publishPurchaseResult(data.sessionToken, true, extensionVersion);
 
-        return { success: true };
+        return { success: true, requiresReload: isInstalled };
     }
 
     private async getInstalledExtensionVersion(extensionName: string): Promise<string | null> {
@@ -541,7 +544,19 @@ export class ExtensionStoreChannelService {
         }
     }
 
-    private async installExtension(cartData: ExtensionStoreBasket): Promise<void> {
+    /**
+     * A failing cache clear must not be reported as a failed installation, the extension is
+     * installed at this point either way and the following reload picks it up.
+     */
+    private async clearCache(): Promise<void> {
+        try {
+            await this.cacheApiService.clear();
+        } catch (error) {
+            console.error('Failed to clear the cache after installing an extension', error);
+        }
+    }
+
+    private async installExtension(cartData: ExtensionStoreBasket): Promise<boolean> {
         const extension = cartData.positions[0].extension;
         const snippetService = Shopware.Snippet as unknown as {
             tc: (key: string, params?: Record<string, string>) => string;
@@ -549,10 +564,7 @@ export class ExtensionStoreChannelService {
 
         try {
             await this.extensionHelperService.downloadAndActivateExtension(extension.name, extension.type);
-
-            if (extension.type === 'plugin') {
-                await this.cacheApiService.clear();
-            }
+            await this.clearCache();
 
             Shopware.Store.get('notification').createNotification({
                 variant: 'positive',
@@ -560,6 +572,8 @@ export class ExtensionStoreChannelService {
                 message: snippetService.tc('sw-extension-store.installation.successMessage', { name: String(extension.name) }),
                 growl: true,
             });
+
+            return true;
         } catch (error) {
             console.error('Failed to install extension after purchase', error);
 
@@ -569,6 +583,8 @@ export class ExtensionStoreChannelService {
                 message: snippetService.tc('sw-extension-store.installation.errorMessage', { name: String(extension.name) }),
                 growl: true,
             });
+
+            return false;
         }
     }
 }

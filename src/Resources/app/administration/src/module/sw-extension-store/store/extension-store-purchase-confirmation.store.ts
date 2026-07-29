@@ -1,10 +1,12 @@
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
 import { trackExtensionStoreEvent } from 'SwagExtensionStore/util/telemetry';
+import { pageReload } from 'SwagExtensionStore/util/page-reload';
 
-export type PurchaseConfirmationCheckoutStep = 'order' | 'update' | 'install';
+export type PurchaseConfirmationCheckoutStep = 'order' | 'update' | 'install' | 'reload';
 
 export type PurchaseConfirmationOnConfirmCallbackResult = {
     success: boolean;
+    requiresReload?: boolean;
     title?: string;
     description?: string;
     documentationLink?: string;
@@ -40,13 +42,13 @@ type PurchaseConfirmationState = {
 const trackExtensionStorePurchaseEvent = (
     cartData: ExtensionStoreBasket | null,
     name: 'initiated' | 'confirmed' | 'successful' | 'failed' | 'cancelled',
-): void => {
+): Promise<void> => {
     const [position] = cartData?.positions ?? [];
     if (!position) {
-        return;
+        return Promise.resolve();
     }
 
-    trackExtensionStoreEvent(`extension_purchase_${name}`, {
+    return trackExtensionStoreEvent(`extension_purchase_${name}`, {
         extension_id: position.extension.id,
         extension_name: position.extension.name,
         net_price: position.netPrice,
@@ -56,6 +58,13 @@ const trackExtensionStorePurchaseEvent = (
         pseudo_price: position.pseudoPrice,
     });
 };
+
+/**
+ * Duration the 'reload' hint is shown before the page is reloaded. Must stay above the
+ * telemetry gateway's flush interval (1s), so the tracked purchase events are sent out
+ * before the page is torn down.
+ */
+const RELOAD_DELAY_MS = 1_500;
 
 export default Shopware.Store.register('extensionStorePurchaseConfirmation', {
     state: (): PurchaseConfirmationState => ({
@@ -84,7 +93,7 @@ export default Shopware.Store.register('extensionStorePurchaseConfirmation', {
             this.onCancel = data.onCancel;
             this.isOpen = true;
 
-            trackExtensionStorePurchaseEvent(this.cartData, 'initiated');
+            void trackExtensionStorePurchaseEvent(this.cartData, 'initiated');
         },
 
         async confirm(): Promise<void> {
@@ -92,7 +101,7 @@ export default Shopware.Store.register('extensionStorePurchaseConfirmation', {
                 return;
             }
 
-            trackExtensionStorePurchaseEvent(this.cartData, 'confirmed');
+            void trackExtensionStorePurchaseEvent(this.cartData, 'confirmed');
 
             this.isSubmitted = true;
             this.isLoading = true;
@@ -102,15 +111,24 @@ export default Shopware.Store.register('extensionStorePurchaseConfirmation', {
             }));
 
             this.isSuccessful = result.success;
+            let trackingDispatched: Promise<void>;
             if (this.isSuccessful) {
                 this.onCancel = null;
                 this.onConfirm = null;
-                trackExtensionStorePurchaseEvent(this.cartData, 'successful');
+                trackingDispatched = trackExtensionStorePurchaseEvent(this.cartData, 'successful');
             } else {
                 this.errorTitle = result.title ?? null;
                 this.errorDescription = result.description ?? null;
                 this.errorDocumentationLink = result.documentationLink ?? null;
-                trackExtensionStorePurchaseEvent(this.cartData, 'failed');
+                trackingDispatched = trackExtensionStorePurchaseEvent(this.cartData, 'failed');
+            }
+
+            if (this.isSuccessful && result.requiresReload) {
+                // Ensure the tracking event is sent before the page is reloaded, otherwise it will be lost.
+                await trackingDispatched;
+                await pageReload.reloadAfter(RELOAD_DELAY_MS);
+
+                return;
             }
 
             this.isLoading = false;
@@ -122,7 +140,7 @@ export default Shopware.Store.register('extensionStorePurchaseConfirmation', {
             }
 
             if (!this.isSuccessful) {
-                trackExtensionStorePurchaseEvent(this.cartData, 'cancelled');
+                void trackExtensionStorePurchaseEvent(this.cartData, 'cancelled');
             }
 
             this.closeModal();

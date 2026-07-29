@@ -87,6 +87,33 @@ describe('SwagExtensionStore/util/telemetry', () => {
         }));
     });
 
+    it('should resolve only after the event has been dispatched', async () => {
+        const promise = trackExtensionStoreEvent('test_event');
+
+        expect(mockTrack).not.toHaveBeenCalled();
+
+        await promise;
+
+        expect(mockTrack).toHaveBeenCalledWith(expect.objectContaining({ eventName: 'test_event' }));
+    });
+
+    it('should resolve instead of rejecting when tracking throws', async () => {
+        const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+        mockTrack.mockImplementation(() => {
+            throw new Error('tracking failed');
+        });
+
+        await expect(trackExtensionStoreEvent('test_event')).resolves.toBeUndefined();
+        expect(consoleError).toHaveBeenCalledWith('Failed to track the test_event event', expect.any(Error));
+    });
+
+    it('should resolve when Telemetry is not available in Shopware', async () => {
+        delete Shopware.Telemetry;
+
+        await expect(trackExtensionStoreEvent('test_event')).resolves.toBeUndefined();
+        expect(mockTrack).not.toHaveBeenCalled();
+    });
+
     it('should merge custom data with default event data', async () => {
         trackExtensionStoreEvent('test_event', { custom_field: 'value' });
         await flushPromises();

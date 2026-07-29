@@ -82,7 +82,8 @@
                   "title": {
                     "order": "Deine Bestellung wird verarbeitet ...",
                     "update": "Deine Erweiterungsdaten werden aktualisiert ...",
-                    "install": "Deine Erweiterung wird installiert ..."
+                    "install": "Deine Erweiterung wird installiert ...",
+                    "reload": "Dein Shop wird neu geladen ..."
                   },
                   "description": "Bitte warten, dies kann einige Sekunden dauern."
                 }
