@@ -2,7 +2,7 @@ import { handle, publish } from '@shopware-ag/meteor-admin-sdk/es/channel';
 import type ExtensionStoreActionService from 'src/module/sw-extension/service/extension-store-action.service';
 import type ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
 import type ExtensionStoreLicensesService from './extension-store-licenses.service';
-import type { LocationQuery, Router } from 'vue-router';
+import type { LocationQuery, RouteLocationNormalizedGeneric, RouteLocationNormalizedLoadedGeneric, Router } from 'vue-router';
 import type { ShopwareMessageTypes } from '@shopware-ag/meteor-admin-sdk/es/message-types';
 import extensionStorePurchaseConfirmationStore, { type PurchaseConfirmationOnConfirmCallbackResult } from '../store/extension-store-purchase-confirmation.store';
 import type ExtensionHelperService from 'src/app/service/extension-helper.service';
@@ -111,6 +111,7 @@ type StoreApiErrorResponse = {
 };
 
 export class ExtensionStoreChannelService {
+    private removeRouterAfterEachHook?: () => void;
     private unsubscribeFunction?: () => void;
     private registeredAt?: number;
 
@@ -142,6 +143,8 @@ export class ExtensionStoreChannelService {
             }
         });
 
+        this.removeRouterAfterEachHook = this.router.afterEach((to, from) => this.publishReturnToExtensionStore(to, from));
+
         window.addEventListener('popstate', () => this.publishRouterSync());
     }
 
@@ -151,9 +154,24 @@ export class ExtensionStoreChannelService {
         this.unsubscribeFunction?.();
         this.unsubscribeFunction = undefined;
 
+        this.removeRouterAfterEachHook?.();
+        this.removeRouterAfterEachHook = undefined;
+
         window.removeEventListener('popstate', () => this.publishRouterSync());
 
         this.registeredAt = undefined;
+    }
+
+    private publishReturnToExtensionStore(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedLoadedGeneric): void {
+        const isFromExtensionStore = from.name?.toString() === 'sw.extension.store';
+        const isToExtensionStore = to.name?.toString() === 'sw.extension.store';
+        const isFullPathEqual = from.fullPath === to.fullPath;
+
+        if (!isFromExtensionStore || !isToExtensionStore || isFullPathEqual) {
+            return;
+        }
+
+        this.publishRouterSync();
     }
 
     private handleAction(data: unknown): Promise<StoreContext | PurchaseResponse> | void {
