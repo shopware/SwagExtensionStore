@@ -108,7 +108,7 @@ class DataControllerTest extends TestCase
         $requestHandler = $this->getStoreRequestHandler();
         $requestHandler->reset();
         $requestHandler->append(
-            function (\GuzzleHttp\Psr7\Request $request) use ($extensionId): Response {
+            static function (\GuzzleHttp\Psr7\Request $request) use ($extensionId): Response {
                 $matches = [];
                 preg_match('/\/swplatform\/extensionstore\/extensions\/(.*)/', $request->getUri()->getPath(), $matches);
 
@@ -128,7 +128,7 @@ class DataControllerTest extends TestCase
         $requestHandler = $this->getStoreRequestHandler();
         $requestHandler->reset();
         $requestHandler->append(
-            function (\GuzzleHttp\Psr7\Request $request) use ($extensionId): Response {
+            static function (\GuzzleHttp\Psr7\Request $request) use ($extensionId): Response {
                 $matches = [];
                 preg_match('/\/swplatform\/extensionstore\/extensions\/(.*)\/reviews/', $request->getUri()->getPath(), $matches);
 

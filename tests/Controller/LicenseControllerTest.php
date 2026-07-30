@@ -56,7 +56,7 @@ class LicenseControllerTest extends TestCase
     public function testAvailablePaymentMeans(): void
     {
         $service = $this->createMock(LicenseService::class);
-        $service->expects(static::once())
+        $service->expects($this->once())
             ->method('availablePaymentMeans')
             ->willReturn(['payment-mean-1', 'payment-mean-2']);
 
@@ -73,7 +73,7 @@ class LicenseControllerTest extends TestCase
         ]);
 
         $service = $this->createMock(LicenseService::class);
-        $service->expects(static::once())
+        $service->expects($this->once())
             ->method('orderCart');
 
         $response = (new LicenseController($service))->orderCart($requestDataBag, Context::createDefaultContext());
