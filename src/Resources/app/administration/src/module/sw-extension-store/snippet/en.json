@@ -104,7 +104,10 @@
             "successTitle": "Installation successful",
             "successMessage": "{name} has been successfully installed and activated.",
             "errorTitle": "Installation failed",
-            "errorMessage": "{name} could not be installed. Please try again or install it manually."
+            "errorMessage": "{name} could not be installed. Please try again or install it manually.",
+            "reloadRequiredTitle": "Reload required",
+            "reloadRequiredMessage": "{name} has been installed. Reload the administration to start using it.",
+            "reloadRequiredAction": "Reload now"
         }
     }
 }

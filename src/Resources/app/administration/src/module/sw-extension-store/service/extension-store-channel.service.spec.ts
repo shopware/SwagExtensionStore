@@ -1,3 +1,4 @@
+import { flushPromises } from '@vue/test-utils';
 import { handle, publish } from '@shopware-ag/meteor-admin-sdk/es/channel';
 import { ExtensionStoreChannelService } from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-channel.service';
 import extensionStorePurchaseConfirmationStore from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-purchase-confirmation.store';
@@ -76,7 +77,11 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             extensionStoreLicensesService as never,
             extensionHelperService as never,
             cacheApiService as never,
-            { push: jest.fn(), currentRoute: { value: { params: {}, query: {} } } } as never,
+            {
+                push: jest.fn(),
+                afterEach: jest.fn(() => jest.fn()),
+                currentRoute: { value: { params: {}, query: {} } },
+            } as never,
             extensionStorePreferencesService as never,
         );
     };
@@ -146,6 +151,37 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             await performPurchase();
 
             expect(cacheApiService.clear).toHaveBeenCalledTimes(1);
+        });
+
+        it('should publish the successful result when the modal is closed while installing', async () => {
+            let finishInstallation = (): void => {};
+            extensionHelperService.downloadAndActivateExtension.mockReturnValue(new Promise((resolve) => {
+                finishInstallation = () => resolve(undefined);
+            }));
+
+            service.register();
+            const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<unknown>;
+            await channelHandler(purchaseActionData);
+
+            const store = extensionStorePurchaseConfirmationStore();
+            const confirmed = store.confirm();
+            await flushPromises();
+
+            // The user closes the modal while the extension is being installed.
+            store.cancel();
+
+            expect(publishMock).not.toHaveBeenCalled();
+
+            finishInstallation();
+            await confirmed;
+
+            expect(publishMock).toHaveBeenCalledTimes(1);
+            expect(publishMock).toHaveBeenCalledWith('swag-extension-store-channel', {
+                action: 'purchaseResult',
+                sessionToken: 'session-token',
+                success: true,
+                extensionVersion: '2.1.0',
+            });
         });
 
         it('should still request a reload when clearing the cache fails', async () => {

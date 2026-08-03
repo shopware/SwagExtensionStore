@@ -104,7 +104,10 @@
             "successTitle": "Installation erfolgreich",
             "successMessage": "{name} wurde erfolgreich installiert und aktiviert.",
             "errorTitle": "Installation fehlgeschlagen",
-            "errorMessage": "{name} konnte nicht installiert werden. Bitte versuche es erneut oder installiere es manuell."
+            "errorMessage": "{name} konnte nicht installiert werden. Bitte versuche es erneut oder installiere es manuell.",
+            "reloadRequiredTitle": "Neuladen erforderlich",
+            "reloadRequiredMessage": "{name} wurde installiert. Lade die Administration neu, um es zu verwenden.",
+            "reloadRequiredAction": "Jetzt neu laden"
         }
     }
 }
