@@ -11,16 +11,19 @@ use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProvider;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use SwagExtensionStore\Exception\ExtensionStoreException;
+use SwagExtensionStore\Struct\DemoShopInformationStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCartPositionStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCartStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCollection;
 use SwagExtensionStore\Struct\InAppPurchaseStruct;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @phpstan-type SbpEndpoints array<string, string>
  * @phpstan-type PaymentMethod array{id: positive-int, type: 'paypal'|'creditCard'|'directDebit', label: string, default: bool}
  *
+ * @phpstan-import-type DemoShopInformation from DemoShopInformationStruct
  * @phpstan-import-type InAppPurchaseCartItem from InAppPurchaseCartPositionStruct
  */
 #[Package('checkout')]
@@ -99,6 +102,31 @@ class StoreClient
         } catch (ClientException $e) {
             throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
         }
+    }
+
+    public function getDemoShopInformation(Context $context): ?DemoShopInformationStruct
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                $this->endpoints['demo_shop_information'],
+                [
+                    'query' => $this->storeRequestOptionsProvider->getDefaultQueryParameters($context),
+                    'headers' => $this->storeRequestOptionsProvider->getAuthenticationHeader($context),
+                ],
+            );
+        } catch (ClientException $e) {
+            throw ExtensionStoreException::createStoreApiExceptionFromClientError($e);
+        }
+
+        if ($response->getStatusCode() === Response::HTTP_NO_CONTENT) {
+            return null;
+        }
+
+        /** @var DemoShopInformation $demoShopInformation */
+        $demoShopInformation = json_decode((string) $response->getBody(), true);
+
+        return DemoShopInformationStruct::fromArray($demoShopInformation);
     }
 
     public function createInAppPurchaseCart(string $extensionName, string $feature, string $variant, Context $context): InAppPurchaseCartStruct

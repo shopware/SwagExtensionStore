@@ -6,6 +6,8 @@ import type ExtensionStorePreferencesService
 import type {
     ExtensionStoreChannelService,
 } from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-channel.service';
+import type ExtensionStoreDemoShopService
+    from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-demo-shop.service';
 
 declare global {
     type PropType<T> = TPropType<T>;
@@ -14,6 +16,7 @@ declare global {
         inAppPurchasesService: InAppPurchasesService;
         extensionStoreChannelService: ExtensionStoreChannelService;
         extensionStorePreferencesService: ExtensionStorePreferencesService;
+        extensionStoreDemoShopService: ExtensionStoreDemoShopService;
     }
 
     type ErrorResponse = AxiosError<{ errors: Array<ShopwareHttpError & { apiCode: string }> }>;

@@ -15,6 +15,7 @@ import type { TrackableType } from 'src/core/telemetry/types';
 import type ExtensionStorePreferencesService
     from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-preferences.service';
 import type { UserInfo } from 'src/core/service/api/store.api.service';
+import type { DemoShopInformation } from '../types/extension-store-demo-shop.types';
 
 type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent';
 
@@ -66,6 +67,8 @@ type StoreContext = {
     language: string;
     licenseHost: string | null;
     userInfo: UserInfo | null;
+    isDemoShop: boolean;
+    demoShopInformation: DemoShopInformation | null;
     success: boolean;
     currentRoute: string;
     currentRouteQuery: LocationQuery;
@@ -301,7 +304,11 @@ export class ExtensionStoreChannelService {
     }
 
     private async handleHandshake(data: HandshakeActionData): Promise<StoreContext> {
-        const extensions = await this.extensionStoreActionService.getMyExtensions();
+        const contextStore = extensionStoreContextStore();
+        const [extensions, { isDemoShop, demoShopInformation }] = await Promise.all([
+            this.extensionStoreActionService.getMyExtensions(),
+            contextStore.loadDemoShopStatus(),
+        ]);
         const owningExtensions = extensions.filter(extension => !!extension.storeLicense)
             .map((extension) => ({
                 name: extension.name,
@@ -310,7 +317,6 @@ export class ExtensionStoreChannelService {
 
         await this.shopwareExtensionService.checkLogin();
 
-        const contextStore = extensionStoreContextStore();
         const licenseHost = await contextStore.loadLicenseHost();
         const shopwareVersion = Shopware.Context.app.config.version ?? '';
         const rawLocale: unknown = Shopware.Store.get('session')?.currentLocale;
@@ -331,6 +337,8 @@ export class ExtensionStoreChannelService {
             language: language,
             licenseHost,
             userInfo: userInfo,
+            isDemoShop,
+            demoShopInformation,
             success: true,
             currentRoute: currentRoute,
             currentRouteQuery: currentRouteQuery,

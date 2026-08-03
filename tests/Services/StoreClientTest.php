@@ -12,6 +12,7 @@ use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use SwagExtensionStore\Services\StoreClient;
+use SwagExtensionStore\Struct\DemoShopInformationStruct;
 use SwagExtensionStore\Struct\InAppPurchaseCartPositionStruct;
 
 /**
@@ -85,6 +86,47 @@ class StoreClientTest extends TestCase
 
         $this->expectException(StoreApiException::class);
         $this->storeClient->availablePaymentMeans($this->context);
+    }
+
+    public function testGetDemoShopInformation(): void
+    {
+        $this->getStoreRequestHandler()->append(new Response(200, [], (string) json_encode([
+            'remainingDays' => 5,
+            'expirationDate' => '2099-12-31',
+            'accountLink' => 'https://account.shopware.com/shops/demoshops/1',
+            'contact' => [
+                'firstName' => 'John',
+                'lastName' => 'Doe',
+            ],
+        ])));
+
+        $demoShopInformation = $this->storeClient->getDemoShopInformation($this->context);
+
+        static::assertInstanceOf(DemoShopInformationStruct::class, $demoShopInformation);
+        static::assertSame([
+            'remainingDays' => 5,
+            'expirationDate' => '2099-12-31',
+            'accountLink' => 'https://account.shopware.com/shops/demoshops/1',
+            'contact' => [
+                'firstName' => 'John',
+                'lastName' => 'Doe',
+            ],
+        ], $demoShopInformation->toArray());
+    }
+
+    public function testGetDemoShopInformationReturnsNullForAStandardShop(): void
+    {
+        $this->getStoreRequestHandler()->append(new Response(204));
+
+        static::assertNull($this->storeClient->getDemoShopInformation($this->context));
+    }
+
+    public function testGetDemoShopInformationPropagatesApiErrors(): void
+    {
+        $this->getStoreRequestHandler()->append(new Response(401, [], '{}'));
+
+        $this->expectException(StoreApiException::class);
+        $this->storeClient->getDemoShopInformation($this->context);
     }
 
     public function testCreateInAppPurchaseCartException(): void

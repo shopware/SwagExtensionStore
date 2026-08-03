@@ -6,8 +6,6 @@ use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Struct\Struct;
 
 /**
- * @codeCoverageIgnore
- *
  * @phpstan-import-type InAppPurchase from InAppPurchaseStruct
  * @phpstan-import-type InAppPurchasePendingDowngrade from InAppPurchasePendingDowngradeStruct
  *
