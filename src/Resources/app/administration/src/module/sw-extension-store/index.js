@@ -1,4 +1,5 @@
 import ExtensionLicenseService from './service/extension-store-licenses.service';
+import ExtensionStoreDemoShopService from './service/extension-store-demo-shop.service';
 import {
     ExtensionStoreChannelService,
 } from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-channel.service';
@@ -27,6 +28,13 @@ Shopware.Application.addServiceProvider('extensionStoreChannelService', () => {
 
 Shopware.Application.addServiceProvider('extensionStoreLicensesService', () => {
     return new ExtensionLicenseService(
+        Shopware.Application.getContainer('init').httpClient,
+        Shopware.Service('loginService'),
+    );
+});
+
+Shopware.Application.addServiceProvider('extensionStoreDemoShopService', () => {
+    return new ExtensionStoreDemoShopService(
         Shopware.Application.getContainer('init').httpClient,
         Shopware.Service('loginService'),
     );

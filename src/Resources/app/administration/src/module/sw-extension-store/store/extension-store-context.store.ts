@@ -1,7 +1,10 @@
+import type { DemoShopStatus } from '../service/extension-store-demo-shop.service';
+
 export type ExtensionStoreContextState = {
     licenseHost: string | null;
     skyBridgeStoreVersion: string | null;
     iframeUrl: string | null;
+    isDemoShop: boolean | null;
 };
 
 const FALLBACK_IFRAME_URL = 'https://sky-bridge-store.production.shopware.in';
@@ -10,12 +13,14 @@ const isLoggedIn = () => Shopware.Store.get('shopwareExtensions').userInfo !== n
 
 let iframeUrlLoadPromise: Promise<string> | null = null;
 let licenseHostLoadPromise: Promise<string | null> | null = null;
+let isDemoShopLoadPromise: Promise<boolean> | null = null;
 
 export default Shopware.Store.register('extensionStoreContext', {
     state: (): ExtensionStoreContextState => ({
         licenseHost: null,
         skyBridgeStoreVersion: null,
         iframeUrl: null,
+        isDemoShop: null,
     }),
     actions: {
         loadLicenseHost(): Promise<string | null> {
@@ -49,6 +54,32 @@ export default Shopware.Store.register('extensionStoreContext', {
                 });
 
             return licenseHostLoadPromise;
+        },
+        loadIsDemoShop(): Promise<boolean> {
+            // Bundles cannot change while the admin is open, so it is only requested once
+            if (this.isDemoShop !== null) {
+                return Promise.resolve(this.isDemoShop);
+            }
+
+            if (isDemoShopLoadPromise) {
+                return isDemoShopLoadPromise;
+            }
+
+            isDemoShopLoadPromise = Shopware.Service('extensionStoreDemoShopService')
+                .getDemoShopStatus()
+                .then(({ isDemoShop }: DemoShopStatus) => {
+                    this.isDemoShop = isDemoShop;
+
+                    return isDemoShop;
+                })
+                .catch((error: unknown) => {
+                    console.warn('Failed to load the demo shop status. Assuming a regular shop.', error);
+                    isDemoShopLoadPromise = null;
+
+                    return false;
+                });
+
+            return isDemoShopLoadPromise;
         },
         updateSkyBridgeStoreVersion(version: string): void {
             this.skyBridgeStoreVersion = version;
