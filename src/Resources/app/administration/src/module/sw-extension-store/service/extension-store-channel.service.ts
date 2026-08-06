@@ -16,6 +16,8 @@ import type ExtensionStorePreferencesService
     from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-preferences.service';
 import type { UserInfo } from 'src/core/service/api/store.api.service';
 
+const DEMO_SHOP_BUNDLE_NAME = 'SwagDemoEnvironment';
+
 type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent';
 
 type StoreChannelActionData = {
@@ -66,6 +68,7 @@ type StoreContext = {
     language: string;
     licenseHost: string | null;
     userInfo: UserInfo | null;
+    isDemoShop: boolean;
     success: boolean;
     currentRoute: string;
     currentRouteQuery: LocationQuery;
@@ -331,6 +334,7 @@ export class ExtensionStoreChannelService {
             language: language,
             licenseHost,
             userInfo: userInfo,
+            isDemoShop: this.hasDemoShopBundle(),
             success: true,
             currentRoute: currentRoute,
             currentRouteQuery: currentRouteQuery,
@@ -507,6 +511,12 @@ export class ExtensionStoreChannelService {
 
             return null;
         }
+    }
+
+    private hasDemoShopBundle(): boolean {
+        const bundles = Shopware.Context.app.config.bundles;
+
+        return !!bundles && DEMO_SHOP_BUNDLE_NAME in bundles;
     }
 
     private getCurrentRoute(): string {
