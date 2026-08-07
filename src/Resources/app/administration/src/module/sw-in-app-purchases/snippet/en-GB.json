@@ -22,6 +22,14 @@
     "errorSubtitle": "Please try again or contact the manufacturer.",
     "successTitle": "In-App Purchase was successful!",
     "successSubtitle": "You can now experience your new feature.",
+    "infoTitle": "Please note",
+    "infoSubtitle": "This action is not available.",
+    "infos": {
+      "demoShop": {
+        "title": "In-app purchases are not available",
+        "subtitle": "In-app purchases can't be made in a demo shop."
+      }
+    },
     "errors": {
       "ShopwarePlatformException-87": "Invalid in-app feature",
       "ShopwarePlatformException-88": "In-app feature not found",
@@ -33,6 +41,7 @@
       "ShopwarePlatformException-94": "Insufficient balance",
       "ShopwarePlatformException-95": "GTC not accepted",
       "ShopwarePlatformException-96": "In-app license not found",
+      "ShopwarePlatformException-97": "In-app purchases are not available for demo shops",
       "CloudAdminException-42": "@:sw-in-app-purchase-checkout-state.errors.ShopwarePlatformException-87",
       "CloudAdminException-43": "@:sw-in-app-purchase-checkout-state.errors.ShopwarePlatformException-88",
       "CloudAdminException-44": "@:sw-in-app-purchase-checkout-state.errors.ShopwarePlatformException-89",
