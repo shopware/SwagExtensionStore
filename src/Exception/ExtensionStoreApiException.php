@@ -20,6 +20,9 @@ class ExtensionStoreApiException extends StoreApiException
         $this->apiCode = $data['code'] ?? '';
     }
 
+    /**
+     * @return \Generator<int, array{code: string, status: string, title: string, detail: string, meta: array{documentationLink: string}, trace?: string, apiCode: string}>
+     */
     public function getErrors(bool $withTrace = false): \Generator
     {
         $errors = parent::getErrors($withTrace);
