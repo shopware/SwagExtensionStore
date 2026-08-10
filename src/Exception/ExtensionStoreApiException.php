@@ -13,18 +13,19 @@ class ExtensionStoreApiException extends StoreApiException
 
     public function __construct(ClientException $exception)
     {
-        $data = json_decode($exception->getResponse()->getBody()->getContents(), true);
-
         parent::__construct($exception);
 
+        try {
+            $data = json_decode($exception->getResponse()->getBody()->getContents(), true, 512, \JSON_THROW_ON_ERROR);
+        } catch (\JsonException) {
+        }
         $this->apiCode = $data['code'] ?? '';
     }
 
     public function getErrors(bool $withTrace = false): \Generator
     {
-        $errors = parent::getErrors($withTrace);
-
-        foreach ($errors as $error) {
+        foreach (parent::getErrors($withTrace) as $error) {
+            /** @phpstan-ignore generator.valueType (Parent class defines a sealed array as return type. Might not be worth it, to widen it in core) */
             yield [
                 ...$error,
                 'apiCode' => $this->apiCode,
