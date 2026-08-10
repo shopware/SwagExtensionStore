@@ -25,7 +25,7 @@ class ExtensionStoreApiException extends StoreApiException
         $errors = parent::getErrors($withTrace);
 
         foreach ($errors as $error) {
-            /** @phpstan-ignore-next-line keep API specific error code in payload for Administration usage */
+            /** @phpstan-ignore generator.valueType keep API specific error code in payload for Administration usage */
             yield [
                 ...$error,
                 'apiCode' => $this->apiCode,
