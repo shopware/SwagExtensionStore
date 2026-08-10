@@ -20,14 +20,12 @@ class ExtensionStoreApiException extends StoreApiException
         $this->apiCode = $data['code'] ?? '';
     }
 
-    /**
-     * @return \Generator<int, array{code: string, status: string, title: string, detail: string, meta: array{documentationLink: string}, trace?: string, apiCode: string}>
-     */
     public function getErrors(bool $withTrace = false): \Generator
     {
         $errors = parent::getErrors($withTrace);
 
         foreach ($errors as $error) {
+            /** @phpstan-ignore-next-line keep API specific error code in payload for Administration usage */
             yield [
                 ...$error,
                 'apiCode' => $this->apiCode,
