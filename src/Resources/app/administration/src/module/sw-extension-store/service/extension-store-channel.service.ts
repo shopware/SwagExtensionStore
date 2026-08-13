@@ -1,19 +1,19 @@
 import { handle, publish } from '@shopware-ag/meteor-admin-sdk/es/channel';
-import type ExtensionStoreActionService from 'src/module/sw-extension/service/extension-store-action.service';
-import type ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
-import type ExtensionStoreLicensesService from './extension-store-licenses.service';
-import type { LocationQuery, RouteLocationNormalizedGeneric, RouteLocationNormalizedLoadedGeneric, Router } from 'vue-router';
 import type { ShopwareMessageTypes } from '@shopware-ag/meteor-admin-sdk/es/message-types';
-import extensionStorePurchaseConfirmationStore, { type PurchaseConfirmationOnConfirmCallbackResult } from '../store/extension-store-purchase-confirmation.store';
+import type { LocationQuery, RouteLocationNormalizedGeneric, RouteLocationNormalizedLoadedGeneric, Router } from 'vue-router';
 import type ExtensionHelperService from 'src/app/service/extension-helper.service';
 import type CacheApiService from 'src/core/service/api/cache.api.service';
-import extensionStoreContextStore
-    from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store';
+import type { UserInfo } from 'src/core/service/api/store.api.service';
+import type ExtensionStoreActionService from 'src/module/sw-extension/service/extension-store-action.service';
+import type ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
 import type ExtensionStorePreferencesService
     from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-preferences.service';
-import type { UserInfo } from 'src/core/service/api/store.api.service';
-import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
+import extensionStoreContextStore
+    from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store';
 import { hasDemoShopBundle } from 'SwagExtensionStore/util/demo-shop';
+import extensionStorePurchaseConfirmationStore, { type PurchaseConfirmationOnConfirmCallbackResult } from '../store/extension-store-purchase-confirmation.store';
+import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
+import type ExtensionStoreLicensesService from './extension-store-licenses.service';
 
 type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent';
 
@@ -27,7 +27,8 @@ type HandshakeActionData = StoreChannelActionData & {
 };
 
 type RouteToActionData = StoreChannelActionData & {
-    route: string;
+    name: string;
+    params?: Record<string, string>;
 };
 
 type RouterUpdateActionData = StoreChannelActionData & {
@@ -106,6 +107,7 @@ type StoreApiErrorResponse = {
 
 export class ExtensionStoreChannelService {
     private removeRouterAfterEachHook?: () => void;
+
     private unsubscribeFunction?: () => void;
 
     constructor(
@@ -151,7 +153,10 @@ export class ExtensionStoreChannelService {
         window.removeEventListener('popstate', () => this.publishRouterSync());
     }
 
-    private publishReturnToExtensionStore(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedLoadedGeneric): void {
+    private publishReturnToExtensionStore(
+        to: RouteLocationNormalizedGeneric,
+        from: RouteLocationNormalizedLoadedGeneric
+    ): void {
         const isFromExtensionStore = from.name?.toString() === 'sw.extension.store';
         const isToExtensionStore = to.name?.toString() === 'sw.extension.store';
         const isFullPathEqual = from.fullPath === to.fullPath;
@@ -218,9 +223,17 @@ export class ExtensionStoreChannelService {
     private isRouteToActionData(data: unknown): data is RouteToActionData {
         return (
             this.isStoreChannelActionData(data)
-            && 'route' in data
-            && typeof data.route === 'string'
+            && 'name' in data
+            && typeof data.name === 'string'
+            && (!('params' in data) || this.isRouteParams(data.params))
         );
+    }
+
+    private isRouteParams(value: unknown): value is Record<string, string> {
+        return typeof value === 'object'
+            && value !== null
+            && !Array.isArray(value)
+            && Object.values(value).every((parameter) => typeof parameter === 'string');
     }
 
     private isCopyToClipboardActionData(data: unknown): data is CopyToClipboardActionData {
@@ -272,7 +285,8 @@ export class ExtensionStoreChannelService {
             && (data as { urlSegments: unknown[] }).urlSegments.every((segment: unknown) => typeof segment === 'string')
             && this.isListingQuery((data as { listingQuery: unknown }).listingQuery)
             && Array.isArray((data as { queryProperties: unknown }).queryProperties)
-            && (data as { queryProperties: unknown[] }).queryProperties.every((property: unknown) => typeof property === 'string')
+            && (data as { queryProperties: unknown[] }).queryProperties
+                .every((property: unknown) => typeof property === 'string')
         );
     }
 
@@ -291,7 +305,7 @@ export class ExtensionStoreChannelService {
         const shopwareVersion = Shopware.Context.app.config.version ?? '';
         const rawLocale: unknown = Shopware.State.get('session')?.currentLocale;
         const language: string = typeof rawLocale === 'string' ? rawLocale : 'en-GB';
-        const userInfo = Shopware.State.get('shopwareExtensions').userInfo;
+        const userInfo = Shopware.State.get('shopwareExtensions')?.userInfo ?? null;
         const currentRoute = this.getCurrentRoute();
         const currentRouteQuery = this.getCurrentRouteQuery();
 
@@ -313,7 +327,7 @@ export class ExtensionStoreChannelService {
     }
 
     private handleRouteTo(data: RouteToActionData): void {
-        this.router.push({ name: data.route });
+        this.router.push({ name: data.name, params: data.params });
     }
 
     private async handlePurchase(data: PurchaseActionData): Promise<PurchaseResponse> {
@@ -335,9 +349,14 @@ export class ExtensionStoreChannelService {
             });
         } catch (error) {
             const errorDetails = this.getErrorDetails(error);
-            extensionStorePurchaseConfirmationStore().openErrorModal(errorDetails.title, errorDetails.description, errorDetails.documentationLink, () => {
-                this.publishPurchaseResult(data.sessionToken, false);
-            });
+            extensionStorePurchaseConfirmationStore().openErrorModal(
+                errorDetails.title,
+                errorDetails.description,
+                errorDetails.documentationLink,
+                () => {
+                    this.publishPurchaseResult(data.sessionToken, false);
+                }
+            );
         }
 
         // Respond immediately to the iframe so the channel does not time out.
@@ -421,7 +440,10 @@ export class ExtensionStoreChannelService {
         });
     }
 
-    private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<PurchaseConfirmationOnConfirmCallbackResult> {
+    private async performPurchase(
+        data: PurchaseActionData,
+        cartData: ExtensionStoreBasket
+    ): Promise<PurchaseConfirmationOnConfirmCallbackResult> {
         extensionStorePurchaseConfirmationStore().checkoutStep = 'order';
 
         try {
@@ -524,7 +546,9 @@ export class ExtensionStoreChannelService {
             Shopware.State.commit('notification/createNotification', {
                 variant: 'positive',
                 title: snippetService.tc('sw-extension-store.installation.successTitle'),
-                message: snippetService.tc('sw-extension-store.installation.successMessage', { name: String(extension.name) }),
+                message: snippetService.tc('sw-extension-store.installation.successMessage', {
+                    name: String(extension.name)
+                }),
                 growl: true
             });
 

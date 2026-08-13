@@ -1,9 +1,5 @@
 import { handle, publish } from '@shopware-ag/meteor-admin-sdk/es/channel';
 import { ExtensionStoreChannelService } from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-channel.service';
-import type ExtensionStoreActionService from 'src/module/sw-extension/service/extension-store-action.service';
-import type ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
-import type ExtensionStoreLicensesService from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-licenses.service';
-import type ExtensionHelperService from 'src/app/service/extension-helper.service';
 import type { ExtensionStoreBasket } from 'SwagExtensionStore/module/sw-extension-store/types/extension-store-basket.types';
 import extensionStorePurchaseConfirmationStore from '../store/extension-store-purchase-confirmation.store';
 
@@ -47,7 +43,10 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
     let extensionHelperService: { downloadAndActivateExtension: jest.Mock };
     let cacheApiService: { clear: jest.Mock };
     let extensionStorePreferencesService: { state: { installAfterPurchase: boolean } };
-    let createNotificationSpy: jest.SpyInstance;
+    let createNotificationSpy: jest.Mock;
+    let originalCommit: typeof Shopware.State.commit;
+    let originalGet: typeof Shopware.State.get;
+    let router: { push: jest.Mock; afterEach: jest.Mock; currentRoute: { value: { params: object; query: object } } };
 
     const createService = (cart: ExtensionStoreBasket) => {
         extensionStoreActionService = {
@@ -69,6 +68,11 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
         };
         cacheApiService = { clear: jest.fn().mockResolvedValue(undefined) };
         extensionStorePreferencesService = { state: { installAfterPurchase: true } };
+        router = {
+            push: jest.fn(),
+            afterEach: jest.fn(() => jest.fn()),
+            currentRoute: { value: { params: {}, query: {} } }
+        };
 
         return new ExtensionStoreChannelService(
             extensionStoreActionService as never,
@@ -76,18 +80,21 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             extensionStoreLicensesService as never,
             extensionHelperService as never,
             cacheApiService as never,
-            {
-                push: jest.fn(),
-                afterEach: jest.fn(() => jest.fn()),
-                currentRoute: { value: { params: {}, query: {} } }
-            } as never,
+            router as never,
             extensionStorePreferencesService as never
         );
     };
 
     /** Runs the handshake through the channel and returns the context the iframe receives. */
     const performHandshake = async (bundles?: Record<string, unknown>) => {
-        Shopware.Context.app.config.bundles = bundles as never;
+        jest.spyOn(Shopware, 'Context', 'get').mockReturnValue({
+            app: {
+                config: {
+                    bundles
+                }
+            }
+        } as never);
+
         service.register();
 
         const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<{ isDemoShop: boolean }>;
@@ -112,10 +119,35 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
     };
 
     beforeEach(() => {
-        Shopware.State.get('session').currentLocale = 'de-DE';
-        Shopware.State.get('shopwareExtensions').userInfo = null;
-        Shopware.Snippet = { tc: (key: string, params?: Record<string, string>) => `${key}:${JSON.stringify(params ?? {})}` } as never;
-        createNotificationSpy = jest.spyOn(Shopware.State, 'commit').mockImplementation(() => {});
+        jest.spyOn(console, 'error').mockImplementation(() => {});
+
+        originalCommit = Shopware.State.commit;
+        originalGet = Shopware.State.get;
+
+        createNotificationSpy = jest.fn();
+        Object.defineProperty(Shopware.State, 'commit', {
+            value: createNotificationSpy,
+            configurable: true,
+            writable: true
+        });
+
+        Object.defineProperty(Shopware.State, 'get', {
+            value: (storeName: string) => {
+                if (storeName === 'session') {
+                    return { currentLocale: 'de-DE' };
+                }
+                if (storeName === 'shopwareExtensions') {
+                    return { userInfo: null };
+                }
+                return undefined;
+            },
+            configurable: true,
+            writable: true
+        });
+
+        jest.spyOn(Shopware, 'Snippet', 'get').mockReturnValue({
+            tc: (key: string, params?: Record<string, string>) => `${key}:${JSON.stringify(params ?? {})}`
+        } as never);
 
         service = createService(cartWithPlugin);
     });
@@ -123,6 +155,16 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
     afterEach(() => {
         service.unregister();
         extensionStorePurchaseConfirmationStore().$reset();
+        Object.defineProperty(Shopware.State, 'commit', {
+            value: originalCommit,
+            configurable: true,
+            writable: true
+        });
+        Object.defineProperty(Shopware.State, 'get', {
+            value: originalGet,
+            configurable: true,
+            writable: true
+        });
         jest.restoreAllMocks();
     });
 
@@ -143,6 +185,37 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             const context = await performHandshake(undefined);
 
             expect(context.isDemoShop).toBe(false);
+        });
+    });
+
+    describe('routeTo', () => {
+        it('should navigate to the named route with its parameters', async () => {
+            service.register();
+
+            const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<unknown>;
+            await channelHandler({
+                action: 'routeTo',
+                name: 'sw.extension.store.detail',
+                params: { id: 'extension-id' }
+            });
+
+            expect(router.push).toHaveBeenCalledWith({
+                name: 'sw.extension.store.detail',
+                params: { id: 'extension-id' }
+            });
+        });
+
+        it('should ignore route parameters with non-string values', async () => {
+            service.register();
+
+            const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<unknown>;
+            await channelHandler({
+                action: 'routeTo',
+                name: 'sw.extension.store.detail',
+                params: { id: 1 }
+            });
+
+            expect(router.push).not.toHaveBeenCalled();
         });
     });
 
