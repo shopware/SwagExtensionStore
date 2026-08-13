@@ -51,6 +51,7 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
     let cacheApiService: { clear: jest.Mock };
     let extensionStorePreferencesService: { state: { installAfterPurchase: boolean } };
     let createNotificationSpy: jest.SpyInstance;
+    let router: { push: jest.Mock; afterEach: jest.Mock; currentRoute: { value: { params: object; query: object } } };
 
     const createService = (cart: ExtensionStoreBasket) => {
         extensionStoreActionService = {
@@ -70,6 +71,11 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
         };
         cacheApiService = { clear: jest.fn().mockResolvedValue(undefined) };
         extensionStorePreferencesService = { state: { installAfterPurchase: true } };
+        router = {
+            push: jest.fn(),
+            afterEach: jest.fn(() => jest.fn()),
+            currentRoute: { value: { params: {}, query: {} } },
+        };
 
         return new ExtensionStoreChannelService(
             extensionStoreActionService as never,
@@ -77,11 +83,7 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             extensionStoreLicensesService as never,
             extensionHelperService as never,
             cacheApiService as never,
-            {
-                push: jest.fn(),
-                afterEach: jest.fn(() => jest.fn()),
-                currentRoute: { value: { params: {}, query: {} } },
-            } as never,
+            router as never,
             extensionStorePreferencesService as never,
         );
     };
@@ -140,6 +142,37 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             const context = await performHandshake(undefined);
 
             expect(context.isDemoShop).toBe(false);
+        });
+    });
+
+    describe('routeTo', () => {
+        it('should navigate to the named route with its parameters', async () => {
+            service.register();
+
+            const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<unknown>;
+            await channelHandler({
+                action: 'routeTo',
+                name: 'sw.extension.store.detail',
+                params: { id: 'extension-id' },
+            });
+
+            expect(router.push).toHaveBeenCalledWith({
+                name: 'sw.extension.store.detail',
+                params: { id: 'extension-id' },
+            });
+        });
+
+        it('should ignore route parameters with non-string values', async () => {
+            service.register();
+
+            const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<unknown>;
+            await channelHandler({
+                action: 'routeTo',
+                name: 'sw.extension.store.detail',
+                params: { id: 1 },
+            });
+
+            expect(router.push).not.toHaveBeenCalled();
         });
     });
 
