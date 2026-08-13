@@ -1,0 +1,25 @@
+{
+    "global": {
+        "sw-admin-menu": {
+            "navigation": {
+                "mainMenuItemShopwarePayments": "Shopware Payments"
+            }
+        }
+    },
+    "sw-payments": {
+        "general": {
+            "mainMenuItemGeneral": "Shopware Payments",
+            "description": "Manage Shopware Payments."
+        },
+        "dashboardPromotion": {
+            "badge": "New",
+            "dismiss": "Dismiss Shopware Payments promotion",
+            "marketingAlt": "Shopware Payments supported payment methods",
+            "headline": "Shopware Payments now available",
+            "description": "Manage payments where you manage your business. Streamline payment operations while maintaining flexibility through an open architecture. Powered by PayPal's global payment infrastructure for reliable payments worldwide.",
+            "activateNow": "Activate now",
+            "learnMore": "Learn more",
+            "learnMoreUrl": "https://www.shopware.com/en/products/shopware-payments/"
+        }
+    }
+}

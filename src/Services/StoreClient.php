@@ -122,7 +122,7 @@ class StoreClient
         }
 
         $inAppPurchaseCart = InAppPurchaseCartStruct::fromArray(json_decode((string) $response->getBody(), true));
-        $inAppPurchaseCart->getPositions()->map(function (InAppPurchaseCartPositionStruct $position) use ($extensionName): void {
+        $inAppPurchaseCart->getPositions()->map(static function (InAppPurchaseCartPositionStruct $position) use ($extensionName): void {
             $position->setExtensionName($position->getExtensionName() ?: $extensionName);
         });
 

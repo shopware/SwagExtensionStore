@@ -19,7 +19,7 @@ use Shopware\Core\Framework\Struct\Collection;
 class InAppPurchaseCartPositionCollection extends Collection
 {
     /**
-     * @param InAppPurchaseCartPosition[] $data
+     * @param list<InAppPurchaseCartPosition> $data
      */
     public static function fromArray(array $data): self
     {
@@ -53,7 +53,7 @@ class InAppPurchaseCartPositionCollection extends Collection
         InAppPurchaseCartPositionCollection $allPurchases,
         array $validPurchases,
     ): self {
-        return $allPurchases->filter(function (InAppPurchaseCartPositionStruct $purchase) use ($validPurchases) {
+        return $allPurchases->filter(static function (InAppPurchaseCartPositionStruct $purchase) use ($validPurchases) {
             return \in_array($purchase->getInAppFeatureIdentifier(), $validPurchases, true);
         });
     }

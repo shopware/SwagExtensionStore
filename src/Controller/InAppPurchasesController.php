@@ -79,7 +79,7 @@ class InAppPurchasesController
         \assert($positions instanceof RequestDataBag);
         $extensionName = $data->get('name');
 
-        $positionCollection = InAppPurchaseCartPositionCollection::fromArray($positions->all());
+        $positionCollection = InAppPurchaseCartPositionCollection::fromArray(array_values($positions->all()));
 
         $app = $this->getAppByName($extensionName, $context);
         if (!$app) {

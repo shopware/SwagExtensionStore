@@ -19,10 +19,6 @@ parameters:
             message: '#Service ".*" is private#'
             path: tests
 
-        -
-            message: '#Call to deprecated method set\(\) of class Shopware\\Core\\System\\SystemConfig\\SystemConfigService#'
-            path: tests
-
 rules:
     # Shopware core rules
     - Shopware\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\DeprecatedMethodsThrowDeprecationRule
