@@ -29,7 +29,8 @@ type HandshakeActionData = StoreChannelActionData & {
 };
 
 type RouteToActionData = StoreChannelActionData & {
-    route: string;
+    name: string;
+    params?: Record<string, string>;
 };
 
 type RouterUpdateActionData = StoreChannelActionData & {
@@ -236,9 +237,17 @@ export class ExtensionStoreChannelService {
     private isRouteToActionData(data: unknown): data is RouteToActionData {
         return (
             this.isStoreChannelActionData(data)
-            && 'route' in data
-            && typeof data.route === 'string'
+            && 'name' in data
+            && typeof data.name === 'string'
+            && (!('params' in data) || this.isRouteParams(data.params))
         );
+    }
+
+    private isRouteParams(value: unknown): value is Record<string, string> {
+        return typeof value === 'object'
+            && value !== null
+            && !Array.isArray(value)
+            && Object.values(value).every((parameter) => typeof parameter === 'string');
     }
 
     private isCopyToClipboardActionData(data: unknown): data is CopyToClipboardActionData {
@@ -342,7 +351,7 @@ export class ExtensionStoreChannelService {
     }
 
     private handleRouteTo(data: RouteToActionData): void {
-        this.router.push({ name: data.route });
+        this.router.push({ name: data.name, params: data.params });
     }
 
     private async handlePurchase(data: PurchaseActionData): Promise<PurchaseResponse> {

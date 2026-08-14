@@ -1,0 +1,67 @@
+<mt-card
+    v-if="showBanner"
+    class="sw-payments-dashboard-promotion-card"
+    :aria-label="$t('sw-payments.dashboardPromotion.headline')"
+>
+    <button
+        class="sw-payments-dashboard-promotion-card__dismiss"
+        type="button"
+        :aria-label="$t('sw-payments.dashboardPromotion.dismiss')"
+        @click="dismiss"
+    >
+        <mt-icon
+            name="regular-times"
+            size="10px"
+        />
+    </button>
+
+    <div class="sw-payments-dashboard-promotion-card__layout">
+        <div class="sw-payments-dashboard-promotion-card__content">
+            <mt-badge variant="positive" size="s" icon="solid-party-horn">
+                {{ $t('sw-payments.dashboardPromotion.badge') }}
+            </mt-badge>
+
+            <img
+                class="sw-payments-dashboard-promotion-card__brand"
+                :src="assetFilter('/swagextensionstore/administration/static/img/payments/dashboard/shopware-payments-dashboard-logo.svg')"
+                alt="Shopware Payments"
+            >
+
+            <div class="sw-payments-dashboard-promotion-card__copy">
+                <h2 class="sw-payments-dashboard-promotion-card__headline">
+                    {{ $t('sw-payments.dashboardPromotion.headline') }}
+                </h2>
+                <p class="sw-payments-dashboard-promotion-card__description">
+                    {{ $t('sw-payments.dashboardPromotion.description') }}
+                </p>
+            </div>
+
+            <div class="sw-payments-dashboard-promotion-card__actions">
+                <mt-button
+                    v-if="showActivateButton"
+                    class="sw-payments-dashboard-promotion-card__activate"
+                    variant="primary"
+                    @click="activateNow"
+                >
+                    {{ $t('sw-payments.dashboardPromotion.activateNow') }}
+                </mt-button>
+
+                <mt-button
+                    class="sw-payments-dashboard-promotion-card__learn-more"
+                    variant="secondary"
+                    @click="learnMore"
+                >
+                    {{ $t('sw-payments.dashboardPromotion.learnMore') }}
+                </mt-button>
+            </div>
+        </div>
+
+        <div class="sw-payments-dashboard-promotion-card__visual-column">
+            <img
+                class="sw-payments-dashboard-promotion-card__visual"
+                :src="assetFilter('/swagextensionstore/administration/static/img/payments/dashboard/shopware-payments-dashboard-marketing.svg')"
+                :alt="$t('sw-payments.dashboardPromotion.marketingAlt')"
+            >
+        </div>
+    </div>
+</mt-card>
