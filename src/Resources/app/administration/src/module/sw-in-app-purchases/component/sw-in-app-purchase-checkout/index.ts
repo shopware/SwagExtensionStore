@@ -1,5 +1,4 @@
 import type * as IAP from 'SwagExtensionStore/module/sw-in-app-purchases/types';
-import { hasDemoShopBundle } from 'SwagExtensionStore/util/demo-shop';
 import template from './sw-in-app-purchase-checkout.html.twig';
 import './sw-in-app-purchase-checkout.scss';
 
@@ -98,14 +97,6 @@ export default Shopware.Component.wrapComponentConfig({
         async requestFeature() {
             if (!this.store.extension || !this.store.entry) {
                 this.reset();
-                return;
-            }
-
-            // Demo shops can never complete an in-app purchase, so the request is skipped entirely
-            // instead of letting the API reject it. Must not reset, that would close the modal.
-            if (hasDemoShopBundle()) {
-                this.reason = 'demoShop';
-                this.state = 'info';
                 return;
             }
 

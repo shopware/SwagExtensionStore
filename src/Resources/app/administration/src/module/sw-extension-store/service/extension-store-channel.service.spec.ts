@@ -85,23 +85,6 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
         );
     };
 
-    /** Runs the handshake through the channel and returns the context the iframe receives. */
-    const performHandshake = async (bundles?: Record<string, unknown>) => {
-        jest.spyOn(Shopware, 'Context', 'get').mockReturnValue({
-            app: {
-                config: {
-                    bundles
-                }
-            }
-        } as never);
-
-        service.register();
-
-        const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<{ isDemoShop: boolean }>;
-
-        return channelHandler({ action: 'handshake', sessionToken: 'session-token', version: '1.0.0' });
-    };
-
     /** Runs the purchase action through the channel and returns the confirm callback result. */
     const performPurchase = async () => {
         service.register();
@@ -166,26 +149,6 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             writable: true
         });
         jest.restoreAllMocks();
-    });
-
-    describe('handshake', () => {
-        it('should report a demo shop when the demo environment bundle is present', async () => {
-            const context = await performHandshake({ SwagDemoEnvironment: { js: [], css: [] } });
-
-            expect(context.isDemoShop).toBe(true);
-        });
-
-        it('should report a regular shop when the demo environment bundle is absent', async () => {
-            const context = await performHandshake({ SwagExtensionStore: { js: [], css: [] } });
-
-            expect(context.isDemoShop).toBe(false);
-        });
-
-        it('should report a regular shop when no bundles are known', async () => {
-            const context = await performHandshake(undefined);
-
-            expect(context.isDemoShop).toBe(false);
-        });
     });
 
     describe('routeTo', () => {

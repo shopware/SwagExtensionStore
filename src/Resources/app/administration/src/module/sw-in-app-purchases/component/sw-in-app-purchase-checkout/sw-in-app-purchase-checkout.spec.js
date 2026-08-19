@@ -156,40 +156,6 @@ describe('src/module/sw-in-app-purchases/component/sw-in-app-purchase-checkout',
         wrapper.vm.reset();
     });
 
-    it('does not request the feature in a demo shop', async () => {
-        const spyGetExtension = jest.spyOn(wrapper.vm.inAppPurchasesService, 'getExtension');
-        const spyGetPriceModels = jest.spyOn(wrapper.vm.inAppPurchasesService, 'getPriceModels');
-
-        Shopware.Context.app.config.bundles = {
-            jestapp: {
-                name: 'jestapp',
-                baseUrl: '',
-                permissions: [],
-                version: '1.0.0',
-                type: 'app',
-                integrationId: '123',
-                active: true
-            },
-            SwagDemoEnvironment: {
-                js: [],
-                css: []
-            }
-        };
-        wrapper.vm.store.request({ featureId: 'your-feature-id' }, 'jestapp');
-
-        await wrapper.vm.requestFeature();
-
-        expect(wrapper.vm.state).toBe('info');
-        expect(wrapper.vm.reason).toBe('demoShop');
-        expect(spyGetExtension).not.toHaveBeenCalled();
-        expect(spyGetPriceModels).not.toHaveBeenCalled();
-
-        // the assignment above leaks into the following tests, so the demo bundle has to go
-        delete Shopware.Context.app.config.bundles.SwagDemoEnvironment;
-        wrapper.vm.store.$reset();
-        wrapper.vm.reset();
-    });
-
     it('does not call orderCart when entry or extension not set', async () => {
         const spy = jest.spyOn(wrapper.vm.inAppPurchasesService, 'orderCart');
 

@@ -10,7 +10,6 @@ import type ExtensionStorePreferencesService
     from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-preferences.service';
 import extensionStoreContextStore
     from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store';
-import { hasDemoShopBundle } from 'SwagExtensionStore/util/demo-shop';
 import extensionStorePurchaseConfirmationStore, { type PurchaseConfirmationOnConfirmCallbackResult } from '../store/extension-store-purchase-confirmation.store';
 import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
 import type ExtensionStoreLicensesService from './extension-store-licenses.service';
@@ -66,7 +65,6 @@ type StoreContext = {
     language: string;
     licenseHost: string | null;
     userInfo: UserInfo | null;
-    isDemoShop: boolean;
     success: boolean;
     currentRoute: string;
     currentRouteQuery: LocationQuery;
@@ -318,7 +316,6 @@ export class ExtensionStoreChannelService {
             language: language,
             licenseHost,
             userInfo: userInfo,
-            isDemoShop: hasDemoShopBundle(),
             success: true,
             currentRoute: currentRoute,
             currentRouteQuery: currentRouteQuery,

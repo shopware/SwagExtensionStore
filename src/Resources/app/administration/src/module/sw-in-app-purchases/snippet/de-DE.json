@@ -24,12 +24,6 @@
     "successSubtitle": "Du kannst jetzt dein neues Feature erleben.",
     "infoTitle": "Hinweis",
     "infoSubtitle": "Diese Aktion ist nicht verfügbar.",
-    "infos": {
-      "demoShop": {
-        "title": "In-App-Käufe sind nicht verfügbar",
-        "subtitle": "In einem Demo-Shop können keine In-App-Käufe getätigt werden."
-      }
-    },
     "errors": {
         "ShopwarePlatformException-87": "Ungültiges In-App-Feature",
         "ShopwarePlatformException-88": "In-App-Feature nicht gefunden",
@@ -41,7 +35,6 @@
         "ShopwarePlatformException-94": "Unzureichendes Guthaben",
         "ShopwarePlatformException-95": "AGB nicht akzeptiert",
         "ShopwarePlatformException-96": "In-App-Lizenz nicht gefunden",
-        "ShopwarePlatformException-97": "In-App-Käufe sind für Demo-Shops nicht verfügbar",
         "CloudAdminException-42": "@:sw-in-app-purchase-checkout-state.errors.ShopwarePlatformException-87",
         "CloudAdminException-43": "@:sw-in-app-purchase-checkout-state.errors.ShopwarePlatformException-88",
         "CloudAdminException-44": "@:sw-in-app-purchase-checkout-state.errors.ShopwarePlatformException-89",
