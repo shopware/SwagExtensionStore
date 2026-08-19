@@ -262,6 +262,6 @@ export default Shopware.Component.wrapComponentConfig({
 
         async confirmPurchase() {
             await extensionStorePurchaseConfirmationStore().confirm();
-        },
-    },
+        }
+    }
 });
