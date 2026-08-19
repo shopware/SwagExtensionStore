@@ -228,7 +228,7 @@ export default Shopware.Component.wrapComponentConfig({
             }
 
             return this.$t('sw-extension-store.purchase-confirmation.checkout.loading.description');
-        },
+        }
     },
 
     methods: {
