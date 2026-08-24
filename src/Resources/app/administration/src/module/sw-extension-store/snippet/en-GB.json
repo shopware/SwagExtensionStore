@@ -82,7 +82,8 @@
                     "title": {
                         "order": "Processing your order...",
                         "update": "Updating your extension data...",
-                        "install": "Installing your extension..."
+                        "install": "Installing your extension...",
+                        "reload": "Reloading administration..."
                     },
                     "description": "Please wait. This can take a few seconds."
                 }
@@ -103,7 +104,10 @@
             "successTitle": "Installation successful",
             "successMessage": "{name} has been successfully installed and activated.",
             "errorTitle": "Installation failed",
-            "errorMessage": "{name} could not be installed. Please try again or install it manually."
+            "errorMessage": "{name} could not be installed. Please try again or install it manually.",
+            "reloadRequiredTitle": "Extension installed",
+            "reloadRequiredMessage": "{name} has been successfully installed and activated. Reload the administration to see the changes.",
+            "reloadRequiredAction": "Reload"
         }
     }
 }

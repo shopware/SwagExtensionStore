@@ -39,8 +39,9 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         installAfterPurchase() {
-            return extensionStorePurchaseConfirmationStore().isCompatible && this.extensionStorePreferencesService.state.installAfterPurchase;
-        },
+            return extensionStorePurchaseConfirmationStore().isCompatible
+                && this.extensionStorePreferencesService.state.installAfterPurchase;
+        }
     },
 
     watch: {

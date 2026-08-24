@@ -228,7 +228,7 @@ export default Shopware.Component.wrapComponentConfig({
             }
 
             return this.$t('sw-extension-store.purchase-confirmation.checkout.loading.description');
-        },
+        }
     },
 
     methods: {
@@ -262,6 +262,6 @@ export default Shopware.Component.wrapComponentConfig({
 
         async confirmPurchase() {
             await extensionStorePurchaseConfirmationStore().confirm();
-        },
-    },
+        }
+    }
 });

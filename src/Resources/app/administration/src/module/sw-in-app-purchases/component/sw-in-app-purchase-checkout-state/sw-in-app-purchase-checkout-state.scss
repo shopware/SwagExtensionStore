@@ -46,4 +46,11 @@
             background-color: var(--color-background-positive-default);
         }
     }
+
+    &.is--info {
+        .sw-in-app-purchase-checkout-state__icon {
+            color: var(--color-interaction-primary-default);
+            background-color: var(--color-background-brand-default);
+        }
+    }
 }

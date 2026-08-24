@@ -22,7 +22,7 @@ export default Shopware.Component.wrapComponentConfig({
 
     data() {
         return {
-            state: 'loading' as 'loading' | 'purchase' | 'error' | 'success',
+            state: 'loading' as 'loading' | 'purchase' | 'error' | 'success' | 'info',
             store: Shopware.Store.get('inAppPurchaseCheckout'),
             inAppPurchaseCart: null as IAP.InAppPurchaseCart | null,
             extension: null as IAP.Extension | null,
@@ -30,7 +30,7 @@ export default Shopware.Component.wrapComponentConfig({
             tosAccepted: false,
             gtcAccepted: false,
             variant: null as string | null,
-            errorMessage: null as string | null
+            reason: null as string | null
         };
     },
 
@@ -89,7 +89,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.state = 'purchase';
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error('checkout-iap', errorResponse);
-                this.errorMessage = this.getError(errorResponse);
+                this.reason = this.getErrorApiCode(errorResponse);
                 this.state = 'error';
             });
         },
@@ -110,13 +110,13 @@ export default Shopware.Component.wrapComponentConfig({
                 this.purchase = purchase;
 
                 if (!this.purchase) {
-                    throw new Error('No in-app purchase foud');
+                    throw new Error('No in-app purchase found');
                 }
 
                 return this.createCart(this.purchase.preselectedVariant);
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error('checkout-iap', errorResponse);
-                this.errorMessage = this.getError(errorResponse);
+                this.reason = this.getErrorApiCode(errorResponse);
                 this.state = 'error';
             });
         },
@@ -135,7 +135,7 @@ export default Shopware.Component.wrapComponentConfig({
                 this.state = 'success';
             }).catch((errorResponse: ErrorResponse) => {
                 Shopware.Utils.debug.error('checkout-iap', errorResponse);
-                this.errorMessage = this.getError(errorResponse);
+                this.reason = this.getErrorApiCode(errorResponse);
                 this.state = 'error';
             });
         },
@@ -169,7 +169,7 @@ export default Shopware.Component.wrapComponentConfig({
             }
         },
 
-        getError(errorResponse: ErrorResponse): string | null {
+        getErrorApiCode(errorResponse: ErrorResponse): string | null {
             return errorResponse?.response?.data.errors[0]?.apiCode ?? null;
         },
 
@@ -177,7 +177,7 @@ export default Shopware.Component.wrapComponentConfig({
             this.store.dismiss();
             this.inAppPurchaseCart = null;
             this.extension = null;
-            this.errorMessage = null;
+            this.reason = null;
             this.state = 'loading';
             this.purchase = null;
             this.variant = null;

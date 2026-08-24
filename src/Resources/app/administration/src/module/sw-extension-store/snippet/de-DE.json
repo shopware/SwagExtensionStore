@@ -82,7 +82,8 @@
                   "title": {
                     "order": "Deine Bestellung wird verarbeitet ...",
                     "update": "Deine Erweiterungsdaten werden aktualisiert ...",
-                    "install": "Deine Erweiterung wird installiert ..."
+                    "install": "Deine Erweiterung wird installiert ...",
+                    "reload": "Die Administration wird neu geladen ..."
                   },
                   "description": "Bitte warten, dies kann einige Sekunden dauern."
                 }
@@ -103,7 +104,10 @@
             "successTitle": "Installation erfolgreich",
             "successMessage": "{name} wurde erfolgreich installiert und aktiviert.",
             "errorTitle": "Installation fehlgeschlagen",
-            "errorMessage": "{name} konnte nicht installiert werden. Bitte versuche es erneut oder installiere es manuell."
+            "errorMessage": "{name} konnte nicht installiert werden. Bitte versuche es erneut oder installiere es manuell.",
+            "reloadRequiredTitle": "Erweiterung installiert",
+            "reloadRequiredMessage": "{name} wurde erfolgreich installiert und aktiviert. Lade die Administration neu, um die Änderungen zu sehen.",
+            "reloadRequiredAction": "Neu laden"
         }
     }
 }

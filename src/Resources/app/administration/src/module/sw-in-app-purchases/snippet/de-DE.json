@@ -22,6 +22,8 @@
     "errorSubtitle": "Bitte versuche es erneut oder kontaktiere den Hersteller.",
     "successTitle": "In-App Kauf war erfolgreich!",
     "successSubtitle": "Du kannst jetzt dein neues Feature erleben.",
+    "infoTitle": "Hinweis",
+    "infoSubtitle": "Diese Aktion ist nicht verfügbar.",
     "errors": {
         "ShopwarePlatformException-87": "Ungültiges In-App-Feature",
         "ShopwarePlatformException-88": "In-App-Feature nicht gefunden",
