@@ -67,7 +67,7 @@ module.exports = {
             '@shopware-ag/eslint-config-base',
             'plugin:@typescript-eslint/eslint-recommended',
             'plugin:@typescript-eslint/recommended',
-            'plugin:@typescript-eslint/recommended-requiring-type-checking',
+            'plugin:@typescript-eslint/recommended-requiring-type-checking'
         ],
         parser: '@typescript-eslint/parser',
         parserOptions: {
@@ -81,6 +81,15 @@ module.exports = {
             'no-void': 'off',
             'no-unused-vars': 'off',
             'no-shadow': 'off',
+            'no-useless-constructor': 'off',
+            'no-empty-function': 'off',
+            'default-case': 'off',
+            'consistent-return': 'off',
+            'max-len': 'off',
+            'no-return-await': 'off',
+            'no-restricted-syntax': 'off',
+
+            'import/prefer-default-export': 'off',
 
             '@typescript-eslint/indent': ['error', 4, { SwitchCase: 1 }],
             '@typescript-eslint/ban-ts-comment': 0,
