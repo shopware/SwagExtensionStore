@@ -2,6 +2,8 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    container-type: inline-size;
+    container-name: sw-payments-dashboard-promotion-card;
 
     &__dismiss {
         position: absolute;
@@ -74,5 +76,18 @@
         display: block;
         width: min(100%, 305px);
         height: 228px;
+    }
+
+    @container sw-payments-dashboard-promotion-card (max-width: 750px) {
+        &__visual {
+            display: none;
+        }
+
+        &__layout {
+            display: block;
+            > * {
+                flex: 1 1100%;
+            }
+        }
     }
 }
