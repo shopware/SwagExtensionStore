@@ -1,4 +1,5 @@
 .sw-payments-dashboard-promotion-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -79,15 +80,25 @@
     }
 
     @container sw-payments-dashboard-promotion-card (max-width: 750px) {
-        &__visual {
-            display: none;
+        &__layout {
+            flex-direction: column;
+            align-items: stretch;
+
+            > * {
+                flex: 0 0 auto;
+            }
         }
 
-        &__layout {
-            display: block;
-            > * {
-                flex: 1 1100%;
-            }
+        /* stack the marketing visual above the copy instead of beside it */
+        &__visual-column {
+            order: -1;
+            justify-content: flex-start;
+        }
+
+        &__visual {
+            height: auto;
+            width: 100%;
+            margin-bottom: 12px;
         }
     }
 }
