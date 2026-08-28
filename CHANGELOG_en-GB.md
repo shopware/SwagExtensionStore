@@ -1,0 +1,13 @@
+# 4.2.3
+- [fix: Fix svg file build (#206)](https://github.com/shopware/SwagExtensionStore/commit/90932ad)
+- [fix: Fix release store error (#204)](https://github.com/shopware/SwagExtensionStore/commit/f841429)
+- [chore: release 4.2.3 (#203)](https://github.com/shopware/SwagExtensionStore/commit/a5ce5b5)
+- [feat: Move analysis promotion to other position (#202)](https://github.com/shopware/SwagExtensionStore/commit/196ab30)
+- [fix: PHPStan issue with widened return type (#199)](https://github.com/shopware/SwagExtensionStore/commit/ec13fe6)
+- [chore: Prepare code for PHPStan update 2026-07 (#192)](https://github.com/shopware/SwagExtensionStore/commit/c2784e2)
+- [fix: unbreak PHPStan EntitySearchResult deprecations (#189)](https://github.com/shopware/SwagExtensionStore/commit/272c3ad)
+- [Update phpstan.neon.dist to remove deprecated warnings (#188)](https://github.com/shopware/SwagExtensionStore/commit/3f41d3a)
+- [chore: update PHPStan ignores for v6.8 deprecations (#187)](https://github.com/shopware/SwagExtensionStore/commit/8582a85)
+- [fix: replace ShopwarePayments install action with services handoff (#173)](https://github.com/shopware/SwagExtensionStore/commit/c71be67)
+- [Fix Static Analyse failure by removing invalid coverage-ignore annotations (#177)](https://github.com/shopware/SwagExtensionStore/commit/9304d32)
+- [feat: add sw-payments dashboard promotion card (#169)](https://github.com/shopware/SwagExtensionStore/commit/658c790)
