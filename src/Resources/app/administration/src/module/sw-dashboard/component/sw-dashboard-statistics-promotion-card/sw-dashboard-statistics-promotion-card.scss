@@ -1,6 +1,9 @@
 @import "~scss/variables";
 
 .sw-dashboard-statistics-promotion-banner {
+    container-type: inline-size;
+    container-name: sw-dashboard-statistics-promotion-banner;
+
     .mt-card {
         overflow: visible;
     }
@@ -99,7 +102,7 @@
             }
         }
 
-        @container (max-width: 750px) {
+        @container sw-dashboard-statistics-promotion-banner (max-width: 750px) {
             &-details {
                 display: block;
             }
@@ -150,7 +153,7 @@
             margin-top: 14px;
         }
 
-        @container (max-width: 525px) {
+        @container sw-dashboard-statistics-promotion-banner (max-width: 525px) {
             &-go-to-app {
                 float: left;
             }
