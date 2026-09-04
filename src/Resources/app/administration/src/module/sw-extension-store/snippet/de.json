@@ -16,7 +16,7 @@
             "checkout": {
                 "success": {
                     "title": "Dein Kauf war erfolgreich!",
-                    "description": "Eine Bestätigungsemail wurde an dich gesendet. Die Erweiterungen sind nun in deinem Konto und im Admin deines Shops sichtbar."
+                    "description": "Eine Bestätigungsemail wurde an dich gesendet. Die Erweiterung ist nun in deinem Shopware Account und im Admin deines Shops sichtbar."
                 },
                 "failed": {
                     "title": "Etwas ist schiefgelaufen",
@@ -35,14 +35,27 @@
                     "paymentMethodBanner": {
                         "noPaymentMethod": {
                             "title": "Bitte füge eine Zahlungsmethode hinzu, um fortzufahren",
-                            "description": "Um Erweiterungen in unserem Store zu kaufen, ist eine Zahlungsmethode erforderlich. Bitte füge eine Zahlungsmethode in deinem Konto hinzu. Um sie hinzuzufügen, klicke auf den Button unten.",
+                            "description": "Um Erweiterungen in unserem Store zu kaufen, ist eine Zahlungsmethode erforderlich. Bitte füge eine Zahlungsmethode in deinem Shopware Account hinzu. Um sie hinzuzufügen, klicke auf den Button unten.",
                             "action": "Zahlungsmethode hinzufügen"
                         },
                         "change": {
                             "title": "Zahlungsmethode ändern?",
-                            "description": "Die standardmäßige Zahlungsmethode, die in deinem Konto gespeichert ist, wird für diesen Kauf verwendet. Um sie zu ändern, klicke auf den Button unten.<br><br><b>Hinweis:</b> Nach dem Aktualisieren der standardmäßigen Zahlungsmethode in deinem Konto wird sie im Hintergrund aktualisiert und automatisch verwendet, wenn du diese Bestellung absendest. Kein Neuladen erforderlich.",
+                            "description": "Die standardmäßige Zahlungsmethode, die in deinem Shopware Account gespeichert ist, wird für diesen Kauf verwendet. Um sie zu ändern, klicke auf den Button unten.<br><br><b>Hinweis:</b> Nach dem Aktualisieren der standardmäßigen Zahlungsmethode in deinem Shopware Account wird sie im Hintergrund aktualisiert und automatisch verwendet, wenn du diese Bestellung absendest. Kein Neuladen erforderlich.",
                             "action": "Zahlungsmethode ändern"
                         }
+                    }
+                },
+                "demo": {
+                    "hint": {
+                        "title": "Test-Lizenz für Demo-Umgebung",
+                        "description": "Du buchst diese Erweiterung als Test-Lizenz für deine Demo-Umgebung. Diese Lizenz ist ausschließlich für Testzwecke bestimmt und kann nicht in einer Produktivumgebung verwendet werden. In der Demo-Testphase entstehen keine Kosten."
+                    },
+                    "install": {
+                        "label": "Erweiterung nach Erstellung der Test-Lizenz automatisch installieren"
+                    },
+                    "order": {
+                        "submit": "Test-Lizenz erstellen",
+                        "submit-and-install": "Test-Lizenz erstellen & installieren"
                     }
                 },
                 "install": {

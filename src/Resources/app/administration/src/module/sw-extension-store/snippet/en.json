@@ -16,7 +16,7 @@
             "checkout": {
                 "success": {
                     "title": "Your order was successful!",
-                    "description": "Order confirmation email has been sent. The extensions are now visible in your Account and in the Admin of your shop."
+                    "description": "Order confirmation email has been sent. The extension is now visible in your Shopware Account and in the Admin of your shop."
                 },
                 "failed": {
                     "title": "Something went wrong",
@@ -35,14 +35,27 @@
                     "paymentMethodBanner": {
                         "noPaymentMethod": {
                             "title": "Please provide a payment method to proceed",
-                            "description": "For licensing Extensions in our store a payment method is required. Please add a payment method in your Account. To add it, click the button below.",
+                            "description": "For licensing Extensions in our store a payment method is required. Please add a payment method in your Shopware Account. To add it, click the button below.",
                             "action": "Add payment method"
                         },
                         "change": {
                             "title": "Change payment method?",
-                            "description": "The standard payment method that has been added to the Account will be used for this order. To change it, click the button below.<br><br><b>Note:</b> After updating the standard payment method in the Account it will be updated in the background and automatically be used if you submit this order. No reload required.",
+                            "description": "The standard payment method that has been added to the Shopware Account will be used for this order. To change it, click the button below.<br><br><b>Note:</b> After updating the standard payment method in the Shopware Account it will be updated in the background and automatically be used if you submit this order. No reload required.",
                             "action": "Change payment method"
                         }
+                    }
+                },
+                "demo": {
+                    "hint": {
+                        "title": "Test license for demo environment",
+                        "description": "You are booking this extension as a test license for your demo environment. This license is intended for testing purposes only and cannot be used in a production environment. No costs will apply in the demo test phase."
+                    },
+                    "install": {
+                        "label": "Install extension automatically after test license creation"
+                    },
+                    "order": {
+                        "submit": "Create test license",
+                        "submit-and-install": "Create & install test license"
                     }
                 },
                 "install": {
