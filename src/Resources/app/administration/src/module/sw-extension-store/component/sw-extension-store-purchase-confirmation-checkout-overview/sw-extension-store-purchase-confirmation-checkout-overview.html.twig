@@ -53,7 +53,7 @@
             {% endblock %}
 
             {% block sw_extension_store_purchase_confirmation_checkout_overview_info_billing_address %}
-            <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row">
+            <div v-if="!isDemoShop" class="sw-extension-store-purchase-confirmation__checkout-overview-info-row">
                 <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-label">
                     {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.billingAddress') }}:
                 </div>
@@ -88,7 +88,7 @@
             {% endblock %}
 
             {% block sw_extension_store_purchase_confirmation_checkout_overview_info_payment_method %}
-            <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row">
+            <div v-if="!isDemoShop" class="sw-extension-store-purchase-confirmation__checkout-overview-info-row">
                 <div class="sw-extension-store-purchase-confirmation__checkout-overview-info-row-label">
                     {{ $t('sw-extension-store.purchase-confirmation.checkout.overview.paymentMethod') }}:
                 </div>
@@ -143,7 +143,7 @@
         {% endblock %}
 
         {% block sw_extension_store_purchase_confirmation_checkout_overview_payment_method_banner %}
-        <template v-if="hasPaymentMethodError">
+        <template v-if="!isDemoShop && hasPaymentMethodError">
             <div class="sw-extension-store-purchase-confirmation__checkout-overview-payment-method-banner">
                 <mt-banner
                     variant="critical"
@@ -165,7 +165,7 @@
                 </mt-banner>
             </div>
         </template>
-        <template v-else-if="showPaymentMethodBanner">
+        <template v-else-if="!isDemoShop && showPaymentMethodBanner">
             <div class="sw-extension-store-purchase-confirmation__checkout-overview-payment-method-banner">
                 <mt-banner
                     variant="neutral"

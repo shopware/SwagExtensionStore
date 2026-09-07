@@ -10,6 +10,11 @@ type ExtensionStoreBasketBillingAddress = {
 type ExtensionStoreBasketShop = {
     id: number;
     domain: string;
+    /**
+     * This is only filled for on-premise shops.
+     * SaaS/cloud shops will always receive `null`.
+     */
+    kind: 'standard' | 'demo' | null;
 };
 
 type ExtensionStoreBasketExtensionProducer = {

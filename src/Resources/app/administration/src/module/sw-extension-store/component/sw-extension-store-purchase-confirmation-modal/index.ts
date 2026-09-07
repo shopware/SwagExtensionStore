@@ -37,6 +37,21 @@ export default Shopware.Component.wrapComponentConfig({
             return extensionStorePurchaseConfirmationStore().paymentMeansData;
         },
 
+        // Drives the billing and payment details, which a demo shop never shows for any booking.
+        isDemoShop() {
+            return this.cart?.bookingShop?.kind === 'demo';
+        },
+
+        isFreeExtension() {
+            return this.cart?.positions?.[0]?.variant?.name === 'free';
+        },
+
+        // Drives the wording and the pricing. A demo shop books a free extension as a regular free
+        // order, so only paid extensions become a test license.
+        isTestLicense() {
+            return this.isDemoShop && !this.isFreeExtension;
+        },
+
         installAfterPurchase() {
             return extensionStorePurchaseConfirmationStore().isCompatible && this.extensionStorePreferencesService.state.installAfterPurchase;
         },

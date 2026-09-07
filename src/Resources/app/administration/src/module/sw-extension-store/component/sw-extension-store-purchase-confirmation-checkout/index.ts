@@ -33,6 +33,14 @@ export default Shopware.Component.wrapComponentConfig({
             type: Boolean,
             required: true,
         },
+        isDemoShop: {
+            type: Boolean,
+            required: true,
+        },
+        isTestLicense: {
+            type: Boolean,
+            required: true,
+        },
     },
 
     emits: [
@@ -197,6 +205,11 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         hasPaymentMethodError() {
+            // A demo shop hides its payment details, so it must not block on them either.
+            if (this.isDemoShop) {
+                return false;
+            }
+
             return (this.paymentMeans || []).length <= 0 &&
                 this.cart && this.cart.payment && this.cart.payment.paymentMeanRequired;
         },
@@ -210,6 +223,19 @@ export default Shopware.Component.wrapComponentConfig({
 
         isCompatible() {
             return extensionStorePurchaseConfirmationStore().isCompatible;
+        },
+
+        installLabel() {
+            return this.isTestLicense
+                ? this.$t('sw-extension-store.purchase-confirmation.checkout.demo.install.label')
+                : this.$t('sw-extension-store.purchase-confirmation.checkout.install.label');
+        },
+
+        submitLabel() {
+            const scope = this.isTestLicense ? 'demo.order' : 'order';
+            const key = this.installAfterPurchase ? 'submit-and-install' : 'submit';
+
+            return this.$t(`sw-extension-store.purchase-confirmation.checkout.${scope}.${key}`);
         },
 
         loadingTitle() {

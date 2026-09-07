@@ -28,6 +28,11 @@ export default Shopware.Component.wrapComponentConfig({
             required: false,
             default: false,
         },
+        isDemoShop: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
     },
 
     data() {
