@@ -1,7 +1,10 @@
 .sw-payments-dashboard-promotion-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    container-type: inline-size;
+    container-name: sw-payments-dashboard-promotion-card;
 
     &__dismiss {
         position: absolute;
@@ -74,5 +77,28 @@
         display: block;
         width: min(100%, 305px);
         height: 228px;
+    }
+
+    @container sw-payments-dashboard-promotion-card (max-width: 750px) {
+        &__layout {
+            flex-direction: column;
+            align-items: stretch;
+
+            > * {
+                flex: 0 0 auto;
+            }
+        }
+
+        /* stack the marketing visual above the copy instead of beside it */
+        &__visual-column {
+            order: -1;
+            justify-content: flex-start;
+        }
+
+        &__visual {
+            height: auto;
+            width: 100%;
+            margin-bottom: 12px;
+        }
     }
 }
