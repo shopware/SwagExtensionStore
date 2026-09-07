@@ -99,7 +99,7 @@ describe('src/module/sw-payments/component/sw-payments-dashboard-promotion-card'
         expect(wrapper.find('.sw-payments-dashboard-promotion-card__brand').attributes('src'))
             .toBe('swagextensionstore/administration/static/img/payments/dashboard/shopware-payments-dashboard-logo.svg');
         expect(wrapper.find('.sw-payments-dashboard-promotion-card__visual').attributes('src'))
-            .toBe('swagextensionstore/administration/static/img/payments/dashboard/shopware-payments-dashboard-marketing.svg');
+            .toBe('swagextensionstore/administration/static/img/payments/dashboard/shopware-payments-dashboard-marketing.png');
         expect(wrapper.text()).toContain('sw-payments.dashboardPromotion.badge');
         expect(wrapper.text()).toContain('sw-payments.dashboardPromotion.headline');
         expect(wrapper.text()).toContain('sw-payments.dashboardPromotion.description');

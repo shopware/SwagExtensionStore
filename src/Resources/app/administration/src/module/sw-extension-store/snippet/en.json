@@ -9,6 +9,10 @@
             "paymentOptions": "Payment Options",
             "onceOff": "one-time"
         },
+        "legacyServices": {
+            "description": "This extension is now available as a Shopware Service.",
+            "openServices": "Open Shopware Payments"
+        },
         "purchase-confirmation": {
             "backToCheckout": "Back to checkout",
             "closeWindow": "Close window",
