@@ -8,8 +8,6 @@ use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Struct\Struct;
 
 /**
- * @codeCoverageIgnore
- *
  * @phpstan-import-type InAppPurchasePriceModel from InAppPurchasePriceModelStruct
  *
  * @phpstan-type InAppPurchase array{
@@ -21,6 +19,7 @@ use Shopware\Core\Framework\Struct\Struct;
  *     priceModels: list<InAppPurchasePriceModel>,
  *     serviceConditions?: string|null,
  *     websiteGtc?: string|null,
+ *     preselectedVariant?: string|null,
  *     status?: string,
  * }
  */
