@@ -1,83 +1,10 @@
 {% block sw_extension_store_index %}
-    <sw-meteor-page class="sw-extension-store-index" hide-icon>
-        {% block sw_extension_store_index_slots %}
-            {% block sw_extension_store_index_slot_search_bar %}
-                <template #search-bar>
-                    {% block sw_extension_store_index_search_bar %}
-                        <sw-search-bar
-                            :key="storeSearchKey"
-                            :initial-search="searchValue"
-                            initial-search-type="extension"
-                            :placeholder="$t('sw-extension-store.listing.placeholderSearchBar')"
-                            @search="updateSearch"
-                        />
-                    {% endblock %}
-                </template>
-            {% endblock %}
+    <sw-iframe-renderer
+        v-if="storeUrl"
+        class="sw-extension-store-iframe"
+        :src="storeUrl"
+        location-id=""
+    />
 
-            {% block sw_extension_store_index_slot_tabs %}
-                <template #page-tabs>
-                    {% block sw_extension_store_index_tabs %}
-                        {% block sw_extension_store_index_tabs_extensions_app %}
-                            <sw-tabs-item :route="{ name: 'sw.extension.store.listing.app' }" :disabled="!isAvailable">
-                                {{ $t('sw-extension-store.tabs.apps') }}
-                            </sw-tabs-item>
-                        {% endblock %}
-
-                        {% block sw_extension_store_index_tabs_extensions_theme %}
-                            <sw-tabs-item :route="{ name: 'sw.extension.store.listing.theme' }" :disabled="!isAvailable">
-                                {{ $t('sw-extension-store.tabs.themes') }}
-                            </sw-tabs-item>
-                        {% endblock %}
-                    {% endblock %}
-                </template>
-            {% endblock %}
-
-            {% block sw_extension_store_index_slot_default %}
-                <template #default>
-
-                    {% block sw_extension_store_index_loader %}
-                        <sw-loader v-if="isLoading" />
-                    {% endblock %}
-
-                    <template v-else>
-                        {% block sw_extension_store_index_content %}
-                            {% block sw_extension_store_index_content_view %}
-                                <router-view
-                                    v-if="isAvailable"
-                                    @extension-listing-errors="onExtensionListingError"
-                                />
-                            {% endblock %}
-
-                            {% block sw_extension_store_index_content_offline_warning %}
-                                <sw-extension-store-error-card
-                                    v-else-if="failReason === 'offline'"
-                                    :title="$t('sw-extension-store.offline.headline')"
-                                    variant="danger"
-                                >
-                                    {{ $t('sw-extension-store.offline.description') }}
-                                </sw-extension-store-error-card>
-                            {% endblock %}
-
-                            {% block sw_extension_store_index_content_update_warning %}
-                                <sw-extension-store-update-warning v-else-if="failReason === 'outdated'" />
-                            {% endblock %}
-
-                            {% block sw_extension_store_index_content_listing_error %}
-                                <sw-extension-store-error-card
-                                    v-else
-                                    :title="listingError?.title"
-                                    variant="danger"
-                                >
-                                    <template v-if="listingError">
-                                        {{ listingError.message }}
-                                    </template>
-                                </sw-extension-store-error-card>
-                            {% endblock %}
-                        {% endblock %}
-                    </template>
-                </template>
-            {% endblock %}
-        {% endblock %}
-    </sw-meteor-page>
+    <sw-extension-store-purchase-confirmation-modal />
 {% endblock %}

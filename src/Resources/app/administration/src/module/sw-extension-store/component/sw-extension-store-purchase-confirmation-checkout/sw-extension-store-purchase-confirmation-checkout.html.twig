@@ -1,0 +1,240 @@
+{% block sw_extension_store_purchase_confirmation_checkout %}
+<div class="sw-extension-store-purchase-confirmation__checkout">
+
+    {% block sw_extension_store_purchase_confirmation_checkout_loader %}
+    <div v-if="isLoading" class="sw-extension-store-purchase-confirmation__checkout-loading">
+        <mt-loader size="50px" />
+
+        <!-- Meteor Component Library >=5.1.0 supports loading title & description natively via props. -->
+        <div v-if="loadingTitle || loadingDescription" class="sw-extension-store-purchase-confirmation__checkout-loading-text">
+            <span v-if="loadingTitle" class="sw-extension-store-purchase-confirmation__checkout-loading-text-title">
+                {{ loadingTitle }}
+            </span>
+            <span v-if="loadingDescription" class="sw-extension-store-purchase-confirmation__checkout-loading-text-description">
+                {{ loadingDescription }}
+            </span>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block sw_extension_store_purchase_confirmation_checkout_success %}
+    <template v-if="step === steps.SUCCESS">
+        <div class="sw-extension-store-purchase-confirmation__checkout-success">
+            <mt-banner
+                variant="positive"
+                :title="$t('sw-extension-store.purchase-confirmation.checkout.success.title')"
+            >
+                <p>{{ $t('sw-extension-store.purchase-confirmation.checkout.success.description') }}</p>
+            </mt-banner>
+            <sw-extension-store-purchase-confirmation-checkout-overview
+                :cart="cart"
+                :default-payment-mean="defaultPaymentMean"
+                :editable="false"
+                :is-demo-shop="isDemoShop"
+            />
+        </div>
+    </template>
+    {% endblock %}
+
+    {% block sw_extension_store_purchase_confirmation_checkout_failed %}
+    <template v-else-if="step === steps.FAILED">
+        <div class="sw-extension-store-purchase-confirmation__checkout-failed">
+            <mt-empty-state
+                centered
+                :description="errorDescription ?? $t('sw-extension-store.purchase-confirmation.checkout.failed.description')"
+                :headline="errorTitle ?? $t('sw-extension-store.purchase-confirmation.checkout.failed.title')"
+                :link-href="errorDocumentationLink"
+                :link-text="$t('sw-extension-store.purchase-confirmation.checkout.failed.documentationLink')"
+                link-type="external"
+                icon="solid-exclamation-circle"
+            >
+                <template #button>
+                    <mt-button
+                        variant="secondary"
+                        size="default"
+                        @click="cancelPurchase"
+                    >
+                        {{ $t('sw-extension-store.purchase-confirmation.closeWindow') }}
+                    </mt-button>
+                </template>
+            </mt-empty-state>
+        </div>
+    </template>
+    {% endblock %}
+
+    {% block sw_extension_store_purchase_confirmation_checkout_default %}
+    <template v-else>
+        {% block sw_extension_store_purchase_confirmation_checkout_overview %}
+        <sw-extension-store-purchase-confirmation-checkout-overview
+            :cart="cart"
+            :default-payment-mean="defaultPaymentMean"
+            :has-payment-method-error="hasPaymentMethodError"
+            :is-demo-shop="isDemoShop"
+        />
+        {% endblock %}
+
+        {% block sw_extension_store_purchase_confirmation_checkout_demo_hint %}
+        <div v-if="isTestLicense" class="sw-extension-store-purchase-confirmation__checkout-demo-hint">
+            <mt-banner
+                variant="info"
+                :closable="false"
+                :title="$t('sw-extension-store.purchase-confirmation.checkout.demo.hint.title')"
+            >
+                <p>{{ $t('sw-extension-store.purchase-confirmation.checkout.demo.hint.description') }}</p>
+            </mt-banner>
+        </div>
+        {% endblock %}
+
+        {% block sw_extension_store_purchase_confirmation_checkout_install %}
+        <div class="sw-extension-store-purchase-confirmation__checkout-install">
+            {% block sw_extension_store_purchase_confirmation_checkout_install_title %}
+            <div class="sw-extension-store-purchase-confirmation__checkout-install-title">
+                {{ $t('sw-extension-store.purchase-confirmation.checkout.install.title') }}
+            </div>
+            {% endblock %}
+
+            {% block sw_extension_store_purchase_confirmation_checkout_install_switch %}
+            <div :class="`sw-extension-store-purchase-confirmation__checkout-install-switch ${!isCompatible ? 'is--disabled' : ''}`">
+                <mt-switch
+                    :disabled="isLoading || !isCompatible"
+                    :model-value="installAfterPurchase"
+                    :label="installLabel"
+                    @update:model-value="onInstallAfterPurchaseChange"
+                />
+            </div>
+            {% endblock %}
+
+            {% block sw_extension_store_purchase_confirmation_checkout_install_hint %}
+            <div v-if="!isCompatible" class="sw-extension-store-purchase-confirmation__checkout-install-hint">
+                <mt-icon name="solid-exclamation-circle" size="14px" />
+                {{ $t('sw-extension-store.purchase-confirmation.checkout.install.hint') }}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+
+        {% block sw_extension_store_purchase_confirmation_checkout_toc %}
+        <div class="sw-extension-store-purchase-confirmation__checkout-toc">
+            {% block sw_extension_store_purchase_confirmation_checkout_toc_title %}
+            <div class="sw-extension-store-purchase-confirmation__checkout-toc-title">
+                {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.title') }}
+            </div>
+            {% endblock %}
+
+            {% block sw_extension_store_purchase_confirmation_checkout_toc_checkboxes %}
+            <div class="sw-extension-store-purchase-confirmation__checkout-toc-checkboxes">
+                <div class="sw-extension-store-purchase-confirmation__checkout-toc-checkboxes-item">
+                    <mt-checkbox
+                        :disabled="isLoading"
+                        :model-value="tocAccepted"
+                        @update:model-value="onTocAcceptedChange"
+                    >
+                        <template #label>
+                            <i18n-t keypath="sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.gtc.text" tag="span">
+                                <template #link>
+                                    <mt-link
+                                        :to="$t('global.sw-gtc-checkbox.url')"
+                                        target="_blank"
+                                        type="external"
+                                        data-analytics-source="SwagExtensionStore"
+                                    >
+                                        {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.gtc.link') }}
+                                    </mt-link>
+                                </template>
+                            </i18n-t>
+                        </template>
+                    </mt-checkbox>
+                </div>
+
+                <div v-if="extensionHasPermissionsOrDomains" class="sw-extension-store-purchase-confirmation__checkout-toc-checkboxes-item">
+                    <mt-checkbox
+                        :disabled="isLoading"
+                        :model-value="permissionsAccepted"
+                        @update:model-value="onPermissionsAcceptedChange"
+                    >
+                        <template #label>
+                            {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.text') }}
+                            <mt-link
+                                as="button"
+                                @click="showPermissions"
+                            >
+                                {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.link') }}
+                            </mt-link>
+                        </template>
+                    </mt-checkbox>
+                </div>
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+
+        {% block sw_extension_store_purchase_confirmation_checkout_order %}
+        <div class="sw-extension-store-purchase-confirmation__checkout-order">
+
+            {% block sw_extension_store_purchase_confirmation_checkout_order_summary %}
+            <div v-if="!isTestLicense" class="sw-extension-store-purchase-confirmation__checkout-order-summary">
+                <div class="sw-extension-store-purchase-confirmation__checkout-order-summary-net-price">
+                    <span class="sw-extension-store-purchase-confirmation__checkout-order-summary-net-price-value">
+                        {{ netPrice }}*
+                    </span>
+                    <span class="sw-extension-store-purchase-confirmation__checkout-order-summary-net-price-interval">
+                        {{ netPriceIntervalSnippet }}
+                    </span>
+                </div>
+                <div v-if="isDiscounted" class="sw-extension-store-purchase-confirmation__checkout-order-summary-discounted-price">
+                    <span class="sw-extension-store-purchase-confirmation__checkout-order-summary-discounted-price-interval">
+                        {{ discountedPriceIntervalSnippet }}
+                    </span>
+                </div>
+                <div v-if="isFirstMonthFree || isDiscounted" class="sw-extension-store-purchase-confirmation__checkout-order-summary-pseudo-price">
+                    <span class="sw-extension-store-purchase-confirmation__checkout-order-summary-pseudo-price-value">
+                        {{ $t('sw-extension-store.purchase-confirmation.checkout.order.then') }} {{ pseudoPrice }}
+                    </span>
+                    <span class="sw-extension-store-purchase-confirmation__checkout-order-summary-pseudo-price-interval">
+                        {{ durationIntervalSnippet }}
+                    </span>
+                </div>
+            </div>
+            {% endblock %}
+
+            {% block sw_extension_store_purchase_confirmation_checkout_order_submit %}
+            <div class="sw-extension-store-purchase-confirmation__checkout-order-submit">
+                <mt-button
+                    :disabled="!canConfirmPurchase || isLoading"
+                    variant="primary"
+                    size="large"
+                    block
+                    @click="confirmPurchase"
+                >
+                    {{ submitLabel }}
+                </mt-button>
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+
+        {% block sw_extension_store_purchase_confirmation_checkout_notes %}
+        <div v-if="!isTestLicense" class="sw-extension-store-purchase-confirmation__checkout-notes">
+            <small>{{ $t('sw-extension-store.purchase-confirmation.checkout.notes.tax') }}</small>
+            <small v-if="position.legalText">** {{ position.legalText }}</small>
+        </div>
+        {% endblock %}
+    </template>
+    {% endblock %}
+
+</div>
+{% endblock %}
+
+{% block sw_extension_store_purchase_confirmation_footer %}
+<template v-if="step === steps.SUCCESS">
+    <div class="sw-extension-store-purchase-confirmation__footer">
+        <mt-button
+            variant="secondary"
+            size="small"
+            @click="closeModal"
+        >
+            {{ $t('sw-extension-store.purchase-confirmation.closeWindow') }}
+        </mt-button>
+    </div>
+</template>
+{% endblock %}

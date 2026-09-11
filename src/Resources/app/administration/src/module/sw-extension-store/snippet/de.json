@@ -1,105 +1,130 @@
 {
     "sw-extension-store": {
         "general": {
-            "labelPriceFirstMonth": "{price} / 1. Monat",
-            "labelPriceOneTime": "{price}",
-            "labelPricePerMonth": "{price} /Monat",
-            "labelPricePerYear": "{price} /Jahr",
-            "labelFromPricePerMonth": "ab {price} /Monat",
-            "labelFree": "Kostenlos",
-            "labelSale": "% Sale",
-            "labelSavings": "{percentage}% Rabatt",
-            "labelDiscountedPrice": "Kostenlos | <s>{price}</s> <strong>{discountedPrice}</strong>/Monat | <s>{price}</s> <strong>{discountedPrice}</strong>",
             "title": "Store",
             "taxNotice": "* Alle Preise verstehen sich zzgl. Mehrwertsteuer"
         },
-        "tabs": {
-            "apps": "Apps",
-            "themes": "Themes"
-        },
-        "listing":  {
-            "placeholderSearchBar": "Finde Erweiterungen ..."
-        },
-        "updateWarning": {
-            "headline": "Wir haben den Shopware Store aktualisiert.<br>Nimm Dir einen Moment Zeit, um auf die neueste Version zu aktualisieren.",
-            "description": "Entdecke zahlreiche, großartige Erweiterungen, die Dir helfen, Dein Geschäft auszubauen.",
-            "requestDescription": "Du musst auf die neueste Version upgraden, um neue und aktualisierte Erweiterungen oder Themes für Deinen Shop zu erhalten.",
-            "update": "Update"
-        },
-        "offline": {
-            "headline": "Der Shopware Store ist nicht verfügbar",
-            "description": "Überprüfe Deine Internetverbindung oder versuche es später noch einmal."
-        },
-        "detail": {
-            "enterpriseContactLinkText": "Vertrieb kontaktieren",
-            "enterpriseContactUrl": "https://www.shopware.com/de/enterprise-kontakt",
-            "enterpriseFeatureAlertText": "Diese Erweiterung ist Bestandteil der Enterprise Edition.",
-            "hasTrialPhase": "Probemonat inbegriffen",
-            "openConfiguration": "Konfiguration",
-            "themeIsAlreadyInstalled": "Theme ist bereits installiert",
-            "extensionIsAlreadyInstalled": "Erweiterung ist bereits installiert",
-            "inAppPurchases": {
-              "label": "In-App Einkäufe",
-              "paymentOptions": "Zahlungsoptionen"
-            }
-        },
-        "typeLabels": {
-            "self-hosted": "Selbst-gehosted",
-            "cloud": "Cloud"
-        },
-        "buy-modal": {
-            "paymentSelectionPlaceholder": "Wähle eine Zahlungsmethode ...",
-            "checkboxes": {
-                "permissionsAndAppProvider": {
-                    "introText": "Ich bin mir bewusst, dass diese App weitere",
-                    "buttonPermissions": "Berechtigungen",
-                    "middleText": "benötigt und akzeptiere den",
-                    "buttonAppProvider": "App-Anbieter",
-                    "endText": "als neuen Unterauftragnehmer von Shopware",
-                    "appProviderStartText": "Ich akzeptiere den"
-                }
-            },
-            "legalTextModal": {
-                "title": "Unterauftragnehmer von Shopware"
-            },
-            "rent": {
-                "priceDisplay": "{priceDisplay}/Monat",
-                "freeTrial": "30-Tage-Testversion",
-                "disclaimer": "Es können zusätzliche Kosten anfallen.",
-                "followingDiscount": "anschließend {price} /Monat für {months} Monate,",
-                "monthly": {
-                  "discountInformation": "Für {months} Monate, dann {price} /Monat",
-                  "cancellationInformation": "Monatlich kündbar",
-                  "finalPrice": "dann {price} /Monat"
-                },
-                "yearly": {
-                  "discountInformation": "Für 12 Monate, dann {price} /Jahr",
-                  "cancellationInformation": "Jährlich kündbar",
-                  "finalPrice": "dann {price} /Jahr"
-                }
-            },
-            "warnings": {
-                "paymentMeansRequiredText": "Um diese App zu kaufen, musst Du",
-                "paymentMeansRequiredLinkText": "eine Zahlungsmethode hinzufügen"
-            },
-            "plusVat": "* Alle Preise verstehen sich ohne die gesetzliche Mehrwertsteuer. Bei gebuchten Mieten inkl. Probemonat entstehen Kosten nach automatischer Verlängerung."
-        },
         "in-app-purchases": {
+            "label": "In-App Einkäufe",
+            "paymentOptions": "Zahlungsoptionen",
             "onceOff": "einmalig"
         },
         "legacyServices": {
             "description": "Diese Erweiterung ist jetzt als Shopware Service verfügbar.",
             "openServices": "Shopware Payments öffnen"
+        },
+        "purchase-confirmation": {
+            "backToCheckout": "Zurück zur Kasse",
+            "closeWindow": "Fenster schließen",
+            "modalTitle": "Kauf bestätigen",
+            "checkout": {
+                "success": {
+                    "title": "Dein Kauf war erfolgreich!",
+                    "description": "Eine Bestätigungsemail wurde an dich gesendet. Die Erweiterung ist nun in deinem Shopware Account und im Admin deines Shops sichtbar."
+                },
+                "failed": {
+                    "title": "Etwas ist schiefgelaufen",
+                    "description": "Entschuldigung, dein Kauf konnte nicht abgeschlossen werden.",
+                    "documentationLink": "Siehe Dokumentation"
+                },
+                "overview": {
+                    "billingAddress": "Rechnungsadresse",
+                    "bookingDomain": "Buchungsdomain",
+                    "by": "von",
+                    "change": "ändern",
+                    "changeBillingAddressUrl": "https://account.shopware.com/settings/data",
+                    "paymentMethod": "Zahlungsmethode",
+                    "noPaymentMethod": "Keine Zahlungsmethode gespeichert",
+                    "addPaymentMethod": "Zahlungsmethode hinzufügen",
+                    "paymentMethodBanner": {
+                        "noPaymentMethod": {
+                            "title": "Bitte füge eine Zahlungsmethode hinzu, um fortzufahren",
+                            "description": "Um Erweiterungen in unserem Store zu kaufen, ist eine Zahlungsmethode erforderlich. Bitte füge eine Zahlungsmethode in deinem Shopware Account hinzu. Um sie hinzuzufügen, klicke auf den Button unten.",
+                            "action": "Zahlungsmethode hinzufügen"
+                        },
+                        "change": {
+                            "title": "Zahlungsmethode ändern?",
+                            "description": "Die standardmäßige Zahlungsmethode, die in deinem Shopware Account gespeichert ist, wird für diesen Kauf verwendet. Um sie zu ändern, klicke auf den Button unten.<br><br><b>Hinweis:</b> Nach dem Aktualisieren der standardmäßigen Zahlungsmethode in deinem Shopware Account wird sie im Hintergrund aktualisiert und automatisch verwendet, wenn du diese Bestellung absendest. Kein Neuladen erforderlich.",
+                            "action": "Zahlungsmethode ändern"
+                        }
+                    }
+                },
+                "demo": {
+                    "hint": {
+                        "title": "Test-Lizenz für Demo-Umgebung",
+                        "description": "Du buchst diese Erweiterung als Test-Lizenz für deine Demo-Umgebung. Diese Lizenz ist ausschließlich für Testzwecke bestimmt und kann nicht in einer Produktivumgebung verwendet werden. In der Demo-Testphase entstehen keine Kosten."
+                    },
+                    "install": {
+                        "label": "Erweiterung nach Erstellung der Test-Lizenz automatisch installieren"
+                    },
+                    "order": {
+                        "submit": "Test-Lizenz erstellen",
+                        "submit-and-install": "Test-Lizenz erstellen & installieren"
+                    }
+                },
+                "install": {
+                  "title": "Installation",
+                  "label": "Erweiterung nach dem Kauf automatisch installieren",
+                  "hint": "Die Erweiterung ist nicht als kompatibel mit deiner Shop-Version gekennzeichnet."
+                },
+                "toc": {
+                    "title": "Nutzungsbedingungen",
+                    "checkboxes": {
+                        "gtc": {
+                            "text": "Ich habe die {link} gelesen und stimme ihnen zu.",
+                            "link": "Allgemeine Nutzungsbedingungen"
+                        },
+                        "permissions": {
+                            "text": "Ich bin mir bewusst, dass diese Erweiterung weitere Berechtigungen benötigt.",
+                            "link": "Berechtigungen anzeigen"
+                        }
+                    }
+                },
+                "order": {
+                    "firstMonth": "/1. Monat",
+                    "followingPerMonth": "Anschließend {price}** /Monat",
+                    "followingPerYear": "Anschließend {price}** /Jahr",
+                    "forMonths": "für {months} Monate",
+                    "forFirstYear": "für das erste Jahr",
+                    "perMonth": "/Monat",
+                    "perYear": "/Jahr",
+                    "submit": "Bestellung absenden",
+                    "submit-and-install": "Bestellung absenden und installieren",
+                    "then": "Dann"
+                },
+                "notes": {
+                    "tax": "* Alle Preise verstehen sich ohne die gesetzliche Mehrwertsteuer"
+                },
+                "loading": {
+                  "title": {
+                    "order": "Deine Bestellung wird verarbeitet ...",
+                    "update": "Deine Erweiterungsdaten werden aktualisiert ...",
+                    "install": "Deine Erweiterung wird installiert ...",
+                    "reload": "Dein Shop wird neu geladen ..."
+                  },
+                  "description": "Bitte warten, dies kann einige Sekunden dauern."
+                }
+            },
+            "permissions": {
+                "intro": {
+                    "label": "Berechtigungen",
+                    "descriptionPermissions": "{extensionLabel} wird Zugriff auf die Komponenten unten erhalten.",
+                    "descriptionDomains": "Einige Daten werden auch mit den Domains unten geteilt."
+                },
+                "domains": {
+                    "label": "Domains",
+                    "description": "Einige Daten werden auch mit den folgenden Domains geteilt."
+                }
+            }
+        },
+        "installation": {
+            "successTitle": "Installation erfolgreich",
+            "successMessage": "{name} wurde erfolgreich installiert und aktiviert.",
+            "errorTitle": "Installation fehlgeschlagen",
+            "errorMessage": "{name} konnte nicht installiert werden. Bitte versuche es erneut oder installiere es manuell.",
+            "reloadRequiredTitle": "Neuladen erforderlich",
+            "reloadRequiredMessage": "{name} wurde installiert. Lade die Administration neu, um es zu verwenden.",
+            "reloadRequiredAction": "Jetzt neu laden"
         }
-    },
-    "sw-extension-store-statistics-promotion": {
-        "app-name": "Shopware Analytics",
-        "app-description": "Erfasse wichtige Shop-Kennzahlen",
-        "go-to-app": "Jetzt ausprobieren"
-    },
-    "sw-extension-store-accessibility": {
-      "accessibility-text": "Erfahre mehr zu Barrierefreiheit von Erweiterungen im Shopware Store",
-      "accessibility-more-information": "Jetzt mehr erfahren",
-      "accessibility-link": "https://store.shopware.com/de/ressourcen/barrierefreiheit-von-erweiterungen/"
     }
 }
