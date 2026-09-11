@@ -19,6 +19,7 @@ use Shopware\Core\Framework\Struct\Struct;
  *     priceModels: list<InAppPurchasePriceModel>,
  *     serviceConditions?: string|null,
  *     websiteGtc?: string|null,
+ *     preselectedVariant?: string|null,
  *     status?: string,
  * }
  */
