@@ -1,5 +1,11 @@
 {
     "sw-extension-store": {
+        "component": {
+            "sw-extension-permissions-details-modal": {
+                "operationUpdate": "Edit",
+                "operationDelete": "Delete"
+            }
+        },
         "general": {
             "title": "Store",
             "taxNotice": "* All prices are exclusive of VAT"
