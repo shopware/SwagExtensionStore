@@ -12,7 +12,7 @@ export default Shopware.Component.wrapComponentConfig({
 
     props: {
         state: {
-            type: String as PropType<'error' | 'success' | 'purchase'>,
+            type: String as PropType<'error' | 'success' | 'purchase' | 'info'>,
             required: true,
         },
         tosAccepted: {
@@ -32,7 +32,7 @@ export default Shopware.Component.wrapComponentConfig({
 
     computed: {
         show() {
-            return ['error', 'success', 'purchase'].includes(this.state);
+            return ['error', 'success', 'purchase', 'info'].includes(this.state);
         },
 
         disabled() {
@@ -44,6 +44,7 @@ export default Shopware.Component.wrapComponentConfig({
                 case 'error':
                     return this.$t('sw-in-app-purchase-checkout-button.tryAgainButton');
                 case 'success':
+                case 'info':
                     return this.$t('sw-in-app-purchase-checkout-button.closeButton');
                 case 'purchase':
                     return this.$t('sw-in-app-purchase-checkout-button.purchaseButton');

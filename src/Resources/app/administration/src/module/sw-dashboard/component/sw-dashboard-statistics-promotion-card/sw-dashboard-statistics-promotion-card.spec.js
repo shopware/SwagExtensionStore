@@ -8,26 +8,14 @@ Shopware.Component.register(
 );
 
 describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-card', () => {
-    const extensionStoreDataService = {};
     const router = {};
 
-    async function createWrapper(isAppExistingInTheStore = true, hasPermission = true) {
-        const app = !isAppExistingInTheStore ? null : {
-            id: 99999,
-            label: 'Statistics service app by shopware',
-            name: STATISTICS_APP_NAME,
-        };
-
-        extensionStoreDataService.getExtensionByName = hasPermission
-            ? jest.fn(() => Promise.resolve(app))
-            : jest.fn(() => Promise.reject(new Error('Request failed with status code 403')));
-
+    async function createWrapper(hasPermission = true) {
         router.push = jest.fn();
 
         return mount(await Shopware.Component.build('sw-dashboard-statistics-promotion-card'), {
             global: {
                 provide: {
-                    extensionStoreDataService,
                     acl: {
                         can: () => hasPermission,
                     },
@@ -86,27 +74,12 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
         expect(wrapper.find('.sw-dashboard-statistics-promotion-banner').exists()).toBe(false);
     });
 
-    it('disables the button if the app is not found in the store', async () => {
-        const wrapper = await createWrapper(false);
-
-        expect(wrapper.find('button[disabled]').exists()).toBe(true);
-
-        wrapper.vm.goToStatisticsAppDetailPage();
-        expect(router.push).toHaveBeenCalledTimes(0);
-    });
-
-    it('does not fetch the extension when the user does not have permission to access the extension store', async () => {
-        await createWrapper(true, false);
-        expect(extensionStoreDataService.getExtensionByName).toHaveBeenCalledTimes(0);
-    });
-
     it(
         'redirects to the extension store even if the user does not have permission to access the extension store',
         async () => {
-            const wrapper = await createWrapper(true, false);
+            const wrapper = await createWrapper(false);
 
             expect(wrapper.find('button').exists()).toBe(true);
-            expect(wrapper.find('button[disabled]').exists()).toBe(false);
 
             wrapper.vm.goToStatisticsAppDetailPage();
             expect(router.push).toHaveBeenNthCalledWith(1, { name: 'sw.extension.store' });
@@ -129,16 +102,15 @@ describe('src/module/sw-dashboard/component/sw-dashboard-statistics-promotion-ca
         jest.useRealTimers();
     });
 
-    it('enables the button if the app is found in the store', async () => {
-        const wrapper = await createWrapper(true);
+    it('navigates to the extension detail page on button click', async () => {
+        const wrapper = await createWrapper();
 
         expect(wrapper.find('button').exists()).toBe(true);
-        expect(wrapper.find('button[disabled]').exists()).toBe(false);
 
         wrapper.vm.goToStatisticsAppDetailPage();
         expect(router.push).toHaveBeenNthCalledWith(1, {
             name: 'sw.extension.store.detail',
-            params: { id: 99999 },
+            params: { id: STATISTICS_APP_NAME },
         });
     });
 });

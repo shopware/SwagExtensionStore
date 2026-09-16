@@ -1,6 +1,16 @@
 import template from './sw-in-app-purchase-checkout-state.html.twig';
 import './sw-in-app-purchase-checkout-state.scss';
 
+const SNIPPET_ROOT = 'sw-in-app-purchase-checkout-state';
+
+/**
+ * States that describe their reason with a snippet key, mapped to the namespace that key lives in.
+ */
+const REASON_NAMESPACES: Record<string, string> = {
+    error: 'errors',
+    info: 'infos',
+};
+
 /**
  * @private
  */
@@ -9,10 +19,10 @@ export default Shopware.Component.wrapComponentConfig({
 
     props: {
         state: {
-            type: String as PropType<'loading' | 'error' | 'success'>,
+            type: String as PropType<'loading' | 'error' | 'success' | 'info'>,
             required: true,
         },
-        error: {
+        reason: {
             type: String,
             required: false,
             default: null,
@@ -25,6 +35,7 @@ export default Shopware.Component.wrapComponentConfig({
                 'is--error': this.state === 'error',
                 'is--success': this.state === 'success',
                 'is--loading': this.state === 'loading',
+                'is--info': this.state === 'info',
             };
         },
 
@@ -34,6 +45,8 @@ export default Shopware.Component.wrapComponentConfig({
                     return 'solid-times';
                 case 'success':
                     return 'solid-checkmark';
+                case 'info':
+                    return 'solid-info-circle';
                 default:
                     return null;
             }
@@ -42,9 +55,9 @@ export default Shopware.Component.wrapComponentConfig({
         title(): string | null {
             switch (this.state) {
                 case 'error':
-                    return this.$t('sw-in-app-purchase-checkout-state.errorTitle');
                 case 'success':
-                    return this.$t('sw-in-app-purchase-checkout-state.successTitle');
+                case 'info':
+                    return this.resolveSnippet('title');
                 default:
                     return null;
             }
@@ -53,24 +66,35 @@ export default Shopware.Component.wrapComponentConfig({
         subtitle(): string | null {
             switch (this.state) {
                 case 'error':
-                    return this.errorSnippet;
                 case 'success':
-                    return this.$t('sw-in-app-purchase-checkout-state.successSubtitle');
+                case 'info':
+                    return this.resolveSnippet('subtitle');
                 default:
                     return null;
             }
         },
+    },
 
-        errorSnippet(): string {
-            if (!this.error) {
-                return this.$t('sw-in-app-purchase-checkout-state.errorSubtitle');
+    methods: {
+        resolveSnippet(part: 'title' | 'subtitle'): string {
+            const fallback = `${SNIPPET_ROOT}.${this.state}${part === 'title' ? 'Title' : 'Subtitle'}`;
+            const namespace = REASON_NAMESPACES[this.state];
+
+            if (!namespace || !this.reason) {
+                return this.$t(fallback);
             }
 
-            if (this.$te(`sw-in-app-purchase-checkout-state.errors.${this.error}`)) {
-                return this.$t(`sw-in-app-purchase-checkout-state.errors.${this.error}`);
+            const base = `${SNIPPET_ROOT}.${namespace}.${this.reason}`;
+
+            if (this.$te(`${base}.${part}`)) {
+                return this.$t(`${base}.${part}`);
             }
 
-            return this.$t('sw-in-app-purchase-checkout-state.errorSubtitle');
+            if (part === 'subtitle' && this.$te(base)) {
+                return this.$t(base);
+            }
+
+            return this.$t(fallback);
         },
     },
 });

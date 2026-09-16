@@ -22,7 +22,8 @@ class LicenseControllerTest extends TestCase
         $controller = new LicenseController($this->createMock(LicenseService::class));
 
         $request = new Request();
-        $request->request->set('extensionId', 'foo');
+        $request->request->set('extensionId', true);
+        $request->request->set('variantId', 2);
 
         $this->expectException(InvalidExtensionIdException::class);
         $controller->createCart($request, Context::createDefaultContext());
@@ -34,7 +35,7 @@ class LicenseControllerTest extends TestCase
 
         $request = new Request();
         $request->request->set('extensionId', 1);
-        $request->request->set('variantId', 'foo');
+        $request->request->set('variantId', true);
 
         $this->expectException(InvalidVariantIdException::class);
         $controller->createCart($request, Context::createDefaultContext());
