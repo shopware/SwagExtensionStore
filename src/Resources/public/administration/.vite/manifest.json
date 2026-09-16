@@ -1,0 +1,185 @@
+{
+  "main.js": {
+    "file": "assets/swag-extension-store-CRvzeWEr.js",
+    "name": "swag-extension-store",
+    "src": "main.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "module/sw-extension/component/sw-extension-card-base/index.ts",
+      "module/sw-extension-store/page/sw-extension-store-index/index.js",
+      "module/sw-extension-store/component/sw-extension-store-purchase-confirmation-checkout/index.ts",
+      "module/sw-extension-store/component/sw-extension-store-purchase-confirmation-checkout-overview/index.ts",
+      "module/sw-extension-store/component/sw-extension-store-purchase-confirmation-modal/index.ts",
+      "module/sw-extension-store/component/sw-extension-store-purchase-confirmation-permissions/index.ts",
+      "module/sw-extension-store/component/sw-extension-store-in-app-purchases-listing-modal/index.js",
+      "module/sw-payments/component/sw-payments-dashboard-promotion-card/index.js",
+      "module/sw-dashboard/page/sw-dashboard-index/index.js",
+      "module/sw-dashboard/component/sw-dashboard-statistics-promotion-card/index.js",
+      "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout/index.ts",
+      "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-button/index.ts",
+      "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-overview/index.ts",
+      "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-state/index.ts",
+      "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-subscription-change/index.ts",
+      "module/sw-in-app-purchases/component/sw-in-app-purchase-price-box/index.ts"
+    ]
+  },
+  "module/sw-dashboard/component/sw-dashboard-statistics-promotion-card/index.js": {
+    "file": "assets/index-BU9PH26P.js",
+    "name": "index",
+    "src": "module/sw-dashboard/component/sw-dashboard-statistics-promotion-card/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-DqRHkELY.css"
+    ]
+  },
+  "module/sw-dashboard/page/sw-dashboard-index/index.js": {
+    "file": "assets/index-DXAIspxG.js",
+    "name": "index",
+    "src": "module/sw-dashboard/page/sw-dashboard-index/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-DmFcILee.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-in-app-purchases-listing-modal/index.js": {
+    "file": "assets/index-zwDmww9h.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-in-app-purchases-listing-modal/index.js",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-hFy3IpB6.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-purchase-confirmation-checkout-overview/index.ts": {
+    "file": "assets/index-BcikpDiJ.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-purchase-confirmation-checkout-overview/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-BVu2VmKo.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-purchase-confirmation-checkout/index.ts": {
+    "file": "assets/index-B3piLQFU.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-purchase-confirmation-checkout/index.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.js"
+    ],
+    "css": [
+      "assets/index-6-BxSOZh.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-purchase-confirmation-modal/index.ts": {
+    "file": "assets/index-cj08uMqT.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-purchase-confirmation-modal/index.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.js"
+    ],
+    "css": [
+      "assets/index-CvGHnoA9.css"
+    ]
+  },
+  "module/sw-extension-store/component/sw-extension-store-purchase-confirmation-permissions/index.ts": {
+    "file": "assets/index-DJYj18tn.js",
+    "name": "index",
+    "src": "module/sw-extension-store/component/sw-extension-store-purchase-confirmation-permissions/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-ZryCq4YO.css"
+    ]
+  },
+  "module/sw-extension-store/page/sw-extension-store-index/index.js": {
+    "file": "assets/index-nEpsAGVw.js",
+    "name": "index",
+    "src": "module/sw-extension-store/page/sw-extension-store-index/index.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.js"
+    ],
+    "css": [
+      "assets/index-BHO1eImK.css"
+    ]
+  },
+  "module/sw-extension/component/sw-extension-card-base/index.ts": {
+    "file": "assets/index-C_PQzdQY.js",
+    "name": "index",
+    "src": "module/sw-extension/component/sw-extension-card-base/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-B49oxqIu.css"
+    ]
+  },
+  "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-button/index.ts": {
+    "file": "assets/index-PJimdVvv.js",
+    "name": "index",
+    "src": "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-button/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-C9GbjkOe.css"
+    ]
+  },
+  "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-overview/index.ts": {
+    "file": "assets/index-C5mriFze.js",
+    "name": "index",
+    "src": "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-overview/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-DEJW3V-I.css"
+    ]
+  },
+  "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-state/index.ts": {
+    "file": "assets/index-BjCD8D_k.js",
+    "name": "index",
+    "src": "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-state/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-DoBzhgCd.css"
+    ]
+  },
+  "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-subscription-change/index.ts": {
+    "file": "assets/index-roxPMqcM.js",
+    "name": "index",
+    "src": "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout-subscription-change/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-DoMpBPvq.css"
+    ]
+  },
+  "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout/index.ts": {
+    "file": "assets/index-Bxgnc9aI.js",
+    "name": "index",
+    "src": "module/sw-in-app-purchases/component/sw-in-app-purchase-checkout/index.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.js"
+    ],
+    "css": [
+      "assets/index-BAvWdIly.css"
+    ]
+  },
+  "module/sw-in-app-purchases/component/sw-in-app-purchase-price-box/index.ts": {
+    "file": "assets/index-B2RTz1Bn.js",
+    "name": "index",
+    "src": "module/sw-in-app-purchases/component/sw-in-app-purchase-price-box/index.ts",
+    "isDynamicEntry": true,
+    "css": [
+      "assets/index-C6EJv79-.css"
+    ]
+  },
+  "module/sw-payments/component/sw-payments-dashboard-promotion-card/index.js": {
+    "file": "assets/index-C72rLUAp.js",
+    "name": "index",
+    "src": "module/sw-payments/component/sw-payments-dashboard-promotion-card/index.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.js"
+    ],
+    "css": [
+      "assets/index-om4Md7uV.css"
+    ]
+  }
+}
