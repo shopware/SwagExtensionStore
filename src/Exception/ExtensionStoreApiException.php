@@ -25,7 +25,6 @@ class ExtensionStoreApiException extends StoreApiException
     public function getErrors(bool $withTrace = false): \Generator
     {
         foreach (parent::getErrors($withTrace) as $error) {
-            /** @phpstan-ignore generator.valueType (Parent class defines a sealed array as return type. Might not be worth it, to widen it in core) */
             yield [
                 ...$error,
                 'apiCode' => $this->apiCode,
