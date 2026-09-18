@@ -13,7 +13,15 @@ use Shopware\Core\Framework\Struct\Struct;
  * @phpstan-import-type InAppPurchaseCartPosition from InAppPurchaseCartPositionStruct
  *
  * @phpstan-type Shop array{id: int, domain: string}|array{}
- * @phpstan-type InAppPurchaseCart array{positions: InAppPurchaseCartPosition[], bookingShop: Shop, licenseShop: Shop, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}
+ * @phpstan-type InAppPurchaseCart array{
+ *     positions: list<InAppPurchaseCartPosition>,
+ *     bookingShop?: Shop,
+ *     licenseShop?: Shop,
+ *     netPrice?: float,
+ *     grossPrice?: float,
+ *     taxRate?: float,
+ *     taxValue?: float
+ * }
  */
 #[Package('checkout')]
 class InAppPurchaseCartStruct extends Struct
