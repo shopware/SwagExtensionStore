@@ -16,8 +16,7 @@ export default Shopware.Component.wrapComponentConfig({
         return {
             view: 'checkout' as ModalView,
             tocAccepted: false,
-            permissionsAccepted: false,
-            installAfterPurchase: true
+            permissionsAccepted: false
         };
     },
 
