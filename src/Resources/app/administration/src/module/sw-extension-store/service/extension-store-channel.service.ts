@@ -1,4 +1,4 @@
-import { handle, publish } from '@shopware-ag/meteor-admin-sdk/es/channel';
+import { handle, publish, setExtensions } from '@shopware-ag/meteor-admin-sdk/es/channel';
 import type { ShopwareMessageTypes } from '@shopware-ag/meteor-admin-sdk/es/message-types';
 import type { LocationQuery, RouteLocationNormalizedGeneric, RouteLocationNormalizedLoadedGeneric, Router } from 'vue-router';
 import type ExtensionHelperService from 'src/app/service/extension-helper.service';
@@ -83,6 +83,12 @@ type PurchaseResultData = {
     extensionVersion?: string | null;
 };
 
+type StoreChannelSource = {
+    source: Window;
+    origin: string;
+    sdkVersion: string;
+};
+
 type CopyToClipboardActionData = StoreChannelActionData & {
     text: string;
 };
@@ -108,6 +114,10 @@ export class ExtensionStoreChannelService {
 
     private unsubscribeFunction?: () => void;
 
+    private channelSource?: StoreChannelSource;
+
+    private readonly onPopState = (): void => this.publishRouterSync();
+
     constructor(
         private readonly extensionStoreActionService: ExtensionStoreActionService,
         private readonly shopwareExtensionService: ShopwareExtensionService,
@@ -124,19 +134,26 @@ export class ExtensionStoreChannelService {
             return;
         }
 
-        this.unsubscribeFunction = handle('swag-extension-store-channel' as keyof ShopwareMessageTypes, (data: unknown) => {
-            try {
-                return this.handleAction(data);
-            } catch (err) {
-                return {
-                    success: false
-                };
+        this.unsubscribeFunction = handle(
+            'swag-extension-store-channel' as keyof ShopwareMessageTypes,
+            (data: unknown, additionalInformation) => {
+                try {
+                    if (this.isHandshakeActionData(data)) {
+                        this.registerChannelSource(additionalInformation._event_, data.version);
+                    }
+
+                    return this.handleAction(data);
+                } catch (err) {
+                    return {
+                        success: false
+                    };
+                }
             }
-        });
+        );
 
         this.removeRouterAfterEachHook = this.router.afterEach((to, from) => this.publishReturnToExtensionStore(to, from));
 
-        window.addEventListener('popstate', () => this.publishRouterSync());
+        window.addEventListener('popstate', this.onPopState);
     }
 
     unregister(): void {
@@ -148,7 +165,9 @@ export class ExtensionStoreChannelService {
         this.removeRouterAfterEachHook?.();
         this.removeRouterAfterEachHook = undefined;
 
-        window.removeEventListener('popstate', () => this.publishRouterSync());
+        window.removeEventListener('popstate', this.onPopState);
+
+        this.channelSource = undefined;
     }
 
     private publishReturnToExtensionStore(
@@ -376,10 +395,7 @@ export class ExtensionStoreChannelService {
             ...(extensionVersion !== undefined ? { extensionVersion } : {})
         };
 
-        publish(
-            'swag-extension-store-channel' as keyof ShopwareMessageTypes,
-            resultData
-        );
+        this.publishToExtensionStore(resultData);
     }
 
     private publishRouterSync(): void {
@@ -391,9 +407,49 @@ export class ExtensionStoreChannelService {
             currentRouteQuery
         };
 
+        this.publishToExtensionStore(data);
+    }
+
+    private registerChannelSource(event: MessageEvent<string>, sdkVersion: string): void {
+        if (!event.source || !this.isStoreOrigin(event.origin)) {
+            return;
+        }
+
+        const source = event.source as Window;
+
+        setExtensions({
+            'swag-extension-store-sky-bridge': {
+                baseUrl: event.origin,
+                permissions: {}
+            }
+        });
+
+        this.channelSource = {
+            source,
+            origin: event.origin,
+            sdkVersion
+        };
+    }
+
+    private isStoreOrigin(origin: string): boolean {
+        const iframeUrl = extensionStoreContextStore().iframeUrl;
+
+        if (!iframeUrl) {
+            return false;
+        }
+
+        return new URL(iframeUrl).origin === origin;
+    }
+
+    private publishToExtensionStore(data: PurchaseResultData | RouterSyncData): void {
+        if (!this.channelSource) {
+            return;
+        }
+
         publish(
             'swag-extension-store-channel' as keyof ShopwareMessageTypes,
-            data
+            data,
+            [this.channelSource]
         );
     }
 
