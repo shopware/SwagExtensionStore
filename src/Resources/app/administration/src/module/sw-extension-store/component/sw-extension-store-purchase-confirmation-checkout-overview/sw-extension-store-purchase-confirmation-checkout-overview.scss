@@ -124,6 +124,10 @@
             margin: 0;
             font-size: var(--font-size-xs);
 
+            &.mt-banner--neutral {
+                background-color: var(--color-background-primary-default);
+            }
+
             a {
                 margin-top: 12px;
             }

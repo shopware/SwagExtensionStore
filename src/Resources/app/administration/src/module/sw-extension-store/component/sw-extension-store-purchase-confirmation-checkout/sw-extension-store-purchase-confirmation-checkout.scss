@@ -84,18 +84,6 @@
 
     &-install {
         display: flex;
-        padding: 12px 16px;
-        align-items: center;
-        gap: 8px;
-        align-self: stretch;
-        border-radius: $border-radius-sm;
-        border: 1px solid #e2e3e9;
-
-
-    }
-
-    &-install {
-        display: flex;
         flex-direction: column;
         gap: 4px;
 
@@ -107,7 +95,7 @@
 
         &-switch {
             display: flex;
-            padding: 12px 24px;
+            padding: 15px 24px;
             align-items: center;
             gap: 8px;
             align-self: stretch;
@@ -115,18 +103,22 @@
             border: 1px solid #e2e3e9;
 
             &.is--disabled {
-                background-color: var(--color-background-secondary-default);
+                background-color: var(--color-background-primary-default);
             }
 
-            .mt-switch {
+            .mt-field--switch {
                 margin: 0;
 
-                &__switch {
-                    min-width: 24px;
+                .mt-field--switch__input {
+                    padding: 0;
                 }
 
-                &__label {
+                .mt-field__label {
                     padding-left: 8px;
+
+                    label {
+                        padding: 0;
+                    }
                 }
             }
         }
