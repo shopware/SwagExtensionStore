@@ -56,6 +56,7 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
     let createNotificationSpy: jest.Mock;
     let originalCommit: typeof Shopware.State.commit;
     let originalGet: typeof Shopware.State.get;
+    let originalContext: typeof Shopware.Context;
     let router: { push: jest.Mock; afterEach: jest.Mock; currentRoute: { value: { params: object; query: object } } };
     let channelWindow: Window;
 
@@ -137,8 +138,20 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
 
         originalCommit = Shopware.State.commit;
         originalGet = Shopware.State.get;
+        originalContext = Shopware.Context;
 
         createNotificationSpy = jest.fn();
+        Object.defineProperty(Shopware, 'Context', {
+            value: {
+                app: {
+                    config: {
+                        version: ''
+                    }
+                }
+            },
+            configurable: true,
+            writable: true
+        });
         Object.defineProperty(Shopware.State, 'commit', {
             value: createNotificationSpy,
             configurable: true,
@@ -176,6 +189,11 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
         });
         Object.defineProperty(Shopware.State, 'get', {
             value: originalGet,
+            configurable: true,
+            writable: true
+        });
+        Object.defineProperty(Shopware, 'Context', {
+            value: originalContext,
             configurable: true,
             writable: true
         });
