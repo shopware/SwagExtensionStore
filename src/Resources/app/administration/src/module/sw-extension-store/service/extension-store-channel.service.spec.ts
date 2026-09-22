@@ -1,12 +1,14 @@
 import { flushPromises } from '@vue/test-utils';
-import { handle, publish } from '@shopware-ag/meteor-admin-sdk/es/channel';
+import { handle, publish, setExtensions } from '@shopware-ag/meteor-admin-sdk/es/channel';
 import { ExtensionStoreChannelService } from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-channel.service';
+import extensionStoreContextStore from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store';
 import extensionStorePurchaseConfirmationStore from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-purchase-confirmation.store';
 import type { ExtensionStoreBasket } from 'SwagExtensionStore/module/sw-extension-store/types/extension-store-basket.types';
 
 jest.mock('@shopware-ag/meteor-admin-sdk/es/channel', () => ({
     handle: jest.fn(() => jest.fn()),
     publish: jest.fn(),
+    setExtensions: jest.fn(),
 }));
 
 jest.mock('SwagExtensionStore/util/telemetry', () => ({
@@ -15,6 +17,13 @@ jest.mock('SwagExtensionStore/util/telemetry', () => ({
 
 const handleMock = handle as jest.MockedFunction<typeof handle>;
 const publishMock = publish as jest.MockedFunction<typeof publish>;
+const setExtensionsMock = setExtensions as jest.MockedFunction<typeof setExtensions>;
+
+const STORE_ORIGIN = 'https://sky-bridge-store.production.shopware.in';
+
+type ChannelInformation = {
+    _event_: MessageEvent<string>;
+};
 
 const buildCart = (type: 'app' | 'plugin' = 'plugin') => ({
     positions: [
@@ -52,6 +61,7 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
     let extensionStorePreferencesService: { state: { installAfterPurchase: boolean } };
     let createNotificationSpy: jest.SpyInstance;
     let router: { push: jest.Mock; afterEach: jest.Mock; currentRoute: { value: { params: object; query: object } } };
+    let channelWindow: Window;
 
     const createService = (cart: ExtensionStoreBasket) => {
         extensionStoreActionService = {
@@ -93,14 +103,27 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
         Shopware.Context.app.config.bundles = bundles as never;
         service.register();
 
-        const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<{ isDemoShop: boolean }>;
+        const channelHandler = handleMock.mock.calls[0][1] as (
+            data: unknown,
+            additionalInformation: ChannelInformation
+        ) => Promise<{ isDemoShop: boolean }>;
 
-        return channelHandler({ action: 'handshake', sessionToken: 'session-token', version: '1.0.0' });
+        return channelHandler(
+            { action: 'handshake', sessionToken: 'session-token', version: '1.0.0' },
+            {
+                _event_: {
+                    source: channelWindow,
+                    origin: STORE_ORIGIN,
+                } as MessageEvent<string>,
+            },
+        );
     };
 
     /** Runs the purchase action through the channel and returns the confirm callback result. */
     const performPurchase = async () => {
         service.register();
+
+        await performHandshake();
 
         const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<unknown>;
         await channelHandler(purchaseActionData);
@@ -111,10 +134,25 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
         return onConfirm!();
     };
 
+    const expectPublishedToStore = (data: object) => {
+        expect(publishMock).toHaveBeenCalledWith(
+            'swag-extension-store-channel',
+            data,
+            [expect.objectContaining({
+                source: channelWindow,
+                origin: STORE_ORIGIN,
+                sdkVersion: '1.0.0',
+            })],
+        );
+    };
+
     beforeEach(() => {
         handleMock.mockClear();
         publishMock.mockClear();
+        setExtensionsMock.mockClear();
         extensionStorePurchaseConfirmationStore().$reset();
+        channelWindow = { postMessage: jest.fn() } as unknown as Window;
+        extensionStoreContextStore().iframeUrl = `${STORE_ORIGIN}/`;
         createNotificationSpy = jest.spyOn(Shopware.Store.get('notification'), 'createNotification')
             .mockImplementation(() => null);
         service = createService(buildCart());
@@ -142,6 +180,34 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             const context = await performHandshake(undefined);
 
             expect(context.isDemoShop).toBe(false);
+        });
+    });
+
+    describe('channel registration', () => {
+        it('should register and target the store iframe after its handshake', async () => {
+            await performHandshake();
+
+            expect(setExtensionsMock).toHaveBeenCalledWith({
+                'swag-extension-store-sky-bridge': {
+                    baseUrl: STORE_ORIGIN,
+                    permissions: {},
+                },
+            });
+        });
+
+        it('should remove the same popstate listener that was registered', () => {
+            const addEventListenerSpy = jest.spyOn(window, 'addEventListener');
+            const removeEventListenerSpy = jest.spyOn(window, 'removeEventListener');
+
+            service.register();
+
+            const popstateListener = addEventListenerSpy.mock.calls
+                .find(([eventName]) => eventName === 'popstate')?.[1];
+
+            service.unregister();
+
+            expect(popstateListener).toBeDefined();
+            expect(removeEventListenerSpy).toHaveBeenCalledWith('popstate', popstateListener);
         });
     });
 
@@ -182,7 +248,7 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
 
             expect(extensionHelperService.downloadAndActivateExtension).toHaveBeenCalledWith('SwagExtension', 'plugin');
             expect(result).toEqual({ success: true, requiresReload: true });
-            expect(publishMock).toHaveBeenCalledWith('swag-extension-store-channel', {
+            expectPublishedToStore({
                 action: 'purchaseResult',
                 sessionToken: 'session-token',
                 success: true,
@@ -223,6 +289,7 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             }));
 
             service.register();
+            await performHandshake();
             const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<unknown>;
             await channelHandler(purchaseActionData);
 
@@ -239,7 +306,7 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             await confirmed;
 
             expect(publishMock).toHaveBeenCalledTimes(1);
-            expect(publishMock).toHaveBeenCalledWith('swag-extension-store-channel', {
+            expectPublishedToStore({
                 action: 'purchaseResult',
                 sessionToken: 'session-token',
                 success: true,
@@ -270,8 +337,9 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             const result = await performPurchase();
 
             expect(result).toEqual({ success: true, requiresReload: false });
-            expect(extensionStoreActionService.getMyExtensions).not.toHaveBeenCalled();
-            expect(publishMock).toHaveBeenCalledWith('swag-extension-store-channel', {
+            // The handshake loads the extensions once. A failed install must not look the version up again.
+            expect(extensionStoreActionService.getMyExtensions).toHaveBeenCalledTimes(1);
+            expectPublishedToStore({
                 action: 'purchaseResult',
                 sessionToken: 'session-token',
                 success: true,
