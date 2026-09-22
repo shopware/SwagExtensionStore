@@ -53,6 +53,9 @@ describe('sw-in-app-purchase-checkout-button', () => {
         await wrapper.setProps({ state: 'purchase' });
         expect(wrapper.vm.show).toBe(true);
 
+        await wrapper.setProps({ state: 'info' });
+        expect(wrapper.vm.show).toBe(true);
+
         await wrapper.setProps({ state: 'unknown' });
         expect(wrapper.vm.show).toBe(false);
     });
@@ -74,6 +77,9 @@ describe('sw-in-app-purchase-checkout-button', () => {
 
         await wrapper.setProps({ state: 'purchase' });
         expect(wrapper.vm.text).toBe('sw-in-app-purchase-checkout-button.purchaseButton');
+
+        await wrapper.setProps({ state: 'info' });
+        expect(wrapper.vm.text).toBe('sw-in-app-purchase-checkout-button.closeButton');
 
         await wrapper.setProps({ state: 'random' });
         expect(wrapper.vm.text).toBe(null);

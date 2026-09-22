@@ -22,6 +22,8 @@
     "errorSubtitle": "Please try again or contact the manufacturer.",
     "successTitle": "In-App Purchase was successful!",
     "successSubtitle": "You can now experience your new feature.",
+    "infoTitle": "Please note",
+    "infoSubtitle": "This action is not available.",
     "errors": {
       "ShopwarePlatformException-87": "Invalid in-app feature",
       "ShopwarePlatformException-88": "In-app feature not found",

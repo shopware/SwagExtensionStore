@@ -16,7 +16,6 @@ use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use SwagExtensionStore\Services\LicenseService;
 use SwagExtensionStore\Services\StoreClient;
-use SwagExtensionStore\Services\StoreDataProvider;
 
 class LicenseServiceTest extends TestCase
 {
@@ -150,7 +149,7 @@ class LicenseServiceTest extends TestCase
         $this->getStoreRequestHandler()->append(
             new Response(
                 200,
-                [StoreDataProvider::HEADER_NAME_TOTAL_COUNT => '0'],
+                ['sw-meta-total' => '0'],
                 $licensesJson,
             ),
         );
