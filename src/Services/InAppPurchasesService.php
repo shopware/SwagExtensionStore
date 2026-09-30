@@ -41,7 +41,7 @@ class InAppPurchasesService
     {
         $purchases = $this->client->listInAppPurchases($extensionName, $context);
 
-        return $purchases->filter(fn (InAppPurchaseStruct $purchase) => $purchase->getStatus() === InAppPurchaseStatus::ACTIVE);
+        return $purchases->filter(static fn (InAppPurchaseStruct $purchase) => $purchase->getStatus() === InAppPurchaseStatus::ACTIVE);
     }
 
     public function getInAppPurchase(string $extensionName, string $inAppPurchase, Context $context): InAppPurchaseStruct

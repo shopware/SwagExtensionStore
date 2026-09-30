@@ -8,14 +8,49 @@ use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\Struct\Struct;
 
 /**
- * @codeCoverageIgnore
- *
  * @phpstan-import-type InAppPurchase from InAppPurchaseStruct
  * @phpstan-import-type InAppPurchasePriceModel from InAppPurchasePriceModelStruct
  * @phpstan-import-type InAppPurchaseSubscriptionChange from InAppPurchaseSubscriptionChangeStruct
  *
- * @phpstan-type InAppPurchaseCartPosition array{subscriptionChange?: InAppPurchaseSubscriptionChange, extensionName: string, inAppFeatureIdentifier: string, netPrice: float, grossPrice: float, taxRate: float, taxValue: float}
- * @phpstan-type InAppPurchaseCartItem array{extensionName: string, inAppFeatureIdentifier: string, netPrice: float, taxValue: float, grossPrice: float, taxRate: float, variant: string, subscriptionChange?: array{type: string, currentInAppFeatureIdentifier: string}}
+ * @phpstan-type InAppPurchaseCartPosition array{
+ *     subscriptionChange?: InAppPurchaseSubscriptionChange,
+ *     extensionName: string,
+ *     inAppFeatureIdentifier: string,
+ *     priceModel?: array{
+ *         type: string,
+ *         price: float,
+ *         duration: int|null,
+ *         oneTimeOnly: bool,
+ *     },
+ *     feature?: array{
+ *         name: string,
+ *         identifier: string,
+ *         description: string|null,
+ *         priceModels: array{
+ *             type: string,
+ *             price: float,
+ *             duration: int|null,
+ *             oneTimeOnly: bool,
+ *         },
+ *     },
+ *     netPrice: float,
+ *     grossPrice: float,
+ *     taxRate: float,
+ *     taxValue: float,
+ * }
+ * @phpstan-type InAppPurchaseCartItem array{
+ *     extensionName: string,
+ *     inAppFeatureIdentifier: string,
+ *     netPrice: float,
+ *     taxValue: float,
+ *     grossPrice: float,
+ *     taxRate: float,
+ *     variant: string,
+ *     subscriptionChange?: array{
+ *         type: string,
+ *         currentInAppFeatureIdentifier: string
+ *     }
+ * }
  */
 #[Package('checkout')]
 class InAppPurchaseCartPositionStruct extends Struct

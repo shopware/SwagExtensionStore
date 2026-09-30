@@ -3,6 +3,7 @@
 .sw-dashboard-statistics-promotion-banner {
     display: block;
     container-type: inline-size;
+    container-name: sw-dashboard-statistics-promotion-banner;
     margin: 32px auto;
     border-radius: $border-radius-lg;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 10%), 0 2px 1px 0 rgba(0, 0, 0, 6%), 0 1px 1px 0 rgba(0, 0, 0, 8%);
@@ -101,7 +102,7 @@
             }
         }
 
-        @container (max-width: 750px) {
+        @container sw-dashboard-statistics-promotion-banner (max-width: 750px) {
             &-details {
                 display: block;
             }
@@ -152,10 +153,7 @@
             margin-top: 14px;
         }
 
-        @container (max-width: 525px) {
-            &-app {
-            }
-
+        @container sw-dashboard-statistics-promotion-banner (max-width: 525px) {
             &-go-to-app {
                 float: left;
             }

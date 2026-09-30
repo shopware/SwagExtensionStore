@@ -10,7 +10,7 @@ module.exports = {
     preset: '@shopware-ag/jest-preset-sw6-admin',
     globals: {
         // required, e.g. /www/sw6/platform/src/Administration/Resources/app/administration
-        adminPath
+        adminPath,
     },
 
     setupFilesAfterEnv: [
@@ -39,7 +39,8 @@ module.exports = {
         '^\@shopware-ag\/meteor-admin-sdk\/es\/(.*)':
             `${process.env.ADMIN_PATH}/node_modules/@shopware-ag/meteor-admin-sdk/umd/$1`,
         vue$: '<rootDir>/node_modules/@vue/compat/dist/vue.cjs.js',
-        '@vue/test-utils': '<rootDir>/node_modules/@vue/test-utils'
+        '@vue/test-utils': '<rootDir>/node_modules/@vue/test-utils',
+        '^lodash-es/(.*)$': 'lodash/$1'
     },
 
     transformIgnorePatterns: [

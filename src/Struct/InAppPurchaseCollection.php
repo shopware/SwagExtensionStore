@@ -18,7 +18,7 @@ use Shopware\Core\Framework\Struct\Collection;
 class InAppPurchaseCollection extends Collection
 {
     /**
-     * @param InAppPurchase[] $data
+     * @param array<InAppPurchase> $data
      */
     public static function fromArray(array $data): self
     {
@@ -42,7 +42,7 @@ class InAppPurchaseCollection extends Collection
         InAppPurchaseCollection $allPurchases,
         array $validPurchases,
     ): InAppPurchaseCollection {
-        return $allPurchases->filter(function (InAppPurchaseStruct $purchase) use ($validPurchases) {
+        return $allPurchases->filter(static function (InAppPurchaseStruct $purchase) use ($validPurchases) {
             return \in_array($purchase->getIdentifier(), $validPurchases, true);
         });
     }

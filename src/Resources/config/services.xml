@@ -6,10 +6,6 @@
 >
     <parameters>
         <parameter key="swag_extension_store.endpoints" type="collection">
-            <parameter key="list_extensions">/swplatform/extensionstore/extensions</parameter>
-            <parameter key="extension_detail">/swplatform/extensionstore/extensions/%d</parameter>
-            <parameter key="filter">/swplatform/extensionstore/extensions/filter</parameter>
-            <parameter key="reviews">/swplatform/extensionstore/extensions/%d/reviews</parameter>
             <parameter key="create_basket">/swplatform/extensionstore/baskets</parameter>
             <parameter key="order_basket">/swplatform/extensionstore/orders</parameter>
             <parameter key="payment_means">/swplatform/extensionstore/paymentmeans</parameter>
@@ -23,10 +19,6 @@
         <!-- Controller -->
         <service id="SwagExtensionStore\Controller\LicenseController" public="true">
             <argument type="service" id="SwagExtensionStore\Services\LicenseService"/>
-        </service>
-
-        <service id="SwagExtensionStore\Controller\DataController" public="true">
-            <argument type="service" id="SwagExtensionStore\Services\StoreDataProvider"/>
         </service>
 
         <service id="SwagExtensionStore\Controller\InAppPurchasesController" public="true">
@@ -46,11 +38,6 @@
             <argument>%swag_extension_store.endpoints%</argument>
             <argument type="service" id="Shopware\Core\Framework\Store\Authentication\StoreRequestOptionsProvider"/>
             <argument type="service" id="shopware.store_client"/>
-        </service>
-
-        <service id="SwagExtensionStore\Services\StoreDataProvider">
-            <argument type="service" id="SwagExtensionStore\Services\StoreClient"/>
-            <argument type="service" id="Shopware\Core\Framework\Store\Services\ExtensionLoader"/>
         </service>
 
         <service id="SwagExtensionStore\Services\InAppPurchasesService">

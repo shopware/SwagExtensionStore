@@ -35,15 +35,15 @@ class LicenseController
         $extensionId = $request->request->get('extensionId');
         $variantId = $request->request->get('variantId');
 
-        if (!is_numeric($extensionId)) {
+        if (!\is_int($extensionId) && !\is_string($extensionId)) {
             throw ExtensionStoreException::invalidExtensionId();
         }
 
-        if (!is_numeric($variantId)) {
+        if (!\is_int($variantId) && !\is_string($variantId)) {
             throw ExtensionStoreException::invalidVariantId();
         }
 
-        $cart = $this->licenseService->createCart((int) $extensionId, (int) $variantId, $context);
+        $cart = $this->licenseService->createCart($extensionId, $variantId, $context);
 
         return new JsonResponse($cart);
     }

@@ -8,7 +8,6 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Store\Exception\StoreApiException;
-use Shopware\Core\Framework\Store\Search\ExtensionCriteria;
 use Shopware\Core\Framework\Store\Struct\CartStruct;
 use Shopware\Core\Framework\Test\Store\StoreClientBehaviour;
 use Shopware\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
@@ -33,49 +32,38 @@ class StoreClientTest extends TestCase
         $this->storeClient = static::getContainer()->get(StoreClient::class);
     }
 
-    public function testListExtensionsException(): void
+    public function testCreateCart(): void
     {
-        $this->setUpFilterRequestHandler(400);
+        $this->setUpCreateCartRequestHandler();
 
-        $this->expectException(StoreApiException::class);
-        $this->storeClient->listExtensions(new ExtensionCriteria(), $this->context);
-    }
+        $cart = $this->storeClient->createCart(12089, 79190, $this->context);
 
-    public function testListListingFiltersException(): void
-    {
-        $this->setUpFilterRequestHandler(400);
-
-        $this->expectException(StoreApiException::class);
-        $this->storeClient->listListingFilters([], $this->context);
-    }
-
-    public function testExtensionDetailException(): void
-    {
-        $this->setUpFilterRequestHandler(400);
-
-        $this->expectException(StoreApiException::class);
-        $this->storeClient->extensionDetail(1337, $this->context);
-    }
-
-    public function testExtensionDetailReviewsException(): void
-    {
-        $this->setUpFilterRequestHandler(400);
-
-        $this->expectException(StoreApiException::class);
-        $this->storeClient->extensionDetailReviews(1337, new ExtensionCriteria(), $this->context);
+        static::assertSame(2577.52, $cart->getGrossPrice());
+        static::assertCount(1, $cart->getPositions());
     }
 
     public function testCreateCartException(): void
     {
-        $this->setUpFilterRequestHandler(400);
+        $this->setUpCreateCartRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
         $this->storeClient->createCart(69, 1337, $this->context);
     }
 
+    public function testOrderCart(): void
+    {
+        $this->setUpExtensionRequestHandler(201);
+
+        try {
+            $this->storeClient->orderCart(new CartStruct(), $this->context);
+        } catch (\Throwable $exception) {
+            static::fail('Expected no exception to be thrown, got: ' . $exception->getMessage());
+        }
+    }
+
     public function testOrderCartException(): void
     {
-        $this->setUpFilterRequestHandler(400);
+        $this->setUpExtensionRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
         $this->storeClient->orderCart(new CartStruct(), $this->context);
@@ -83,19 +71,17 @@ class StoreClientTest extends TestCase
 
     public function testAvailablePaymentMeans(): void
     {
-        $this->setUpFilterRequestHandler();
+        $this->setUpAvailablePaymentMeansRequestHandler();
 
-        $response = $this->storeClient->availablePaymentMeans($this->context);
+        $paymentMeans = $this->storeClient->availablePaymentMeans($this->context);
 
-        static::assertArrayHasKey('filter', $response);
-        static::assertCount(3, $response['filter']);
-        static::assertArrayHasKey('sorting', $response);
-        static::assertCount(5, $response['sorting']['options']);
+        static::assertIsArray($paymentMeans);
+        static::assertCount(2, $paymentMeans);
     }
 
     public function testAvailablePaymentMeansException(): void
     {
-        $this->setUpFilterRequestHandler(400);
+        $this->setUpAvailablePaymentMeansRequestHandler(400);
 
         $this->expectException(StoreApiException::class);
         $this->storeClient->availablePaymentMeans($this->context);
@@ -135,12 +121,36 @@ class StoreClientTest extends TestCase
         static::assertCount(2, $iap);
     }
 
-    private function setUpFilterRequestHandler(int $statusCode = 200): void
+    private function setUpExtensionRequestHandler(int $statusCode = 200): void
     {
         $requestHandler = $this->getStoreRequestHandler();
-        $filterJson = file_get_contents(__DIR__ . '/../_fixtures/responses/filter.json');
-        static::assertIsString($filterJson);
-        $requestHandler->append(new Response($statusCode, [], $filterJson));
+        $requestHandler->append(new Response($statusCode, []));
+    }
+
+    private function setUpCreateCartRequestHandler(int $statusCode = 200): void
+    {
+        $requestHandler = $this->getStoreRequestHandler();
+        if ($statusCode === 200) {
+            $cartJson = file_get_contents(__DIR__ . '/../_fixtures/responses/example-cart.json');
+            static::assertIsString($cartJson);
+            $requestHandler->append(new Response($statusCode, [], $cartJson));
+
+            return;
+        }
+        $requestHandler->append(new Response($statusCode, []));
+    }
+
+    private function setUpAvailablePaymentMeansRequestHandler(int $statusCode = 200): void
+    {
+        $requestHandler = $this->getStoreRequestHandler();
+        if ($statusCode === 200) {
+            $json = file_get_contents(__DIR__ . '/../_fixtures/responses/payment-means.json');
+            static::assertIsString($json);
+            $requestHandler->append(new Response($statusCode, [], $json));
+
+            return;
+        }
+        $requestHandler->append(new Response($statusCode, []));
     }
 
     private function setUpIapRequestHandler(int $statusCode = 200): void

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "type": "paypal",
+    "label": "My PayPal",
+    "default": false
+  },
+  {
+    "id": 2,
+    "type": "creditCard",
+    "label": "My Credit Card",
+    "default": true
+  }
+]
