@@ -49,10 +49,7 @@ export default Shopware.Component.wrapComponentConfig({
         },
 
         showBanner() {
-            return this.isInitialized
-                && this.isSupportedShopwareVersion
-                && !this.isDismissed
-                && this.hasNoOnboardedMerchant;
+            return true;
         },
     },
 
