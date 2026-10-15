@@ -200,7 +200,7 @@ class InAppPurchasesControllerTest extends TestCase
             Response::HTTP_CREATED,
         );
 
-        static::assertEmpty($content);
+        static::assertSame([], $content);
     }
 
     public function testOrderCartWithInvalidItem(): void
