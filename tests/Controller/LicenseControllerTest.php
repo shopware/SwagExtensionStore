@@ -80,7 +80,7 @@ class LicenseControllerTest extends TestCase
         $response = (new LicenseController($service))->orderCart($requestDataBag, Context::createDefaultContext());
 
         static::assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
-        static::assertEmpty($response->getContent());
+        static::assertSame('', $response->getContent());
     }
 
     public function testOrderCartWithEmptyRequestDataBag(): void
