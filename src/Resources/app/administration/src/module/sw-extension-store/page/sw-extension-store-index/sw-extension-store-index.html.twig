@@ -1,10 +1,9 @@
 {% block sw_extension_store_index %}
     <sw-iframe-renderer
         v-if="storeUrl"
+        ref="storeFrame"
         class="sw-extension-store-iframe"
         :src="storeUrl"
         location-id=""
     />
-
-    <sw-extension-store-purchase-confirmation-modal />
 {% endblock %}

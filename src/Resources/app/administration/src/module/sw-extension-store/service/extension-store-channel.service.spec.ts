@@ -1,3 +1,4 @@
+import ExtensionStoreCheckoutService, { type StoreCheckout } from './extension-store-checkout.service';
 import { flushPromises } from '@vue/test-utils';
 import { handle, publish, setExtensions } from '@shopware-ag/meteor-admin-sdk/es/channel';
 import { ExtensionStoreChannelService } from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-channel.service';
@@ -87,21 +88,28 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             currentRoute: { value: { params: {}, query: {} } },
         };
 
-        return new ExtensionStoreChannelService(
+        let storeCheckout!: StoreCheckout;
+        new ExtensionStoreCheckoutService(
             extensionStoreActionService as never,
             shopwareExtensionService as never,
             extensionStoreLicensesService as never,
             extensionHelperService as never,
             cacheApiService as never,
-            router as never,
             extensionStorePreferencesService as never,
+            { can: () => true },
+            (callback) => { storeCheckout = callback; },
+        );
+        return new ExtensionStoreChannelService(
+            extensionStoreActionService as never,
+            shopwareExtensionService as never,
+            storeCheckout,
         );
     };
 
     /** Runs the handshake through the channel and returns the context the iframe receives. */
     const performHandshake = async (bundles?: Record<string, unknown>) => {
         Shopware.Context.app.config.bundles = bundles as never;
-        service.register();
+        service.register(() => ({ contentWindow: channelWindow }) as HTMLIFrameElement, router as never);
 
         const channelHandler = handleMock.mock.calls[0][1] as (
             data: unknown,
@@ -114,6 +122,7 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
                 _event_: {
                     source: channelWindow,
                     origin: STORE_ORIGIN,
+                    isTrusted: true,
                 } as MessageEvent<string>,
             },
         );
@@ -121,12 +130,15 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
 
     /** Runs the purchase action through the channel and returns the confirm callback result. */
     const performPurchase = async () => {
-        service.register();
+        service.register(() => ({ contentWindow: channelWindow }) as HTMLIFrameElement, router as never);
 
         await performHandshake();
 
-        const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<unknown>;
+        const channelHandler = (data: unknown) => handleMock.mock.calls[0][1](data as never, {
+            _event_: { source: channelWindow, origin: STORE_ORIGIN, isTrusted: true },
+        } as never) as unknown;
         await channelHandler(purchaseActionData);
+        await flushPromises();
 
         const onConfirm = extensionStorePurchaseConfirmationStore().onConfirm;
         expect(onConfirm).not.toBeNull();
@@ -199,7 +211,7 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             const addEventListenerSpy = jest.spyOn(window, 'addEventListener');
             const removeEventListenerSpy = jest.spyOn(window, 'removeEventListener');
 
-            service.register();
+            service.register(() => ({ contentWindow: channelWindow }) as HTMLIFrameElement, router as never);
 
             const popstateListener = addEventListenerSpy.mock.calls
                 .find(([eventName]) => eventName === 'popstate')?.[1];
@@ -213,9 +225,11 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
 
     describe('routeTo', () => {
         it('should navigate to the named route with its parameters', async () => {
-            service.register();
+            await performHandshake();
 
-            const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<unknown>;
+            const channelHandler = (data: unknown) => handleMock.mock.calls[0][1](data as never, {
+                _event_: { source: channelWindow, origin: STORE_ORIGIN, isTrusted: true },
+            } as never) as unknown;
             await channelHandler({
                 action: 'routeTo',
                 name: 'sw.extension.store.detail',
@@ -229,9 +243,11 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
         });
 
         it('should ignore route parameters with non-string values', async () => {
-            service.register();
+            await performHandshake();
 
-            const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<unknown>;
+            const channelHandler = (data: unknown) => handleMock.mock.calls[0][1](data as never, {
+                _event_: { source: channelWindow, origin: STORE_ORIGIN, isTrusted: true },
+            } as never) as unknown;
             await channelHandler({
                 action: 'routeTo',
                 name: 'sw.extension.store.detail',
@@ -288,10 +304,13 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
                 finishInstallation = () => resolve(undefined);
             }));
 
-            service.register();
+            service.register(() => ({ contentWindow: channelWindow }) as HTMLIFrameElement, router as never);
             await performHandshake();
-            const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<unknown>;
+            const channelHandler = (data: unknown) => handleMock.mock.calls[0][1](data as never, {
+                _event_: { source: channelWindow, origin: STORE_ORIGIN, isTrusted: true },
+            } as never) as unknown;
             await channelHandler(purchaseActionData);
+            await flushPromises();
 
             const store = extensionStorePurchaseConfirmationStore();
             const confirmed = store.confirm();
@@ -369,9 +388,12 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
         });
 
         it('should not request a reload when the extension is incompatible', async () => {
-            service.register();
-            const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<unknown>;
+            await performHandshake();
+            const channelHandler = (data: unknown) => handleMock.mock.calls[0][1](data as never, {
+                _event_: { source: channelWindow, origin: STORE_ORIGIN, isTrusted: true },
+            } as never) as unknown;
             await channelHandler({ ...purchaseActionData, isCompatible: false });
+            await flushPromises();
 
             const result = await extensionStorePurchaseConfirmationStore().onConfirm!();
 

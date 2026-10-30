@@ -273,6 +273,36 @@ describe('SwagExtensionStore/module/sw-extension-store/store/extension-store-pur
         });
     });
 
+    describe('checkout isolation', () => {
+        it('submits only once even when confirmation is triggered twice', async () => {
+            const store = extensionStorePurchaseConfirmationStore();
+            const { finishPurchase } = openModalWithPendingPurchase({ success: true });
+            const onConfirm = jest.fn(store.onConfirm!);
+            store.onConfirm = onConfirm;
+
+            const first = store.confirm();
+            await store.confirm();
+            expect(onConfirm).toHaveBeenCalledTimes(1);
+            finishPurchase();
+            await first;
+        });
+
+        it('does not overwrite a new modal when a detached purchase finishes', async () => {
+            const store = extensionStorePurchaseConfirmationStore();
+            const { finishPurchase } = openModalWithPendingPurchase({ success: true });
+            const first = store.confirm();
+            store.cancel();
+            openModalWith({ success: false });
+            finishPurchase();
+            await first;
+
+            expect(store.isOpen).toBe(true);
+            expect(store.isSuccessful).toBe(false);
+            expect(store.isSubmitted).toBe(false);
+            expect(store.onConfirm).not.toBeNull();
+        });
+    });
+
     describe('cancel', () => {
         it('should report the cancellation when the purchase was not confirmed yet', () => {
             const store = extensionStorePurchaseConfirmationStore();

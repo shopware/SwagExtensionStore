@@ -36,7 +36,7 @@ class StoreClient
     ) {
     }
 
-    public function createCart(int|string $extensionId, int|string $variantId, Context $context): CartStruct
+    public function createCart(int|string $extensionId, int|string $variantId, Context $context, ?string $sourceExtensionName = null): CartStruct
     {
         try {
             $response = $this->client->request(
@@ -53,6 +53,7 @@ class StoreClient
                             ],
                         ],
                         'identifierBase' => 'storeUuid',
+                        ...($sourceExtensionName !== null ? ['sourceExtensionName' => $sourceExtensionName] : []),
                     ],
                 ],
             );

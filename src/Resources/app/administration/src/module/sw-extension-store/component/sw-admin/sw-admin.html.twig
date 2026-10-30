@@ -1,0 +1,5 @@
+{% block sw_admin %}
+    {% parent %}
+
+    <sw-extension-store-purchase-confirmation-modal v-if="isLoggedIn" />
+{% endblock %}

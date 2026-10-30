@@ -39,6 +39,11 @@ class ExtensionStoreException extends HttpException
         );
     }
 
+    public static function invalidSourceExtension(): self
+    {
+        return new self(Response::HTTP_BAD_REQUEST, 'EXTENSION_STORE__INVALID_SOURCE_EXTENSION', 'sourceExtensionName must be a string.');
+    }
+
     public static function invalidInAppPurchase(): self
     {
         return new self(

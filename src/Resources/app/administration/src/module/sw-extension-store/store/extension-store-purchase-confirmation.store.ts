@@ -17,7 +17,7 @@ export type PurchaseConfirmationOnCancelCallback = () => void;
 export type PurchaseConfirmationModalData = {
     cart: ExtensionStoreBasket;
     paymentMeans: ExtensionStorePaymentMean[];
-    isCompatible: boolean;
+    isCompatible: boolean | null;
     onConfirm: PurchaseConfirmationOnConfirmCallback;
     onCancel: PurchaseConfirmationOnCancelCallback;
 };
@@ -36,7 +36,7 @@ type PurchaseConfirmationState = {
     isSuccessful: boolean;
     cartData: ExtensionStoreBasket | null;
     paymentMeansData: ExtensionStorePaymentMean[] | null;
-    isCompatible: boolean;
+    isCompatible: boolean | null;
     onConfirm: PurchaseConfirmationOnConfirmCallback | null;
     onCancel: PurchaseConfirmationOnCancelCallback | null;
     errorTitle: string | null;
@@ -140,7 +140,7 @@ export default Shopware.Store.register('extensionStorePurchaseConfirmation', {
         },
 
         async confirm(): Promise<void> {
-            if (!this.onConfirm) {
+            if (!this.onConfirm || this.isSubmitted) {
                 return;
             }
 
@@ -158,17 +158,29 @@ export default Shopware.Store.register('extensionStorePurchaseConfirmation', {
                 success: false,
             }));
 
-            this.isSuccessful = result.success;
             let trackingDispatched: Promise<void>;
-            if (this.isSuccessful) {
+            if (result.success) {
+                trackingDispatched = trackExtensionStorePurchaseEvent(cartData, 'successful');
+            } else {
+                trackingDispatched = trackExtensionStorePurchaseEvent(cartData, 'failed');
+            }
+
+            const ownsModal = this.isOpen && this.purchaseId === purchaseId;
+            if (!ownsModal) {
+                if (result.success && result.requiresReload) {
+                    notifyReloadRequired(cartData);
+                }
+                return;
+            }
+
+            this.isSuccessful = result.success;
+            if (result.success) {
                 this.onCancel = null;
                 this.onConfirm = null;
-                trackingDispatched = trackExtensionStorePurchaseEvent(cartData, 'successful');
             } else {
                 this.errorTitle = result.title ?? null;
                 this.errorDescription = result.description ?? null;
                 this.errorDocumentationLink = result.documentationLink ?? null;
-                trackingDispatched = trackExtensionStorePurchaseEvent(cartData, 'failed');
             }
 
             if (this.isSuccessful && result.requiresReload) {

@@ -22,7 +22,10 @@ export default {
 
     created() {
         trackExtensionStoreEvent('extension_store_entered');
-        this.extensionStoreChannelService.register();
+        this.extensionStoreChannelService.register(
+            () => this.$refs.storeFrame?.$el?.querySelector('iframe') ?? null,
+            this.$router,
+        );
     },
 
     beforeUnmount() {

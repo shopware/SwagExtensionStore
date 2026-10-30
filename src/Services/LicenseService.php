@@ -24,9 +24,9 @@ class LicenseService
         $this->client = $client;
     }
 
-    public function createCart(int|string $extensionId, int|string $variantId, Context $context): CartStruct
+    public function createCart(int|string $extensionId, int|string $variantId, Context $context, ?string $sourceExtensionName = null): CartStruct
     {
-        $cart = $this->client->createCart($extensionId, $variantId, $context);
+        $cart = $this->client->createCart($extensionId, $variantId, $context, $sourceExtensionName);
 
         return $this->ensureCartStruct($cart);
     }

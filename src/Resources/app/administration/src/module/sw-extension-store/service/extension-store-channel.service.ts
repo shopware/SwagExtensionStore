@@ -1,19 +1,13 @@
 import { handle, publish, setExtensions } from '@shopware-ag/meteor-admin-sdk/es/channel';
 import type ExtensionStoreActionService from 'src/module/sw-extension/service/extension-store-action.service';
 import type ShopwareExtensionService from 'src/module/sw-extension/service/shopware-extension.service';
-import type ExtensionStoreLicensesService from './extension-store-licenses.service';
+import type { StoreCheckout } from './extension-store-checkout.service';
 import type { LocationQuery, RouteLocationNormalizedGeneric, RouteLocationNormalizedLoadedGeneric, Router } from 'vue-router';
 import type { ShopwareMessageTypes } from '@shopware-ag/meteor-admin-sdk/es/message-types';
-import extensionStorePurchaseConfirmationStore, { type PurchaseConfirmationOnConfirmCallbackResult } from '../store/extension-store-purchase-confirmation.store';
-import type ExtensionHelperService from 'src/app/service/extension-helper.service';
-import type CacheApiService from 'src/core/service/api/cache.api.service';
-import type { ExtensionStoreBasket, ExtensionStorePaymentMean } from '../types/extension-store-basket.types';
 import extensionStoreContextStore
     from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store';
 import { trackExtensionStoreEvent } from 'SwagExtensionStore/util/telemetry';
 import type { TrackableType } from 'src/core/telemetry/types';
-import type ExtensionStorePreferencesService
-    from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-preferences.service';
 import type { UserInfo } from 'src/core/service/api/store.api.service';
 import { hasDemoShopBundle } from 'SwagExtensionStore/util/demo-shop';
 
@@ -103,56 +97,54 @@ type TrackActionData = StoreChannelActionData & {
     [key: string]: TrackableType;
 };
 
-type StoreApiErrorItem = {
-    title?: string;
-    description?: string;
-    meta?: {
-        documentationLink?: string;
-    };
-};
-
-type StoreApiErrorResponse = {
-    response?: {
-        data?: {
-            errors?: StoreApiErrorItem[];
-        };
-    };
-};
-
 export class ExtensionStoreChannelService {
+    #storeCheckout: StoreCheckout;
+    #channelSource?: StoreChannelSource;
+    #getFrame?: () => HTMLIFrameElement | null;
+
     private removeRouterAfterEachHook?: () => void;
     private unsubscribeFunction?: () => void;
     private registeredAt?: number;
-    private channelSource?: StoreChannelSource;
+    private router!: Router;
     private readonly onPopState = (): void => this.publishRouterSync();
 
     constructor(
         private readonly extensionStoreActionService: ExtensionStoreActionService,
         private readonly shopwareExtensionService: ShopwareExtensionService,
-        private readonly extensionStoreLicensesService: ExtensionStoreLicensesService,
-        private readonly extensionHelperService: ExtensionHelperService,
-        private readonly cacheApiService: CacheApiService,
-        private readonly router: Router,
-        private readonly extensionStorePreferencesService: ExtensionStorePreferencesService,
+        storeCheckout: StoreCheckout,
     ) {
+        this.#storeCheckout = storeCheckout;
     }
 
-    register(): void {
+    register(getFrame: () => HTMLIFrameElement | null, router: Router): void {
         if (this.unsubscribeFunction) {
             return;
         }
 
+        this.router = router;
+        this.#getFrame = getFrame;
         this.registeredAt = performance.now();
 
         this.unsubscribeFunction = handle(
             'swag-extension-store-channel' as keyof ShopwareMessageTypes,
             (data: unknown, additionalInformation) => {
                 try {
-                    if (this.isHandshakeActionData(data)) {
-                        this.registerChannelSource(additionalInformation._event_, data.version);
+                    const event = additionalInformation._event_;
+                    const frame = this.#getFrame?.();
+
+                    if (!frame || !event.isTrusted || event.source !== frame.contentWindow || !this.isStoreOrigin(event.origin)) {
+                        return { success: false };
                     }
 
-                    return this.handleAction(data);
+                    if (this.isHandshakeActionData(data)) {
+                        return this.#connect(data, event);
+                    }
+
+                    if (!this.#channelSource || this.#channelSource.source !== event.source || this.#channelSource.origin !== event.origin) {
+                        return { success: false };
+                    }
+
+                    return this.#handleAction(data);
                 } catch (err) {
                     return {
                         success: false,
@@ -168,6 +160,7 @@ export class ExtensionStoreChannelService {
 
     unregister(): void {
         extensionStoreContextStore().resetSkyBridgeStoreVersion();
+        this.#channelSource = undefined;
 
         this.unsubscribeFunction?.();
         this.unsubscribeFunction = undefined;
@@ -178,7 +171,7 @@ export class ExtensionStoreChannelService {
         window.removeEventListener('popstate', this.onPopState);
 
         this.registeredAt = undefined;
-        this.channelSource = undefined;
+        this.#getFrame = undefined;
     }
 
     private publishReturnToExtensionStore(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedLoadedGeneric): void {
@@ -193,7 +186,7 @@ export class ExtensionStoreChannelService {
         this.publishRouterSync();
     }
 
-    private handleAction(data: unknown): Promise<StoreContext | PurchaseResponse> | void {
+    #handleAction(data: unknown): Promise<StoreContext | PurchaseResponse> | void {
         if (!this.isStoreChannelActionData(data)) {
             return;
         }
@@ -212,7 +205,7 @@ export class ExtensionStoreChannelService {
                 if (!this.isPurchaseActionData(data)) {
                     return;
                 }
-                return this.handlePurchase(data);
+                return this.#handlePurchase(data);
             case 'routerUpdate':
                 if (!this.isRouterUpdateActionData(data)) {
                     return;
@@ -346,11 +339,6 @@ export class ExtensionStoreChannelService {
         const currentRoute = this.getCurrentRoute();
         const currentRouteQuery = this.getCurrentRouteQuery();
 
-        extensionStoreContextStore().updateSkyBridgeStoreVersion(data.version);
-        trackExtensionStoreEvent('extension_store_connected', {
-            loading_duration_ms: this.registeredAt ? performance.now() - this.registeredAt : -1,
-        });
-
         return {
             shopwareVersion: shopwareVersion,
             owningExtensions: owningExtensions,
@@ -370,42 +358,29 @@ export class ExtensionStoreChannelService {
         this.router.push({ name: data.name, params: data.params });
     }
 
-    private async handlePurchase(data: PurchaseActionData): Promise<PurchaseResponse> {
-        try {
-            const [cart, paymentMeans] = await Promise.all([
-                (await this.extensionStoreLicensesService.newCart(
-                    data.productId,
-                    data.variantId,
-                )).data as ExtensionStoreBasket,
-                (await this.extensionStoreLicensesService.getPaymentMeans()).data as ExtensionStorePaymentMean[],
-            ]);
+    #handlePurchase(data: PurchaseActionData): Promise<PurchaseResponse> {
+        const source = this.#channelSource;
+        void this.#storeCheckout({
+            extensionId: data.productId,
+            variantId: data.variantId,
+        }, data.isCompatible).then((result) => {
+            this.publishPurchaseResult(
+                data.sessionToken,
+                result.status === 'purchased',
+                result.status === 'purchased' ? result.extensionVersion : undefined,
+                source,
+            );
+        });
 
-            extensionStorePurchaseConfirmationStore().openModal({
-                cart,
-                paymentMeans,
-                isCompatible: data.isCompatible,
-                onConfirm: () => this.performPurchase(data, cart),
-                onCancel: () => this.publishPurchaseResult(data.sessionToken, false),
-            });
-        } catch (error) {
-            const errorDetails = this.getErrorDetails(error);
-            extensionStorePurchaseConfirmationStore().openErrorModal(errorDetails.title, errorDetails.description, errorDetails.documentationLink, () => {
-                this.publishPurchaseResult(data.sessionToken, false);
-            });
-        }
-
-        // Respond immediately to the iframe so the channel does not time out.
-        // The final purchase result is communicated via a separate published message.
-        return {
-            sessionToken: data.sessionToken,
-            success: true,
-        };
+        // The final result is published separately so the iframe channel does not time out.
+        return Promise.resolve({ sessionToken: data.sessionToken, success: true });
     }
 
     private publishPurchaseResult(
         sessionToken: string,
         success: boolean,
         extensionVersion?: string | null,
+        source?: StoreChannelSource,
     ): void {
         const resultData: PurchaseResultData = {
             action: 'purchaseResult',
@@ -414,7 +389,9 @@ export class ExtensionStoreChannelService {
             ...(extensionVersion !== undefined ? { extensionVersion } : {}),
         };
 
-        this.publishToExtensionStore(resultData);
+        if (source && this.#channelSource === source) {
+            this.publishToExtensionStore(resultData);
+        }
     }
 
     private publishRouterSync(): void {
@@ -429,7 +406,21 @@ export class ExtensionStoreChannelService {
         this.publishToExtensionStore(data);
     }
 
-    private registerChannelSource(event: MessageEvent<string>, sdkVersion: string): void {
+    async #connect(data: HandshakeActionData, event: MessageEvent<string>): Promise<StoreContext | { success: false }> {
+        this.#channelSource = undefined;
+        try {
+            const context = await this.handleHandshake(data);
+            if (!this.unsubscribeFunction || this.#getFrame?.()?.contentWindow !== event.source || !this.isStoreOrigin(event.origin)) {
+                return { success: false };
+            }
+            this.#registerChannelSource(event, data.version);
+            return context;
+        } catch {
+            return { success: false };
+        }
+    }
+
+    #registerChannelSource(event: MessageEvent<string>, sdkVersion: string): void {
         if (!event.source || !this.isStoreOrigin(event.origin)) {
             return;
         }
@@ -443,11 +434,15 @@ export class ExtensionStoreChannelService {
             },
         });
 
-        this.channelSource = {
+        this.#channelSource = {
             source,
             origin: event.origin,
             sdkVersion,
         };
+        extensionStoreContextStore().updateSkyBridgeStoreVersion(sdkVersion);
+        trackExtensionStoreEvent('extension_store_connected', {
+            loading_duration_ms: this.registeredAt ? performance.now() - this.registeredAt : -1,
+        });
     }
 
     private isStoreOrigin(origin: string): boolean {
@@ -461,14 +456,14 @@ export class ExtensionStoreChannelService {
     }
 
     private publishToExtensionStore(data: PurchaseResultData | RouterSyncData): void {
-        if (!this.channelSource) {
+        if (!this.#channelSource) {
             return;
         }
 
         publish(
             'swag-extension-store-channel' as keyof ShopwareMessageTypes,
             data,
-            [this.channelSource],
+            [this.#channelSource],
         );
     }
 
@@ -531,49 +526,6 @@ export class ExtensionStoreChannelService {
         trackExtensionStoreEvent(eventName, data);
     }
 
-    private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<PurchaseConfirmationOnConfirmCallbackResult> {
-        extensionStorePurchaseConfirmationStore().checkoutStep = 'order';
-
-        try {
-            await this.extensionStoreLicensesService.orderCart(cartData);
-        } catch (e) {
-            const errorDetails = this.getErrorDetails(e);
-            this.publishPurchaseResult(data.sessionToken, false);
-            return { success: false, ...errorDetails };
-        }
-
-        extensionStorePurchaseConfirmationStore().checkoutStep = 'update';
-        await this.updateExtensionData();
-
-        let isInstalled = false;
-        if (data.isCompatible && this.extensionStorePreferencesService.state.installAfterPurchase) {
-            extensionStorePurchaseConfirmationStore().checkoutStep = 'install';
-            isInstalled = await this.installExtension(cartData);
-        }
-
-        let extensionVersion: string | null = null;
-        if (isInstalled) {
-            extensionStorePurchaseConfirmationStore().checkoutStep = 'reload';
-            extensionVersion = await this.getInstalledExtensionVersion(cartData.positions[0].extension.name);
-        }
-
-        this.publishPurchaseResult(data.sessionToken, true, extensionVersion);
-
-        return { success: true, requiresReload: isInstalled };
-    }
-
-    private async getInstalledExtensionVersion(extensionName: string): Promise<string | null> {
-        try {
-            const extensions = await this.extensionStoreActionService.getMyExtensions();
-
-            return extensions.find((extension) => extension.name === extensionName)?.version ?? null;
-        } catch (error) {
-            console.error('Failed to get installed extension version after purchase', error);
-
-            return null;
-        }
-    }
-
     private getCurrentRoute(): string {
         return Object.values(this.router.currentRoute.value.params.pathMatch || {}).join('/');
     }
@@ -582,74 +534,11 @@ export class ExtensionStoreChannelService {
         return this.router.currentRoute.value.query || {};
     }
 
-    private getErrorDetails(error: unknown): { title: string; description: string; documentationLink: string } {
-        const maybeError = error as StoreApiErrorResponse;
-        const errorDetails = maybeError.response?.data?.errors?.at(-1);
-
-        return {
-            title: errorDetails?.title ?? '',
-            description: errorDetails?.description ?? '',
-            documentationLink: errorDetails?.meta?.documentationLink ?? '',
-        };
-    }
-
     private getNavigateToExtension(): string | number | undefined {
         const state = window.history.state as unknown;
 
         return state && typeof state === 'object' && 'extensionIdentifier' in state
             ? state.extensionIdentifier as string | number
             : undefined;
-    }
-
-    private async updateExtensionData(): Promise<void> {
-        try {
-            await this.shopwareExtensionService.updateExtensionData();
-        } catch (error) {
-            console.error('Failed to update extension data', error);
-        }
-    }
-
-    /**
-     * A failing cache clear must not be reported as a failed installation, the extension is
-     * installed at this point either way and the following reload picks it up.
-     */
-    private async clearCache(): Promise<void> {
-        try {
-            await this.cacheApiService.clear();
-        } catch (error) {
-            console.error('Failed to clear the cache after installing an extension', error);
-        }
-    }
-
-    private async installExtension(cartData: ExtensionStoreBasket): Promise<boolean> {
-        const extension = cartData.positions[0].extension;
-        const snippetService = Shopware.Snippet as unknown as {
-            tc: (key: string, params?: Record<string, string>) => string;
-        };
-
-        try {
-            await this.extensionHelperService.downloadAndActivateExtension(extension.name, extension.type);
-            await this.clearCache();
-
-            Shopware.Store.get('notification').createNotification({
-                variant: 'positive',
-                title: snippetService.tc('sw-extension-store.installation.successTitle'),
-                message: snippetService.tc('sw-extension-store.installation.successMessage', { name: String(extension.name) }),
-                growl: true,
-            });
-
-            return true;
-        } catch (error) {
-            console.error('Failed to install extension after purchase', error);
-
-            Shopware.Store.get('notification').createNotification({
-                variant: 'critical',
-                title: snippetService.tc('sw-extension-store.installation.errorTitle'),
-                message: snippetService.tc('sw-extension-store.installation.errorMessage', { name: String(extension.name) }),
-                growl: true,
-            });
-
-            return false;
-        }
     }
 }

@@ -43,7 +43,8 @@ class LicenseController
             throw ExtensionStoreException::invalidVariantId();
         }
 
-        $cart = $this->licenseService->createCart($extensionId, $variantId, $context);
+        $source = $this->sourceName($request->request->all());
+        $cart = $this->licenseService->createCart($extensionId, $variantId, $context, $source);
 
         return new JsonResponse($cart);
     }
@@ -51,8 +52,10 @@ class LicenseController
     #[Route('/api/_action/extension-store/cart/order', name: 'api.extension.order', methods: ['POST'])]
     public function orderCart(RequestDataBag $bag, Context $context): Response
     {
+        $data = $bag->all();
+        unset($data['sourceExtensionName']);
         try {
-            $cart = CartStruct::fromArray($bag->all());
+            $cart = CartStruct::fromArray($data);
         } catch (\TypeError $e) {
             throw ExtensionStoreException::invalidExtensionCart($e->getMessage());
         }
@@ -66,5 +69,22 @@ class LicenseController
     public function availablePaymentMeans(Context $context): Response
     {
         return new JsonResponse($this->licenseService->availablePaymentMeans($context));
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function sourceName(array $data): ?string
+    {
+        if (!\array_key_exists('sourceExtensionName', $data)) {
+            return null;
+        }
+
+        $name = $data['sourceExtensionName'];
+        if (!\is_string($name)) {
+            throw ExtensionStoreException::invalidSourceExtension();
+        }
+
+        return $name;
     }
 }
