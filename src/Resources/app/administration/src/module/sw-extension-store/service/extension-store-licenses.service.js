@@ -4,10 +4,10 @@ export default class ExtensionLicenseService extends Shopware.Classes.ApiService
         this.name = 'extensionStoreLicensesService';
     }
 
-    newCart(extensionId, variantId) {
+    newCart(extensionId, variantId, sourceExtensionName) {
         return this.httpClient.post(
             `/_action/${this.apiEndpoint}/cart/new`,
-            { extensionId, variantId },
+            { extensionId, variantId, ...(sourceExtensionName !== undefined ? { sourceExtensionName } : {}) },
             { headers: this.basicHeaders(), version: 3 },
         );
     }

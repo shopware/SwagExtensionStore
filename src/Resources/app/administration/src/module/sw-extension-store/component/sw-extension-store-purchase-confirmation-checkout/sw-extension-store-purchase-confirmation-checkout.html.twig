@@ -86,7 +86,7 @@
         {% endblock %}
 
         {% block sw_extension_store_purchase_confirmation_checkout_install %}
-        <div class="sw-extension-store-purchase-confirmation__checkout-install">
+        <div v-if="isCompatible !== null" class="sw-extension-store-purchase-confirmation__checkout-install">
             {% block sw_extension_store_purchase_confirmation_checkout_install_title %}
             <div class="sw-extension-store-purchase-confirmation__checkout-install-title">
                 {{ $t('sw-extension-store.purchase-confirmation.checkout.install.title') }}

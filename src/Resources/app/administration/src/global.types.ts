@@ -1,3 +1,4 @@
+import type ExtensionStoreCheckoutService from './module/sw-extension-store/service/extension-store-checkout.service';
 import type { PropType as TPropType } from 'vue';
 import type InAppPurchasesService from './module/sw-in-app-purchases/service/in-app-purchases.service';
 import type { AxiosError } from 'axios';
@@ -12,6 +13,7 @@ declare global {
 
     interface ServiceContainer {
         inAppPurchasesService: InAppPurchasesService;
+        extensionStoreCheckoutService: ExtensionStoreCheckoutService;
         extensionStoreChannelService: ExtensionStoreChannelService;
         extensionStorePreferencesService: ExtensionStorePreferencesService;
     }

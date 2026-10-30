@@ -1,3 +1,4 @@
+import ExtensionStoreCheckoutService from './service/extension-store-checkout.service';
 import ExtensionLicenseService from './service/extension-store-licenses.service';
 import {
     ExtensionStoreChannelService,
@@ -13,17 +14,37 @@ Shopware.Component.register('sw-extension-store-purchase-confirmation-modal', ()
 Shopware.Component.register('sw-extension-store-purchase-confirmation-permissions', () => import('./component/sw-extension-store-purchase-confirmation-permissions'));
 Shopware.Component.register('sw-extension-store-in-app-purchases-listing-modal', () => import('./component/sw-extension-store-in-app-purchases-listing-modal'));
 
-Shopware.Application.addServiceProvider('extensionStoreChannelService', () => {
-    return new ExtensionStoreChannelService(
+// The Store capability stays in this module's closure, outside the registered checkout API.
+let checkoutServices;
+const getCheckoutServices = () => {
+    if (checkoutServices) {
+        return checkoutServices;
+    }
+
+    let storeCheckout;
+    const checkout = new ExtensionStoreCheckoutService(
         Shopware.Service('extensionStoreActionService'),
         Shopware.Service('shopwareExtensionService'),
         Shopware.Service('extensionStoreLicensesService'),
         Shopware.Service('extensionHelperService'),
         Shopware.Service('cacheApiService'),
-        Shopware.Application.view.router,
         Shopware.Service('extensionStorePreferencesService'),
+        Shopware.Service('acl'),
+        (callback) => { storeCheckout = callback; },
     );
-});
+    const channel = new ExtensionStoreChannelService(
+        Shopware.Service('extensionStoreActionService'),
+        Shopware.Service('shopwareExtensionService'),
+        storeCheckout,
+    );
+    checkoutServices = { checkout, channel };
+    return checkoutServices;
+};
+
+Shopware.Application.addServiceProvider('extensionStoreChannelService', () => getCheckoutServices().channel);
+Shopware.Application.addServiceProvider('extensionStoreCheckoutService', () => getCheckoutServices().checkout);
+
+Shopware.Component.override('sw-admin', () => import('./component/sw-admin'));
 
 Shopware.Application.addServiceProvider('extensionStoreLicensesService', () => {
     return new ExtensionLicenseService(
