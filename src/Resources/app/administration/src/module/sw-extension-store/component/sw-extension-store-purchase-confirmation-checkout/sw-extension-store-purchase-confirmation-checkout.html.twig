@@ -125,9 +125,10 @@
             <div class="sw-extension-store-purchase-confirmation__checkout-toc-checkboxes">
                 <div class="sw-extension-store-purchase-confirmation__checkout-toc-checkboxes-item">
                     <mt-checkbox
+                        v-model="tocAccepted"
                         :disabled="isLoading"
-                        :model-value="tocAccepted"
-                        @update:model-value="onTocAcceptedChange"
+                        :checked="tocAccepted"
+                        @update:checked="onTocAcceptedChange"
                     >
                         <template #label>
                             <i18n-t keypath="sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.gtc.text" tag="span">
@@ -148,9 +149,10 @@
 
                 <div v-if="extensionHasPermissionsOrDomains" class="sw-extension-store-purchase-confirmation__checkout-toc-checkboxes-item">
                     <mt-checkbox
+                        v-model="permissionsAccepted"
                         :disabled="isLoading"
-                        :model-value="permissionsAccepted"
-                        @update:model-value="onPermissionsAcceptedChange"
+                        :checked="permissionsAccepted"
+                        @update:checked="onPermissionsAcceptedChange"
                     >
                         <template #label>
                             {{ $t('sw-extension-store.purchase-confirmation.checkout.toc.checkboxes.permissions.text') }}

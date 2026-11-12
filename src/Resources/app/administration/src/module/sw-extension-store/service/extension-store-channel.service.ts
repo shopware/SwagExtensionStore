@@ -16,8 +16,9 @@ import type ExtensionStorePreferencesService
     from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-preferences.service';
 import type { UserInfo } from 'src/core/service/api/store.api.service';
 import { hasDemoShopBundle } from 'SwagExtensionStore/util/demo-shop';
+import { pageReload } from 'SwagExtensionStore/util/page-reload';
 
-type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent';
+type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent' | 'updateExtensionStore';
 
 type StoreChannelActionData = {
     action: StoreChannelAction;
@@ -63,6 +64,7 @@ type StoreContextOwnedExtension = {
 
 type StoreContext = {
     shopwareVersion: string;
+    extensionStoreVersion: string;
     owningExtensions: StoreContextOwnedExtension[];
     sessionToken: string;
     language: string;
@@ -193,7 +195,7 @@ export class ExtensionStoreChannelService {
         this.publishRouterSync();
     }
 
-    private handleAction(data: unknown): Promise<StoreContext | PurchaseResponse> | void {
+    private handleAction(data: unknown): Promise<StoreContext | PurchaseResponse | void> | void {
         if (!this.isStoreChannelActionData(data)) {
             return;
         }
@@ -228,6 +230,8 @@ export class ExtensionStoreChannelService {
                     return;
                 }
                 return this.handleTrack(data);
+            case 'updateExtensionStore':
+                return this.handleUpdateExtensionStore();
         }
     }
 
@@ -353,6 +357,7 @@ export class ExtensionStoreChannelService {
 
         return {
             shopwareVersion: shopwareVersion,
+            extensionStoreVersion: __SWAG_EXTENSION_STORE_VERSION__,
             owningExtensions: owningExtensions,
             sessionToken: data.sessionToken,
             language: language,
@@ -531,6 +536,28 @@ export class ExtensionStoreChannelService {
         trackExtensionStoreEvent(eventName, data);
     }
 
+    private async handleUpdateExtensionStore(): Promise<void> {
+        try {
+            await this.extensionStoreActionService.downloadExtension('SwagExtensionStore');
+            await this.shopwareExtensionService.updateExtension('SwagExtensionStore', 'plugin');
+            await this.cacheApiService.clear();
+
+            pageReload.reload();
+        } catch (e) {
+            Shopware.Utils.debug.error('extension-store-channel', e);
+
+            const snippetService = Shopware.Snippet as unknown as {
+                t: (key: string) => string;
+            };
+
+            Shopware.Store.get('notification').createNotification({
+                variant: 'critical',
+                growl: true,
+                message: snippetService.t('global.notification.unspecifiedSaveErrorMessage'),
+            });
+        }
+    }
+
     private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<PurchaseConfirmationOnConfirmCallbackResult> {
         extensionStorePurchaseConfirmationStore().checkoutStep = 'order';
 
@@ -624,7 +651,7 @@ export class ExtensionStoreChannelService {
     private async installExtension(cartData: ExtensionStoreBasket): Promise<boolean> {
         const extension = cartData.positions[0].extension;
         const snippetService = Shopware.Snippet as unknown as {
-            tc: (key: string, params?: Record<string, string>) => string;
+            t: (key: string, params?: Record<string, string>) => string;
         };
 
         try {
@@ -633,8 +660,8 @@ export class ExtensionStoreChannelService {
 
             Shopware.Store.get('notification').createNotification({
                 variant: 'positive',
-                title: snippetService.tc('sw-extension-store.installation.successTitle'),
-                message: snippetService.tc('sw-extension-store.installation.successMessage', { name: String(extension.name) }),
+                title: snippetService.t('sw-extension-store.installation.successTitle'),
+                message: snippetService.t('sw-extension-store.installation.successMessage', { name: String(extension.name) }),
                 growl: true,
             });
 
@@ -644,8 +671,8 @@ export class ExtensionStoreChannelService {
 
             Shopware.Store.get('notification').createNotification({
                 variant: 'critical',
-                title: snippetService.tc('sw-extension-store.installation.errorTitle'),
-                message: snippetService.tc('sw-extension-store.installation.errorMessage', { name: String(extension.name) }),
+                title: snippetService.t('sw-extension-store.installation.errorTitle'),
+                message: snippetService.t('sw-extension-store.installation.errorMessage', { name: String(extension.name) }),
                 growl: true,
             });
 
