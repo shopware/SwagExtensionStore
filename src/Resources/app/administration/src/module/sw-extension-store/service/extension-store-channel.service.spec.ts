@@ -4,6 +4,7 @@ import { ExtensionStoreChannelService } from 'SwagExtensionStore/module/sw-exten
 import extensionStoreContextStore from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-context.store';
 import extensionStorePurchaseConfirmationStore from 'SwagExtensionStore/module/sw-extension-store/store/extension-store-purchase-confirmation.store';
 import type { ExtensionStoreBasket } from 'SwagExtensionStore/module/sw-extension-store/types/extension-store-basket.types';
+import { pageReload } from 'SwagExtensionStore/util/page-reload';
 
 jest.mock('@shopware-ag/meteor-admin-sdk/es/channel', () => ({
     handle: jest.fn(() => jest.fn()),
@@ -53,8 +54,8 @@ const purchaseActionData = {
 
 describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-channel.service', () => {
     let service: ExtensionStoreChannelService;
-    let extensionStoreActionService: { getMyExtensions: jest.Mock };
-    let shopwareExtensionService: { checkLogin: jest.Mock; updateExtensionData: jest.Mock };
+    let extensionStoreActionService: { getMyExtensions: jest.Mock; downloadExtension: jest.Mock };
+    let shopwareExtensionService: { checkLogin: jest.Mock; updateExtensionData: jest.Mock; updateExtension: jest.Mock };
     let extensionStoreLicensesService: { newCart: jest.Mock; getPaymentMeans: jest.Mock; orderCart: jest.Mock };
     let extensionHelperService: { downloadAndActivateExtension: jest.Mock };
     let cacheApiService: { clear: jest.Mock };
@@ -66,10 +67,12 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
     const createService = (cart: ExtensionStoreBasket) => {
         extensionStoreActionService = {
             getMyExtensions: jest.fn().mockResolvedValue([{ name: 'SwagExtension', version: '2.1.0' }]),
+            downloadExtension: jest.fn().mockResolvedValue(undefined),
         };
         shopwareExtensionService = {
             checkLogin: jest.fn().mockResolvedValue(undefined),
             updateExtensionData: jest.fn().mockResolvedValue(undefined),
+            updateExtension: jest.fn().mockResolvedValue(undefined),
         };
         extensionStoreLicensesService = {
             newCart: jest.fn().mockResolvedValue({ data: cart }),
@@ -161,6 +164,75 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
     afterEach(() => {
         service.unregister();
         jest.restoreAllMocks();
+    });
+
+    describe('updateExtensionStore', () => {
+        let reloadSpy: jest.SpyInstance;
+        let debugErrorSpy: jest.SpyInstance;
+        let translateSpy: jest.SpyInstance;
+
+        beforeEach(() => {
+            reloadSpy = jest.spyOn(pageReload, 'reload').mockImplementation(() => {});
+            debugErrorSpy = jest.spyOn(Shopware.Utils.debug, 'error').mockImplementation(() => {});
+            const snippetService = Shopware.Snippet as unknown as { t: (key: string) => string };
+            translateSpy = jest.spyOn(snippetService, 't').mockReturnValue('An error occurred.');
+            jest.spyOn(Shopware, 'Snippet', 'get').mockReturnValue(snippetService as never);
+            service.register();
+        });
+
+        it('should download and update the store plugin, then clear the cache and reload', async () => {
+            const calls: string[] = [];
+            extensionStoreActionService.downloadExtension.mockImplementation(() => {
+                calls.push('download');
+                expect(shopwareExtensionService.updateExtension).not.toHaveBeenCalled();
+                return Promise.resolve();
+            });
+            shopwareExtensionService.updateExtension.mockImplementation(() => {
+                calls.push('update');
+                expect(cacheApiService.clear).not.toHaveBeenCalled();
+                return Promise.resolve();
+            });
+            cacheApiService.clear.mockImplementation(() => {
+                calls.push('clear');
+                expect(reloadSpy).not.toHaveBeenCalled();
+                return Promise.resolve();
+            });
+            reloadSpy.mockImplementation(() => calls.push('reload'));
+            const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<void>;
+
+            await channelHandler({ action: 'updateExtensionStore' });
+
+            expect(extensionStoreActionService.downloadExtension).toHaveBeenCalledWith('SwagExtensionStore');
+            expect(shopwareExtensionService.updateExtension).toHaveBeenCalledWith('SwagExtensionStore', 'plugin');
+            expect(calls).toEqual(['download', 'update', 'clear', 'reload']);
+            expect(createNotificationSpy).not.toHaveBeenCalled();
+            expect(debugErrorSpy).not.toHaveBeenCalled();
+        });
+
+        it.each(['download', 'update', 'clear'])('should notify and stop when %s fails', async (step) => {
+            const error = new Error(`${step} failed`);
+            const steps = [
+                extensionStoreActionService.downloadExtension,
+                shopwareExtensionService.updateExtension,
+                cacheApiService.clear,
+            ];
+            const failingStep = ['download', 'update', 'clear'].indexOf(step);
+            steps[failingStep].mockRejectedValue(error);
+            const channelHandler = handleMock.mock.calls[0][1] as (data: unknown) => Promise<void>;
+
+            await expect(channelHandler({ action: 'updateExtensionStore' })).resolves.toBeUndefined();
+
+            steps.slice(failingStep + 1).forEach((nextStep) => expect(nextStep).not.toHaveBeenCalled());
+            expect(reloadSpy).not.toHaveBeenCalled();
+            expect(debugErrorSpy).toHaveBeenCalledWith('extension-store-channel', error);
+            expect(translateSpy).toHaveBeenCalledWith('global.notification.unspecifiedSaveErrorMessage');
+            expect(createNotificationSpy).toHaveBeenCalledTimes(1);
+            expect(createNotificationSpy).toHaveBeenCalledWith({
+                variant: 'critical',
+                growl: true,
+                message: 'An error occurred.',
+            });
+        });
     });
 
     describe('handshake', () => {

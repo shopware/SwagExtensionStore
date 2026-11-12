@@ -16,8 +16,9 @@ import type ExtensionStorePreferencesService
     from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-preferences.service';
 import type { UserInfo } from 'src/core/service/api/store.api.service';
 import { hasDemoShopBundle } from 'SwagExtensionStore/util/demo-shop';
+import { pageReload } from 'SwagExtensionStore/util/page-reload';
 
-type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent';
+type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent' | 'updateExtensionStore';
 
 type StoreChannelActionData = {
     action: StoreChannelAction;
@@ -194,7 +195,7 @@ export class ExtensionStoreChannelService {
         this.publishRouterSync();
     }
 
-    private handleAction(data: unknown): Promise<StoreContext | PurchaseResponse> | void {
+    private handleAction(data: unknown): Promise<StoreContext | PurchaseResponse | void> | void {
         if (!this.isStoreChannelActionData(data)) {
             return;
         }
@@ -229,6 +230,8 @@ export class ExtensionStoreChannelService {
                     return;
                 }
                 return this.handleTrack(data);
+            case 'updateExtensionStore':
+                return this.handleUpdateExtensionStore();
         }
     }
 
@@ -531,6 +534,28 @@ export class ExtensionStoreChannelService {
 
     private handleTrack({ action: _, eventName, ...data }: TrackActionData): void {
         trackExtensionStoreEvent(eventName, data);
+    }
+
+    private async handleUpdateExtensionStore(): Promise<void> {
+        try {
+            await this.extensionStoreActionService.downloadExtension('SwagExtensionStore');
+            await this.shopwareExtensionService.updateExtension('SwagExtensionStore', 'plugin');
+            await this.cacheApiService.clear();
+
+            pageReload.reload();
+        } catch (e) {
+            Shopware.Utils.debug.error('extension-store-channel', e);
+
+            const snippetService = Shopware.Snippet as unknown as {
+                t: (key: string) => string;
+            };
+
+            Shopware.Store.get('notification').createNotification({
+                variant: 'critical',
+                growl: true,
+                message: snippetService.t('global.notification.unspecifiedSaveErrorMessage'),
+            });
+        }
     }
 
     private async performPurchase(data: PurchaseActionData, cartData: ExtensionStoreBasket): Promise<PurchaseConfirmationOnConfirmCallbackResult> {
