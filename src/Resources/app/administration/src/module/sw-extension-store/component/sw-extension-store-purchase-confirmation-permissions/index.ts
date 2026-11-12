@@ -32,19 +32,19 @@ export default Shopware.Component.wrapComponentConfig({
         operations() {
             return [
                 {
-                    label: this.$tc('sw-extension-store.component.sw-extension-permissions-details-modal.operationRead'),
+                    label: this.$t('sw-extension-store.component.sw-extension-permissions-details-modal.operationRead'),
                     operation: 'read',
                 },
                 {
-                    label: this.$tc('sw-extension-store.component.sw-extension-permissions-details-modal.operationUpdate'),
+                    label: this.$t('sw-extension-store.component.sw-extension-permissions-details-modal.operationUpdate'),
                     operation: 'update',
                 },
                 {
-                    label: this.$tc('sw-extension-store.component.sw-extension-permissions-details-modal.operationCreate'),
+                    label: this.$t('sw-extension-store.component.sw-extension-permissions-details-modal.operationCreate'),
                     operation: 'create',
                 },
                 {
-                    label: this.$tc('sw-extension-store.component.sw-extension-permissions-details-modal.operationDelete'),
+                    label: this.$t('sw-extension-store.component.sw-extension-permissions-details-modal.operationDelete'),
                     operation: 'delete',
                 },
             ];
@@ -93,13 +93,13 @@ export default Shopware.Component.wrapComponentConfig({
         categoryLabel(category: string) {
             const translation = `entityCategories.${category}.title`;
 
-            return this.$te(translation) ? this.$tc(translation) : category;
+            return this.$te(translation) ? this.$t(translation) : category;
         },
 
         entityLabel(category: string, entity: string) {
             const translation = `entityCategories.${category}.entities.${entity}`;
 
-            return this.$te(translation) ? this.$tc(translation) : entity;
+            return this.$te(translation) ? this.$t(translation) : entity;
         },
 
         showCheckout() {

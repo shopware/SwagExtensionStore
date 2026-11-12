@@ -629,7 +629,7 @@ export class ExtensionStoreChannelService {
     private async installExtension(cartData: ExtensionStoreBasket): Promise<boolean> {
         const extension = cartData.positions[0].extension;
         const snippetService = Shopware.Snippet as unknown as {
-            tc: (key: string, params?: Record<string, string>) => string;
+            t: (key: string, params?: Record<string, string>) => string;
         };
 
         try {
@@ -638,8 +638,8 @@ export class ExtensionStoreChannelService {
 
             Shopware.Store.get('notification').createNotification({
                 variant: 'positive',
-                title: snippetService.tc('sw-extension-store.installation.successTitle'),
-                message: snippetService.tc('sw-extension-store.installation.successMessage', { name: String(extension.name) }),
+                title: snippetService.t('sw-extension-store.installation.successTitle'),
+                message: snippetService.t('sw-extension-store.installation.successMessage', { name: String(extension.name) }),
                 growl: true,
             });
 
@@ -649,8 +649,8 @@ export class ExtensionStoreChannelService {
 
             Shopware.Store.get('notification').createNotification({
                 variant: 'critical',
-                title: snippetService.tc('sw-extension-store.installation.errorTitle'),
-                message: snippetService.tc('sw-extension-store.installation.errorMessage', { name: String(extension.name) }),
+                title: snippetService.t('sw-extension-store.installation.errorTitle'),
+                message: snippetService.t('sw-extension-store.installation.errorMessage', { name: String(extension.name) }),
                 growl: true,
             });
 

@@ -76,20 +76,20 @@ const notifyReloadRequired = (cartData: ExtensionStoreBasket | null): void => {
     }
 
     const snippetService = Shopware.Snippet as unknown as {
-        tc: (key: string, params?: Record<string, string>) => string;
+        t: (key: string, params?: Record<string, string>) => string;
     };
 
     Shopware.Store.get('notification').createNotification({
         variant: 'info',
         growl: true,
         autoClose: false,
-        title: snippetService.tc('sw-extension-store.installation.reloadRequiredTitle'),
-        message: snippetService.tc('sw-extension-store.installation.reloadRequiredMessage', {
+        title: snippetService.t('sw-extension-store.installation.reloadRequiredTitle'),
+        message: snippetService.t('sw-extension-store.installation.reloadRequiredMessage', {
             name: String(position.extension.name),
         }),
         actions: [
             {
-                label: snippetService.tc('sw-extension-store.installation.reloadRequiredAction'),
+                label: snippetService.t('sw-extension-store.installation.reloadRequiredAction'),
                 method: () => pageReload.reload(),
             },
         ],
