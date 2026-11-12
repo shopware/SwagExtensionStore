@@ -63,7 +63,7 @@ type StoreContextOwnedExtension = {
 
 type StoreContext = {
     shopwareVersion: string;
-    extensionStoreVersion: string | null;
+    extensionStoreVersion: string;
     owningExtensions: StoreContextOwnedExtension[];
     sessionToken: string;
     language: string;
@@ -330,9 +330,6 @@ export class ExtensionStoreChannelService {
 
     private async handleHandshake(data: HandshakeActionData): Promise<StoreContext> {
         const extensions = await this.extensionStoreActionService.getMyExtensions();
-        const extensionStoreVersion = extensions.find(
-            extension => extension.name === 'SwagExtensionStore',
-        )?.version ?? null;
         const owningExtensions = extensions.filter(extension => !!extension.storeLicense)
             .map((extension) => ({
                 name: extension.name,
@@ -357,7 +354,7 @@ export class ExtensionStoreChannelService {
 
         return {
             shopwareVersion: shopwareVersion,
-            extensionStoreVersion,
+            extensionStoreVersion: __SWAG_EXTENSION_STORE_VERSION__,
             owningExtensions: owningExtensions,
             sessionToken: data.sessionToken,
             language: language,
