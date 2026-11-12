@@ -106,7 +106,7 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
         const channelHandler = handleMock.mock.calls[0][1] as (
             data: unknown,
             additionalInformation: ChannelInformation
-        ) => Promise<{ isDemoShop: boolean }>;
+        ) => Promise<{ isDemoShop: boolean; extensionStoreVersion: string | null }>;
 
         return channelHandler(
             { action: 'handshake', sessionToken: 'session-token', version: '1.0.0' },
@@ -164,6 +164,32 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
     });
 
     describe('handshake', () => {
+        it('should report the installed store plugin version without a store license', async () => {
+            extensionStoreActionService.getMyExtensions.mockResolvedValue([
+                { name: 'SwagExtension', version: '2.1.0' },
+                { name: 'SwagExtensionStore', version: '7.0.0', latestVersion: '7.1.0', storeLicense: null },
+            ]);
+
+            const context = await performHandshake();
+
+            expect(context).toMatchObject({
+                extensionStoreVersion: '7.0.0',
+                owningExtensions: [],
+            });
+        });
+
+        it.each([
+            { scenario: 'the store plugin is absent', extensions: [{ name: 'SwagExtension', version: '2.1.0' }] },
+            { scenario: 'the version is null', extensions: [{ name: 'SwagExtensionStore', version: null }] },
+            { scenario: 'the version is missing', extensions: [{ name: 'SwagExtensionStore' }] },
+        ])('should report a null store plugin version when $scenario', async ({ extensions }) => {
+            extensionStoreActionService.getMyExtensions.mockResolvedValue(extensions);
+
+            const context = await performHandshake();
+
+            expect(context.extensionStoreVersion).toBeNull();
+        });
+
         it('should report a demo shop when the demo environment bundle is present', async () => {
             const context = await performHandshake({ SwagDemoEnvironment: { js: [], css: [] } });
 
