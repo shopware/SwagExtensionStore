@@ -16,6 +16,7 @@ import type ExtensionStorePreferencesService
     from 'SwagExtensionStore/module/sw-extension-store/service/extension-store-preferences.service';
 import type { UserInfo } from 'src/core/service/api/store.api.service';
 import { hasDemoShopBundle } from 'SwagExtensionStore/util/demo-shop';
+import { isShopDataSharingEnabled } from 'SwagExtensionStore/util/shop-data-sharing';
 import { pageReload } from 'SwagExtensionStore/util/page-reload';
 
 type StoreChannelAction = 'handshake' | 'routeTo' | 'purchase' | 'routerUpdate' | 'copyToClipboard' | 'trackEvent' | 'updateExtensionStore';
@@ -71,6 +72,7 @@ type StoreContext = {
     licenseHost: string | null;
     userInfo: UserInfo | null;
     isDemoShop: boolean;
+    isShopDataSharingEnabled: boolean;
     success: boolean;
     currentRoute: string;
     currentRouteQuery: LocationQuery;
@@ -344,6 +346,7 @@ export class ExtensionStoreChannelService {
         const contextStore = extensionStoreContextStore();
         const licenseHost = await contextStore.loadLicenseHost();
         const shopwareVersion = Shopware.Context.app.config.version ?? '';
+        const shopDataSharingEnabled = await isShopDataSharingEnabled(shopwareVersion);
         const rawLocale: unknown = Shopware.Store.get('session')?.currentLocale;
         const language: string = typeof rawLocale === 'string' ? rawLocale : 'en-GB';
         const userInfo = Shopware.Store.get('shopwareExtensions').userInfo;
@@ -364,6 +367,7 @@ export class ExtensionStoreChannelService {
             licenseHost,
             userInfo: userInfo,
             isDemoShop: hasDemoShopBundle(),
+            isShopDataSharingEnabled: shopDataSharingEnabled,
             success: true,
             currentRoute: currentRoute,
             currentRouteQuery: currentRouteQuery,

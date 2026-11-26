@@ -109,7 +109,7 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
         const channelHandler = handleMock.mock.calls[0][1] as (
             data: unknown,
             additionalInformation: ChannelInformation
-        ) => Promise<{ isDemoShop: boolean; extensionStoreVersion: string }>;
+        ) => Promise<{ isDemoShop: boolean; extensionStoreVersion: string; isShopDataSharingEnabled: boolean }>;
 
         return channelHandler(
             { action: 'handshake', sessionToken: 'session-token', version: '1.0.0' },
@@ -278,6 +278,64 @@ describe('SwagExtensionStore/module/sw-extension-store/service/extension-store-c
             const context = await performHandshake(undefined);
 
             expect(context.isDemoShop).toBe(false);
+        });
+
+        describe('shop data sharing', () => {
+            let version: typeof Shopware.Context.app.config.version;
+            let consentStore: { consents: Record<string, unknown>; update: jest.Mock; isAccepted: jest.Mock };
+            let getDataSharingStore: jest.Mock<unknown, [string]>;
+
+            beforeEach(() => {
+                version = Shopware.Context.app.config.version;
+                Shopware.Context.app.config.version = '6.7.9.0';
+                consentStore = { consents: {}, update: jest.fn(), isAccepted: jest.fn() };
+                getDataSharingStore = jest.fn<unknown, [string]>(() => consentStore);
+
+                const originalGet = Shopware.Store.get.bind(Shopware.Store);
+                jest.spyOn(Shopware.Store, 'get').mockImplementation((name: string) => {
+                    if (name === 'consent' || name === 'usageData') {
+                        return getDataSharingStore(name) as never;
+                    }
+
+                    return originalGet(name as keyof PiniaRootState);
+                });
+            });
+
+            afterEach(() => {
+                Shopware.Context.app.config.version = version;
+            });
+
+            it.each([true, false])('should report backend_data consent as %s', async (accepted) => {
+                consentStore.consents.backend_data = { status: accepted ? 'accepted' : 'revoked' };
+                consentStore.isAccepted.mockReturnValue(accepted);
+
+                await expect(performHandshake()).resolves.toMatchObject({
+                    success: true,
+                    isShopDataSharingEnabled: accepted,
+                });
+            });
+
+            it.each(['6.7.8.2', '6.7.9.0'])('should complete the handshake without a consent store on Shopware %s', async (shopwareVersion) => {
+                Shopware.Context.app.config.version = shopwareVersion;
+                getDataSharingStore.mockImplementation((name) => {
+                    throw new Error(`Store with id "${name}" not found`);
+                });
+
+                await expect(performHandshake()).resolves.toMatchObject({
+                    success: true,
+                    isShopDataSharingEnabled: false,
+                });
+            });
+
+            it('should complete the handshake when loading consents fails', async () => {
+                consentStore.update.mockRejectedValue(new Error('Consent request failed'));
+
+                await expect(performHandshake()).resolves.toMatchObject({
+                    success: true,
+                    isShopDataSharingEnabled: false,
+                });
+                expect(consentStore.update).toHaveBeenCalledTimes(1);
+            });
         });
     });
 
